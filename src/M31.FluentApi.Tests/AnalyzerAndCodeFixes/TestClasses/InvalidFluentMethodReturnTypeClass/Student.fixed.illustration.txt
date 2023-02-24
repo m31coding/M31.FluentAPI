@@ -1,0 +1,21 @@
+// NOTE: File does not compile due to an error (void method returns int). The file will not be used in the unit test.
+
+// Non-nullable member is uninitialized
+#pragma warning disable CS8618
+
+using M31.FluentApi.Attributes;
+
+namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.InvalidFluentMethodReturnTypeClass;
+
+[FluentApi]
+public class Student
+{
+    public string Name { get; private set; }
+
+    [FluentMethod(0)]
+    public void WithName(string name)
+    {
+        Name = name;
+        return 0;
+    }
+}

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Kevin Schaal</Authors>
+    <Description>Generate fluent APIs in C#.</Description>
+    <PackageTags>FluentAPI CodeGeneration</PackageTags>
+    <PackageProjectUrl>https://github.com/m31coding/M31.FluentAPI</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/m31coding/M31.FluentAPI.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\M31.FluentApi.Generator\M31.FluentApi.Generator.csproj" PrivateAssets="contentfiles;build" SetTargetFramework="TargetFramework=netstandard2.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
