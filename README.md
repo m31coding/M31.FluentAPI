@@ -89,7 +89,7 @@ You may have a look at the generated code for this example: [CreateStudent.g.cs]
 
 ## Attributes
 
-The attributes `FluentApi` and `FluentMember` are the basic attributes; they are all you need in order to get started. The attributes `FluentPredicate` and `FluentCollection` can be used instead of a `FluentMember` attribute if the decorated member is a boolean or a collection, respectively. `FluentDefault` and `FluentNullable` are orthogonal attributes and used in combination with the attributes above. Finally, the `FluentMethod` attribute are used for custom implementations.
+The attributes `FluentApi` and `FluentMember` are the basic attributes; they are all you need in order to get started. The attributes `FluentPredicate` and `FluentCollection` can be used instead of a `FluentMember` attribute if the decorated member is a boolean or a collection, respectively. `FluentDefault` and `FluentNullable` are orthogonal attributes and used in combination with the attributes above. Finally, the `FluentMethod` attribute is used for custom implementations.
 
 ---
 
@@ -103,19 +103,19 @@ Use this attribute for your class / struct / record. The optional parameter allo
 
 ### FluentMember
 
-**Definition**: FluentMemberAttribute(int order, string method = "With{Name}", int parameterOrder = 0)
+**Definition**: FluentMemberAttribute(int builderStep, string method = "With{Name}", int parameterPosition = 0)
 
-Use this attribute for fields and properties of your class. They can be private but properties must have a set accessor. The order parameter specifies the builder step in which the member is set. With the method parameter you can specify the name of the builder method.
+Use this attribute for fields and properties of your class. They can be private but properties must have a set accessor. The `builderStep` parameter specifies the step in which the member can be set. With the method parameter you can specify the name of the builder method.
 
-If two `FluentMember` attributes with the same order are used, either a compound method or a fork will be created.
-If the specified method names are equal, a compound method will be created, which is a builder method that sets multiple properties at once. See the `WithName` method in the example above. For compounds the order of the parameters can be controlled by the last parameter of this attribute.<br/>
+If two `FluentMember` attributes with the same builder step are used, either a compound method or a fork will be created.
+If the specified method names are equal, a compound method will be created, which is a builder method that sets multiple properties at once. See the `WithName` method in the example above. For compounds the position of the parameters can be controlled by the last parameter of this attribute.<br/>
 If the specified method names differ, a fork will be created. That means that there are multiple methods at this step but you can call only one. See the `OfAge` and `BornOn` methods in the example above.
 
 ---
 
 ### FluentPredicate
 
-**Definition**: FluentPredicateAttribute(int order, string method = "{Name}", string negatedMethod = "Not{Name}")
+**Definition**: FluentPredicateAttribute(int builderStep, string method = "{Name}", string negatedMethod = "Not{Name}")
 
 Can be used instead of a `FluentMember` attribute if the decorated member is of type `bool`. This attribute generates two methods, one for setting the value of the member to `true` and one for setting it to `false`.
 
@@ -124,7 +124,7 @@ Can be used instead of a `FluentMember` attribute if the decorated member is of 
 ### FluentCollection
 
 **Definition**: FluentCollectionAttribute(
-    int order,
+    int builderStep,
     string singularName,
     string withItems = "With{Name}",
     string withItem = "With{SingularName}",
@@ -152,7 +152,7 @@ Can be used for fields and properties in addition to other attributes. Generates
 
 ### FluentMethod
 
-**Definition**: FluentMethodAttribute(int order, string method = "{Name}")
+**Definition**: FluentMethodAttribute(int builderStep, string method = "{Name}")
 
 Use this attribute on methods in order to provide a custom implementation for setting values or triggering additional behavior. The decorated method must return `void`.
 
@@ -161,7 +161,8 @@ Use this attribute on methods in order to provide a custom implementation for se
 This library generates a builder class for initializing objects step by step. There are use cases for simpler builder classes that don't offer a step by step initialization. E.g. consider the following API for combining hash codes:
 
 ```cs
-HashCode hashCode = new HashCode().Add(42).Add(3.14).AddSequence(new[] { 1, 2, 3 }).Add("Hello world");
+HashCode hashCode = new HashCode()
+    .Add(42).Add(3.14).AddSequence(new[] { 1, 2, 3 }).Add("Hello world");
 ```
 
 The `Add` and `AddSequence` methods can be called any number of times and in any order. This behavior can not be modeled with the fluent API library. In order to create such a builder class I suggest to write the code by hand, since the implementation is straight forward and does not require a lot of additional code.
@@ -170,7 +171,7 @@ The `Add` and `AddSequence` methods can be called any number of times and in any
 
 As of 2023 code generation with Roslyn is still a relatively new feature but is already supported quite well in Visual Studio and Rider. Since code generation is potentially triggered with every single key stroke, there are sometimes situations where the code completion index of the IDE does not keep up with all the changes.
 
-In particular, if your IDE indicates that there are errors in your code but it compiles and runs just fine, try the following things:
+In particular, if your IDE visually indicates that there are errors in your code but it compiles and runs just fine, try the following things:
 
 - Rebuild the project or the whole solution
 - Unload and reload the project
