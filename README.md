@@ -12,6 +12,8 @@ The generated code follows the builder design pattern and allows you to construc
 [![youtube](https://img.shields.io/badge/youtube-kevin%20schaal-FF0000.svg)](https://www.youtube.com/channel/UC6CZ_Bcyql1kfHZvx9W85mA)
 [![twitter](https://img.shields.io/badge/twitter-@m31coding-1DA1F2.svg)](https://twitter.com/m31coding)
 
+Accompanying blog post: [www.m31coding.com>blog>fluent-api](https://www.m31coding.com/blog/fluent-api.html)
+
 # Installing via NuGet
 
 Install the latest version of the package `M31.FluentAPI` via your IDE or use the package manager console:
