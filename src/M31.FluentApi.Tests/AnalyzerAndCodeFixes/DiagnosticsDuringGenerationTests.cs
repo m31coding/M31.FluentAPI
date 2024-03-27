@@ -5,9 +5,6 @@ using M31.FluentApi.Tests.Helpers;
 using Microsoft.CodeAnalysis;
 using Xunit;
 using static M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers.TestSourceCodeReader;
-using Verifier = M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers.AnalyzerAndCodeFixVerifier<
-    M31.FluentApi.Generator.SourceAnalyzers.FluentApiAnalyzer,
-    M31.FluentApi.Generator.SourceAnalyzers.FluentApiCodeFixProvider>;
 
 namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes;
 
