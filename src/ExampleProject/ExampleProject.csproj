@@ -8,7 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="M31.FluentApi" Version="1.0.0" PrivateAssets="all" />
+      <ProjectReference Include="..\M31.FluentApi\M31.FluentApi.csproj"/>
+      <ProjectReference Include="..\M31.FluentApi.Generator\M31.FluentApi.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer"/>
     </ItemGroup>
 
   <PropertyGroup>

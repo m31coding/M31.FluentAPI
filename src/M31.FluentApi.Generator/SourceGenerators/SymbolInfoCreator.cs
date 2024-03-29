@@ -87,6 +87,37 @@ internal static class SymbolInfoCreator
         return new ParameterSymbolInfo(
             parameterSymbol.Name,
             CodeTypeExtractor.GetTypeForCodeGeneration(parameterSymbol.Type),
-            parameterSymbol.NullableAnnotation == NullableAnnotation.Annotated);
+            parameterSymbol.NullableAnnotation == NullableAnnotation.Annotated,
+            GetDefaultValueAsCode(parameterSymbol));
+    }
+
+    private static string? GetDefaultValueAsCode(IParameterSymbol parameterSymbol)
+    {
+        if (!parameterSymbol.HasExplicitDefaultValue)
+        {
+            return null;
+        }
+
+        if (parameterSymbol.ExplicitDefaultValue == null && parameterSymbol.Type.IsReferenceType)
+        {
+            return "null";
+        }
+
+        if (parameterSymbol.ExplicitDefaultValue == null && parameterSymbol.Type.IsValueType)
+        {
+            return "default";
+        }
+
+        if (parameterSymbol.ExplicitDefaultValue == null &&
+            parameterSymbol.Type is { IsReferenceType: false, IsValueType: false }) // unconstrained type parameter
+        {
+            return "default";
+        }
+
+        return parameterSymbol.ExplicitDefaultValue! switch
+        {
+            string s => $"\"{s}\"",
+            { } o => o.ToString(),
+        };
     }
 }

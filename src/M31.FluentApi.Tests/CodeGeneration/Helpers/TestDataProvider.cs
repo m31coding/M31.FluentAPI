@@ -16,6 +16,7 @@ internal class TestDataProvider : IEnumerable<object[]>
             new object[] { "Abstract", "DefaultFluentMethodNameClass", "Student" },
             new object[] { "Abstract", "FluentDefaultMemberClass", "Student" },
             new object[] { "Abstract", "FluentMethodClass", "Student" },
+            new object[] { "Abstract", "FluentMethodDefaultValuesClass", "Student" },
             new object[] { "Abstract", "FluentNullableClass", "Student" },
             new object[] { "Abstract", "FluentNullableNoNullableAnnotationClass", "Student" },
             new object[] { "Abstract", "FluentNullableNoNullableAnnotationPrivateSetClass", "Student" },
