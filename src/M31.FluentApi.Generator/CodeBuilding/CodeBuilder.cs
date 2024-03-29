@@ -60,7 +60,7 @@ internal class CodeBuilder
         if (code is not null)
         {
             InsertNewLines();
-            stringBuilder.Append(code!);
+            stringBuilder.Append(code);
         }
 
         return this;

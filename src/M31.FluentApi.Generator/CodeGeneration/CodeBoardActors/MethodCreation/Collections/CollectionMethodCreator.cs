@@ -28,7 +28,7 @@ internal abstract class CollectionMethodCreator
             : methodCreator.CreateMethod(symbolInfo, collectionAttributeInfo.WithItems);
     }
 
-    internal BuilderMethod? CreateWithItemsParamsMethod(MethodCreator methodCreator)
+    internal BuilderMethod CreateWithItemsParamsMethod(MethodCreator methodCreator)
     {
         Parameter parameter = new Parameter($"params {genericTypeArgument}[]", symbolInfo.NameInCamelCase);
         return methodCreator.CreateMethodWithComputedValue(
