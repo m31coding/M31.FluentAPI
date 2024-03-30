@@ -22,18 +22,25 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
     {
         // createStudent.student.InSemester(semester);
         CallMethodCode callMethodCode =
-            new CallMethodCode((instancePrefix, values) =>
-                $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}({string.Join(", ", values)});");
+            new CallMethodCode((instancePrefix, outerMethodParameters) =>
+                $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}" +
+                $"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});");
         CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
+
+        static string CreateArgument(Parameter outerMethodParameter)
+        {
+            // ref/in/out semester
+            return $"{outerMethodParameter.ParameterAnnotations?.ToCallsiteAnnotations()}{outerMethodParameter.Name}";
+        }
     }
 
     protected override void GenerateLineWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
     {
         // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester });
         CallMethodCode callMethodCode =
-            new CallMethodCode((instancePrefix, values) =>
+            new CallMethodCode((instancePrefix, outerMethodParameters) =>
                 $"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
-                $"new object[] {{ {string.Join(", ", values)} }});");
+                $"new object[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});");
         CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
     }
 

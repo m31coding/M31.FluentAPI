@@ -19,7 +19,12 @@ internal class FluentMethods : IBuilderMethodCreator
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
     {
         List<Parameter> parameters = SymbolInfo.ParameterInfos
-            .Select(i => new Parameter(i.TypeForCodeGeneration, i.ParameterName, i.DefaultValue)).ToList();
+            .Select(i => new Parameter(
+                i.TypeForCodeGeneration,
+                i.ParameterName,
+                i.DefaultValue,
+                new ParameterAnnotations(i.ParameterKinds)))
+            .ToList();
 
         BuilderMethod builderMethod =
             methodCreator.BuilderMethodFactory.CreateBuilderMethod(

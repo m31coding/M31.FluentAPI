@@ -61,7 +61,7 @@ internal class BuilderMethodFactory
             return new List<string>()
             {
                 methodToCallMethodCode[methodIdentity]
-                    .BuildCode(instancePrefix, parameters.Select(p => p.Name).ToArray()),
+                    .BuildCode(instancePrefix, parameters),
             };
         }
 
