@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
@@ -88,7 +89,8 @@ internal static class SymbolInfoCreator
             parameterSymbol.Name,
             CodeTypeExtractor.GetTypeForCodeGeneration(parameterSymbol.Type),
             parameterSymbol.NullableAnnotation == NullableAnnotation.Annotated,
-            GetDefaultValueAsCode(parameterSymbol));
+            GetDefaultValueAsCode(parameterSymbol),
+            GetParameterKinds(parameterSymbol));
     }
 
     private static string? GetDefaultValueAsCode(IParameterSymbol parameterSymbol)
@@ -119,5 +121,34 @@ internal static class SymbolInfoCreator
             string s => $"\"{s}\"",
             { } o => o.ToString(),
         };
+    }
+
+    private static ParameterKinds GetParameterKinds(IParameterSymbol parameterSymbol)
+    {
+        ParameterKinds parameterKinds = ParameterKinds.None;
+
+        if (parameterSymbol.IsParams)
+        {
+            parameterKinds |= ParameterKinds.Params;
+        }
+
+        switch (parameterSymbol.RefKind)
+        {
+            case RefKind.None:
+                break;
+            case RefKind.Ref:
+                parameterKinds |= ParameterKinds.Ref;
+                break;
+            case RefKind.Out:
+                parameterKinds |= ParameterKinds.Out;
+                break;
+            case RefKind.In:
+                parameterKinds |= ParameterKinds.In;
+                break;
+            default:
+                throw new ArgumentException($"RefKind {parameterSymbol.RefKind} is not handled.");
+        }
+
+        return parameterKinds;
     }
 }

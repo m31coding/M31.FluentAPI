@@ -41,19 +41,19 @@ public class CreateStudent : CreateStudent.IBornOn, CreateStudent.IInSemester
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        withNameMethodInfo.Invoke(createStudent.student, new object[] { name });
+        withNameMethodInfo.Invoke(createStudent.student, new object?[] { name });
         return createStudent;
     }
 
     public IInSemester BornOn(System.DateOnly date)
     {
-        bornOnMethodInfo.Invoke(student, new object[] { date });
+        bornOnMethodInfo.Invoke(student, new object?[] { date });
         return this;
     }
 
     public Student InSemester(int semester)
     {
-        inSemesterMethodInfo.Invoke(student, new object[] { semester });
+        inSemesterMethodInfo.Invoke(student, new object?[] { semester });
         return student;
     }
 

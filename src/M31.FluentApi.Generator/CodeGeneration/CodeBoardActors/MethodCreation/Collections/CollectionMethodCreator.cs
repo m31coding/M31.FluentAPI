@@ -30,7 +30,12 @@ internal abstract class CollectionMethodCreator
 
     internal BuilderMethod CreateWithItemsParamsMethod(MethodCreator methodCreator)
     {
-        Parameter parameter = new Parameter($"params {genericTypeArgument}[]", symbolInfo.NameInCamelCase);
+        Parameter parameter = new Parameter(
+            $"{genericTypeArgument}[]",
+            symbolInfo.NameInCamelCase,
+            null,
+            new ParameterAnnotations(ParameterKinds.Params));
+
         return methodCreator.CreateMethodWithComputedValue(
             symbolInfo,
             collectionAttributeInfo.WithItems,

@@ -1,21 +1,23 @@
+using M31.FluentApi.Generator.CodeBuilding;
+
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 internal class CallMethodCode
 {
-    private readonly Func<string, string[], string> buildCodeWithInstancePrefixAndValues;
+    private readonly BuildCallMethodCode buildCallMethodCode;
 
-    internal CallMethodCode(Func<string, string[], string> buildCodeWithInstancePrefixAndValues)
+    internal CallMethodCode(BuildCallMethodCode buildCallMethodCode)
     {
-        this.buildCodeWithInstancePrefixAndValues = buildCodeWithInstancePrefixAndValues;
+        this.buildCallMethodCode = buildCallMethodCode;
     }
 
-    internal string BuildCode(string instancePrefix, string[] parameters)
+    internal List<string> BuildCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
     {
-        return buildCodeWithInstancePrefixAndValues(instancePrefix, parameters);
+        return buildCallMethodCode(instancePrefix, outerMethodParameters);
     }
 
     public override string ToString()
     {
-        return buildCodeWithInstancePrefixAndValues(string.Empty, Array.Empty<string>());
+        return string.Join(Environment.NewLine, buildCallMethodCode(string.Empty, Array.Empty<Parameter>()));
     }
 }

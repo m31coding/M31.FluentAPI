@@ -55,6 +55,20 @@ internal struct HashCode
         return this;
     }
 
+    internal HashCode Add<T1, T2, T3, T4, T5>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
+    {
+        unchecked
+        {
+            hash = hash * 23 + value1?.GetHashCode() ?? 0;
+            hash = hash * 23 + value2?.GetHashCode() ?? 0;
+            hash = hash * 23 + value3?.GetHashCode() ?? 0;
+            hash = hash * 23 + value4?.GetHashCode() ?? 0;
+            hash = hash * 23 + value5?.GetHashCode() ?? 0;
+        }
+
+        return this;
+    }
+
     internal HashCode AddSequence<T>(IEnumerable<T> items)
     {
         unchecked
