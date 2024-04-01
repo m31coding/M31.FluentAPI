@@ -100,7 +100,7 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         {
             // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester });
             $"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
-            $"new object[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});",
+            $"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});",
         };
     }
 

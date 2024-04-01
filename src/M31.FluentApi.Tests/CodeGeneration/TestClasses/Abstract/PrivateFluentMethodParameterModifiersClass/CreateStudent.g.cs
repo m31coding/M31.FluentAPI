@@ -51,7 +51,7 @@ public class CreateStudent : CreateStudent.IMethodWithRefParameter, CreateStuden
     public static IMethodWithRefParameter MethodWithParams(params int[] numbers)
     {
         CreateStudent createStudent = new CreateStudent();
-        methodWithParamsMethodInfo.Invoke(createStudent.student, new object[] { numbers });
+        methodWithParamsMethodInfo.Invoke(createStudent.student, new object?[] { numbers });
         return createStudent;
     }
 
@@ -65,7 +65,7 @@ public class CreateStudent : CreateStudent.IMethodWithRefParameter, CreateStuden
 
     public IMethodWithOutParameter MethodWithInParameter(in int n2)
     {
-        methodWithInParameterMethodInfo.Invoke(student, new object[] { n2 });
+        methodWithInParameterMethodInfo.Invoke(student, new object?[] { n2 });
         return this;
     }
 

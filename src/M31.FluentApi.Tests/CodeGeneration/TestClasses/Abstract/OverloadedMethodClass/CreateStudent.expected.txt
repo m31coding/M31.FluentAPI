@@ -36,14 +36,14 @@ public class CreateStudent
     public static Student Named(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        namedMethodInfo.Invoke(createStudent.student, new object[] { firstName, lastName });
+        namedMethodInfo.Invoke(createStudent.student, new object?[] { firstName, lastName });
         return createStudent.student;
     }
 
     public static Student Named(string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        namedMethodInfo2.Invoke(createStudent.student, new object[] { lastName });
+        namedMethodInfo2.Invoke(createStudent.student, new object?[] { lastName });
         return createStudent.student;
     }
 }

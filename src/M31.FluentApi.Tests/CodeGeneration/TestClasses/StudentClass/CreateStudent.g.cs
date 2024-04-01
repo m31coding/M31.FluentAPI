@@ -59,7 +59,7 @@ public class CreateStudent : CreateStudent.IOfAgeBornOn, CreateStudent.IInSemest
 
     public IInSemester BornOn(System.DateOnly dateOfBirth)
     {
-        bornOnMethodInfo.Invoke(student, new object[] { dateOfBirth });
+        bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
         return this;
     }
 
