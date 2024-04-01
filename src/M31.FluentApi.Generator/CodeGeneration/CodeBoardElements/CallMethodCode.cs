@@ -11,13 +11,13 @@ internal class CallMethodCode
         this.buildCallMethodCode = buildCallMethodCode;
     }
 
-    internal string BuildCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
+    internal List<string> BuildCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
     {
         return buildCallMethodCode(instancePrefix, outerMethodParameters);
     }
 
     public override string ToString()
     {
-        return buildCallMethodCode(string.Empty, Array.Empty<Parameter>());
+        return string.Join(Environment.NewLine, buildCallMethodCode(string.Empty, Array.Empty<Parameter>()));
     }
 }

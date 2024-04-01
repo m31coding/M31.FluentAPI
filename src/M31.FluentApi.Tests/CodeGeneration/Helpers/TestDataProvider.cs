@@ -38,6 +38,7 @@ internal class TestDataProvider : IEnumerable<object[]>
             new object[] { "Abstract", "PrivateConstructorClass", "Student" },
             new object[] { "Abstract", "PrivateFieldClass", "Student" },
             new object[] { "Abstract", "PrivateFluentMethodClass", "Student" },
+            new object[] { "Abstract", "PrivateFluentMethodParameterModifiersClass", "Student" },
             new object[] { "Abstract", "PrivateReadonlyFieldClass", "Student" },
             new object[] { "Abstract", "PrivateUnderscoreFieldClass", "Student" },
             new object[] { "Abstract", "PublicFieldClass", "Student" },

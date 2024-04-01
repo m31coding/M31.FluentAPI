@@ -19,6 +19,11 @@ internal class Parameter : ICode
     internal string? DefaultValue { get; }
     internal ParameterAnnotations? ParameterAnnotations { get; }
 
+    internal bool HasAnnotation(ParameterKinds parameterKinds)
+    {
+        return ParameterAnnotations != null && ParameterAnnotations.Contains(parameterKinds);
+    }
+
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
         return codeBuilder

@@ -12,10 +12,15 @@ internal class ParameterAnnotations : ICode
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
         return codeBuilder
-            .Append("params ", ParameterKinds.HasFlag(ParameterKinds.Params))
-            .Append("ref ", ParameterKinds.HasFlag(ParameterKinds.Ref))
-            .Append("in ", ParameterKinds.HasFlag(ParameterKinds.In))
-            .Append("out ", ParameterKinds.HasFlag(ParameterKinds.Out));
+            .Append("params ", Contains(ParameterKinds.Params))
+            .Append("ref ", Contains(ParameterKinds.Ref))
+            .Append("in ", Contains(ParameterKinds.In))
+            .Append("out ", Contains(ParameterKinds.Out));
+    }
+
+    internal bool Contains(ParameterKinds parameterKinds)
+    {
+        return ParameterKinds.HasFlag(parameterKinds);
     }
 
     internal string ToCallsiteAnnotations()
@@ -26,8 +31,8 @@ internal class ParameterAnnotations : ICode
         }
 
         return new CodeBuilder()
-            .Append("ref ", ParameterKinds.HasFlag(ParameterKinds.Ref))
-            .Append("in ", ParameterKinds.HasFlag(ParameterKinds.In))
-            .Append("out ", ParameterKinds.HasFlag(ParameterKinds.Out)).ToString();
+            .Append("ref ", Contains(ParameterKinds.Ref))
+            .Append("in ", Contains(ParameterKinds.In))
+            .Append("out ", Contains(ParameterKinds.Out)).ToString();
     }
 }

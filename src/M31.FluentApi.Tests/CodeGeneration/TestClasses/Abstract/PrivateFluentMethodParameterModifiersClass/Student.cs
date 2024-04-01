@@ -3,7 +3,7 @@
 
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodParameterModifiersClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodParameterModifiersClass;
 
 [FluentApi]
 public class Student
@@ -17,33 +17,33 @@ public class Student
     public int N6 { get; set; }
 
     [FluentMethod(0)]
-    public void MethodWithParams(params int[] numbers)
+    private void MethodWithParams(params int[] numbers)
     {
         Numbers = numbers;
     }
 
     [FluentMethod(1)]
-    public void MethodWithRefParameter(ref int n1)
+    private void MethodWithRefParameter(ref int n1)
     {
         n1 *= 2;
         N1 = n1;
     }
 
     [FluentMethod(2)]
-    public void MethodWithInParameter(in int n2)
+    private void MethodWithInParameter(in int n2)
     {
         N2 = n2;
     }
 
     [FluentMethod(3)]
-    public void MethodWithOutParameter(out int n3)
+    private void MethodWithOutParameter(out int n3)
     {
         n3 = 3;
         N3 = n3;
     }
 
     [FluentMethod(4)]
-    public void MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
+    private void MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
     {
         n4 *= 2;
         N4 = n4;

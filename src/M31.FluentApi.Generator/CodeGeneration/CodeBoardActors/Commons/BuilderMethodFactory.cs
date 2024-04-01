@@ -58,11 +58,7 @@ internal class BuilderMethodFactory
 
         List<string> BuildBodyCode(string instancePrefix)
         {
-            return new List<string>()
-            {
-                methodToCallMethodCode[methodIdentity]
-                    .BuildCode(instancePrefix, parameters),
-            };
+            return methodToCallMethodCode[methodIdentity].BuildCode(instancePrefix, parameters);
         }
 
         return new BuilderMethod(methodName, parameters, BuildBodyCode);

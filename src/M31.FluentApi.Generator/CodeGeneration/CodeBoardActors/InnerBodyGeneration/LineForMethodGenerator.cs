@@ -20,12 +20,18 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
 
     protected override void GenerateLineWithoutReflection(MethodSymbolInfo symbolInfo)
     {
-        // createStudent.student.InSemester(semester);
-        CallMethodCode callMethodCode =
-            new CallMethodCode((instancePrefix, outerMethodParameters) =>
-                $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}" +
-                $"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});");
+        CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode);
         CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
+
+        List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
+        {
+            return new List<string>()
+            {
+                // createStudent.student.InSemester(semester);
+                $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}" +
+                $"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});",
+            };
+        }
 
         static string CreateArgument(Parameter outerMethodParameter)
         {
@@ -36,12 +42,66 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
 
     protected override void GenerateLineWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
     {
-        // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester });
-        CallMethodCode callMethodCode =
-            new CallMethodCode((instancePrefix, outerMethodParameters) =>
-                $"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
-                $"new object[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});");
+        CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode);
         CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
+
+        List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
+        {
+            return outerMethodParameters.Any(p =>
+                p.HasAnnotation(ParameterKinds.Ref) || p.HasAnnotation(ParameterKinds.Out))
+                ? BuildReflectionCodeWithParameterModifiers(infoFieldName, instancePrefix, outerMethodParameters)
+                : BuildDefaultReflectionCode(infoFieldName, instancePrefix, outerMethodParameters);
+        }
+    }
+
+    private List<string> BuildReflectionCodeWithParameterModifiers(
+        string infoFieldName,
+        string instancePrefix,
+        IReadOnlyCollection<Parameter> outerMethodParameters)
+    {
+        List<string> lines = new List<string>();
+
+        // object?[] args = new object?[] { semester };
+        lines.Add(
+            $"object?[] args = new object?[] {{ {string.Join(", ", outerMethodParameters.Select(GetArgument))} }};");
+
+        // semesterMethodInfo.Invoke(createStudent.student, args)
+        lines.Add($"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);");
+
+        foreach (var parameter in outerMethodParameters.Select((p, i) => new { Value = p, Index = i }))
+        {
+            if (parameter.Value.HasAnnotation(ParameterKinds.Ref) || parameter.Value.HasAnnotation(ParameterKinds.Out))
+            {
+                lines.Add(AssignValueToArgument(parameter.Index, parameter.Value));
+            }
+        }
+
+        return lines;
+
+        string GetArgument(Parameter parameter)
+        {
+            return parameter.HasAnnotation(ParameterKinds.Out) ? "null" : parameter.Name;
+        }
+
+        string AssignValueToArgument(int index, Parameter parameter)
+        {
+            // For out and ref parameters, the invoke method writes the result values into the args array.
+            // semester = (int) args[0];
+            return $"{parameter.Name} = ({parameter.Type}) args[{index}]!;";
+        }
+    }
+
+    private List<string> BuildDefaultReflectionCode(
+        string infoFieldName,
+        string instancePrefix,
+        IReadOnlyCollection<Parameter> outerMethodParameters)
+    {
+        return new List<string>()
+        {
+            // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester });
+            $"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
+            $"new object[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});",
+        };
     }
 
     private static MethodIdentity CreateMethodIdentity(MethodSymbolInfo methodSymbolInfo)
