@@ -17,6 +17,7 @@ internal class AttributeDataExtractor
     {
         List<AttributeDataExtended> mainAttributes = new List<AttributeDataExtended>();
         List<AttributeDataExtended> orthogonalAttributes = new List<AttributeDataExtended>();
+        List<AttributeDataExtended> controlAttributes = new List<AttributeDataExtended>();
 
         foreach (AttributeData attributeData in symbol.GetAttributes())
         {
@@ -34,6 +35,10 @@ internal class AttributeDataExtractor
             else if (IsOrthogonalAttribute(attributeDataExtended.FullName))
             {
                 orthogonalAttributes.Add(attributeDataExtended);
+            }
+            else if (IsControlAttribute(attributeDataExtended.FullName))
+            {
+                controlAttributes.Add(attributeDataExtended);
             }
         }
 
@@ -62,9 +67,12 @@ internal class AttributeDataExtractor
                 classInfoReport.ReportDiagnostic(OrthogonalAttributeMisused.CreateDiagnostic(orthogonalAttribute));
             }
 
-            return new FluentApiAttributeData(mainAttributes[0], Array.Empty<AttributeDataExtended>());
+            return new FluentApiAttributeData(
+                mainAttributes[0],
+                Array.Empty<AttributeDataExtended>(),
+                controlAttributes);
         }
 
-        return new FluentApiAttributeData(mainAttributes[0], orthogonalAttributes);
+        return new FluentApiAttributeData(mainAttributes[0], orthogonalAttributes, controlAttributes);
     }
 }

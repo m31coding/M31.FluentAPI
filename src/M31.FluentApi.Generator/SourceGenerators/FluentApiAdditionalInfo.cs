@@ -9,14 +9,17 @@ internal class FluentApiAdditionalInfo
     internal FluentApiAdditionalInfo(
         ISymbol symbol,
         AttributeDataExtended mainAttributeData,
-        Dictionary<OrthogonalAttributeInfoBase, AttributeDataExtended> orthogonalAttributeData)
+        Dictionary<OrthogonalAttributeInfoBase, AttributeDataExtended> orthogonalAttributeData,
+        Dictionary<ControlAttributeInfoBase, AttributeDataExtended> controlAttributeData)
     {
         Symbol = symbol;
         MainAttributeData = mainAttributeData;
         OrthogonalAttributeData = orthogonalAttributeData;
+        ControlAttributeData = controlAttributeData;
     }
 
     internal ISymbol Symbol { get; }
     internal AttributeDataExtended MainAttributeData { get; }
     internal Dictionary<OrthogonalAttributeInfoBase, AttributeDataExtended> OrthogonalAttributeData { get; }
+    internal Dictionary<ControlAttributeInfoBase, AttributeDataExtended> ControlAttributeData { get; }
 }

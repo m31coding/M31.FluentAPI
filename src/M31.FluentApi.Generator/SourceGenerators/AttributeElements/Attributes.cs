@@ -14,6 +14,9 @@ internal static class Attributes
         internal const string FluentDefaultAttribute = "M31.FluentApi.Attributes.FluentDefaultAttribute";
 
         internal const string FluentMethodAttribute = "M31.FluentApi.Attributes.FluentMethodAttribute";
+
+        internal const string FluentContinueWithAttribute = "M31.FluentApi.Attributes.FluentContinueWithAttribute";
+        internal const string FluentBreakAttribute = "M31.FluentApi.Attributes.FluentBreakAttribute";
     }
 
     private static class AttributeSets
@@ -31,6 +34,12 @@ internal static class Attributes
             FullNames.FluentNullableAttribute,
             FullNames.FluentDefaultAttribute,
         };
+
+        internal static readonly HashSet<string> FullNamesOfControlAttributes = new HashSet<string>()
+        {
+            FullNames.FluentContinueWithAttribute,
+            FullNames.FluentBreakAttribute,
+        };
     }
 
     internal static bool IsMainAttribute(string attributeFullName)
@@ -41,5 +50,10 @@ internal static class Attributes
     internal static bool IsOrthogonalAttribute(string attributeFullName)
     {
         return AttributeSets.FullNamesOfOrthogonalAttributes.Contains(attributeFullName);
+    }
+
+    internal static bool IsControlAttribute(string attributeFullName)
+    {
+        return AttributeSets.FullNamesOfControlAttributes.Contains(attributeFullName);
     }
 }
