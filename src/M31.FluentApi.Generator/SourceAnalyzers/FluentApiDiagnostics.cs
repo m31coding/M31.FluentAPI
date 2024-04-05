@@ -224,6 +224,9 @@ internal static class FluentApiDiagnostics
         }
     }
 
+    /// <summary>
+    /// Diagnostic used for <see cref="GenerationException"/>s.
+    /// </summary>
     internal static class CodeGenerationException
     {
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
@@ -240,6 +243,9 @@ internal static class FluentApiDiagnostics
         }
     }
 
+    /// <summary>
+    /// Diagnostic used for caught exceptions other than <see cref="GenerationException"/>s.
+    /// </summary>
     internal static class GenericException
     {
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(

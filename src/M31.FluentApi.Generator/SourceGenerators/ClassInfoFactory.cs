@@ -6,6 +6,9 @@ using static M31.FluentApi.Generator.SourceAnalyzers.FluentApiDiagnostics;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
+/// <summary>
+/// Creates and analyzes a <see cref="FluentApiClassInfo"/> instance.
+/// </summary>
 internal class ClassInfoFactory
 {
     private readonly Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfo;
