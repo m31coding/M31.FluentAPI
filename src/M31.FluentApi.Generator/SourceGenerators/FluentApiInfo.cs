@@ -7,6 +7,10 @@ using static M31.FluentApi.Generator.SourceGenerators.AttributeElements.Attribut
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
+/// <summary>
+/// Represents the information for one member or method of the fluent API class. GetHashCode and Equals must be
+/// implemented carefully to ensure correct caching in the incremental source generator.
+/// </summary>
 internal class FluentApiInfo
 {
     internal FluentApiInfo(

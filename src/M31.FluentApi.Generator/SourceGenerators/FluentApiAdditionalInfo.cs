@@ -4,6 +4,10 @@ using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
+/// <summary>
+/// Contains additional information related to <see cref="FluentApiInfo"/>. Unlike the former, this class is not used
+/// for caching in the incremental source generator.
+/// </summary>
 internal class FluentApiAdditionalInfo
 {
     internal FluentApiAdditionalInfo(

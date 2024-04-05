@@ -61,6 +61,12 @@ internal class SourceGenerator : IIncrementalGenerator
         }
     }
 
+    /// <summary>
+    /// Transformation method. Creates the <see cref="FluentApiClassInfo"/> from the syntax context.
+    /// </summary>
+    /// <param name="ctx">The <see cref="GeneratorSyntaxContext"/>.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>The <see cref="FluentApiClassInfo"/> or null in case of errors.</returns>
     private FluentApiClassInfo? GetFluentApiClassInfo(GeneratorSyntaxContext ctx, CancellationToken cancellationToken)
     {
         SyntaxNode? syntaxNode = ctx.Node.Parent?.Parent;
@@ -81,6 +87,12 @@ internal class SourceGenerator : IIncrementalGenerator
         return result.ClassInfo;
     }
 
+    /// <summary>
+    /// Predicate / filter method. Must be fast.
+    /// </summary>
+    /// <param name="node">The <see cref="SyntaxNode"/> to analyze.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>True if the node potentially represents a fluent API class.</returns>
     private bool CanBeFluentApiClass(SyntaxNode node, CancellationToken cancellationToken)
     {
         if (node is not AttributeSyntax attributeSyntax)
