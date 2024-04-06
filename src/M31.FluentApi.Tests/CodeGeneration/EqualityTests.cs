@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Tests.CodeGeneration.Helpers;
@@ -17,6 +18,7 @@ public class EqualityTests
     [ClassData(typeof(TestDataProvider))]
     public void TwoInstanceOfFluentApiClassInfoHaveTheSameHashCode(params string[] testClassPathAndName)
     {
+        Array.Reverse(testClassPathAndName);
         ClassInfoResult result1 = CreateFluentApiClassInfoResult(testClassPathAndName);
         ClassInfoResult result2 = CreateFluentApiClassInfoResult(testClassPathAndName);
         Assert.NotNull(result1.ClassInfo);
@@ -28,6 +30,7 @@ public class EqualityTests
     [ClassData(typeof(TestDataProvider))]
     public void TwoInstanceOfFluentApiClassInfoAreEqual(params string[] testClassPathAndName)
     {
+        Array.Reverse(testClassPathAndName);
         ClassInfoResult result1 = CreateFluentApiClassInfoResult(testClassPathAndName);
         ClassInfoResult result2 = CreateFluentApiClassInfoResult(testClassPathAndName);
         Assert.NotNull(result1.ClassInfo);
