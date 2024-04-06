@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 
@@ -21,12 +22,7 @@ internal class FluentApiInfoGroup
     internal string FluentMethodName { get; }
     internal Type AttributeInfoType { get; }
     internal IReadOnlyCollection<FluentApiInfo> FluentApiInfos { get; }
-
-    internal bool IsCompoundGroup => FluentApiInfos.Count > 1 &&
-                                     AttributeInfoType == typeof(FluentMemberAttributeInfo);
-
-    internal bool IsOverloadedMethodGroup => FluentApiInfos.Count > 1 &&
-                                             AttributeInfoType == typeof(FluentMethodAttributeInfo);
+    internal bool IsCompoundGroup => FluentApiInfos.Count > 1;
 
     internal static IReadOnlyCollection<FluentApiInfoGroup> CreateGroups(IReadOnlyCollection<FluentApiInfo> infos)
     {
@@ -34,13 +30,37 @@ internal class FluentApiInfoGroup
             .GroupBy(i => (i.AttributeInfo.BuilderStep, i.FluentMethodName, i.AttributeInfo.GetType()))
             .ToArray();
 
-        return grouping.Select(CreateInfoGroup).ToArray();
+        List<FluentApiInfoGroup> infoGroups = new List<FluentApiInfoGroup>();
 
-        FluentApiInfoGroup CreateInfoGroup(
-            IGrouping<(int builderStep, string fluentMethodName, Type type), FluentApiInfo> group)
+        foreach (IGrouping<(int builderStep, string fluentMethodName, Type type), FluentApiInfo> group in grouping)
         {
-            return new FluentApiInfoGroup(group.Key.builderStep, group.Key.fluentMethodName, group.Key.type,
-                group.ToArray());
+            AddGroups(group);
+        }
+
+        return infoGroups;
+
+        void AddGroups(IGrouping<(int builderStep, string fluentMethodName, Type type), FluentApiInfo> group)
+        {
+            var (builderStep, fluentMethodName, type) = group.Key;
+            FluentApiInfo[] infoArray = group.ToArray();
+
+            // single fluent API info or compound
+            if (infoArray.Length == 1 || group.Key.type == typeof(FluentMemberAttributeInfo))
+            {
+                infoGroups.Add(new FluentApiInfoGroup(builderStep, fluentMethodName, type, infoArray));
+                return;
+            }
+
+            if (group.Key.type != typeof(FluentMethodAttributeInfo))
+            {
+                throw new GenerationException($"Unexpected group type: {group.Key.type.Name}.");
+            }
+
+            // method overloads; split into separate groups
+            foreach (FluentApiInfo info in group)
+            {
+                infoGroups.Add(new FluentApiInfoGroup(builderStep, fluentMethodName, type, new[] { info }));
+            }
         }
     }
 }

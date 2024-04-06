@@ -16,6 +16,6 @@ internal class ForkUnderConstruction
     internal void AddBuilderMethods(string interfacePartialName, IEnumerable<BuilderMethod> builderMethods)
     {
         InterfaceName += interfacePartialName;
-        this.BuilderMethods.AddRange(builderMethods);
+        BuilderMethods.AddRange(builderMethods);
     }
 }

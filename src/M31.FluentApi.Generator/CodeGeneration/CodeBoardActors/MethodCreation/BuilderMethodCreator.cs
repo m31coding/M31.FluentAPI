@@ -45,16 +45,6 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
             return CreateCompoundMethods(methodCreator);
         }
 
-        if (group.IsOverloadedMethodGroup)
-        {
-            return FluentApiInfos.Select(i => CreateBuilderMethods(methodCreator, i))
-                .Aggregate((b1, b2) =>
-                {
-                    b1.Add(b2);
-                    return b1;
-                });
-        }
-
         throw new ArgumentException(
             $"Unable to create methods for group with method name {FluentMethodName}");
     }
