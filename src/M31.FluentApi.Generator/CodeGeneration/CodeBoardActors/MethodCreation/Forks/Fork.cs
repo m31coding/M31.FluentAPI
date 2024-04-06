@@ -4,12 +4,14 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.
 
 internal class Fork
 {
-    internal Fork(string interfaceName, IReadOnlyList<BuilderMethod> builderMethods)
+    internal Fork(int builderStep, string interfaceName, IReadOnlyList<ForkBuilderMethod> builderMethods)
     {
+        BuilderStep = builderStep;
         InterfaceName = interfaceName;
         BuilderMethods = builderMethods;
     }
 
+    internal int BuilderStep { get; }
     internal string InterfaceName { get; }
-    internal IReadOnlyList<BuilderMethod> BuilderMethods { get; }
+    internal IReadOnlyList<ForkBuilderMethod> BuilderMethods { get; }
 }

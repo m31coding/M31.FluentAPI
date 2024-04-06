@@ -42,18 +42,28 @@ internal class ForkCreator : ICodeBoardActor
                 codeBoard.CodeFile.AddUsing(@using);
             }
 
-            AddBuilderMethodsToFork(group.AttributeInfoBuilderStep, group.FluentMethodName, builderMethods.Methods);
+            AddBuilderMethodsToFork(
+                group.BuilderStep,
+                group.NextBuilderStep,
+                group.FluentMethodName,
+                builderMethods.Methods);
         }
     }
 
-    private void AddBuilderMethodsToFork(int builderStep, string interfacePartialName, IEnumerable<BuilderMethod> builderMethods)
+    private void AddBuilderMethodsToFork(
+        int builderStep,
+        int? nextBuilderStep,
+        string interfacePartialName,
+        IEnumerable<BuilderMethod> builderMethods)
     {
         if (!forksByBuilderStep.TryGetValue(builderStep, out ForkUnderConstruction? forkUnderConstruction))
         {
-            forkUnderConstruction = forksByBuilderStep[builderStep] = new ForkUnderConstruction();
+            forkUnderConstruction = forksByBuilderStep[builderStep] = new ForkUnderConstruction(builderStep);
         }
 
-        forkUnderConstruction.AddBuilderMethods(interfacePartialName, builderMethods);
+        ForkBuilderMethod[] forkBuilderMethods =
+            builderMethods.Select(b => new ForkBuilderMethod(b, nextBuilderStep)).ToArray();
+        forkUnderConstruction.AddBuilderMethods(interfacePartialName, forkBuilderMethods);
     }
 
     private IReadOnlyList<Fork> GetForks()
@@ -72,7 +82,7 @@ internal class ForkCreator : ICodeBoardActor
             }
 
             interfaceNames.Add(interfaceName);
-            result.Add(new Fork(interfaceName, fork.BuilderMethods));
+            result.Add(new Fork(fork.BuilderStep, interfaceName, fork.BuilderMethods));
         }
 
         return result;
