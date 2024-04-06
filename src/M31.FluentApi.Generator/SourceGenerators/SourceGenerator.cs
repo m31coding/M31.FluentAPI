@@ -16,7 +16,7 @@ internal class SourceGenerator : IIncrementalGenerator
             .Where(info => info is not null)
             .Collect() // handle partial classes, get an array of related info objects into GenerateCode
             .SelectMany((infos, _) =>
-                infos.Distinct()); // want to have every fluent API info object only once.
+                infos.Distinct()); // want to have every fluent API info object only once
 
         context.RegisterSourceOutput(infos, SourceOutputAction!);
     }
