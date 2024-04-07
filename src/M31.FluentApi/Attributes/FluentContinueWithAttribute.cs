@@ -4,13 +4,13 @@ namespace M31.FluentApi.Attributes;
 /// After calling the builder method, the fluent API continues with the given step.
 /// </summary>
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-public class FluentContinueWith : Attribute
+public class FluentContinueWithAttribute : Attribute
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="FluentContinueWith"/> class.
+    /// Initializes a new instance of the <see cref="FluentContinueWithAttribute"/> class.
     /// </summary>
     /// <param name="builderStep">The builder step to continue with.</param>
-    public FluentContinueWith(int builderStep)
+    public FluentContinueWithAttribute(int builderStep)
     {
 
     }
