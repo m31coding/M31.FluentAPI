@@ -71,7 +71,7 @@ public class CreatePerson : CreatePerson.IWithMiddleNameWithLastName, CreatePers
         return createPerson;
     }
 
-    public IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad WithMiddleName(string? middleName)
+    public IWithMiddleNameWithLastName WithMiddleName(string? middleName)
     {
         middleNamePropertyInfo.SetValue(person, middleName);
         return this;
@@ -83,10 +83,10 @@ public class CreatePerson : CreatePerson.IWithMiddleNameWithLastName, CreatePers
         return this;
     }
 
-    public IWithHouseNumber WhoseAddressIsUnknown()
+    public Person WhoseAddressIsUnknown()
     {
         whoseAddressIsUnknownMethodInfo.Invoke(person, new object?[] {  });
-        return this;
+        return person;
     }
 
     public IWithHouseNumber WhoLivesAtAddress()
@@ -95,7 +95,7 @@ public class CreatePerson : CreatePerson.IWithMiddleNameWithLastName, CreatePers
         return this;
     }
 
-    public IWithHouseNumber WhoIsADigitalNomad()
+    public ILivingInCity WhoIsADigitalNomad()
     {
         whoIsADigitalNomadMethodInfo.Invoke(person, new object?[] {  });
         return this;
@@ -113,10 +113,10 @@ public class CreatePerson : CreatePerson.IWithMiddleNameWithLastName, CreatePers
         return this;
     }
 
-    public ILivingInCity InCity(string city)
+    public Person InCity(string city)
     {
         inCityMethodInfo.Invoke(person, new object?[] { city });
-        return this;
+        return person;
     }
 
     public Person LivingInCity(string city)
@@ -127,15 +127,15 @@ public class CreatePerson : CreatePerson.IWithMiddleNameWithLastName, CreatePers
 
     public interface IWithMiddleNameWithLastName
     {
-        IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad WithMiddleName(string? middleName);
+        IWithMiddleNameWithLastName WithMiddleName(string? middleName);
         IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad WithLastName(string lastName);
     }
 
     public interface IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad
     {
-        IWithHouseNumber WhoseAddressIsUnknown();
+        Person WhoseAddressIsUnknown();
         IWithHouseNumber WhoLivesAtAddress();
-        IWithHouseNumber WhoIsADigitalNomad();
+        ILivingInCity WhoIsADigitalNomad();
     }
 
     public interface IWithHouseNumber
@@ -150,7 +150,7 @@ public class CreatePerson : CreatePerson.IWithMiddleNameWithLastName, CreatePers
 
     public interface IInCity
     {
-        ILivingInCity InCity(string city);
+        Person InCity(string city);
     }
 
     public interface ILivingInCity
