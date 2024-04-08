@@ -28,8 +28,7 @@ internal class ClassInfoAnalyzer
     {
         AnalyzeFluentApiInfosIndividually(classInfo.FluentApiInfos, cancellationToken);
         if (cancellationToken.IsCancellationRequested) return;
-        IReadOnlyCollection<FluentApiInfoGroup> groups = FluentApiInfoGroup.CreateGroups(classInfo.FluentApiInfos);
-        AnalyzeGroups(groups, cancellationToken);
+        AnalyzeGroups(classInfo.AdditionalInfo.FluentApiInfoGroups, cancellationToken);
     }
 
     private void AnalyzeFluentApiInfosIndividually(

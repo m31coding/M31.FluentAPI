@@ -15,12 +15,14 @@ internal class CodeBoard
 
     private CodeBoard(
         IReadOnlyCollection<FluentApiInfo> fluentApiInfos,
+        IReadOnlyCollection<FluentApiInfoGroup> fluentApiInfoGroups,
         BuilderAndTargetInfo builderAndTargetInfo,
         CodeFile codeFile,
         Class builderClass,
         CancellationToken cancellationToken)
     {
         FluentApiInfos = fluentApiInfos;
+        FluentApiInfoGroups = fluentApiInfoGroups;
         Info = builderAndTargetInfo;
         CodeFile = codeFile;
         BuilderClass = builderClass;
@@ -36,6 +38,7 @@ internal class CodeBoard
     }
 
     internal IReadOnlyCollection<FluentApiInfo> FluentApiInfos { get; }
+    internal IReadOnlyCollection<FluentApiInfoGroup> FluentApiInfoGroups { get; }
     internal BuilderAndTargetInfo Info { get; }
     internal CodeFile CodeFile { get; }
     internal Class BuilderClass { get; }
@@ -54,13 +57,20 @@ internal class CodeBoard
 
     internal static CodeBoard Create(
         BuilderAndTargetInfo builderAndTargetInfo,
-        IReadOnlyCollection<FluentApiInfo> infos,
+        IReadOnlyCollection<FluentApiInfo> fluentApiInfos,
+        IReadOnlyCollection<FluentApiInfoGroup> fluentApiInfoGroups,
         IReadOnlyCollection<string> usingStatements,
         CancellationToken cancellationToken)
     {
         CodeFile codeFile = new CodeFile(builderAndTargetInfo.Namespace);
         Class builderClass = new Class(builderAndTargetInfo.BuilderClassName);
-        CodeBoard codeBoard = new CodeBoard(infos, builderAndTargetInfo, codeFile, builderClass, cancellationToken);
+        CodeBoard codeBoard = new CodeBoard(
+            fluentApiInfos,
+            fluentApiInfoGroups,
+            builderAndTargetInfo,
+            codeFile,
+            builderClass,
+            cancellationToken);
 
         CreateHeader(codeFile);
         codeFile.AddPreprocessorDirective("#nullable enable");

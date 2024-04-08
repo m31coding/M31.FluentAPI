@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -87,6 +88,8 @@ internal class ClassInfoFactory
             }
         }
 
+        var groups = FluentApiInfoGroup.CreateGroups(infos);
+
         return new FluentApiClassInfo(
             className,
             @namespace,
@@ -96,7 +99,7 @@ internal class ClassInfoFactory
             builderClassName,
             infos,
             usingStatements,
-            new FluentApiClassAdditionalInfo());
+            new FluentApiClassAdditionalInfo(groups));
     }
 
     private bool HasPrivateConstructor(INamedTypeSymbol type)

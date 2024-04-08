@@ -27,7 +27,7 @@ internal class ForkCreator : ICodeBoardActor
         MethodCreator methodCreator,
         CodeBoard codeBoard)
     {
-        foreach (FluentApiInfoGroup group in FluentApiInfoGroup.CreateGroups(infos))
+        foreach (FluentApiInfoGroup group in codeBoard.FluentApiInfoGroups)
         {
             if (codeBoard.CancellationRequested)
             {

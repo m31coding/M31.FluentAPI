@@ -4,7 +4,8 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 
 /// <summary>
 /// Represents all the required information for the fluent API class. Used by the incremental source generator.
-/// GetHashCode and Equals must be implemented carefully to ensure correct caching.
+/// GetHashCode and Equals must be implemented carefully to ensure correct caching. The property
+/// <see cref="FluentApiClassAdditionalInfo"/> holds members that are irrelevant or unsuitable for equality checks.
 /// </summary>
 internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
 {
