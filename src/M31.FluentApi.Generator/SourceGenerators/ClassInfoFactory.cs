@@ -11,12 +11,10 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 /// </summary>
 internal class ClassInfoFactory
 {
-    private readonly Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfo;
     private readonly ClassInfoReport report;
 
     private ClassInfoFactory()
     {
-        additionalInfo = new Dictionary<FluentApiInfo, FluentApiAdditionalInfo>();
         report = new ClassInfoReport();
     }
 
@@ -98,7 +96,7 @@ internal class ClassInfoFactory
             builderClassName,
             infos,
             usingStatements,
-            new FluentApiClassAdditionalInfo(additionalInfo));
+            new FluentApiClassAdditionalInfo());
     }
 
     private bool HasPrivateConstructor(INamedTypeSymbol type)
@@ -130,12 +128,6 @@ internal class ClassInfoFactory
             return null;
         }
 
-        FluentApiInfo result = FluentApiInfo.Create(
-            symbol,
-            attributeData,
-            out FluentApiAdditionalInfo fluentApiAdditionalInfo);
-
-        additionalInfo.Add(result, fluentApiAdditionalInfo);
-        return result;
+        return FluentApiInfo.Create(symbol, attributeData);
     }
 }

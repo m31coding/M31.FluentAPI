@@ -24,7 +24,6 @@ internal static class CodeGenerator
         CodeBoard codeBoard = CodeBoard.Create(
             builderAndTargetInfo,
             classInfo.FluentApiInfos,
-            classInfo.AdditionalInfo.AdditionalInfos,
             classInfo.UsingStatements,
             cancellationToken);
 

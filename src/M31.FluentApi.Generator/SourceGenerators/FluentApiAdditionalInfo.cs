@@ -5,8 +5,8 @@ using Microsoft.CodeAnalysis;
 namespace M31.FluentApi.Generator.SourceGenerators;
 
 /// <summary>
-/// Contains additional information related to <see cref="FluentApiInfo"/>. Unlike the former, this class is not used
-/// for caching in the incremental source generator.
+/// Contains additional information belonging to <see cref="FluentApiInfo"/>. This class is not used for equality checks
+/// and hence does not influence the caching in the incremental source generator.
 /// </summary>
 internal class FluentApiAdditionalInfo
 {

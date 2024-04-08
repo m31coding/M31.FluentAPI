@@ -168,8 +168,7 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
     {
         foreach (BuilderMethod builderMethod in builderMethods)
         {
-            codeBoard.BuilderMethodToAttributeData[builderMethod] =
-                codeBoard.FluentApiAdditionalInfos[info].MainAttributeData;
+            codeBoard.BuilderMethodToAttributeData[builderMethod] = info.AdditionalInfo.MainAttributeData;
         }
     }
 }

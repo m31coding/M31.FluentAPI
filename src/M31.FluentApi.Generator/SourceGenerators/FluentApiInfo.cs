@@ -10,6 +10,8 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 /// <summary>
 /// Represents the information for one member or method of the fluent API class. GetHashCode and Equals must be
 /// implemented carefully to ensure correct caching in the incremental source generator.
+/// The property <see cref="FluentApiAdditionalInfo"/> holds members that are irrelevant or unsuitable for equality
+/// checks.
 /// </summary>
 internal class FluentApiInfo
 {
@@ -17,24 +19,24 @@ internal class FluentApiInfo
         FluentApiSymbolInfo symbolInfo,
         AttributeInfoBase attributeInfo,
         IReadOnlyCollection<OrthogonalAttributeInfoBase> orthogonalAttributeInfos,
-        IReadOnlyCollection<ControlAttributeInfoBase> controlAttributeInfos)
+        IReadOnlyCollection<ControlAttributeInfoBase> controlAttributeInfos,
+        FluentApiAdditionalInfo fluentApiAdditionalInfo)
     {
         SymbolInfo = symbolInfo;
         AttributeInfo = attributeInfo;
         OrthogonalAttributeInfos = orthogonalAttributeInfos;
         ControlAttributeInfos = controlAttributeInfos;
+        AdditionalInfo = fluentApiAdditionalInfo;
     }
 
     internal FluentApiSymbolInfo SymbolInfo { get; }
     internal AttributeInfoBase AttributeInfo { get; }
     internal IReadOnlyCollection<OrthogonalAttributeInfoBase> OrthogonalAttributeInfos { get; }
     internal IReadOnlyCollection<ControlAttributeInfoBase> ControlAttributeInfos { get; }
+    internal FluentApiAdditionalInfo AdditionalInfo { get; }
     internal string FluentMethodName => AttributeInfo.FluentMethodName;
 
-    internal static FluentApiInfo Create(
-        ISymbol symbol,
-        FluentApiAttributeData attributeData,
-        out FluentApiAdditionalInfo additionalInfo)
+    internal static FluentApiInfo Create(ISymbol symbol, FluentApiAttributeData attributeData)
     {
         AttributeInfoBase attributeInfo =
             CreateAttributeInfo(attributeData.MainAttributeData, symbol.Name);
@@ -50,7 +52,7 @@ internal class FluentApiInfo
                 .ToArray();
 
         FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
-        additionalInfo = new FluentApiAdditionalInfo(
+        FluentApiAdditionalInfo additionalInfo = new FluentApiAdditionalInfo(
             symbol,
             attributeData.MainAttributeData,
             ToDictionary(orthogonalDataAndInfos),
@@ -60,7 +62,8 @@ internal class FluentApiInfo
             symbolInfo,
             attributeInfo,
             ToInfos(orthogonalDataAndInfos),
-            ToInfos(controlDataAndInfos));
+            ToInfos(controlDataAndInfos),
+            additionalInfo);
     }
 
     private static Dictionary<TAttributeInfoBase, AttributeDataExtended> ToDictionary<TAttributeInfoBase>(

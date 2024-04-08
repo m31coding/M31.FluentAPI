@@ -26,16 +26,14 @@ internal class ClassInfoAnalyzer
 
     internal void Analyze(FluentApiClassInfo classInfo, CancellationToken cancellationToken)
     {
-        AnalyzeFluentApiInfosIndividually(classInfo.FluentApiInfos, classInfo.AdditionalInfo.AdditionalInfos,
-            cancellationToken);
+        AnalyzeFluentApiInfosIndividually(classInfo.FluentApiInfos, cancellationToken);
         if (cancellationToken.IsCancellationRequested) return;
         IReadOnlyCollection<FluentApiInfoGroup> groups = FluentApiInfoGroup.CreateGroups(classInfo.FluentApiInfos);
-        AnalyzeGroups(groups, classInfo.AdditionalInfo.AdditionalInfos, cancellationToken);
+        AnalyzeGroups(groups, cancellationToken);
     }
 
     private void AnalyzeFluentApiInfosIndividually(
         IReadOnlyCollection<FluentApiInfo> fluentApiInfos,
-        Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfos,
         CancellationToken cancellationToken)
     {
         foreach (FluentApiInfo info in fluentApiInfos)
@@ -45,68 +43,68 @@ internal class ClassInfoAnalyzer
                 return;
             }
 
-            AnalyzeInfo(info, additionalInfos[info]);
+            AnalyzeInfo(info);
         }
 
-        void AnalyzeInfo(FluentApiInfo info, FluentApiAdditionalInfo additionalInfo)
+        void AnalyzeInfo(FluentApiInfo info)
         {
             if (info.AttributeInfo is FluentCollectionAttributeInfo)
             {
-                AnalyzeFluentCollection(info, additionalInfo);
+                AnalyzeFluentCollection(info);
             }
 
             if (info.AttributeInfo is FluentPredicateAttributeInfo)
             {
-                AnalyzeFluentPredicate(info, additionalInfo);
+                AnalyzeFluentPredicate(info);
             }
 
             if (info.SymbolInfo is MemberSymbolInfo { IsProperty: true })
             {
-                AnalyzeProperty(info, additionalInfo);
+                AnalyzeProperty(info);
             }
 
             if (info.SymbolInfo is MethodSymbolInfo)
             {
-                AnalyzeMethod(info, additionalInfo);
+                AnalyzeMethod(info);
             }
 
             foreach (OrthogonalAttributeInfoBase orthogonalInfo in info.OrthogonalAttributeInfos)
             {
                 if (orthogonalInfo is FluentNullableAttributeInfo)
                 {
-                    AnalyzeFluentNullable(info, additionalInfo);
+                    AnalyzeFluentNullable(info);
                 }
             }
         }
     }
 
-    private void AnalyzeFluentCollection(FluentApiInfo info, FluentApiAdditionalInfo additionalInfo)
+    private void AnalyzeFluentCollection(FluentApiInfo info)
     {
         MemberSymbolInfo memberInfo = (MemberSymbolInfo)info.SymbolInfo;
 
         if (memberInfo.CollectionType == null)
         {
-            ISymbol symbol = additionalInfo.Symbol;
+            ISymbol symbol = info.AdditionalInfo.Symbol;
             TypeSyntax typeSyntax = GetTypeSyntax(symbol);
             report.ReportDiagnostic(UnsupportedFluentCollectionType.CreateDiagnostic(typeSyntax));
         }
     }
 
-    private void AnalyzeFluentPredicate(FluentApiInfo info, FluentApiAdditionalInfo additionalInfo)
+    private void AnalyzeFluentPredicate(FluentApiInfo info)
     {
         MemberSymbolInfo memberInfo = (MemberSymbolInfo)info.SymbolInfo;
 
         if (memberInfo.Type is not ("bool" or "bool?"))
         {
-            ISymbol symbol = additionalInfo.Symbol;
+            ISymbol symbol = info.AdditionalInfo.Symbol;
             TypeSyntax typeSyntax = GetTypeSyntax(symbol);
             report.ReportDiagnostic(InvalidFluentPredicateType.CreateDiagnostic(typeSyntax));
         }
     }
 
-    private void AnalyzeProperty(FluentApiInfo info, FluentApiAdditionalInfo additionalInfo)
+    private void AnalyzeProperty(FluentApiInfo info)
     {
-        IPropertySymbol propertySymbol = (IPropertySymbol)additionalInfo.Symbol;
+        IPropertySymbol propertySymbol = (IPropertySymbol)info.AdditionalInfo.Symbol;
 
         if (propertySymbol.SetMethod == null)
         {
@@ -114,9 +112,9 @@ internal class ClassInfoAnalyzer
         }
     }
 
-    private void AnalyzeMethod(FluentApiInfo info, FluentApiAdditionalInfo additionalInfo)
+    private void AnalyzeMethod(FluentApiInfo info)
     {
-        IMethodSymbol methodSymbol = (IMethodSymbol)additionalInfo.Symbol;
+        IMethodSymbol methodSymbol = (IMethodSymbol)info.AdditionalInfo.Symbol;
 
         if (!methodSymbol.ReturnsVoid)
         {
@@ -125,10 +123,10 @@ internal class ClassInfoAnalyzer
         }
     }
 
-    private void AnalyzeFluentNullable(FluentApiInfo info, FluentApiAdditionalInfo additionalInfo)
+    private void AnalyzeFluentNullable(FluentApiInfo info)
     {
         MemberSymbolInfo memberInfo = (MemberSymbolInfo)info.SymbolInfo;
-        ISymbol symbol = additionalInfo.Symbol;
+        ISymbol symbol = info.AdditionalInfo.Symbol;
         bool isReferenceType = false;
         bool isValueType = false;
 
@@ -177,10 +175,7 @@ internal class ClassInfoAnalyzer
         return node.DescendantNodes(n => n is not AttributeSyntax).OfType<TypeSyntax>().First();
     }
 
-    private void AnalyzeGroups(
-        IReadOnlyCollection<FluentApiInfoGroup> groups,
-        Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfo,
-        CancellationToken cancellationToken)
+    private void AnalyzeGroups(IReadOnlyCollection<FluentApiInfoGroup> groups, CancellationToken cancellationToken)
     {
         foreach (FluentApiInfoGroup group in groups)
         {
@@ -189,13 +184,11 @@ internal class ClassInfoAnalyzer
                 return;
             }
 
-            ReportErrorsForOrthogonalAttributesOnCompounds(group, additionalInfo);
+            ReportErrorsForOrthogonalAttributesOnCompounds(group);
         }
     }
 
-    private void ReportErrorsForOrthogonalAttributesOnCompounds(
-        FluentApiInfoGroup group,
-        Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfo)
+    private void ReportErrorsForOrthogonalAttributesOnCompounds(FluentApiInfoGroup group)
     {
         if (group.IsCompoundGroup)
         {
@@ -204,7 +197,7 @@ internal class ClassInfoAnalyzer
                 foreach (OrthogonalAttributeInfoBase orthogonalAttributeInfo in info.OrthogonalAttributeInfos)
                 {
                     AttributeDataExtended orthogonalAttributeData =
-                        additionalInfo[info].OrthogonalAttributeData[orthogonalAttributeInfo];
+                        info.AdditionalInfo.OrthogonalAttributeData[orthogonalAttributeInfo];
 
                     report.ReportDiagnostic(
                         OrthogonalAttributeMisusedWithCompound.CreateDiagnostic(orthogonalAttributeData));

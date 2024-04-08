@@ -2,10 +2,8 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal class FluentApiClassAdditionalInfo
 {
-    internal FluentApiClassAdditionalInfo(Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfos)
+    // todo: store groups
+    internal FluentApiClassAdditionalInfo()
     {
-        AdditionalInfos = additionalInfos;
     }
-
-    internal Dictionary<FluentApiInfo, FluentApiAdditionalInfo> AdditionalInfos { get; }
 }
