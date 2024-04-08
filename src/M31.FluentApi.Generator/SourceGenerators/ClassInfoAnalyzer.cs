@@ -1,7 +1,6 @@
 // Opening parenthesis should not be preceded by a space
 #pragma warning disable SA1008
 
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;

@@ -30,6 +30,7 @@ internal static class FluentApiDiagnostics
         InvalidFluentMethodReturnType.Descriptor,
         CodeGenerationError.Descriptor,
         UnsupportedGenericType.Descriptor,
+        ConflictingControlAttributes.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -344,6 +345,24 @@ internal static class FluentApiDiagnostics
         internal static Diagnostic CreateDiagnostic(INamedTypeSymbol symbol)
         {
             return Diagnostic.Create(Descriptor, symbol.Locations[0]);
+        }
+    }
+
+    internal static class ConflictingControlAttributes
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA019",
+            title: "Conflicting control attributes",
+            messageFormat: "Control attributes are in conflict with each other",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location);
         }
     }
 }

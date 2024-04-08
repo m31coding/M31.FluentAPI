@@ -1,4 +1,3 @@
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -88,7 +87,7 @@ internal class ClassInfoFactory
             }
         }
 
-        var groups = FluentApiInfoGroup.CreateGroups(infos);
+        IReadOnlyCollection<FluentApiInfoGroup> groups = FluentApiInfoGroupCreator.CreateGroups(infos, report);
 
         return new FluentApiClassInfo(
             className,
