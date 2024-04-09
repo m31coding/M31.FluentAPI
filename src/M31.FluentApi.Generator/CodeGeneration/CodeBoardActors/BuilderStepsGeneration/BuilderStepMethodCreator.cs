@@ -76,8 +76,8 @@ internal class BuilderStepMethodCreator
 
         if (!builderStepToFork.TryGetValue(nextBuilderStep.Value, out Fork nextFork))
         {
-            // todo: implement diagnostics. Avoid duplication.
-            throw new GenerationException("Unable to obtain the next fork.");
+            throw new GenerationException(
+                $"Unable to obtain the next fork. Builder step {nextBuilderStep.Value} is unknown.");
         }
 
         return nextFork.InterfaceName;

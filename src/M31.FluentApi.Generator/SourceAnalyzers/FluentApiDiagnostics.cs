@@ -31,6 +31,7 @@ internal static class FluentApiDiagnostics
         CodeGenerationError.Descriptor,
         UnsupportedGenericType.Descriptor,
         ConflictingControlAttributes.Descriptor,
+        MissingBuilderStep.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -363,6 +364,24 @@ internal static class FluentApiDiagnostics
             Location location = attributeData.AttributeData.ApplicationSyntaxReference?
                 .GetSyntax().GetLocation() ?? Location.None;
             return Diagnostic.Create(Descriptor, location);
+        }
+    }
+
+    internal static class MissingBuilderStep
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA020",
+            title: "Missing builder step",
+            messageFormat: "Builder step {0} can not be found",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData, int missingBuilderStep)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location, missingBuilderStep);
         }
     }
 }

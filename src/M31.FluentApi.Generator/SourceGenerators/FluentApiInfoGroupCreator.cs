@@ -34,6 +34,8 @@ internal class FluentApiInfoGroupCreator
             .ToArray();
 
         Dictionary<int, int?> stepToNextStep = GetStepToNextStepDictionary(grouping);
+        ReportInvalidSteps(stepToNextStep, infos);
+
         List<FluentApiInfoGroup> infoGroups = new List<FluentApiInfoGroup>();
 
         foreach (var group in grouping)
@@ -90,6 +92,23 @@ internal class FluentApiInfoGroupCreator
 
         stepToNextStep[builderSteps[builderSteps.Length - 1]] = null;
         return stepToNextStep;
+    }
+
+    private void ReportInvalidSteps(Dictionary<int, int?> stepToNextStep, IReadOnlyCollection<FluentApiInfo> infos)
+    {
+        foreach (FluentApiInfo info in infos)
+        {
+            foreach (FluentContinueWithAttributeInfo continueWith in
+                     info.ControlAttributeInfos.OfType<FluentContinueWithAttributeInfo>())
+            {
+                if (!stepToNextStep.ContainsKey(continueWith.ContinueWithBuilderStep))
+                {
+                    AttributeDataExtended attributeData = info.AdditionalInfo.ControlAttributeData[continueWith];
+                    classInfoReport.ReportDiagnostic(
+                        MissingBuilderStep.CreateDiagnostic(attributeData, continueWith.ContinueWithBuilderStep));
+                }
+            }
+        }
     }
 
     private int? GetNextBuilderStep(FluentApiInfo[] fluentApiInfos, int? defaultNextBuilderStep)
