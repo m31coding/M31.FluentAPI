@@ -32,7 +32,7 @@ public class CreateStudent : CreateStudent.IWhoIsHappy
         return createStudent;
     }
 
-    public static IWhoIsHappy WhoseFriendsAre(params string[] friends)
+    public static IWhoIsHappy WhoseFriendsAre(params string[]? friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;

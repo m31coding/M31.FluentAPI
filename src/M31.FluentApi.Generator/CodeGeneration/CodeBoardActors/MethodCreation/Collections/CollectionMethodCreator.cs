@@ -23,7 +23,8 @@ internal abstract class CollectionMethodCreator
 
     internal BuilderMethod? CreateWithItemsMethod(MethodCreator methodCreator)
     {
-        return symbolInfo.TypeForCodeGeneration == $"{genericTypeArgument}[]"
+        return symbolInfo.TypeForCodeGeneration == $"{genericTypeArgument}[]" ||
+               symbolInfo.TypeForCodeGeneration == $"{genericTypeArgument}[]?"
             ? null
             : methodCreator.CreateMethod(symbolInfo, collectionAttributeInfo.WithItems);
     }
@@ -31,7 +32,7 @@ internal abstract class CollectionMethodCreator
     internal BuilderMethod CreateWithItemsParamsMethod(MethodCreator methodCreator)
     {
         Parameter parameter = new Parameter(
-            $"{genericTypeArgument}[]",
+            symbolInfo.IsNullable ? $"{genericTypeArgument}[]?" : $"{genericTypeArgument}[]",
             symbolInfo.NameInCamelCase,
             null,
             new ParameterAnnotations(ParameterKinds.Params));

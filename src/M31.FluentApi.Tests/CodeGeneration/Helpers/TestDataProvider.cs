@@ -10,8 +10,9 @@ internal class TestDataProvider : IEnumerable<object[]>
         new List<object[]>
         {
             new object[] { "Abstract", "AliasNamespaceClass", "Student" },
-            new object[] { "Abstract", "CollectionMemberClass", "Student" },
             new object[] { "Abstract", "CollectionInterfaceMemberClass", "Student" },
+            new object[] { "Abstract", "CollectionMemberClass", "Student" },
+            new object[] { "Abstract", "CollectionNullableArrayClass", "Student" },
             new object[] { "Abstract", "ContinueWithSelfClass", "Student" },
             new object[] { "Abstract", "CustomFluentMethodNameClass", "Student" },
             new object[] { "Abstract", "DefaultFluentMethodNameClass", "Student" },
