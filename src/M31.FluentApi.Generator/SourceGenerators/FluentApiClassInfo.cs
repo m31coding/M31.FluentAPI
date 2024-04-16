@@ -16,6 +16,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         bool isInternal,
         bool hasPrivateConstructor,
         string builderClassName,
+        string newLineString,
         IReadOnlyCollection<FluentApiInfo> fluentApiInfos,
         IReadOnlyCollection<string> usingStatements,
         FluentApiClassAdditionalInfo additionalInfo)
@@ -26,6 +27,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         IsInternal = isInternal;
         HasPrivateConstructor = hasPrivateConstructor;
         BuilderClassName = builderClassName;
+        NewLineString = newLineString;
         FluentApiInfos = fluentApiInfos;
         UsingStatements = usingStatements;
         AdditionalInfo = additionalInfo;
@@ -37,6 +39,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     internal bool IsInternal { get; }
     internal bool HasPrivateConstructor { get; }
     internal string BuilderClassName { get; }
+    internal string NewLineString { get; }
     internal IReadOnlyCollection<FluentApiInfo> FluentApiInfos { get; }
     internal IReadOnlyCollection<string> UsingStatements { get; }
     internal FluentApiClassAdditionalInfo AdditionalInfo { get; }
@@ -51,6 +54,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
                IsInternal == other.IsInternal &&
                HasPrivateConstructor == other.HasPrivateConstructor &&
                BuilderClassName == other.BuilderClassName &&
+               NewLineString == other.NewLineString &&
                FluentApiInfos.SequenceEqual(other.FluentApiInfos) &&
                UsingStatements.SequenceEqual(other.UsingStatements);
     }
@@ -69,6 +73,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
             .Add(Name, Namespace)
             .Add(IsStruct, IsInternal, HasPrivateConstructor)
             .Add(BuilderClassName)
+            .Add(NewLineString)
             .AddSequence(FluentApiInfos)
             .AddSequence(UsingStatements);
     }

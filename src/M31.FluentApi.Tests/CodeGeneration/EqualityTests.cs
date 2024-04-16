@@ -44,6 +44,10 @@ public class EqualityTests
         (SemanticModel semanticModel, TypeDeclarationSyntax? typeDeclaration) =
             testClassCodeGenerator.GetSemanticModelAndTypeDeclaration();
         Assert.NotNull(typeDeclaration);
-        return ClassInfoFactory.CreateFluentApiClassInfo(semanticModel, typeDeclaration!, CancellationToken.None);
+        return ClassInfoFactory.CreateFluentApiClassInfo(
+            semanticModel,
+            typeDeclaration!,
+            SourceGenerator.GeneratorConfig,
+            CancellationToken.None);
     }
 }

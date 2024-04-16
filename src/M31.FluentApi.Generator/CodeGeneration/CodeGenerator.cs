@@ -26,6 +26,7 @@ internal static class CodeGenerator
             classInfo.FluentApiInfos,
             classInfo.AdditionalInfo.FluentApiInfoGroups,
             classInfo.UsingStatements,
+            classInfo.NewLineString,
             cancellationToken);
 
         List<ICodeBoardActor> actors = new List<ICodeBoardActor>()

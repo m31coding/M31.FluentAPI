@@ -22,7 +22,7 @@ public class CodeBuildingTests
     {
         Interface moveInterface = CreateIMoveInterface();
         Class robot = CreateRobotClass(moveInterface);
-        CodeFile codeFile = new CodeFile("M31.FluentApi.Tests.Components");
+        CodeFile codeFile = new CodeFile("M31.FluentApi.Tests.Components", "\n");
         codeFile.AddUsing("System.Collections.Generic");
         codeFile.AddDefinition(robot);
         codeFile.AddDefinition(moveInterface);

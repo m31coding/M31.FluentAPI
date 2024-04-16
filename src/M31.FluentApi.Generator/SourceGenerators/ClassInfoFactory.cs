@@ -19,14 +19,23 @@ internal class ClassInfoFactory
     }
 
     internal static ClassInfoResult CreateFluentApiClassInfo(
-        SemanticModel semanticModel, TypeDeclarationSyntax typeDeclaration, CancellationToken cancellationToken)
+        SemanticModel semanticModel,
+        TypeDeclarationSyntax typeDeclaration,
+        SourceGeneratorConfig generatorConfig,
+        CancellationToken cancellationToken)
     {
-        return new ClassInfoFactory().CreateFluentApiClassInfoInternal(semanticModel, typeDeclaration,
+        return new ClassInfoFactory().CreateFluentApiClassInfoInternal(
+            semanticModel,
+            typeDeclaration,
+            generatorConfig,
             cancellationToken);
     }
 
     private ClassInfoResult CreateFluentApiClassInfoInternal(
-        SemanticModel semanticModel, TypeDeclarationSyntax typeDeclaration, CancellationToken cancellationToken)
+        SemanticModel semanticModel,
+        TypeDeclarationSyntax typeDeclaration,
+        SourceGeneratorConfig generatorConfig,
+        CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
         {
@@ -45,7 +54,12 @@ internal class ClassInfoFactory
         bool isStruct = syntaxKind is SyntaxKind.StructDeclaration or SyntaxKind.RecordStructDeclaration;
 
         FluentApiClassInfo? classInfo = CreateFluentApiClassInfo(
-            typeData.Type, typeData.AttributeData, typeData.UsingStatements, isStruct, cancellationToken);
+            typeData.Type,
+            typeData.AttributeData,
+            typeData.UsingStatements,
+            isStruct,
+            generatorConfig.NewLineString,
+            cancellationToken);
 
         if (classInfo != null)
         {
@@ -61,6 +75,7 @@ internal class ClassInfoFactory
         AttributeDataExtended attributeDataExtended,
         IReadOnlyCollection<string> usingStatements,
         bool isStruct,
+        string newLineString,
         CancellationToken cancellationToken)
     {
         string className = type.Name;
@@ -96,6 +111,7 @@ internal class ClassInfoFactory
             isInternal,
             hasPrivateConstructor,
             builderClassName,
+            newLineString,
             infos,
             usingStatements,
             new FluentApiClassAdditionalInfo(groups));

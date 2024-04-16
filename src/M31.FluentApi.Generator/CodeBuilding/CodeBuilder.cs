@@ -4,13 +4,15 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class CodeBuilder
 {
+    private readonly string newLineString;
     internal int IndentationLevel { get; set; } = 0;
     private readonly StringBuilder stringBuilder;
     private bool endOfLine;
     private bool blankLine;
 
-    internal CodeBuilder()
+    internal CodeBuilder(string newLineString)
     {
+        this.newLineString = newLineString;
         stringBuilder = new StringBuilder();
         endOfLine = false;
         blankLine = false;
@@ -176,14 +178,14 @@ internal class CodeBuilder
             {
                 if (stringBuilder.Length > 0)
                 {
-                    stringBuilder.AppendLine().AppendLine();
+                    stringBuilder.Append(newLineString).Append(newLineString);
                 }
 
                 blankLine = false;
             }
             else
             {
-                stringBuilder.AppendLine();
+                stringBuilder.Append(newLineString);
             }
 
             endOfLine = false;

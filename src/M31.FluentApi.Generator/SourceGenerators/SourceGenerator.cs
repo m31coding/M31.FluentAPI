@@ -9,6 +9,8 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 [Generator(LanguageNames.CSharp)]
 internal class SourceGenerator : IIncrementalGenerator
 {
+    internal static readonly SourceGeneratorConfig GeneratorConfig = new SourceGeneratorConfig();
+
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var infos = context.SyntaxProvider
@@ -77,7 +79,8 @@ internal class SourceGenerator : IIncrementalGenerator
         }
 
         ClassInfoResult result =
-            ClassInfoFactory.CreateFluentApiClassInfo(ctx.SemanticModel, typeDeclaration, cancellationToken);
+            ClassInfoFactory.CreateFluentApiClassInfo(
+                ctx.SemanticModel, typeDeclaration, GeneratorConfig, cancellationToken);
 
         if (result.ClassInfoReport.HasErrors())
         {

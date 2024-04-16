@@ -5,10 +5,12 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 internal class CallMethodCode
 {
     private readonly BuildCallMethodCode buildCallMethodCode;
+    private readonly string newLineString;
 
-    internal CallMethodCode(BuildCallMethodCode buildCallMethodCode)
+    internal CallMethodCode(BuildCallMethodCode buildCallMethodCode, string newLineString)
     {
         this.buildCallMethodCode = buildCallMethodCode;
+        this.newLineString = newLineString;
     }
 
     internal List<string> BuildCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
@@ -18,6 +20,6 @@ internal class CallMethodCode
 
     public override string ToString()
     {
-        return string.Join(Environment.NewLine, buildCallMethodCode(string.Empty, Array.Empty<Parameter>()));
+        return string.Join(newLineString, buildCallMethodCode(string.Empty, Array.Empty<Parameter>()));
     }
 }
