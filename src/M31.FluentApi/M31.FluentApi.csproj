@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.1.0</PackageVersion>
     <Authors>Kevin Schaal</Authors>
     <Description>Generate fluent APIs in C#.</Description>
     <PackageTags>FluentAPI CodeGeneration</PackageTags>
