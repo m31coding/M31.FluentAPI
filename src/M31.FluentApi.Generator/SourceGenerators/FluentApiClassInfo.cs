@@ -12,7 +12,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     internal FluentApiClassInfo(
         string name,
         string? @namespace,
-        GenericsInfo? genericsInfo,
+        GenericInfo? genericInfo,
         bool isStruct,
         bool isInternal,
         bool hasPrivateConstructor,
@@ -24,7 +24,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     {
         Name = name;
         Namespace = @namespace;
-        GenericsInfo = genericsInfo;
+        GenericInfo = genericInfo;
         IsStruct = isStruct;
         IsInternal = isInternal;
         HasPrivateConstructor = hasPrivateConstructor;
@@ -37,7 +37,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
 
     internal string Name { get; }
     internal string? Namespace { get; }
-    internal GenericsInfo? GenericsInfo { get; }
+    internal GenericInfo? GenericInfo { get; }
     internal bool IsStruct { get; }
     internal bool IsInternal { get; }
     internal bool HasPrivateConstructor { get; }
@@ -53,7 +53,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         if (ReferenceEquals(this, other)) return true;
         return Name == other.Name &&
                Namespace == other.Namespace &&
-               Equals(GenericsInfo, other.GenericsInfo) &&
+               Equals(GenericInfo, other.GenericInfo) &&
                IsStruct == other.IsStruct &&
                IsInternal == other.IsInternal &&
                HasPrivateConstructor == other.HasPrivateConstructor &&
@@ -74,7 +74,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     public override int GetHashCode()
     {
         return new HashCode()
-            .Add(Name, Namespace, GenericsInfo)
+            .Add(Name, Namespace, GenericInfo)
             .Add(IsStruct, IsInternal, HasPrivateConstructor)
             .Add(BuilderClassName)
             .Add(NewLineString)

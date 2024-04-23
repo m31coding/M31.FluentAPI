@@ -7,18 +7,18 @@ internal class TypeData
 {
     internal TypeData(
         INamedTypeSymbol type,
-        GenericsInfo? genericsInfo,
+        GenericInfo? genericInfo,
         AttributeDataExtended attributeData,
         IReadOnlyCollection<string> usingStatements)
     {
         Type = type;
-        GenericsInfo = genericsInfo;
+        GenericInfo = genericInfo;
         AttributeData = attributeData;
         UsingStatements = usingStatements;
     }
 
     internal INamedTypeSymbol Type { get; }
-    internal GenericsInfo? GenericsInfo { get; }
+    internal GenericInfo? GenericInfo { get; }
     internal AttributeDataExtended AttributeData { get; }
     internal IReadOnlyCollection<string> UsingStatements { get; }
 }

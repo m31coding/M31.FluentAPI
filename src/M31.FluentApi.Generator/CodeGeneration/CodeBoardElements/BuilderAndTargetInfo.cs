@@ -8,7 +8,7 @@ internal class BuilderAndTargetInfo
     internal BuilderAndTargetInfo(
         string fluentApiClassName,
         string? @namespace,
-        GenericsInfo? genericsInfo,
+        GenericInfo? genericsInfo,
         bool fluentApiTypeIsStruct,
         bool fluentApiTypeIsInternal,
         bool fluentApiTypeHasPrivateConstructor,
@@ -30,7 +30,7 @@ internal class BuilderAndTargetInfo
     internal string? Namespace { get; }
     internal string FluentApiClassName { get; }
     internal string FluentApiClassNameWithTypeParameters { get; }
-    internal GenericsInfo? GenericsInfo { get; }
+    internal GenericInfo? GenericsInfo { get; }
     internal bool FluentApiTypeIsStruct { get; }
     internal bool FluentApiTypeIsInternal { get; }
     internal bool FluentApiTypeHasPrivateConstructor { get; }
@@ -39,7 +39,7 @@ internal class BuilderAndTargetInfo
     internal string BuilderInstanceName { get; }
     internal string ClassInstanceName { get; }
 
-    private static string WithTypeParameters(string typeName, GenericsInfo? genericsInfo)
+    private static string WithTypeParameters(string typeName, GenericInfo? genericsInfo)
     {
         if (genericsInfo == null || genericsInfo.Parameters.Count == 0)
         {
