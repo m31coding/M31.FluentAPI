@@ -134,18 +134,6 @@ public class AnalyzerAndCodeFixTests
     }
 
     [Fact]
-    public async Task CanDetectGenericClass()
-    {
-        (string source, string fixedSource) = ReadSource("GenericClass", "Student");
-
-        var expectedDiagnostic = Verifier.Diagnostic(UnsupportedGenericType.Descriptor.Id)
-            .WithLocation(9, 14)
-            .WithArguments("Student");
-
-        await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
-    }
-
-    [Fact]
     public async Task CanDetectNullableTypeNoNullableAnnotation()
     {
         (string source, string fixedSource) = ReadSource("NullableTypeNoNullableAnnotationClass", "Student");

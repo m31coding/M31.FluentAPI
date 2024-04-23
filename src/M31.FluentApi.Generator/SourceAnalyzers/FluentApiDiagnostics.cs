@@ -29,7 +29,6 @@ internal static class FluentApiDiagnostics
         DuplicateFluentApiMethod.Descriptor,
         InvalidFluentMethodReturnType.Descriptor,
         CodeGenerationError.Descriptor,
-        UnsupportedGenericType.Descriptor,
         ConflictingControlAttributes.Descriptor,
         MissingBuilderStep.Descriptor,
     };
@@ -330,22 +329,6 @@ internal static class FluentApiDiagnostics
         internal static Diagnostic CreateDiagnostic(string error)
         {
             return Diagnostic.Create(Descriptor, null, error);
-        }
-    }
-
-    internal static class UnsupportedGenericType
-    {
-        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            id: "M31FA018",
-            title: "Generic types are not supported",
-            messageFormat: "The fluent API does not support generic classes",
-            category: "M31.Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        internal static Diagnostic CreateDiagnostic(INamedTypeSymbol symbol)
-        {
-            return Diagnostic.Create(Descriptor, symbol.Locations[0]);
         }
     }
 

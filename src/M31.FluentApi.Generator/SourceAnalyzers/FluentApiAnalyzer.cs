@@ -70,11 +70,6 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        if (ReportErrorDiagnosticForGenericClass(context, symbol))
-        {
-            return;
-        }
-
         if (context.CancellationToken.IsCancellationRequested)
         {
             return;
@@ -111,17 +106,6 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
             context.ReportDiagnostic(UnsupportedPartialType.CreateDiagnostic(
                 partialKeyword,
                 symbol.Name));
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool ReportErrorDiagnosticForGenericClass(SyntaxNodeAnalysisContext context, INamedTypeSymbol symbol)
-    {
-        if (symbol.IsGenericType)
-        {
-            context.ReportDiagnostic(UnsupportedGenericType.CreateDiagnostic(symbol));
             return true;
         }
 
