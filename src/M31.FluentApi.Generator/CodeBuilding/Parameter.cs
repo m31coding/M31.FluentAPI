@@ -28,6 +28,6 @@ internal class Parameter : ICode
     {
         return codeBuilder
             .Append(ParameterAnnotations)
-            .Append(Type).Space().Append(Name).Append($" = {DefaultValue}", DefaultValue != null);
+            .Append(Type).Space().Append(Name).Append(() => $" = {DefaultValue}", DefaultValue != null);
     }
 }

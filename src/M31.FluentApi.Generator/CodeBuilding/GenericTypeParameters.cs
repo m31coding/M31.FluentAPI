@@ -23,7 +23,7 @@ internal class GenericTypeParameters : ICode
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
-        return codeBuilder.Append($"<{string.Join(", ", values)}>");
+        return codeBuilder.Append(() => $"<{string.Join(", ", values)}>", values.Count > 0);
     }
 
     public override string ToString()

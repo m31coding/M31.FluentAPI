@@ -8,7 +8,7 @@ internal class ConstructorGenerator : ICodeBoardActor
     public void Modify(CodeBoard codeBoard)
     {
         string instanceName = codeBoard.Info.ClassInstanceName;
-        string className = codeBoard.Info.FluentApiClassName;
+        string classNameWithTypeParameters = codeBoard.Info.FluentApiClassNameWithTypeParameters;
 
         if (codeBoard.FluentApiInfos.Any(i => i.SymbolInfo.RequiresReflection))
         {
@@ -21,16 +21,17 @@ internal class ConstructorGenerator : ICodeBoardActor
 
         if (codeBoard.Info.FluentApiTypeHasPrivateConstructor)
         {
-            // student = (Student) Activator.CreateInstance(typeof(Student), true)!;
+            // student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), true)!;
             constructor.AppendBodyLine(
-                $"{instanceName} = ({className}) Activator.CreateInstance(typeof({className}), true)!;");
+                $"{instanceName} = ({classNameWithTypeParameters}) " +
+                $"Activator.CreateInstance(typeof({classNameWithTypeParameters}), true)!;");
 
             codeBoard.CodeFile.AddUsing("System");
         }
         else
         {
-            // student = new Student();
-            constructor.AppendBodyLine($"{instanceName} = new {className}();");
+            // student = new Student<T1, T2>();
+            constructor.AppendBodyLine($"{instanceName} = new {classNameWithTypeParameters}();");
         }
 
         codeBoard.Constructor = constructor;

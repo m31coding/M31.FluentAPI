@@ -119,11 +119,12 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
             @$"new Type[] {{ {string.Join(", ",
                 symbolInfo.ParameterInfos.Select(i => $"typeof({i.TypeForCodeGeneration})"))} }}";
 
-        // withNameMethodInfo = typeof(Student).GetMethod(
+        // withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
         //     "WithName",
         //     BindingFlags.Instance | BindingFlags.NonPublic,
         //     new Type[] { typeof(string) })!;
-        staticConstructor.AppendBodyLine($"{fieldName} = typeof({CodeBoard.Info.FluentApiClassName}).GetMethod(");
+        staticConstructor.AppendBodyLine($"{fieldName} = " +
+                                         $"typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters}).GetMethod(");
         staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
         staticConstructor.AppendBodyLine($"{indentation}{InfoFieldBindingFlagsArgument(symbolInfo)},");
         staticConstructor.AppendBodyLine($"{indentation}{typeArguments})!;");

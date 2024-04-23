@@ -78,6 +78,16 @@ internal class CodeBuilder
         return this;
     }
 
+    internal CodeBuilder Append(Func<string?> createCode, bool condition)
+    {
+        if (condition)
+        {
+            Append(createCode());
+        }
+
+        return this;
+    }
+
     internal CodeBuilder Append(IEnumerable<string> code, string separator)
     {
         return Append(code, separator, c => Append(c));

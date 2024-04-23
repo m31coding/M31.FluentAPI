@@ -7,8 +7,14 @@ internal class EntityFieldGenerator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
-        // private readonly Student student;
+        // private readonly Student<T1, T2> student;
         Field field = new Field(codeBoard.Info.FluentApiClassName, codeBoard.Info.ClassInstanceName);
+
+        if (codeBoard.Info.GenericsInfo != null)
+        {
+            field.AddGenericTypeParameters(codeBoard.Info.GenericsInfo.Parameters);
+        }
+
         field.AddModifiers("private");
         codeBoard.BuilderClassFields.ReserveFieldName(field.Name);
 

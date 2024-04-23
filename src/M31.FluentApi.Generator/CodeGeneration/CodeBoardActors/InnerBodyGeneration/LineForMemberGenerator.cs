@@ -39,10 +39,10 @@ internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
 
     protected override void InitializeInfoField(string fieldName, MemberSymbolInfo symbolInfo)
     {
-        // semesterPropertyInfo = typeof(Student)
+        // semesterPropertyInfo = typeof(Student<T1, T2>)
         //     .GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic););
         string code = $"{fieldName} =" +
-                      $" typeof({CodeBoard.Info.FluentApiClassName})" +
+                      $" typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters})" +
                       $".Get{SymbolType(symbolInfo)}(\"{symbolInfo.Name}\", " +
                       $"{InfoFieldBindingFlagsArgument(symbolInfo)})!;";
 
