@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.Commons;
+using M31.FluentApi.Generator.SourceGenerators;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
@@ -7,6 +8,7 @@ internal class BuilderAndTargetInfo
     internal BuilderAndTargetInfo(
         string fluentApiClassName,
         string? @namespace,
+        GenericsInfo? genericsInfo,
         bool fluentApiTypeIsStruct,
         bool fluentApiTypeIsInternal,
         bool fluentApiTypeHasPrivateConstructor,
@@ -14,6 +16,7 @@ internal class BuilderAndTargetInfo
     {
         Namespace = @namespace;
         FluentApiClassName = fluentApiClassName;
+        GenericsInfo = genericsInfo;
         FluentApiTypeIsStruct = fluentApiTypeIsStruct;
         FluentApiTypeIsInternal = fluentApiTypeIsInternal;
         FluentApiTypeHasPrivateConstructor = fluentApiTypeHasPrivateConstructor;
@@ -24,6 +27,7 @@ internal class BuilderAndTargetInfo
 
     internal string? Namespace { get; }
     internal string FluentApiClassName { get; }
+    internal GenericsInfo? GenericsInfo { get; }
     internal bool FluentApiTypeIsStruct { get; }
     internal bool FluentApiTypeIsInternal { get; }
     internal bool FluentApiTypeHasPrivateConstructor { get; }

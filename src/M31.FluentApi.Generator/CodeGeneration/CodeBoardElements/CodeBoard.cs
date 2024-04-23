@@ -81,6 +81,12 @@ internal class CodeBoard
         codeFile.AddPreprocessorDirective(
             "#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member");
         codeFile.AddPreprocessorDirective("#nullable enable");
+
+        if (builderAndTargetInfo.GenericsInfo != null)
+        {
+            builderClass.AddGenericTypeParameters(builderAndTargetInfo.GenericsInfo.Parameters);
+        }
+
         builderClass.AddModifiers(builderAndTargetInfo.FluentApiTypeIsInternal ? "internal" : "public");
         codeFile.AddDefinition(builderClass);
 

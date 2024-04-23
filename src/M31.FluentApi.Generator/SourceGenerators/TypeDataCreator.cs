@@ -27,7 +27,7 @@ internal class TypeDataCreator
             return null;
         }
 
-        GenericParameters? genericParameters = GetGenericParameters(type);
+        GenericsInfo? genericsInfo = GetGenericsInfo(type);
 
         AttributeDataExtended[] attributeData = type.GetAttributes().Select(AttributeDataExtended.Create)
             .OfType<AttributeDataExtended>().Where(a => a.FullName == Attributes.FullNames.FluentApiAttribute)
@@ -54,7 +54,7 @@ internal class TypeDataCreator
             return null;
         }
 
-        return new TypeData(type, genericParameters, attributeData[0], usingStatements);
+        return new TypeData(type, genericsInfo, attributeData[0], usingStatements);
     }
 
     private IReadOnlyCollection<string>? GetUsingStatements(SyntaxNode syntaxNode)
@@ -73,7 +73,7 @@ internal class TypeDataCreator
         return GetUsingStatements(syntaxNode.Parent);
     }
 
-    private GenericParameters? GetGenericParameters(INamedTypeSymbol type)
+    private GenericsInfo? GetGenericsInfo(INamedTypeSymbol type)
     {
         if (!type.IsGenericType)
         {
@@ -81,6 +81,6 @@ internal class TypeDataCreator
         }
 
         string[] parameters = type.TypeParameters.Select(CodeTypeExtractor.GetTypeForCodeGeneration).ToArray();
-        return new GenericParameters(parameters);
+        return new GenericsInfo(parameters);
     }
 }

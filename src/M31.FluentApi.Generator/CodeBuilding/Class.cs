@@ -11,6 +11,7 @@ internal class Class : ICode
     internal Class(string name)
     {
         Name = name;
+        GenericTypeParameters = new GenericTypeParameters();
         Modifiers = new Modifiers();
         fields = new List<Field>();
         methods = new List<Method>();
@@ -21,6 +22,7 @@ internal class Class : ICode
 
     internal string Name { get; }
 
+    internal GenericTypeParameters GenericTypeParameters { get; }
     internal Modifiers Modifiers { get; }
     internal IReadOnlyCollection<Field> Fields => fields;
     internal IReadOnlyCollection<Method> Methods => methods;
@@ -28,7 +30,22 @@ internal class Class : ICode
     internal IReadOnlyCollection<string> Interfaces => interfaces;
     internal IReadOnlyCollection<ICode> Definitions => definitions;
 
+    internal void AddGenericTypeParameters(params string[] parameters)
+    {
+        GenericTypeParameters.Add(parameters);
+    }
+
+    internal void AddGenericTypeParameters(IEnumerable<string> parameters)
+    {
+        GenericTypeParameters.Add(parameters);
+    }
+
     internal void AddModifiers(params string[] modifiers)
+    {
+        Modifiers.Add(modifiers);
+    }
+
+    internal void AddModifiers(IEnumerable<string> modifiers)
     {
         Modifiers.Add(modifiers);
     }
@@ -63,7 +80,8 @@ internal class Class : ICode
         codeBuilder
             .StartLine()
             .Append(Modifiers)
-            .Append($"class {Name}");
+            .Append($"class {Name}")
+            .Append(GenericTypeParameters);
 
         if (interfaces.Count > 0)
         {

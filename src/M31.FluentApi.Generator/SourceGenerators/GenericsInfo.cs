@@ -2,19 +2,17 @@ using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
-internal class GenericParameters : IEquatable<GenericParameters>
+internal class GenericsInfo
 {
-    public GenericParameters(IReadOnlyCollection<string> parameters)
+    public GenericsInfo(IReadOnlyCollection<string> parameters)
     {
         Parameters = parameters;
     }
 
     internal IReadOnlyCollection<string> Parameters { get; }
 
-    public bool Equals(GenericParameters? other)
+    protected bool Equals(GenericsInfo other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
         return Parameters.SequenceEqual(other.Parameters);
     }
 
@@ -23,7 +21,7 @@ internal class GenericParameters : IEquatable<GenericParameters>
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((GenericParameters)obj);
+        return Equals((GenericsInfo)obj);
     }
 
     public override int GetHashCode()

@@ -16,6 +16,7 @@ internal static class CodeGenerator
             new BuilderAndTargetInfo(
                 classInfo.Name,
                 classInfo.Namespace,
+                classInfo.GenericsInfo,
                 classInfo.IsStruct,
                 classInfo.IsInternal,
                 classInfo.HasPrivateConstructor,

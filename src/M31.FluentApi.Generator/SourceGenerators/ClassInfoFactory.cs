@@ -55,7 +55,7 @@ internal class ClassInfoFactory
 
         FluentApiClassInfo? classInfo = CreateFluentApiClassInfo(
             typeData.Type,
-            typeData.GenericParameters,
+            typeData.GenericsInfo,
             typeData.AttributeData,
             typeData.UsingStatements,
             isStruct,
@@ -73,7 +73,7 @@ internal class ClassInfoFactory
 
     private FluentApiClassInfo? CreateFluentApiClassInfo(
         INamedTypeSymbol type,
-        GenericParameters? genericParameters,
+        GenericsInfo? genericsInfo,
         AttributeDataExtended attributeDataExtended,
         IReadOnlyCollection<string> usingStatements,
         bool isStruct,
@@ -109,7 +109,7 @@ internal class ClassInfoFactory
         return new FluentApiClassInfo(
             className,
             @namespace,
-            genericParameters,
+            genericsInfo,
             isStruct,
             isInternal,
             hasPrivateConstructor,
