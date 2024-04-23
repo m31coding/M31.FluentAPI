@@ -1,7 +1,7 @@
 // Non-nullable member is uninitialized
-using M31.FluentApi.Attributes;
-
 #pragma warning disable CS8618
+
+using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FullyQualifiedTypeClass;
 
