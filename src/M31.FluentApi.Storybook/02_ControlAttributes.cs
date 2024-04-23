@@ -211,8 +211,8 @@ namespace PersonExample4
     {
         public static void UseTheGeneratedFluentApi()
         {
-            Person person1 = CreatePerson.WithFirstName("Alice").WithMiddleName("Sophia").WithLastName("King");
             Person person2 = CreatePerson.WithFirstName("Bob").WithLastName("Bishop");
+            Person person1 = CreatePerson.WithFirstName("Alice").WithMiddleName("Sophia").WithLastName("King");
         }
     }
 }
