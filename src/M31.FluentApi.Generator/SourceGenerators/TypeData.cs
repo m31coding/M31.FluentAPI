@@ -5,15 +5,20 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal class TypeData
 {
-    internal TypeData(INamedTypeSymbol type, AttributeDataExtended attributeData,
+    internal TypeData(
+        INamedTypeSymbol type,
+        GenericParameters? genericParameters,
+        AttributeDataExtended attributeData,
         IReadOnlyCollection<string> usingStatements)
     {
         Type = type;
+        GenericParameters = genericParameters;
         AttributeData = attributeData;
         UsingStatements = usingStatements;
     }
 
     internal INamedTypeSymbol Type { get; }
+    internal GenericParameters? GenericParameters { get; }
     internal AttributeDataExtended AttributeData { get; }
     internal IReadOnlyCollection<string> UsingStatements { get; }
 }

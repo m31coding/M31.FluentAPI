@@ -12,6 +12,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     internal FluentApiClassInfo(
         string name,
         string? @namespace,
+        GenericParameters? genericParameters,
         bool isStruct,
         bool isInternal,
         bool hasPrivateConstructor,
@@ -23,6 +24,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     {
         Name = name;
         Namespace = @namespace;
+        GenericParameters = genericParameters;
         IsStruct = isStruct;
         IsInternal = isInternal;
         HasPrivateConstructor = hasPrivateConstructor;
@@ -35,6 +37,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
 
     internal string Name { get; }
     internal string? Namespace { get; }
+    internal GenericParameters? GenericParameters { get; }
     internal bool IsStruct { get; }
     internal bool IsInternal { get; }
     internal bool HasPrivateConstructor { get; }
@@ -50,6 +53,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         if (ReferenceEquals(this, other)) return true;
         return Name == other.Name &&
                Namespace == other.Namespace &&
+               Equals(GenericParameters, other.GenericParameters) &&
                IsStruct == other.IsStruct &&
                IsInternal == other.IsInternal &&
                HasPrivateConstructor == other.HasPrivateConstructor &&
@@ -70,7 +74,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     public override int GetHashCode()
     {
         return new HashCode()
-            .Add(Name, Namespace)
+            .Add(Name, Namespace, GenericParameters)
             .Add(IsStruct, IsInternal, HasPrivateConstructor)
             .Add(BuilderClassName)
             .Add(NewLineString)
