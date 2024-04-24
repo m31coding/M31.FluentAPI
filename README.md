@@ -5,7 +5,7 @@ Everybody wants to use fluent APIs but writing them is tedious. With this librar
 The generated code follows the builder design pattern and allows you to construct objects step by step. This approach avoids big constructors and results in very readable code. 
 
 [![license](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/m31coding/M31.BinarySearchTrees/blob/master/LICENSE)
-[![.net version](https://img.shields.io/badge/.NET-Standard%202.0-6D429C)](https://dotnet.microsoft.com/en-us/)
+[![.net version](https://img.shields.io/badge/.NET-6.0-6D429C)](https://dotnet.microsoft.com/en-us/)
 [![version](https://img.shields.io/nuget/v/M31.FluentApi)](https://www.nuget.org/packages/M31.FluentApi/)
 [![CI](https://github.com/m31coding/M31.FluentAPI/actions/workflows/ci.yml/badge.svg)](https://github.com/m31coding/M31.FluentAPI/actions/workflows/ci.yml)
 [![m31coding](https://img.shields.io/badge/www-m31coding.com-34345B)](https://www.m31coding.com)
