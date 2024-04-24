@@ -4,7 +4,7 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal class GenericInfo
 {
-    public GenericInfo(IReadOnlyCollection<string> parameters)
+    internal GenericInfo(IReadOnlyCollection<string> parameters)
     {
         Parameters = parameters;
     }
