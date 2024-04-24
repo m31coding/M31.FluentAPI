@@ -1,5 +1,4 @@
 // Non-nullable member is uninitialized
-
 using M31.FluentApi.Attributes;
 
 #pragma warning disable CS8618

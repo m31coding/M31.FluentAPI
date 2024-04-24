@@ -30,6 +30,8 @@ internal static class FluentApiDiagnostics
         InvalidFluentMethodReturnType.Descriptor,
         CodeGenerationError.Descriptor,
         UnsupportedGenericType.Descriptor,
+        ConflictingControlAttributes.Descriptor,
+        MissingBuilderStep.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -224,6 +226,9 @@ internal static class FluentApiDiagnostics
         }
     }
 
+    /// <summary>
+    /// Diagnostic used for <see cref="GenerationException"/>s.
+    /// </summary>
     internal static class CodeGenerationException
     {
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
@@ -240,6 +245,9 @@ internal static class FluentApiDiagnostics
         }
     }
 
+    /// <summary>
+    /// Diagnostic used for caught exceptions other than <see cref="GenerationException"/>s.
+    /// </summary>
     internal static class GenericException
     {
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
@@ -338,6 +346,42 @@ internal static class FluentApiDiagnostics
         internal static Diagnostic CreateDiagnostic(INamedTypeSymbol symbol)
         {
             return Diagnostic.Create(Descriptor, symbol.Locations[0]);
+        }
+    }
+
+    internal static class ConflictingControlAttributes
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA019",
+            title: "Conflicting control attributes",
+            messageFormat: "Control attributes are in conflict with each other",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location);
+        }
+    }
+
+    internal static class MissingBuilderStep
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA020",
+            title: "Missing builder step",
+            messageFormat: "Builder step {0} can not be found",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData, int missingBuilderStep)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location, missingBuilderStep);
         }
     }
 }

@@ -22,3 +22,13 @@ M31FA015 | M31.Usage | Error    | Duplicate fluent api method
 M31FA016 | M31.Usage | Error    | Invalid fluent method return type
 M31FA017 | M31.Usage | Error    | Code generation error
 M31FA018 | M31.Usage | Error    | Generic types are not supported
+ 
+
+## Release 1.1.0
+
+### New Rules
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+M31FA019 | M31.Usage | Error | Conflicting control attributes
+M31FA020 | M31.Usage | Error | Missing builder step

@@ -6,26 +6,36 @@ using static M31.FluentApi.Generator.SourceAnalyzers.FluentApiDiagnostics;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
+/// <summary>
+/// Creates and analyzes a <see cref="FluentApiClassInfo"/> instance.
+/// </summary>
 internal class ClassInfoFactory
 {
-    private readonly Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfo;
     private readonly ClassInfoReport report;
 
     private ClassInfoFactory()
     {
-        additionalInfo = new Dictionary<FluentApiInfo, FluentApiAdditionalInfo>();
         report = new ClassInfoReport();
     }
 
     internal static ClassInfoResult CreateFluentApiClassInfo(
-        SemanticModel semanticModel, TypeDeclarationSyntax typeDeclaration, CancellationToken cancellationToken)
+        SemanticModel semanticModel,
+        TypeDeclarationSyntax typeDeclaration,
+        SourceGeneratorConfig generatorConfig,
+        CancellationToken cancellationToken)
     {
-        return new ClassInfoFactory().CreateFluentApiClassInfoInternal(semanticModel, typeDeclaration,
+        return new ClassInfoFactory().CreateFluentApiClassInfoInternal(
+            semanticModel,
+            typeDeclaration,
+            generatorConfig,
             cancellationToken);
     }
 
     private ClassInfoResult CreateFluentApiClassInfoInternal(
-        SemanticModel semanticModel, TypeDeclarationSyntax typeDeclaration, CancellationToken cancellationToken)
+        SemanticModel semanticModel,
+        TypeDeclarationSyntax typeDeclaration,
+        SourceGeneratorConfig generatorConfig,
+        CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
         {
@@ -44,7 +54,12 @@ internal class ClassInfoFactory
         bool isStruct = syntaxKind is SyntaxKind.StructDeclaration or SyntaxKind.RecordStructDeclaration;
 
         FluentApiClassInfo? classInfo = CreateFluentApiClassInfo(
-            typeData.Type, typeData.AttributeData, typeData.UsingStatements, isStruct, cancellationToken);
+            typeData.Type,
+            typeData.AttributeData,
+            typeData.UsingStatements,
+            isStruct,
+            generatorConfig.NewLineString,
+            cancellationToken);
 
         if (classInfo != null)
         {
@@ -60,6 +75,7 @@ internal class ClassInfoFactory
         AttributeDataExtended attributeDataExtended,
         IReadOnlyCollection<string> usingStatements,
         bool isStruct,
+        string newLineString,
         CancellationToken cancellationToken)
     {
         string className = type.Name;
@@ -86,6 +102,8 @@ internal class ClassInfoFactory
             }
         }
 
+        IReadOnlyCollection<FluentApiInfoGroup> groups = FluentApiInfoGroupCreator.CreateGroups(infos, report);
+
         return new FluentApiClassInfo(
             className,
             @namespace,
@@ -93,9 +111,10 @@ internal class ClassInfoFactory
             isInternal,
             hasPrivateConstructor,
             builderClassName,
+            newLineString,
             infos,
             usingStatements,
-            new FluentApiClassAdditionalInfo(additionalInfo));
+            new FluentApiClassAdditionalInfo(groups));
     }
 
     private bool HasPrivateConstructor(INamedTypeSymbol type)
@@ -127,12 +146,6 @@ internal class ClassInfoFactory
             return null;
         }
 
-        FluentApiInfo result = FluentApiInfo.Create(
-            symbol,
-            attributeData,
-            out FluentApiAdditionalInfo fluentApiAdditionalInfo);
-
-        additionalInfo.Add(result, fluentApiAdditionalInfo);
-        return result;
+        return FluentApiInfo.Create(symbol, attributeData);
     }
 }

@@ -86,7 +86,10 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
         }
 
         ClassInfoResult classInfoResult =
-            ClassInfoFactory.CreateFluentApiClassInfo(context.SemanticModel, typeDeclaration,
+            ClassInfoFactory.CreateFluentApiClassInfo(
+                context.SemanticModel,
+                typeDeclaration,
+                SourceGenerator.GeneratorConfig,
                 context.CancellationToken);
 
         foreach (Diagnostic diagnostic in classInfoResult.ClassInfoReport.Diagnostics)
@@ -101,7 +104,7 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
         INamedTypeSymbol symbol)
     {
         SyntaxToken partialKeyword = typeDeclaration.Modifiers.FirstOrDefault(
-            m => m.Kind() == SyntaxKind.PartialKeyword);
+            m => m.IsKind(SyntaxKind.PartialKeyword));
 
         if (partialKeyword != default)
         {

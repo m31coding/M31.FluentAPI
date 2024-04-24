@@ -24,8 +24,9 @@ internal static class CodeGenerator
         CodeBoard codeBoard = CodeBoard.Create(
             builderAndTargetInfo,
             classInfo.FluentApiInfos,
-            classInfo.AdditionalInfo.AdditionalInfos,
+            classInfo.AdditionalInfo.FluentApiInfoGroups,
             classInfo.UsingStatements,
+            classInfo.NewLineString,
             cancellationToken);
 
         List<ICodeBoardActor> actors = new List<ICodeBoardActor>()
@@ -41,7 +42,7 @@ internal static class CodeGenerator
 
         foreach (ICodeBoardActor actor in actors)
         {
-            if (cancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested || codeBoard.HasErrors)
             {
                 break;
             }
@@ -49,8 +50,16 @@ internal static class CodeGenerator
             actor.Modify(codeBoard);
         }
 
-        return cancellationToken.IsCancellationRequested
-            ? CodeGeneratorResult.Cancelled()
-            : new CodeGeneratorResult(codeBoard.CodeFile.ToString(), codeBoard.Diagnostics);
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return CodeGeneratorResult.Cancelled();
+        }
+
+        if (codeBoard.HasErrors)
+        {
+             return CodeGeneratorResult.WithErrors(codeBoard.Diagnostics);
+        }
+
+        return new CodeGeneratorResult(codeBoard.CodeFile.ToString(), codeBoard.Diagnostics);
     }
 }

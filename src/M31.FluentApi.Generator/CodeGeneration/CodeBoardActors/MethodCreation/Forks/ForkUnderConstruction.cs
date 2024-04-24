@@ -4,18 +4,20 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.
 
 internal class ForkUnderConstruction
 {
+    internal int BuilderStep { get; private set; }
     internal string InterfaceName { get; private set; }
-    internal List<BuilderMethod> BuilderMethods { get; }
+    internal List<ForkBuilderMethod> BuilderMethods { get; }
 
-    internal ForkUnderConstruction()
+    internal ForkUnderConstruction(int builderStep)
     {
+        BuilderStep = builderStep;
         InterfaceName = "I";
-        BuilderMethods = new List<BuilderMethod>();
+        BuilderMethods = new List<ForkBuilderMethod>();
     }
 
-    internal void AddBuilderMethods(string interfacePartialName, IEnumerable<BuilderMethod> builderMethods)
+    internal void AddBuilderMethods(string interfacePartialName, IEnumerable<ForkBuilderMethod> builderMethods)
     {
         InterfaceName += interfacePartialName;
-        this.BuilderMethods.AddRange(builderMethods);
+        BuilderMethods.AddRange(builderMethods);
     }
 }

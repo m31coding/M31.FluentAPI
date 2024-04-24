@@ -1,11 +1,13 @@
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
+
 namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal class FluentApiClassAdditionalInfo
 {
-    internal FluentApiClassAdditionalInfo(Dictionary<FluentApiInfo, FluentApiAdditionalInfo> additionalInfos)
+    internal FluentApiClassAdditionalInfo(IReadOnlyCollection<FluentApiInfoGroup> fluentApiInfoGroups)
     {
-        AdditionalInfos = additionalInfos;
+        FluentApiInfoGroups = fluentApiInfoGroups;
     }
 
-    internal Dictionary<FluentApiInfo, FluentApiAdditionalInfo> AdditionalInfos { get; }
+    internal IReadOnlyCollection<FluentApiInfoGroup> FluentApiInfoGroups { get; }
 }

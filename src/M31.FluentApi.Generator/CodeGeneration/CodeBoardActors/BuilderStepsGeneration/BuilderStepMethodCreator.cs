@@ -1,66 +1,85 @@
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
+using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 
-internal static class BuilderStepMethodCreator
+internal class BuilderStepMethodCreator
 {
     internal static IReadOnlyCollection<BuilderStepMethod> CreateBuilderStepMethods(IReadOnlyList<Fork> forks)
     {
-        return forks.Count switch
+        if (forks.Count == 0)
         {
-            0 => Array.Empty<BuilderStepMethod>(),
-            1 => CreateSingleStepMethods(forks.First()).ToArray(),
-            _ => CreateMultiStepMethods(forks)
-        };
+            return Array.Empty<BuilderStepMethod>();
+        }
+
+        return new BuilderStepMethodCreator(forks).Create();
     }
 
-    private static IEnumerable<BuilderStepMethod> CreateSingleStepMethods(Fork fork)
+    private readonly IReadOnlyList<Fork> forks;
+    private readonly Fork firstFork;
+    private readonly Dictionary<int, Fork> builderStepToFork;
+
+    private BuilderStepMethodCreator(IReadOnlyList<Fork> forks)
     {
-        foreach (BuilderMethod builderMethod in fork.BuilderMethods)
+        this.forks = forks;
+        firstFork = forks.First();
+        builderStepToFork = forks.ToDictionary(f => f.BuilderStep);
+    }
+
+    private IReadOnlyCollection<BuilderStepMethod> Create()
+    {
+        return forks.SelectMany(CreateBuilderStepMethods).ToArray();
+    }
+
+    private IEnumerable<BuilderStepMethod> CreateBuilderStepMethods(Fork fork)
+    {
+        bool isFirstStep = fork == firstFork;
+
+        foreach (ForkBuilderMethod builderMethod in fork.BuilderMethods)
         {
-            yield return new SingleStepBuilderMethod(builderMethod);
+            yield return CreateBuilderStepMethod(isFirstStep, fork.InterfaceName, builderMethod);
         }
     }
 
-    private static IReadOnlyCollection<BuilderStepMethod> CreateMultiStepMethods(IReadOnlyList<Fork> forks)
+    private BuilderStepMethod CreateBuilderStepMethod(
+        bool isFirstStep,
+        string interfaceName,
+        ForkBuilderMethod builderMethod)
     {
-        List<BuilderStepMethod> builderStepMethods =
-            new List<BuilderStepMethod>(forks.Sum(f => f.BuilderMethods.Count));
+        string? nextInterfaceName = GetNextInterfaceName(builderMethod.NextBuilderStep);
+        bool isLastStep = nextInterfaceName == null;
 
-        builderStepMethods.AddRange(CreateFirstBuilderStepMethods(forks[0], forks[1]));
-
-        for (int i = 1; i < forks.Count - 1; i++)
+        if (isFirstStep && isLastStep)
         {
-            builderStepMethods.AddRange(CreateInterjacentBuilderStepMethods(forks[i], forks[i + 1]));
+            return new SingleStepBuilderMethod(builderMethod.Value);
         }
 
-        builderStepMethods.AddRange(CreateLastBuilderStepMethods(forks[forks.Count - 1]));
+        if (isFirstStep)
+        {
+            return new FirstStepBuilderMethod(builderMethod.Value, nextInterfaceName!);
+        }
 
-        return builderStepMethods;
+        if (isLastStep)
+        {
+            return new LastStepBuilderMethod(builderMethod.Value, interfaceName);
+        }
+
+        return new InterjacentBuilderMethod(builderMethod.Value, nextInterfaceName!, interfaceName);
     }
 
-    private static IEnumerable<BuilderStepMethod> CreateFirstBuilderStepMethods(Fork fork, Fork nextFork)
+    private string? GetNextInterfaceName(int? nextBuilderStep)
     {
-        foreach (BuilderMethod builderMethod in fork.BuilderMethods)
+        if (nextBuilderStep == null)
         {
-            yield return new FirstStepBuilderMethod(builderMethod, nextFork.InterfaceName);
+            return null;
         }
-    }
 
-    private static IEnumerable<BuilderStepMethod> CreateInterjacentBuilderStepMethods(Fork fork, Fork nextFork)
-    {
-        foreach (BuilderMethod builderMethod in fork.BuilderMethods)
+        if (!builderStepToFork.TryGetValue(nextBuilderStep.Value, out Fork nextFork))
         {
-            yield return new InterjacentBuilderMethod(builderMethod, nextFork.InterfaceName, fork.InterfaceName);
+            throw new GenerationException(
+                $"Unable to obtain the next fork. Builder step {nextBuilderStep.Value} is unknown.");
         }
-    }
 
-    private static IEnumerable<BuilderStepMethod> CreateLastBuilderStepMethods(Fork fork)
-    {
-        foreach (BuilderMethod builderMethod in fork.BuilderMethods)
-        {
-            yield return new LastStepBuilderMethod(builderMethod, fork.InterfaceName);
-        }
+        return nextFork.InterfaceName;
     }
 }

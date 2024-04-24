@@ -2,13 +2,15 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class CodeFile : ICode
 {
+    private readonly string newLineString;
     private readonly List<string> header;
     private readonly List<string> preprocessorDirectives;
     private readonly List<string> usingStatements;
     private readonly List<ICode> definitions;
 
-    internal CodeFile(string? @namespace)
+    internal CodeFile(string? @namespace, string newLineString)
     {
+        this.newLineString = newLineString;
         Namespace = @namespace;
         header = new List<string>();
         preprocessorDirectives = new List<string>();
@@ -77,6 +79,6 @@ internal class CodeFile : ICode
 
     public override string ToString()
     {
-        return new CodeBuilder().Append(this).ToString();
+        return new CodeBuilder(newLineString).Append(this).ToString();
     }
 }

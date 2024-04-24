@@ -11,6 +11,34 @@ namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes;
 public class AnalyzerAndCodeFixTests
 {
     [Fact]
+    public async Task CanDetectConflictingControlAttributes1()
+    {
+        (string source, string fixedSource) = ReadSource("ConflictingControlAttributesClass1", "Student");
+
+        var expectedDiagnostic1 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
+            .WithLocation(12, 6);
+
+        var expectedDiagnostic2 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
+            .WithLocation(13, 6);
+
+        await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic1, expectedDiagnostic2);
+    }
+
+    [Fact]
+    public async Task CanDetectConflictingControlAttributes2()
+    {
+        (string source, string fixedSource) = ReadSource("ConflictingControlAttributesClass2", "Student");
+
+        var expectedDiagnostic1 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
+            .WithLocation(12, 6);
+
+        var expectedDiagnostic2 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
+            .WithLocation(16, 6);
+
+        await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic1, expectedDiagnostic2);
+    }
+
+    [Fact]
     public async Task CanDetectDuplicateMainAttribute()
     {
         (string source, string fixedSource) = ReadSource("DuplicateMainAttributeClass", "Student");
@@ -77,6 +105,18 @@ public class AnalyzerAndCodeFixTests
         var expectedDiagnostic = Verifier.Diagnostic(InvalidFluentNullableType.Descriptor.Id)
             .WithLocation(10, 12)
             .WithArguments("int");
+
+        await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
+    }
+
+    [Fact]
+    public async Task CanDetectMissingBuilderStep()
+    {
+        (string source, string fixedSource) = ReadSource("MissingBuilderStepClass", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(MissingBuilderStep.Descriptor.Id)
+            .WithLocation(12, 6)
+            .WithArguments(99);
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
     }

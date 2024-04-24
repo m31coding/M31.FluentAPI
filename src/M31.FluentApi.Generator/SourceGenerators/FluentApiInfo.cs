@@ -7,47 +7,75 @@ using static M31.FluentApi.Generator.SourceGenerators.AttributeElements.Attribut
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
+/// <summary>
+/// Represents the information for one member or method of the fluent API class. GetHashCode and Equals must be
+/// implemented carefully to ensure correct caching in the incremental source generator.
+/// The property <see cref="FluentApiAdditionalInfo"/> holds members that are irrelevant or unsuitable for equality
+/// checks.
+/// </summary>
 internal class FluentApiInfo
 {
     internal FluentApiInfo(
         FluentApiSymbolInfo symbolInfo,
         AttributeInfoBase attributeInfo,
-        IReadOnlyCollection<OrthogonalAttributeInfoBase> orthogonalAttributeInfos)
+        IReadOnlyCollection<OrthogonalAttributeInfoBase> orthogonalAttributeInfos,
+        IReadOnlyCollection<ControlAttributeInfoBase> controlAttributeInfos,
+        FluentApiAdditionalInfo fluentApiAdditionalInfo)
     {
         SymbolInfo = symbolInfo;
         AttributeInfo = attributeInfo;
         OrthogonalAttributeInfos = orthogonalAttributeInfos;
+        ControlAttributeInfos = controlAttributeInfos;
+        AdditionalInfo = fluentApiAdditionalInfo;
     }
 
     internal FluentApiSymbolInfo SymbolInfo { get; }
     internal AttributeInfoBase AttributeInfo { get; }
     internal IReadOnlyCollection<OrthogonalAttributeInfoBase> OrthogonalAttributeInfos { get; }
+    internal IReadOnlyCollection<ControlAttributeInfoBase> ControlAttributeInfos { get; }
+    internal FluentApiAdditionalInfo AdditionalInfo { get; }
     internal string FluentMethodName => AttributeInfo.FluentMethodName;
 
-    internal static FluentApiInfo Create(
-        ISymbol symbol,
-        FluentApiAttributeData attributeData,
-        out FluentApiAdditionalInfo additionalInfo)
+    internal static FluentApiInfo Create(ISymbol symbol, FluentApiAttributeData attributeData)
     {
         AttributeInfoBase attributeInfo =
             CreateAttributeInfo(attributeData.MainAttributeData, symbol.Name);
 
-        Dictionary<OrthogonalAttributeInfoBase, AttributeDataExtended> orthogonalAttributeData
-            = new Dictionary<OrthogonalAttributeInfoBase, AttributeDataExtended>();
+        (AttributeDataExtended data, OrthogonalAttributeInfoBase info)[] orthogonalDataAndInfos =
+            attributeData.OrthogonalAttributeData
+                .Select(data => (data, CreateOrthogonalAttributeInfo(data, symbol.Name)))
+                .ToArray();
 
-        List<OrthogonalAttributeInfoBase> orthogonalAttributeInfos = new List<OrthogonalAttributeInfoBase>();
-
-        foreach (AttributeDataExtended orthogonalDataExtended in attributeData.OrthogonalAttributeData)
-        {
-            OrthogonalAttributeInfoBase orthogonalAttributeInfo =
-                CreateOrthogonalAttributeInfo(orthogonalDataExtended, symbol.Name);
-            orthogonalAttributeData[orthogonalAttributeInfo] = orthogonalDataExtended;
-            orthogonalAttributeInfos.Add(orthogonalAttributeInfo);
-        }
+        (AttributeDataExtended data, ControlAttributeInfoBase info)[] controlDataAndInfos =
+            attributeData.ControlAttributeData
+                .Select(data => (data, CreateControlAttributeInfo(data)))
+                .ToArray();
 
         FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
-        additionalInfo = new FluentApiAdditionalInfo(symbol, attributeData.MainAttributeData, orthogonalAttributeData);
-        return new FluentApiInfo(symbolInfo, attributeInfo, orthogonalAttributeInfos);
+        FluentApiAdditionalInfo additionalInfo = new FluentApiAdditionalInfo(
+            symbol,
+            attributeData.MainAttributeData,
+            ToDictionary(orthogonalDataAndInfos),
+            ToDictionary(controlDataAndInfos));
+
+        return new FluentApiInfo(
+            symbolInfo,
+            attributeInfo,
+            ToInfos(orthogonalDataAndInfos),
+            ToInfos(controlDataAndInfos),
+            additionalInfo);
+    }
+
+    private static Dictionary<TAttributeInfoBase, AttributeDataExtended> ToDictionary<TAttributeInfoBase>(
+        (AttributeDataExtended data, TAttributeInfoBase info)[] dataAndInfoArray)
+    {
+        return dataAndInfoArray.ToDictionary(dataAndInfo => dataAndInfo.info, dataAndInfo => dataAndInfo.data);
+    }
+
+    private static List<TAttributeInfoBase> ToInfos<TAttributeInfoBase>(
+        (AttributeDataExtended data, TAttributeInfoBase info)[] dataAndInfoArray)
+    {
+        return dataAndInfoArray.Select(dataAndInfo => dataAndInfo.info).ToList();
     }
 
     private static AttributeInfoBase CreateAttributeInfo(AttributeDataExtended attributeData, string memberName)
@@ -80,11 +108,24 @@ internal class FluentApiInfo
         };
     }
 
+    private static ControlAttributeInfoBase CreateControlAttributeInfo(AttributeDataExtended attributeDataExtended)
+    {
+        return attributeDataExtended.FullName switch
+        {
+            FullNames.FluentContinueWithAttribute =>
+                FluentContinueWithAttributeInfo.Create(attributeDataExtended.AttributeData),
+            FullNames.FluentBreakAttribute =>
+                FluentBreakAttributeInfo.Create(attributeDataExtended.AttributeData),
+            _ => throw new Exception($"Unexpected attribute class name: {attributeDataExtended.FullName}")
+        };
+    }
+
     protected bool Equals(FluentApiInfo other)
     {
         return SymbolInfo.Equals(other.SymbolInfo) &&
                AttributeInfo.Equals(other.AttributeInfo) &&
-               OrthogonalAttributeInfos.SequenceEqual(other.OrthogonalAttributeInfos);
+               OrthogonalAttributeInfos.SequenceEqual(other.OrthogonalAttributeInfos) &&
+               ControlAttributeInfos.SequenceEqual(other.ControlAttributeInfos);
     }
 
     public override bool Equals(object? obj)
@@ -97,6 +138,9 @@ internal class FluentApiInfo
 
     public override int GetHashCode()
     {
-        return new HashCode().Add(SymbolInfo, AttributeInfo).AddSequence(OrthogonalAttributeInfos);
+        return new HashCode()
+            .Add(SymbolInfo, AttributeInfo)
+            .AddSequence(OrthogonalAttributeInfos)
+            .AddSequence(ControlAttributeInfos);
     }
 }

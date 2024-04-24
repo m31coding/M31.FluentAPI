@@ -2,6 +2,11 @@ using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
+/// <summary>
+/// Represents all the required information for the fluent API class. Used by the incremental source generator.
+/// GetHashCode and Equals must be implemented carefully to ensure correct caching. The property
+/// <see cref="FluentApiClassAdditionalInfo"/> holds members that are irrelevant or unsuitable for equality checks.
+/// </summary>
 internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
 {
     internal FluentApiClassInfo(
@@ -11,6 +16,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         bool isInternal,
         bool hasPrivateConstructor,
         string builderClassName,
+        string newLineString,
         IReadOnlyCollection<FluentApiInfo> fluentApiInfos,
         IReadOnlyCollection<string> usingStatements,
         FluentApiClassAdditionalInfo additionalInfo)
@@ -21,6 +27,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         IsInternal = isInternal;
         HasPrivateConstructor = hasPrivateConstructor;
         BuilderClassName = builderClassName;
+        NewLineString = newLineString;
         FluentApiInfos = fluentApiInfos;
         UsingStatements = usingStatements;
         AdditionalInfo = additionalInfo;
@@ -32,6 +39,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     internal bool IsInternal { get; }
     internal bool HasPrivateConstructor { get; }
     internal string BuilderClassName { get; }
+    internal string NewLineString { get; }
     internal IReadOnlyCollection<FluentApiInfo> FluentApiInfos { get; }
     internal IReadOnlyCollection<string> UsingStatements { get; }
     internal FluentApiClassAdditionalInfo AdditionalInfo { get; }
@@ -46,6 +54,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
                IsInternal == other.IsInternal &&
                HasPrivateConstructor == other.HasPrivateConstructor &&
                BuilderClassName == other.BuilderClassName &&
+               NewLineString == other.NewLineString &&
                FluentApiInfos.SequenceEqual(other.FluentApiInfos) &&
                UsingStatements.SequenceEqual(other.UsingStatements);
     }
@@ -64,6 +73,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
             .Add(Name, Namespace)
             .Add(IsStruct, IsInternal, HasPrivateConstructor)
             .Add(BuilderClassName)
+            .Add(NewLineString)
             .AddSequence(FluentApiInfos)
             .AddSequence(UsingStatements);
     }

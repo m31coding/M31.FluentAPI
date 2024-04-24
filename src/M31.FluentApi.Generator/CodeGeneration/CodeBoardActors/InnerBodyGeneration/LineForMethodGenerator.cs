@@ -20,7 +20,7 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
 
     protected override void GenerateLineWithoutReflection(MethodSymbolInfo symbolInfo)
     {
-        CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode);
+        CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
 
         List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
@@ -42,7 +42,7 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
 
     protected override void GenerateLineWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
     {
-        CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode);
+        CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
 
         List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)

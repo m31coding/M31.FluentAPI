@@ -4,9 +4,9 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal static class CodeExtensions
 {
-    internal static string ToString(this ICode code)
+    internal static string ToString(this ICode code, string newLineString)
     {
-        CodeBuilder codeBuilder = new CodeBuilder();
+        CodeBuilder codeBuilder = new CodeBuilder(newLineString);
         code.AppendCode(codeBuilder);
         return codeBuilder.ToString();
     }

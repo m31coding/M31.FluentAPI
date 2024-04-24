@@ -1,3 +1,6 @@
+using System.Text;
+using M31.FluentApi.Generator.Commons;
+
 namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class ParameterAnnotations : ICode
@@ -30,7 +33,7 @@ internal class ParameterAnnotations : ICode
             return string.Empty;
         }
 
-        return new CodeBuilder()
+        return new StringBuilder()
             .Append("ref ", Contains(ParameterKinds.Ref))
             .Append("in ", Contains(ParameterKinds.In))
             .Append("out ", Contains(ParameterKinds.Out)).ToString();

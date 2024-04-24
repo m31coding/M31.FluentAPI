@@ -10,8 +10,10 @@ internal class TestDataProvider : IEnumerable<object[]>
         new List<object[]>
         {
             new object[] { "Abstract", "AliasNamespaceClass", "Student" },
-            new object[] { "Abstract", "CollectionMemberClass", "Student" },
             new object[] { "Abstract", "CollectionInterfaceMemberClass", "Student" },
+            new object[] { "Abstract", "CollectionMemberClass", "Student" },
+            new object[] { "Abstract", "CollectionNullableArrayClass", "Student" },
+            new object[] { "Abstract", "ContinueWithSelfClass", "Student" },
             new object[] { "Abstract", "CustomFluentMethodNameClass", "Student" },
             new object[] { "Abstract", "DefaultFluentMethodNameClass", "Student" },
             new object[] { "Abstract", "FluentDefaultMemberClass", "Student" },
@@ -51,8 +53,10 @@ internal class TestDataProvider : IEnumerable<object[]>
             new object[] { "Abstract", "TwoMemberClass", "Student" },
             new object[] { "Abstract", "TwoParameterCompoundClass", "Student" },
             new object[] { "Abstract", "TwoParameterCompoundClassReversedParameters", "Student" },
+            new object[] { "PersonClass", "Person" },
             new object[] { "StudentClass", "Student" }
-        }.Select(l => new string[] { "..", "..", "..", "CodeGeneration", "TestClasses" }.Concat(l).ToArray()).ToList();
+        }.Select(l => new string[] { "..", "..", "..", "CodeGeneration", "TestClasses" }
+            .Concat(l).Reverse().ToArray()).ToList(); // reversed for better readability in the unit test panel
 
     public IEnumerator<object[]> GetEnumerator() => testClasses.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
