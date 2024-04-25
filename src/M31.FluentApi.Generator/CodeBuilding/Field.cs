@@ -7,13 +7,13 @@ internal class Field : ICode
         Type = type;
         Name = name;
         Modifiers = new Modifiers();
-        GenericTypeParameters = new GenericTypeParameters();
+        GenericParameters = new GenericParameters();
     }
 
     internal string Type { get; }
     internal string Name { get; }
 
-    internal GenericTypeParameters GenericTypeParameters { get; }
+    internal GenericParameters GenericParameters { get; }
     internal Modifiers Modifiers { get; }
 
     internal void AddModifiers(params string[] modifiers)
@@ -26,14 +26,14 @@ internal class Field : ICode
         Modifiers.Add(modifiers);
     }
 
-    internal void AddGenericTypeParameters(params string[] parameters)
+    internal void AddGenericParameters(params string[] parameters)
     {
-        GenericTypeParameters.Add(parameters);
+        GenericParameters.Add(parameters);
     }
 
-    internal void AddGenericTypeParameters(IEnumerable<string> parameters)
+    internal void AddGenericParameters(IEnumerable<string> parameters)
     {
-        GenericTypeParameters.Add(parameters);
+        GenericParameters.Add(parameters);
     }
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
@@ -42,7 +42,7 @@ internal class Field : ICode
             .StartLine()
             .Append(Modifiers)
             .Append(Type)
-            .Append(GenericTypeParameters)
+            .Append(GenericParameters)
             .Append($" {Name};")
             .EndLine();
     }

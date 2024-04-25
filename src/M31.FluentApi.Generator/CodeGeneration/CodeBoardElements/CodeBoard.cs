@@ -4,6 +4,7 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Fork
 using M31.FluentApi.Generator.SourceAnalyzers;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
@@ -84,7 +85,11 @@ internal class CodeBoard
 
         if (builderAndTargetInfo.GenericsInfo != null)
         {
-            builderClass.AddGenericTypeParameters(builderAndTargetInfo.GenericsInfo.Parameters);
+            foreach (GenericTypeParameter genericTypeParameter in builderAndTargetInfo.GenericsInfo.Parameters)
+            {
+                builderClass.AddGenericParameter(genericTypeParameter.ParameterString,
+                    genericTypeParameter.Constraints.GetConstraintsForCodeGeneration());
+            }
         }
 
         builderClass.AddModifiers(builderAndTargetInfo.FluentApiTypeIsInternal ? "internal" : "public");

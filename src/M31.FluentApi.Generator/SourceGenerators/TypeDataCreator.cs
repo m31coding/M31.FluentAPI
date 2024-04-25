@@ -1,4 +1,3 @@
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
@@ -81,7 +80,7 @@ internal class TypeDataCreator
             return null;
         }
 
-        string[] parameters = type.TypeParameters.Select(CodeTypeExtractor.GetTypeForCodeGeneration).ToArray();
+        GenericTypeParameter[] parameters = type.TypeParameters.Select(GenericTypeParameter.Create).ToArray();
         return new GenericInfo(parameters);
     }
 }

@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.SourceGenerators.Generics;
 
-internal class GenericTypeConstraint
+internal class GenericTypeConstraints
 {
-    internal GenericTypeConstraint(
+    internal GenericTypeConstraints(
         bool referenceTypeConstraint,
         bool nullableReferenceTypeConstraint,
         bool valueTypeConstraint,
@@ -24,7 +24,7 @@ internal class GenericTypeConstraint
         ConstraintTypesForCodeGeneration = constraintTypesForCodeGeneration;
     }
 
-    internal static GenericTypeConstraint Create(ITypeParameterSymbol typeParameter)
+    internal static GenericTypeConstraints Create(ITypeParameterSymbol typeParameter)
     {
         bool referenceTypeConstraint = typeParameter.HasReferenceTypeConstraint &&
                                        typeParameter.ReferenceTypeConstraintNullableAnnotation !=
@@ -39,7 +39,7 @@ internal class GenericTypeConstraint
         IReadOnlyCollection<string> constraintTypesForCodeGeneration =
             typeParameter.ConstraintTypes.Select(ToConstraintTypeForCodeGeneration).ToArray();
 
-        return new GenericTypeConstraint(
+        return new GenericTypeConstraints(
             referenceTypeConstraint, nullableReferenceTypeConstraint, valueTypeConstraint, notNullConstraint,
             constructorConstraint, unmanagedTypeConstraint, constraintTypesForCodeGeneration);
 
@@ -78,7 +78,7 @@ internal class GenericTypeConstraint
         if (ConstructorConstraint) yield return "new()";
     }
 
-    protected bool Equals(GenericTypeConstraint other)
+    protected bool Equals(GenericTypeConstraints other)
     {
         return ReferenceTypeConstraint == other.ReferenceTypeConstraint &&
                NullableReferenceTypeConstraint == other.NullableReferenceTypeConstraint &&
@@ -94,7 +94,7 @@ internal class GenericTypeConstraint
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((GenericTypeConstraint)obj);
+        return Equals((GenericTypeConstraints)obj);
     }
 
     public override int GetHashCode()

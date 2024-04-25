@@ -12,7 +12,7 @@ internal class EntityFieldGenerator : ICodeBoardActor
 
         if (codeBoard.Info.GenericsInfo != null)
         {
-            field.AddGenericTypeParameters(codeBoard.Info.GenericsInfo.Parameters);
+            field.AddGenericParameters(codeBoard.Info.GenericsInfo.ParameterStrings);
         }
 
         field.AddModifiers("private");

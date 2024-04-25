@@ -11,7 +11,8 @@ internal class Class : ICode
     internal Class(string name)
     {
         Name = name;
-        GenericTypeParameters = new GenericTypeParameters();
+        GenericParameters = new GenericParameters();
+        GenericConstraints = new GenericConstraints();
         Modifiers = new Modifiers();
         fields = new List<Field>();
         methods = new List<Method>();
@@ -22,7 +23,8 @@ internal class Class : ICode
 
     internal string Name { get; }
 
-    internal GenericTypeParameters GenericTypeParameters { get; }
+    internal GenericParameters GenericParameters { get; }
+    internal GenericConstraints GenericConstraints { get; }
     internal Modifiers Modifiers { get; }
     internal IReadOnlyCollection<Field> Fields => fields;
     internal IReadOnlyCollection<Method> Methods => methods;
@@ -30,14 +32,14 @@ internal class Class : ICode
     internal IReadOnlyCollection<string> Interfaces => interfaces;
     internal IReadOnlyCollection<ICode> Definitions => definitions;
 
-    internal void AddGenericTypeParameters(params string[] parameters)
+    internal void AddGenericParameter(string parameter, IEnumerable<string> constraints)
     {
-        GenericTypeParameters.Add(parameters);
-    }
-
-    internal void AddGenericTypeParameters(IEnumerable<string> parameters)
-    {
-        GenericTypeParameters.Add(parameters);
+        GenericParameters.Add(parameter);
+        IReadOnlyCollection<string> constraintsCollection = constraints.ToArray();
+        if (constraintsCollection.Count > 0)
+        {
+            GenericConstraints.Add(parameter, constraintsCollection);
+        }
     }
 
     internal void AddModifiers(params string[] modifiers)
@@ -81,7 +83,7 @@ internal class Class : ICode
             .StartLine()
             .Append(Modifiers)
             .Append($"class {Name}")
-            .Append(GenericTypeParameters);
+            .Append(GenericParameters);
 
         if (interfaces.Count > 0)
         {

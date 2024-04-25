@@ -1,15 +1,20 @@
 namespace M31.FluentApi.Generator.CodeBuilding;
 
-internal class GenericTypeParameters : ICode
+internal class GenericParameters : ICode
 {
     private readonly List<string> values;
 
-    public GenericTypeParameters(params string[] parameters)
+    internal GenericParameters(params string[] parameters)
     {
         values = parameters.ToList();
     }
 
     internal IReadOnlyCollection<string> Values => values;
+
+    internal void Add(string parameter)
+    {
+        values.Add(parameter);
+    }
 
     internal void Add(params string[] parameters)
     {
