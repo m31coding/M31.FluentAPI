@@ -2,7 +2,7 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.Commons;
 using Microsoft.CodeAnalysis;
 
-namespace M31.FluentApi.Generator.SourceGenerators;
+namespace M31.FluentApi.Generator.SourceGenerators.Generics;
 
 internal class GenericTypeConstraint
 {

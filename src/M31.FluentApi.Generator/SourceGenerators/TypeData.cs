@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
