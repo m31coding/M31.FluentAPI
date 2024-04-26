@@ -10,7 +10,9 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InternalClass;
 
-internal class CreateStudent : CreateStudent.IBornOn, CreateStudent.IInSemester
+internal class CreateStudent :
+    CreateStudent.IBornOn,
+    CreateStudent.IInSemester
 {
     private readonly Student student;
 

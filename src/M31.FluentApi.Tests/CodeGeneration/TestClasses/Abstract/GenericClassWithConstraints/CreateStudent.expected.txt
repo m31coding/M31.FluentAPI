@@ -10,7 +10,15 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWithConstraints;
 
-public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> : CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty2, CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty3, CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty4, CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty5, CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty6, CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty7, CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty8, CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty9
+public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty2,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty3,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty4,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty5,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty6,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty7,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty8,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty9
     where T1 : class
     where T2 : class?
     where T3 : struct

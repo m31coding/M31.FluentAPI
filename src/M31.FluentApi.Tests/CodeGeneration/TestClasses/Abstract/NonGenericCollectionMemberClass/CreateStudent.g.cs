@@ -11,7 +11,9 @@ using System.Collections.Generic;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NonGenericCollectionMemberClass;
 
-public class CreateStudent : CreateStudent.IWithPets, CreateStudent.IWithBackpackContent
+public class CreateStudent :
+    CreateStudent.IWithPets,
+    CreateStudent.IWithBackpackContent
 {
     private readonly Student student;
 

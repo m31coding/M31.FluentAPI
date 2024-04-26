@@ -85,10 +85,26 @@ internal class Class : ICode
             .Append($"class {Name}")
             .Append(GenericParameters);
 
-        if (interfaces.Count > 0)
+        if (interfaces.Count == 1)
         {
             codeBuilder.Append(" : ");
-            codeBuilder.Append(interfaces, ", ");
+            codeBuilder.Append(interfaces[0]);
+        }
+
+        if (interfaces.Count > 1)
+        {
+            codeBuilder.Append(" :");
+            codeBuilder.EndLine();
+            codeBuilder.Indent();
+
+            foreach (string @interface in interfaces.Take(interfaces.Count - 1))
+            {
+                codeBuilder.AppendLine($"{@interface},");
+            }
+
+            codeBuilder.AppendLine(interfaces[interfaces.Count - 1]);
+
+            codeBuilder.Unindent();
         }
 
         return codeBuilder

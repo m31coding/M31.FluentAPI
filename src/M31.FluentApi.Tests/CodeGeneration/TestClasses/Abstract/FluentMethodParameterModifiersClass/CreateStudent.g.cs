@@ -9,7 +9,11 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodParameterModifiersClass;
 
-public class CreateStudent : CreateStudent.IMethodWithRefParameter, CreateStudent.IMethodWithInParameter, CreateStudent.IMethodWithOutParameter, CreateStudent.IMethodWithRefInAndOutParameter
+public class CreateStudent :
+    CreateStudent.IMethodWithRefParameter,
+    CreateStudent.IMethodWithInParameter,
+    CreateStudent.IMethodWithOutParameter,
+    CreateStudent.IMethodWithRefInAndOutParameter
 {
     private readonly Student student;
 

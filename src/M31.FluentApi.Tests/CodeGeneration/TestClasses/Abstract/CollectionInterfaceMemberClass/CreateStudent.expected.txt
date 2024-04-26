@@ -10,7 +10,9 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CollectionInterfaceMemberClass;
 
-public class CreateStudent : CreateStudent.IWithPets, CreateStudent.IWithBackpackContent
+public class CreateStudent :
+    CreateStudent.IWithPets,
+    CreateStudent.IWithBackpackContent
 {
     private readonly Student student;
 

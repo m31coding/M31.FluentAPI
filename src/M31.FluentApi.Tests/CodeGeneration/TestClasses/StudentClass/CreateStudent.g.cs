@@ -12,7 +12,12 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.StudentClass;
 
-public class CreateStudent : CreateStudent.IOfAgeBornOn, CreateStudent.IInSemester, CreateStudent.ILivingIn, CreateStudent.IWhoIsHappy, CreateStudent.IWhoseFriendsAre
+public class CreateStudent :
+    CreateStudent.IOfAgeBornOn,
+    CreateStudent.IInSemester,
+    CreateStudent.ILivingIn,
+    CreateStudent.IWhoIsHappy,
+    CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
     private static readonly PropertyInfo firstNamePropertyInfo;

@@ -11,7 +11,13 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.PersonClass;
 
-public class CreatePerson : CreatePerson.IWithMiddleNameWithLastName, CreatePerson.IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad, CreatePerson.IWithHouseNumber, CreatePerson.IWithStreet, CreatePerson.IInCity, CreatePerson.ILivingInCity
+public class CreatePerson :
+    CreatePerson.IWithMiddleNameWithLastName,
+    CreatePerson.IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad,
+    CreatePerson.IWithHouseNumber,
+    CreatePerson.IWithStreet,
+    CreatePerson.IInCity,
+    CreatePerson.ILivingInCity
 {
     private readonly Person person;
     private static readonly PropertyInfo firstNamePropertyInfo;

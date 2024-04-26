@@ -10,7 +10,9 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreeMemberStruct;
 
-public class CreateStudent : CreateStudent.IBornOn, CreateStudent.IInSemester
+public class CreateStudent :
+    CreateStudent.IBornOn,
+    CreateStudent.IInSemester
 {
     private Student student;
 

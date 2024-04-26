@@ -11,7 +11,9 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodClass;
 
-public class CreateStudent : CreateStudent.IBornOn, CreateStudent.IInSemester
+public class CreateStudent :
+    CreateStudent.IBornOn,
+    CreateStudent.IInSemester
 {
     private readonly Student student;
     private static readonly MethodInfo withNameMethodInfo;
