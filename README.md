@@ -9,8 +9,6 @@ The generated code follows the builder design pattern and allows you to construc
 [![version](https://img.shields.io/nuget/v/M31.FluentApi)](https://www.nuget.org/packages/M31.FluentApi/)
 [![CI](https://github.com/m31coding/M31.FluentAPI/actions/workflows/ci.yml/badge.svg)](https://github.com/m31coding/M31.FluentAPI/actions/workflows/ci.yml)
 [![m31coding](https://img.shields.io/badge/www-m31coding.com-34345B)](https://www.m31coding.com)
-[![youtube](https://img.shields.io/badge/youtube-kevin%20schaal-FF0000.svg)](https://www.youtube.com/channel/UC6CZ_Bcyql1kfHZvx9W85mA)
-[![twitter](https://img.shields.io/badge/twitter-@m31coding-1DA1F2.svg)](https://twitter.com/m31coding)
 
 Accompanying blog post: [www.m31coding.com>blog>fluent-api](https://www.m31coding.com/blog/fluent-api.html)
 
