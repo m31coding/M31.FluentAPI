@@ -9,7 +9,10 @@ internal class InterfaceGenerator : ICodeBoardActor
     public void Modify(CodeBoard codeBoard)
     {
         List<Interface> interfaces = CreateInterfaces(codeBoard);
-        AddInterfacesToBuilderClass(interfaces, codeBoard.BuilderClass);
+        AddInterfacesToBuilderClass(
+            interfaces,
+            codeBoard.BuilderClass,
+            codeBoard.Info.BuilderClassNameWithTypeParameters);
         AddInterfaceDefinitionsToBuilderClass(interfaces, codeBoard.BuilderClass);
     }
 
@@ -42,11 +45,11 @@ internal class InterfaceGenerator : ICodeBoardActor
         return interfaces;
     }
 
-    private void AddInterfacesToBuilderClass(List<Interface> interfaces, Class builderClass)
+    private void AddInterfacesToBuilderClass(List<Interface> interfaces, Class builderClass, string prefix)
     {
         foreach (Interface @interface in interfaces)
         {
-            builderClass.AddInterface($"{builderClass.Name}.{@interface.Name}");
+            builderClass.AddInterface($"{prefix}.{@interface.Name}");
         }
     }
 

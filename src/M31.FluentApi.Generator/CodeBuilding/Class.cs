@@ -93,6 +93,9 @@ internal class Class : ICode
 
         return codeBuilder
             .EndLine()
+            .Indent()
+            .Append(GenericConstraints)
+            .Unindent()
             .OpenBlock()
             .Append(fields)
             .BlankLine()

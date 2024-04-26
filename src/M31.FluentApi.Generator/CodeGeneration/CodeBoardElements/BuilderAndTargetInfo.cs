@@ -47,6 +47,6 @@ internal class BuilderAndTargetInfo
             return typeName;
         }
 
-        return $"{typeName}<{string.Join(", ", genericsInfo.Parameters)}>";
+        return $"{typeName}<{string.Join(", ", genericsInfo.ParameterStrings)}>";
     }
 }

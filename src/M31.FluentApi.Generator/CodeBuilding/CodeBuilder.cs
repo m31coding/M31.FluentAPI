@@ -42,6 +42,18 @@ internal class CodeBuilder
         return this;
     }
 
+    internal CodeBuilder Indent()
+    {
+        IndentationLevel++;
+        return this;
+    }
+
+    internal CodeBuilder Unindent()
+    {
+        IndentationLevel--;
+        return this;
+    }
+
     internal CodeBuilder OpenBlock()
     {
         AppendLine("{");

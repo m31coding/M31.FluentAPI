@@ -66,7 +66,7 @@ internal class GenericTypeConstraints
         // https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/constraints-on-type-parameters
         if (ReferenceTypeConstraint) yield return "class";
         if (NullableReferenceTypeConstraint) yield return "class?";
-        if (ValueTypeConstraint) yield return "struct";
+        if (ValueTypeConstraint && !UnmanagedTypeConstraint) yield return "struct";
         if (NotNullConstraint) yield return "notnull";
         if (UnmanagedTypeConstraint) yield return "unmanaged";
 

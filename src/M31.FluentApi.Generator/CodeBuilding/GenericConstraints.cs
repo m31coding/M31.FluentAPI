@@ -16,7 +16,12 @@ internal class GenericConstraints : ICode
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
-        throw new NotImplementedException();
+        foreach (ParameterWithConstraints p in parametersWithConstraints)
+        {
+            codeBuilder.AppendLine($"where {p.Parameter} : {string.Join(", ", p.Constraints)}");
+        }
+
+        return codeBuilder;
     }
 
     private class ParameterWithConstraints
