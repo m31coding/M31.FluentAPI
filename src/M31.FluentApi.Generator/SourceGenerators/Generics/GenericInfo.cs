@@ -1,12 +1,19 @@
 using M31.FluentApi.Generator.Commons;
+using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.SourceGenerators.Generics;
 
 internal class GenericInfo
 {
-    internal GenericInfo(IReadOnlyCollection<GenericTypeParameter> parameters)
+    private GenericInfo(IReadOnlyCollection<GenericTypeParameter> parameters)
     {
         Parameters = parameters;
+    }
+
+    internal static GenericInfo Create(IEnumerable<ITypeParameterSymbol> typeParameters)
+    {
+        GenericTypeParameter[] parameters = typeParameters.Select(GenericTypeParameter.Create).ToArray();
+        return new GenericInfo(parameters);
     }
 
     internal IReadOnlyCollection<GenericTypeParameter> Parameters { get; }

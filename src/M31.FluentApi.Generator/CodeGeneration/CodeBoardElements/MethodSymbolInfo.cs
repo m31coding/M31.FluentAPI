@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.Commons;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
@@ -9,17 +10,22 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
         string name,
         Accessibility accessibility,
         bool requiresReflection,
+        GenericInfo? genericInfo,
         IReadOnlyCollection<ParameterSymbolInfo> parameterInfos)
         : base(name, accessibility, requiresReflection)
     {
+        GenericInfo = genericInfo;
         ParameterInfos = parameterInfos;
     }
 
+    internal GenericInfo? GenericInfo { get; }
     internal IReadOnlyCollection<ParameterSymbolInfo> ParameterInfos { get; }
 
     protected bool Equals(MethodSymbolInfo other)
     {
-        return base.Equals(other) && ParameterInfos.SequenceEqual(other.ParameterInfos);
+        return base.Equals(other) &&
+               Equals(GenericInfo, other.GenericInfo) &&
+               ParameterInfos.SequenceEqual(other.ParameterInfos);
     }
 
     public override bool Equals(object? obj)
@@ -32,6 +38,9 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
 
     public override int GetHashCode()
     {
-        return new HashCode().Add(base.GetHashCode()).AddSequence(ParameterInfos);
+        return new HashCode()
+            .Add(base.GetHashCode())
+            .Add(GenericInfo)
+            .AddSequence(ParameterInfos);
     }
 }

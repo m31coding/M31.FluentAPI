@@ -75,12 +75,6 @@ internal class TypeDataCreator
 
     private GenericInfo? GetGenericInfo(INamedTypeSymbol type)
     {
-        if (!type.IsGenericType)
-        {
-            return null;
-        }
-
-        GenericTypeParameter[] parameters = type.TypeParameters.Select(GenericTypeParameter.Create).ToArray();
-        return new GenericInfo(parameters);
+        return type.IsGenericType ? GenericInfo.Create(type.TypeParameters) : null;
     }
 }

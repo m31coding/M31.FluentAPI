@@ -2,6 +2,7 @@ using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
@@ -47,11 +48,22 @@ internal static class SymbolInfoCreator
 
     private static MethodSymbolInfo CreateMethodSymbolInfo(IMethodSymbol methodSymbol)
     {
+        GenericInfo? genericInfo = GetGenericInfo(methodSymbol);
+
         IReadOnlyCollection<ParameterSymbolInfo> parameterInfos =
             methodSymbol.Parameters.Select(CreateParameterSymbolInfo).ToArray();
 
-        return new MethodSymbolInfo(methodSymbol.Name, methodSymbol.DeclaredAccessibility,
-            RequiresReflection(methodSymbol), parameterInfos);
+        return new MethodSymbolInfo(
+            methodSymbol.Name,
+            methodSymbol.DeclaredAccessibility,
+            RequiresReflection(methodSymbol),
+            genericInfo,
+            parameterInfos);
+    }
+
+    private static GenericInfo? GetGenericInfo(IMethodSymbol methodSymbol)
+    {
+        return methodSymbol.IsGenericMethod ? GenericInfo.Create(methodSymbol.TypeParameters) : null;
     }
 
     private static bool RequiresReflection(IFieldSymbol fieldSymbol)
