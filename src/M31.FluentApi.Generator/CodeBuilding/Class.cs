@@ -11,8 +11,7 @@ internal class Class : ICode
     internal Class(string name)
     {
         Name = name;
-        GenericParameters = new GenericParameters();
-        GenericConstraints = new GenericConstraints();
+        Generics = new Generics();
         Modifiers = new Modifiers();
         fields = new List<Field>();
         methods = new List<Method>();
@@ -23,8 +22,7 @@ internal class Class : ICode
 
     internal string Name { get; }
 
-    internal GenericParameters GenericParameters { get; }
-    internal GenericConstraints GenericConstraints { get; }
+    internal Generics Generics { get; }
     internal Modifiers Modifiers { get; }
     internal IReadOnlyCollection<Field> Fields => fields;
     internal IReadOnlyCollection<Method> Methods => methods;
@@ -34,12 +32,7 @@ internal class Class : ICode
 
     internal void AddGenericParameter(string parameter, IEnumerable<string> constraints)
     {
-        GenericParameters.Add(parameter);
-        IReadOnlyCollection<string> constraintsCollection = constraints.ToArray();
-        if (constraintsCollection.Count > 0)
-        {
-            GenericConstraints.Add(parameter, constraintsCollection);
-        }
+        Generics.AddGenericParameter(parameter, constraints);
     }
 
     internal void AddModifiers(params string[] modifiers)
@@ -83,7 +76,7 @@ internal class Class : ICode
             .StartLine()
             .Append(Modifiers)
             .Append($"class {Name}")
-            .Append(GenericParameters);
+            .Append(Generics.Parameters);
 
         if (interfaces.Count == 1)
         {
@@ -110,7 +103,7 @@ internal class Class : ICode
         return codeBuilder
             .EndLine()
             .Indent()
-            .Append(GenericConstraints)
+            .Append(Generics.Constraints)
             .Unindent()
             .OpenBlock()
             .Append(fields)

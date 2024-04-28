@@ -7,6 +7,7 @@ internal class MethodSignature : ICode
         ReturnType = returnType;
         MethodName = methodName;
         IsStandAlone = isStandAlone;
+        Generics = new Generics();
         Parameters = new Parameters();
         Modifiers = new Modifiers();
     }
@@ -19,6 +20,33 @@ internal class MethodSignature : ICode
     internal static MethodSignature CreateConstructorSignature(string className)
     {
         return new MethodSignature(null, className, false);
+    }
+
+    internal string? ReturnType { get; }
+    internal string MethodName { get; }
+    internal bool IsStandAlone { get; }
+    internal Generics Generics { get; }
+    internal Parameters Parameters { get; }
+    internal Modifiers Modifiers { get; }
+
+    internal void AddGenericParameter(string parameter, IEnumerable<string> constraints)
+    {
+        Generics.AddGenericParameter(parameter, constraints);
+    }
+
+    internal void AddParameter(string type, string name)
+    {
+        AddParameter(new Parameter(type, name));
+    }
+
+    internal void AddParameter(Parameter parameter)
+    {
+        Parameters.AddParameter(parameter);
+    }
+
+    internal void AddModifiers(params string[] modifiers)
+    {
+        Modifiers.Add(modifiers);
     }
 
     internal MethodSignature ToStandAloneMethodSignature()
@@ -43,28 +71,6 @@ internal class MethodSignature : ICode
         }
 
         return newSignature;
-    }
-
-    internal string? ReturnType { get; }
-    internal string MethodName { get; }
-    internal bool IsStandAlone { get; }
-
-    internal Parameters Parameters { get; }
-    internal Modifiers Modifiers { get; }
-
-    internal void AddParameter(string type, string name)
-    {
-        AddParameter(new Parameter(type, name));
-    }
-
-    internal void AddParameter(Parameter parameter)
-    {
-        Parameters.AddParameter(parameter);
-    }
-
-    internal void AddModifiers(params string[] modifiers)
-    {
-        Modifiers.Add(modifiers);
     }
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
