@@ -8,7 +8,7 @@ internal class BuilderAndTargetInfo
     internal BuilderAndTargetInfo(
         string fluentApiClassName,
         string? @namespace,
-        GenericInfo? genericsInfo,
+        GenericInfo? genericInfo,
         bool fluentApiTypeIsStruct,
         bool fluentApiTypeIsInternal,
         bool fluentApiTypeHasPrivateConstructor,
@@ -16,13 +16,13 @@ internal class BuilderAndTargetInfo
     {
         Namespace = @namespace;
         FluentApiClassName = fluentApiClassName;
-        FluentApiClassNameWithTypeParameters = WithTypeParameters(fluentApiClassName, genericsInfo);
-        GenericsInfo = genericsInfo;
+        FluentApiClassNameWithTypeParameters = WithTypeParameters(fluentApiClassName, genericInfo);
+        GenericInfo = genericInfo;
         FluentApiTypeIsStruct = fluentApiTypeIsStruct;
         FluentApiTypeIsInternal = fluentApiTypeIsInternal;
         FluentApiTypeHasPrivateConstructor = fluentApiTypeHasPrivateConstructor;
         BuilderClassName = builderClassName;
-        BuilderClassNameWithTypeParameters = WithTypeParameters(builderClassName, genericsInfo);
+        BuilderClassNameWithTypeParameters = WithTypeParameters(builderClassName, genericInfo);
         BuilderInstanceName = builderClassName.FirstCharToLower();
         ClassInstanceName = fluentApiClassName.FirstCharToLower();
     }
@@ -30,7 +30,7 @@ internal class BuilderAndTargetInfo
     internal string? Namespace { get; }
     internal string FluentApiClassName { get; }
     internal string FluentApiClassNameWithTypeParameters { get; }
-    internal GenericInfo? GenericsInfo { get; }
+    internal GenericInfo? GenericInfo { get; }
     internal bool FluentApiTypeIsStruct { get; }
     internal bool FluentApiTypeIsInternal { get; }
     internal bool FluentApiTypeHasPrivateConstructor { get; }
@@ -39,13 +39,13 @@ internal class BuilderAndTargetInfo
     internal string BuilderInstanceName { get; }
     internal string ClassInstanceName { get; }
 
-    private static string WithTypeParameters(string typeName, GenericInfo? genericsInfo)
+    private static string WithTypeParameters(string typeName, GenericInfo? genericInfo)
     {
-        if (genericsInfo == null || genericsInfo.Parameters.Count == 0)
+        if (genericInfo == null || genericInfo.Parameters.Count == 0)
         {
             return typeName;
         }
 
-        return $"{typeName}<{string.Join(", ", genericsInfo.ParameterStrings)}>";
+        return $"{typeName}<{string.Join(", ", genericInfo.ParameterStrings)}>";
     }
 }

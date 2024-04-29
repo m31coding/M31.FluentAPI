@@ -83,9 +83,9 @@ internal class CodeBoard
             "#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member");
         codeFile.AddPreprocessorDirective("#nullable enable");
 
-        if (builderAndTargetInfo.GenericsInfo != null)
+        if (builderAndTargetInfo.GenericInfo != null)
         {
-            foreach (GenericTypeParameter genericTypeParameter in builderAndTargetInfo.GenericsInfo.Parameters)
+            foreach (GenericTypeParameter genericTypeParameter in builderAndTargetInfo.GenericInfo.Parameters)
             {
                 builderClass.AddGenericParameter(
                     genericTypeParameter.ParameterString,

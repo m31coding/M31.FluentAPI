@@ -10,9 +10,9 @@ internal class EntityFieldGenerator : ICodeBoardActor
         // private readonly Student<T1, T2> student;
         Field field = new Field(codeBoard.Info.FluentApiClassName, codeBoard.Info.ClassInstanceName);
 
-        if (codeBoard.Info.GenericsInfo != null)
+        if (codeBoard.Info.GenericInfo != null)
         {
-            field.AddGenericParameters(codeBoard.Info.GenericsInfo.ParameterStrings);
+            field.AddGenericParameters(codeBoard.Info.GenericInfo.ParameterStrings);
         }
 
         field.AddModifiers("private");
