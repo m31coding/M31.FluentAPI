@@ -2,40 +2,28 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class GenericConstraints : ICode
 {
-    private readonly List<ParameterWithConstraints> parametersWithConstraints;
+    private readonly List<GenericConstraintClause> genericConstraintClauses;
 
     internal GenericConstraints()
     {
-        parametersWithConstraints = new List<ParameterWithConstraints>();
+        genericConstraintClauses = new List<GenericConstraintClause>();
     }
 
     internal GenericConstraints(GenericConstraints constraints)
     {
-        parametersWithConstraints = constraints.parametersWithConstraints.ToList();
+        genericConstraintClauses = constraints.genericConstraintClauses.ToList();
     }
 
-    internal int Count => parametersWithConstraints.Count;
+    internal IReadOnlyCollection<GenericConstraintClause> GenericConstraintClauses => genericConstraintClauses;
+    internal int Count => genericConstraintClauses.Count;
 
     internal void Add(string parameter, IReadOnlyCollection<string> constraints)
     {
-        parametersWithConstraints.Add(new ParameterWithConstraints(parameter, constraints));
+        genericConstraintClauses.Add(new GenericConstraintClause(parameter, constraints));
     }
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
-        return codeBuilder.AppendNewLineSeparated(
-            parametersWithConstraints.Select(p => $"where {p.Parameter} : {string.Join(", ", p.Constraints)}"));
-    }
-
-    private class ParameterWithConstraints
-    {
-        internal ParameterWithConstraints(string parameter, IReadOnlyCollection<string> constraints)
-        {
-            Parameter = parameter;
-            Constraints = constraints;
-        }
-
-        internal string Parameter { get; }
-        internal IReadOnlyCollection<string> Constraints { get; }
+        return codeBuilder.AppendNewLineSeparated(genericConstraintClauses);
     }
 }
