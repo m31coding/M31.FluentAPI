@@ -104,6 +104,7 @@ internal class Class : ICode
             .EndLine()
             .Indent()
             .Append(Generics.Constraints)
+            .EndLine()
             .Unindent()
             .OpenBlock()
             .Append(fields)

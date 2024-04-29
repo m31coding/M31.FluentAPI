@@ -9,6 +9,14 @@ internal class GenericConstraints : ICode
         parametersWithConstraints = new List<ParameterWithConstraints>();
     }
 
+    internal GenericConstraints(GenericConstraints constraints)
+    {
+        parametersWithConstraints = constraints.parametersWithConstraints.ToList();
+    }
+
+    internal IReadOnlyCollection<ParameterWithConstraints> ParametersWithConstraints => parametersWithConstraints;
+    internal int Count => parametersWithConstraints.Count;
+
     internal void Add(string parameter, IReadOnlyCollection<string> constraints)
     {
         parametersWithConstraints.Add(new ParameterWithConstraints(parameter, constraints));
@@ -16,15 +24,11 @@ internal class GenericConstraints : ICode
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
-        foreach (ParameterWithConstraints p in parametersWithConstraints)
-        {
-            codeBuilder.AppendLine($"where {p.Parameter} : {string.Join(", ", p.Constraints)}");
-        }
-
-        return codeBuilder;
+        return codeBuilder.AppendNewLineSeparated(
+            parametersWithConstraints.Select(p => $"where {p.Parameter} : {string.Join(", ", p.Constraints)}"));
     }
 
-    private class ParameterWithConstraints
+    internal class ParameterWithConstraints
     {
         internal ParameterWithConstraints(string parameter, IReadOnlyCollection<string> constraints)
         {

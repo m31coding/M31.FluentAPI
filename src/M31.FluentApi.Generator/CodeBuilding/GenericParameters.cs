@@ -9,6 +9,11 @@ internal class GenericParameters : ICode
         values = parameters.ToList();
     }
 
+    internal GenericParameters(GenericParameters parameters)
+    {
+        values = parameters.values.ToList();
+    }
+
     internal IReadOnlyCollection<string> Values => values;
 
     internal void Add(string parameter)

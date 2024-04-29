@@ -12,6 +12,16 @@ internal class MethodSignature : ICode
         Modifiers = new Modifiers();
     }
 
+    private MethodSignature(MethodSignature methodSignature, bool isStandAlone)
+    {
+        ReturnType = methodSignature.ReturnType;
+        MethodName = methodSignature.MethodName;
+        IsStandAlone = isStandAlone;
+        Generics = new Generics(methodSignature.Generics);
+        Parameters = new Parameters(methodSignature.Parameters);
+        Modifiers = isStandAlone ? new Modifiers() : new Modifiers(methodSignature.Modifiers);
+    }
+
     internal static MethodSignature Create(string returnType, string methodName, bool isStandAlone)
     {
         return new MethodSignature(returnType, methodName, isStandAlone);
@@ -51,36 +61,37 @@ internal class MethodSignature : ICode
 
     internal MethodSignature ToStandAloneMethodSignature()
     {
-        MethodSignature newSignature = new MethodSignature(ReturnType, MethodName, true);
-
-        foreach (Parameter parameter in Parameters.Values)
-        {
-            newSignature.AddParameter(parameter);
-        }
-
-        return newSignature;
+        return new MethodSignature(this, true);
     }
 
     internal MethodSignature ToSignatureForMethodBody()
     {
-        MethodSignature newSignature = new MethodSignature(ReturnType, MethodName, false);
-
-        foreach (Parameter parameter in Parameters.Values)
-        {
-            newSignature.AddParameter(parameter);
-        }
-
-        return newSignature;
+        return new MethodSignature(this, false);
     }
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
-        return codeBuilder
+        codeBuilder
             .StartLine()
             .Append(Modifiers)
             .Append($"{ReturnType} ", ReturnType != null)
             .Append(MethodName)
-            .Append(Parameters).Append(IsStandAlone ? ";" : null)
-            .EndLine();
+            .Append(Generics.Parameters)
+            .Append(Parameters);
+
+        if (Generics.Constraints.Count == 0)
+        {
+            return codeBuilder.Append(IsStandAlone ? ";" : null).EndLine();
+        }
+        else
+        {
+            return codeBuilder
+                .EndLine()
+                .Indent()
+                .Append(Generics.Constraints)
+                .Append(IsStandAlone ? ";" : null)
+                .EndLine()
+                .Unindent();
+        }
     }
 }

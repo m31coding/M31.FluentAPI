@@ -14,6 +14,11 @@ internal class Modifiers : ICode
         this.values = values.ToList();
     }
 
+    internal Modifiers(Modifiers modifiers)
+    {
+        values = modifiers.values.ToList();
+    }
+
     internal IReadOnlyCollection<string> Values => values;
 
     internal void Add(params string[] modifiers)

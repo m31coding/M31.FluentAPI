@@ -1,5 +1,6 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 
@@ -18,7 +19,7 @@ internal class BuilderMethodFactory
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
     {
-        return new BuilderMethod(methodName, new List<Parameter>(), _ => new List<string>());
+        return new BuilderMethod(methodName, null, new List<Parameter>(), _ => new List<string>());
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, ComputeValueCode computeValue)
@@ -35,7 +36,7 @@ internal class BuilderMethodFactory
             };
         }
 
-        return new BuilderMethod(methodName, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, null, parameters, BuildBodyCode);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, List<ComputeValueCode> computeValues)
@@ -49,10 +50,14 @@ internal class BuilderMethodFactory
                 .ToList();
         }
 
-        return new BuilderMethod(methodName, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, null, parameters, BuildBodyCode);
     }
 
-    internal BuilderMethod CreateBuilderMethod(string methodSymbolName, string methodName, List<Parameter> parameters)
+    internal BuilderMethod CreateBuilderMethod(
+        string methodSymbolName,
+        string methodName,
+        GenericInfo? genericInfo,
+        List<Parameter> parameters)
     {
         MethodIdentity methodIdentity = MethodIdentity.Create(methodSymbolName, parameters.Select(p => p.Type));
 
@@ -61,6 +66,6 @@ internal class BuilderMethodFactory
             return methodToCallMethodCode[methodIdentity].BuildCode(instancePrefix, parameters);
         }
 
-        return new BuilderMethod(methodName, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, genericInfo, parameters, BuildBodyCode);
     }
 }

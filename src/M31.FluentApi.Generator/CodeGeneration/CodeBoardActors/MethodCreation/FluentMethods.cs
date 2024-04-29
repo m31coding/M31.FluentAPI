@@ -30,6 +30,7 @@ internal class FluentMethods : IBuilderMethodCreator
             methodCreator.BuilderMethodFactory.CreateBuilderMethod(
                 SymbolInfo.Name,
                 MethodAttributeInfo.FluentMethodName,
+                SymbolInfo.GenericInfo,
                 parameters);
 
         return new BuilderMethods(builderMethod);

@@ -1,6 +1,7 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 
@@ -17,6 +18,16 @@ internal abstract class BuilderStepMethod : BuilderMethod
     {
         MethodSignature signature = MethodSignature.Create(returnType, MethodName, false);
         signature.AddModifiers(modifiers);
+
+        if (GenericInfo != null)
+        {
+            foreach (GenericTypeParameter genericTypeParameter in GenericInfo.Parameters)
+            {
+                signature.AddGenericParameter(
+                    genericTypeParameter.ParameterString,
+                    genericTypeParameter.Constraints.GetConstraintsForCodeGeneration());
+            }
+        }
 
         foreach (Parameter parameter in Parameters)
         {

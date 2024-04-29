@@ -102,7 +102,12 @@ internal class CodeBuilder
 
     internal CodeBuilder Append(IEnumerable<string> code, string separator)
     {
-        return Append(code, separator, c => Append(c));
+        return AppendSeparated(code, () => stringBuilder.Append(separator), c => Append(c));
+    }
+
+    internal CodeBuilder AppendNewLineSeparated(IEnumerable<string> code)
+    {
+        return AppendSeparated(code, () => EndLine(), c => Append(GetIndentation()).Append(c));
     }
 
     internal CodeBuilder Append(ICode? code)
@@ -148,10 +153,15 @@ internal class CodeBuilder
 
     internal CodeBuilder Append(IEnumerable<ICode> code, string separator)
     {
-        return Append(code, separator, c => c.AppendCode(this));
+        return AppendSeparated(code, () => stringBuilder.Append(separator), c => c.AppendCode(this));
     }
 
-    private CodeBuilder Append<T>(IEnumerable<T> code, string separator, Action<T> append)
+    internal CodeBuilder AppendNewLineSeparated(IEnumerable<ICode> code)
+    {
+        return AppendSeparated(code, () => EndLine(), c => Append(GetIndentation()).Append(c));
+    }
+
+    private CodeBuilder AppendSeparated<T>(IEnumerable<T> code, Action separationAction, Action<T> append)
     {
         using IEnumerator<T> en = code.GetEnumerator();
 
@@ -169,7 +179,7 @@ internal class CodeBuilder
 
         do
         {
-            stringBuilder.Append(separator);
+            separationAction();
             append(en.Current);
         }
         while (en.MoveNext());

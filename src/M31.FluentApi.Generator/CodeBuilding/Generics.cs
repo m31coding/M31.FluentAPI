@@ -8,6 +8,12 @@ internal class Generics
         Constraints = new GenericConstraints();
     }
 
+    internal Generics(Generics generics)
+    {
+        Parameters = new GenericParameters(generics.Parameters);
+        Constraints = new GenericConstraints(generics.Constraints);
+    }
+
     internal GenericParameters Parameters { get; }
     internal GenericConstraints Constraints { get; }
 
