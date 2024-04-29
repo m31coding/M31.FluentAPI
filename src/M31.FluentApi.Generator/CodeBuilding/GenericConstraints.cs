@@ -14,7 +14,6 @@ internal class GenericConstraints : ICode
         parametersWithConstraints = constraints.parametersWithConstraints.ToList();
     }
 
-    internal IReadOnlyCollection<ParameterWithConstraints> ParametersWithConstraints => parametersWithConstraints;
     internal int Count => parametersWithConstraints.Count;
 
     internal void Add(string parameter, IReadOnlyCollection<string> constraints)
@@ -28,7 +27,7 @@ internal class GenericConstraints : ICode
             parametersWithConstraints.Select(p => $"where {p.Parameter} : {string.Join(", ", p.Constraints)}"));
     }
 
-    internal class ParameterWithConstraints
+    private class ParameterWithConstraints
     {
         internal ParameterWithConstraints(string parameter, IReadOnlyCollection<string> constraints)
         {
