@@ -30,11 +30,7 @@ public class Student<T1, T2, T3, T4, T5>
     public T5 Property5 { get; set; }
 
     [FluentMethod(6)]
-    public void Method1<T6, T7, T8, T9>(
-        T6 p1,
-        T7 p2,
-        T8 p3,
-        T9 p4)
+    public void Method1<T6, T7, T8, T9>(T6 p1, T7 p2, T8 p3, T9 p4)
         where T6 : unmanaged
         where T7 : List<int>, IDictionary<int, string>
         where T8 : class, IDictionary<int, string>
