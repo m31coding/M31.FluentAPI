@@ -5,15 +5,11 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 
 internal class BuilderMethodFactory
 {
-    private readonly IReadOnlyDictionary<string, SetMemberCode> memberToSetMemberCode;
-    private readonly CodeBoard codeBoard;
+    private readonly InnerBodyCreationDelegates innerBodyCreationDelegates;
 
-    internal BuilderMethodFactory(
-        IReadOnlyDictionary<string, SetMemberCode> memberToSetMemberCode,
-        CodeBoard codeBoard)
+    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates)
     {
-        this.memberToSetMemberCode = memberToSetMemberCode;
-        this.codeBoard = codeBoard;
+        this.innerBodyCreationDelegates = innerBodyCreationDelegates;
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
@@ -31,7 +27,8 @@ internal class BuilderMethodFactory
         {
             return new List<string>()
             {
-                memberToSetMemberCode[computeValue.TargetMember].BuildCode(instancePrefix, computeValue.Code),
+                innerBodyCreationDelegates.GetSetMemberCode(computeValue.TargetMember)
+                    .BuildCode(instancePrefix, computeValue.Code),
             };
         }
 
@@ -45,7 +42,8 @@ internal class BuilderMethodFactory
         List<string> BuildBodyCode(string instancePrefix)
         {
             return computeValues
-                .Select(v => memberToSetMemberCode[v.TargetMember].BuildCode(instancePrefix, v.Code))
+                .Select(v =>
+                    innerBodyCreationDelegates.GetSetMemberCode(v.TargetMember).BuildCode(instancePrefix, v.Code))
                 .ToList();
         }
 
@@ -64,7 +62,7 @@ internal class BuilderMethodFactory
 
         List<string> BuildBodyCode(string instancePrefix)
         {
-            return codeBoard.GetCallMethodCode(methodSymbolInfo).BuildCode(instancePrefix, parameters);
+            return innerBodyCreationDelegates.GetCallMethodCode(methodSymbolInfo).BuildCode(instancePrefix, parameters);
         }
 
         return new BuilderMethod(methodName, methodSymbolInfo.GenericInfo, parameters, BuildBodyCode);
