@@ -14,6 +14,7 @@ internal class DuplicateMethodsFinder
 
     private static BuilderMethodIdentity CreateBuilderMethodIdentity(BuilderMethod builderMethod)
     {
+        // Create method identities with the actual builder method names.
         MethodIdentity methodIdentity =
             MethodIdentity.Create(builderMethod.MethodName, builderMethod.Parameters.Select(p => p.Type));
 

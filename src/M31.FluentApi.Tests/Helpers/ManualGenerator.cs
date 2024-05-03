@@ -54,8 +54,7 @@ internal static class ManualGenerator
 
         Assert.Equal(0, diagnostics.Count(d => d.Severity == DiagnosticSeverity.Error));
         SyntaxTree? outputSyntaxTree = outputCompilation.SyntaxTrees.Skip(1).LastOrDefault();
-        // first syntax tree is the input syntax tree
-        // last syntax tree is the generated one
+        // First syntax tree is the input syntax tree. Last syntax tree is the generated one.
 
         if (outputSyntaxTree == null)
         {

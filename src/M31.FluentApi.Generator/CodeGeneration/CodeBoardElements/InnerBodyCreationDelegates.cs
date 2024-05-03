@@ -49,6 +49,8 @@ internal class InnerBodyCreationDelegates
 
     private static MethodIdentity CreateMethodIdentity(MethodSymbolInfo methodSymbolInfo)
     {
+        // Create the method identities with the unique symbol names. Check for duplicate methods later with the actual
+        // names of the builder methods.
         return MethodIdentity.Create(methodSymbolInfo.Name,
             methodSymbolInfo.ParameterInfos.Select(i => i.TypeForCodeGeneration));
     }
