@@ -21,7 +21,7 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
     protected override void GenerateLineWithoutReflection(MethodSymbolInfo symbolInfo)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
-        CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
+        CodeBoard.AssignCallMethodCode(symbolInfo, callMethodCode);
 
         List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
         {
@@ -43,7 +43,7 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
     protected override void GenerateLineWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
-        CodeBoard.MethodToCallMethodCode[CreateMethodIdentity(symbolInfo)] = callMethodCode;
+        CodeBoard.AssignCallMethodCode(symbolInfo, callMethodCode);
 
         List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
         {
@@ -102,12 +102,6 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
             $"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
             $"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});",
         };
-    }
-
-    private static MethodIdentity CreateMethodIdentity(MethodSymbolInfo methodSymbolInfo)
-    {
-        return MethodIdentity.Create(methodSymbolInfo.Name,
-            methodSymbolInfo.ParameterInfos.Select(i => i.TypeForCodeGeneration));
     }
 
     protected override void InitializeInfoField(string fieldName, MethodSymbolInfo symbolInfo)

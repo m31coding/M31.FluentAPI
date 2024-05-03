@@ -16,7 +16,7 @@ internal class ForkCreator : ICodeBoardActor
     public void Modify(CodeBoard codeBoard)
     {
         BuilderMethodFactory builderMethodFactory =
-            new BuilderMethodFactory(codeBoard.MemberToSetMemberCode, codeBoard.MethodToCallMethodCode);
+            new BuilderMethodFactory(codeBoard.MemberToSetMemberCode, codeBoard);
         MethodCreator methodCreator = new MethodCreator(builderMethodFactory);
         CreateForks(codeBoard.FluentApiInfos, methodCreator, codeBoard);
         codeBoard.Forks = GetForks();

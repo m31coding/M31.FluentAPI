@@ -20,7 +20,7 @@ internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
                 $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name} = {value}{GetPostfix(value)};");
-        CodeBoard.MemberToSetMemberCode[symbolInfo.Name] = setMemberCode;
+        CodeBoard.AssignSetMemberCode(symbolInfo, setMemberCode);
 
         string GetPostfix(string value)
         {
@@ -34,7 +34,7 @@ internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
                 $"{infoFieldName}.SetValue({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
-        CodeBoard.MemberToSetMemberCode[symbolInfo.Name] = setMemberCode;
+        CodeBoard.AssignSetMemberCode(symbolInfo, setMemberCode);
     }
 
     protected override void InitializeInfoField(string fieldName, MemberSymbolInfo symbolInfo)
