@@ -66,7 +66,7 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
         where T8 : class, System.Collections.Generic.IDictionary<int, string>
         where T9 : System.Collections.Generic.List<int>, new()
     {
-        student.Method1(p1, p2, p3, p4);
+        student.Method1<T6, T7, T8, T9>(p1, p2, p3, p4);
         return student;
     }
 

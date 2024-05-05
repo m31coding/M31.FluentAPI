@@ -8,23 +8,23 @@ internal class GenericTypeParameter
 {
     internal static GenericTypeParameter Create(ITypeParameterSymbol typeParameter)
     {
-        string parameterString = CodeTypeExtractor.GetTypeForCodeGeneration(typeParameter);
+        string parameterName = CodeTypeExtractor.GetTypeForCodeGeneration(typeParameter);
         GenericTypeConstraints constraints = GenericTypeConstraints.Create(typeParameter);
-        return new GenericTypeParameter(parameterString, constraints);
+        return new GenericTypeParameter(parameterName, constraints);
     }
 
-    private GenericTypeParameter(string parameterString, GenericTypeConstraints constraints)
+    private GenericTypeParameter(string parameterName, GenericTypeConstraints constraints)
     {
-        ParameterString = parameterString;
+        ParameterName = parameterName;
         Constraints = constraints;
     }
 
-    internal string ParameterString { get; }
+    internal string ParameterName { get; }
     internal GenericTypeConstraints Constraints { get; }
 
     protected bool Equals(GenericTypeParameter other)
     {
-        return ParameterString == other.ParameterString && Constraints.Equals(other.Constraints);
+        return ParameterName == other.ParameterName && Constraints.Equals(other.Constraints);
     }
 
     public override bool Equals(object? obj)
@@ -37,6 +37,6 @@ internal class GenericTypeParameter
 
     public override int GetHashCode()
     {
-        return new HashCode().Add(ParameterString).Add(Constraints);
+        return new HashCode().Add(ParameterName).Add(Constraints);
     }
 }

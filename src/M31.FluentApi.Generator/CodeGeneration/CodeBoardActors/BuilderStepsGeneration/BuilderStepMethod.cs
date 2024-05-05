@@ -24,7 +24,7 @@ internal abstract class BuilderStepMethod : BuilderMethod
             foreach (GenericTypeParameter genericTypeParameter in GenericInfo.Parameters)
             {
                 signature.AddGenericParameter(
-                    genericTypeParameter.ParameterString,
+                    genericTypeParameter.ParameterName,
                     genericTypeParameter.Constraints.GetConstraintsForCodeGeneration());
             }
         }

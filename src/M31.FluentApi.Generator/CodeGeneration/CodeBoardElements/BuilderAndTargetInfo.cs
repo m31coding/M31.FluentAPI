@@ -41,11 +41,7 @@ internal class BuilderAndTargetInfo
 
     private static string WithTypeParameters(string typeName, GenericInfo? genericInfo)
     {
-        if (genericInfo == null || genericInfo.Parameters.Count == 0)
-        {
-            return typeName;
-        }
-
-        return $"{typeName}<{string.Join(", ", genericInfo.ParameterStrings)}>";
+        string parameterListInAngleBrackets = genericInfo?.ParameterListInAngleBrackets ?? string.Empty;
+        return $"{typeName}{parameterListInAngleBrackets}";
     }
 }

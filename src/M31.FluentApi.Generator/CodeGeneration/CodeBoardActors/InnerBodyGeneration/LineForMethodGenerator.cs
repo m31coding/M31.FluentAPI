@@ -27,8 +27,9 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         {
             return new List<string>()
             {
-                // createStudent.student.InSemester(semester);
+                // createStudent.student.InSemester<T1, T2>(semester);
                 $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}" +
+                symbolInfo.GenericInfo?.ParameterListInAngleBrackets +
                 $"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});",
             };
         }

@@ -31,7 +31,7 @@ public class CreateStudent
         where T9 : System.Collections.Generic.List<int>, new()
     {
         CreateStudent createStudent = new CreateStudent();
-        createStudent.student.Method1(p1, p2, p3, p4, p5, p6, p7, p8, p9);
+        createStudent.student.Method1<T1, T2, T3, T4, T5, T6, T7, T8, T9>(p1, p2, p3, p4, p5, p6, p7, p8, p9);
         return createStudent.student;
     }
 }

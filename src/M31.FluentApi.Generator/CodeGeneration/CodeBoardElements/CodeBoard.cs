@@ -86,7 +86,7 @@ internal class CodeBoard
             foreach (GenericTypeParameter genericTypeParameter in builderAndTargetInfo.GenericInfo.Parameters)
             {
                 builderClass.AddGenericParameter(
-                    genericTypeParameter.ParameterString,
+                    genericTypeParameter.ParameterName,
                     genericTypeParameter.Constraints.GetConstraintsForCodeGeneration());
             }
         }

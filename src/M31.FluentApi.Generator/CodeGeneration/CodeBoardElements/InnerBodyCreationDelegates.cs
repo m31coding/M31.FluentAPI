@@ -31,7 +31,7 @@ internal class InnerBodyCreationDelegates
 
     internal void AssignCallMethodCode(MethodSymbolInfo methodSymbolInfo, CallMethodCode callMethodCode)
     {
-        MethodIdentity methodIdentity = CreateMethodIdentity(methodSymbolInfo);
+        MethodIdentity methodIdentity = MethodIdentity.Create(methodSymbolInfo);
 
         if (methodToCallMethodCode.ContainsKey(methodIdentity))
         {
@@ -44,14 +44,6 @@ internal class InnerBodyCreationDelegates
 
     internal CallMethodCode GetCallMethodCode(MethodSymbolInfo methodSymbolInfo)
     {
-        return methodToCallMethodCode[CreateMethodIdentity(methodSymbolInfo)];
-    }
-
-    private static MethodIdentity CreateMethodIdentity(MethodSymbolInfo methodSymbolInfo)
-    {
-        // Create the method identities with the unique symbol names. Check for duplicate methods later with the actual
-        // names of the builder methods.
-        return MethodIdentity.Create(methodSymbolInfo.Name,
-            methodSymbolInfo.ParameterInfos.Select(i => i.TypeForCodeGeneration));
+        return methodToCallMethodCode[MethodIdentity.Create(methodSymbolInfo)];
     }
 }
