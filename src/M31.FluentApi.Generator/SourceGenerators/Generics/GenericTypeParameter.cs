@@ -10,16 +10,18 @@ internal class GenericTypeParameter
     {
         string parameterName = CodeTypeExtractor.GetTypeForCodeGeneration(typeParameter);
         GenericTypeConstraints constraints = GenericTypeConstraints.Create(typeParameter);
-        return new GenericTypeParameter(parameterName, constraints);
+        return new GenericTypeParameter(parameterName, typeParameter.Ordinal, constraints);
     }
 
-    private GenericTypeParameter(string parameterName, GenericTypeConstraints constraints)
+    private GenericTypeParameter(string parameterName, int parameterPosition, GenericTypeConstraints constraints)
     {
         ParameterName = parameterName;
+        ParameterPosition = parameterPosition;
         Constraints = constraints;
     }
 
     internal string ParameterName { get; }
+    internal int ParameterPosition { get; }
     internal GenericTypeConstraints Constraints { get; }
 
     protected bool Equals(GenericTypeParameter other)

@@ -57,6 +57,7 @@ internal class BuilderMethodFactory
                 i.TypeForCodeGeneration,
                 i.ParameterName,
                 i.DefaultValue,
+                i.GenericTypeParameterPosition,
                 new ParameterAnnotations(i.ParameterKinds)))
             .ToList();
 

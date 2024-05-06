@@ -10,12 +10,14 @@ internal class ParameterSymbolInfo
         string typeForCodeGeneration,
         bool isNullable,
         string? defaultValue,
+        int? genericTypeParameterPosition,
         ParameterKinds parameterKinds)
     {
         ParameterName = parameterName;
         TypeForCodeGeneration = typeForCodeGeneration;
         IsNullable = isNullable;
         DefaultValue = defaultValue;
+        GenericTypeParameterPosition = genericTypeParameterPosition;
         ParameterKinds = parameterKinds;
     }
 
@@ -23,7 +25,9 @@ internal class ParameterSymbolInfo
     internal string TypeForCodeGeneration { get; }
     internal bool IsNullable { get; }
     internal string? DefaultValue { get; }
+    internal int? GenericTypeParameterPosition { get; }
     internal ParameterKinds ParameterKinds { get; }
+    internal bool IsGenericParameter => GenericTypeParameterPosition.HasValue;
 
     protected bool Equals(ParameterSymbolInfo other)
     {

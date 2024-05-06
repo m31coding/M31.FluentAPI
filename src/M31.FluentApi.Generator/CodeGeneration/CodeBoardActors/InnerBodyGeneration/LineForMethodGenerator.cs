@@ -112,12 +112,12 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
 
         string typeArguments =
             @$"new Type[] {{ {string.Join(", ",
-                symbolInfo.ParameterInfos.Select(i => $"typeof({i.TypeForCodeGeneration})"))} }}";
+                symbolInfo.ParameterInfos.Select(CreateMethodParameter))} }}";
 
         // withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
         //     "WithName",
         //     BindingFlags.Instance | BindingFlags.NonPublic,
-        //     new Type[] { typeof(string) })!;
+        //     new Type[] { typeof(string) })!;   or   new Type[] { Type.MakeGenericMethodParameter(0) })!;
         staticConstructor.AppendBodyLine($"{fieldName} = " +
                                          $"typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters}).GetMethod(");
         staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
@@ -125,5 +125,17 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         staticConstructor.AppendBodyLine($"{indentation}{typeArguments})!;");
 
         CodeBoard.CodeFile.AddUsing("System");
+
+        static string CreateMethodParameter(ParameterSymbolInfo parameterInfo)
+        {
+            if (parameterInfo.IsGenericParameter)
+            {
+                return $"Type.MakeGenericMethodParameter({parameterInfo.GenericTypeParameterPosition!.Value})";
+            }
+            else
+            {
+                return $"typeof({parameterInfo.TypeForCodeGeneration})";
+            }
+        }
     }
 }

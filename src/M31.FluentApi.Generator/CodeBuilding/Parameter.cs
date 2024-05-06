@@ -6,11 +6,13 @@ internal class Parameter : ICode
         string type,
         string name,
         string? defaultValue = null,
+        int? genericTypeParameterPosition = null,
         ParameterAnnotations? parameterAnnotations = null)
     {
         Type = type;
         Name = name;
         DefaultValue = defaultValue;
+        GenericTypeParameterPosition = genericTypeParameterPosition;
         ParameterAnnotations = parameterAnnotations;
     }
 
@@ -18,6 +20,8 @@ internal class Parameter : ICode
     internal string Name { get; }
     internal string? DefaultValue { get; }
     internal ParameterAnnotations? ParameterAnnotations { get; }
+    internal int? GenericTypeParameterPosition { get; }
+    internal bool IsGenericParameter => GenericTypeParameterPosition.HasValue;
 
     internal bool HasAnnotation(ParameterKinds parameterKinds)
     {

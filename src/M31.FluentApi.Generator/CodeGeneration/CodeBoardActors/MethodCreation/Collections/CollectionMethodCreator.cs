@@ -35,6 +35,7 @@ internal abstract class CollectionMethodCreator
             symbolInfo.IsNullable ? $"{genericTypeArgument}[]?" : $"{genericTypeArgument}[]",
             symbolInfo.NameInCamelCase,
             null,
+            null,
             new ParameterAnnotations(ParameterKinds.Params));
 
         return methodCreator.CreateMethodWithComputedValue(

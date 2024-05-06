@@ -12,7 +12,8 @@ internal class GenericInfo
 
     internal static GenericInfo Create(IEnumerable<ITypeParameterSymbol> typeParameters)
     {
-        GenericTypeParameter[] parameters = typeParameters.Select(GenericTypeParameter.Create).ToArray();
+        GenericTypeParameter[] parameters =
+            typeParameters.Select(GenericTypeParameter.Create).OrderBy(p => p.ParameterPosition).ToArray();
         return new GenericInfo(parameters);
     }
 

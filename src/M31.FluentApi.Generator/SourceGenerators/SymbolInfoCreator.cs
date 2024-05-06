@@ -49,9 +49,13 @@ internal static class SymbolInfoCreator
     private static MethodSymbolInfo CreateMethodSymbolInfo(IMethodSymbol methodSymbol)
     {
         GenericInfo? genericInfo = GetGenericInfo(methodSymbol);
+        Dictionary<string, int> typeParameterNameToTypeParameterPosition = genericInfo == null
+            ? new Dictionary<string, int>()
+            : genericInfo.Parameters.ToDictionary(p => p.ParameterName, p => p.ParameterPosition);
 
         IReadOnlyCollection<ParameterSymbolInfo> parameterInfos =
-            methodSymbol.Parameters.Select(CreateParameterSymbolInfo).ToArray();
+            methodSymbol.Parameters.Select(p => CreateParameterSymbolInfo(p, typeParameterNameToTypeParameterPosition))
+                .ToArray();
 
         return new MethodSymbolInfo(
             methodSymbol.Name,
@@ -95,13 +99,22 @@ internal static class SymbolInfoCreator
         return !declaredAccessibility.IsPublicOrInternal() || !isWritable;
     }
 
-    private static ParameterSymbolInfo CreateParameterSymbolInfo(IParameterSymbol parameterSymbol)
+    private static ParameterSymbolInfo CreateParameterSymbolInfo(
+        IParameterSymbol parameterSymbol,
+        Dictionary<string, int> typeParameterNameToTypeParameterPosition)
     {
+        string typeForCodeGeneration = CodeTypeExtractor.GetTypeForCodeGeneration(parameterSymbol.Type);
+        int? genericTypeParameterPosition =
+            typeParameterNameToTypeParameterPosition.TryGetValue(typeForCodeGeneration, out int parameterPosition)
+                ? parameterPosition
+                : null;
+
         return new ParameterSymbolInfo(
             parameterSymbol.Name,
-            CodeTypeExtractor.GetTypeForCodeGeneration(parameterSymbol.Type),
+            typeForCodeGeneration,
             parameterSymbol.NullableAnnotation == NullableAnnotation.Annotated,
             GetDefaultValueAsCode(parameterSymbol),
+            genericTypeParameterPosition,
             GetParameterKinds(parameterSymbol));
     }
 
