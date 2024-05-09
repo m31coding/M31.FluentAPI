@@ -17,7 +17,9 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty3,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty4,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty5,
-    CreateStudent<T1, T2, T3, T4, T5>.IMethod1Method2
+    CreateStudent<T1, T2, T3, T4, T5>.IMethod1,
+    CreateStudent<T1, T2, T3, T4, T5>.IMethod2,
+    CreateStudent<T1, T2, T3, T4, T5>.IMethod3
     where T1 : class
     where T2 : class?
     where T3 : struct
@@ -27,6 +29,7 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
     private readonly Student<T1, T2, T3, T4, T5> student;
     private static readonly MethodInfo method1MethodInfo;
     private static readonly MethodInfo method2MethodInfo;
+    private static readonly MethodInfo method3MethodInfo;
 
     static CreateStudent()
     {
@@ -38,6 +41,10 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
             "Method2",
             BindingFlags.Instance | BindingFlags.NonPublic,
             new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), Type.MakeGenericMethodParameter(0), Type.MakeGenericMethodParameter(1), Type.MakeGenericMethodParameter(2), Type.MakeGenericMethodParameter(3) })!;
+        method3MethodInfo = typeof(Student<T1, T2, T3, T4, T5>).GetMethod(
+            "Method3",
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            new Type[] { typeof(T1) })!;
     }
 
     private CreateStudent()
@@ -70,29 +77,39 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
         return this;
     }
 
-    public IMethod1Method2 WithProperty5(T5 property5)
+    public IMethod1 WithProperty5(T5 property5)
     {
         student.Property5 = property5;
         return this;
     }
 
-    public Student<T1, T2, T3, T4, T5> Method1<T6, T7, T8, T9>(T6 p1, T7 p2, T8 p3, T9 p4)
+    public IMethod2 Method1<T6, T7, T8, T9>(T6 p1, T7 p2, T8 p3, T9 p4)
         where T6 : unmanaged
         where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
         where T8 : class, System.Collections.Generic.IDictionary<int, string>
         where T9 : System.Collections.Generic.List<int>, new()
     {
-        method1MethodInfo.Invoke(student, new object?[] { p1, p2, p3, p4 });
-        return student;
+        method1MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1, p2, p3, p4 });
+        return this;
     }
 
-    public Student<T1, T2, T3, T4, T5> Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+    public IMethod3 Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
         where T6 : unmanaged
         where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
         where T8 : class, System.Collections.Generic.IDictionary<int, string>
         where T9 : System.Collections.Generic.List<int>, new()
     {
-        method2MethodInfo.Invoke(student, new object?[] { p1, p2, p3, p4, p5, p6, p7, p8, p9 });
+        method2MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1, p2, p3, p4, p5, p6, p7, p8, p9 });
+        return this;
+    }
+
+    public Student<T1, T2, T3, T4, T5> Method3<T6, T7, T8, T9>(T1 p1)
+        where T6 : unmanaged
+        where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
+        where T8 : class, System.Collections.Generic.IDictionary<int, string>
+        where T9 : System.Collections.Generic.List<int>, new()
+    {
+        method3MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1 });
         return student;
     }
 
@@ -113,17 +130,30 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
 
     public interface IWithProperty5
     {
-        IMethod1Method2 WithProperty5(T5 property5);
+        IMethod1 WithProperty5(T5 property5);
     }
 
-    public interface IMethod1Method2
+    public interface IMethod1
     {
-        Student<T1, T2, T3, T4, T5> Method1<T6, T7, T8, T9>(T6 p1, T7 p2, T8 p3, T9 p4)
+        IMethod2 Method1<T6, T7, T8, T9>(T6 p1, T7 p2, T8 p3, T9 p4)
             where T6 : unmanaged
             where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
             where T8 : class, System.Collections.Generic.IDictionary<int, string>
             where T9 : System.Collections.Generic.List<int>, new();
-        Student<T1, T2, T3, T4, T5> Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+    }
+
+    public interface IMethod2
+    {
+        IMethod3 Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+            where T6 : unmanaged
+            where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
+            where T8 : class, System.Collections.Generic.IDictionary<int, string>
+            where T9 : System.Collections.Generic.List<int>, new();
+    }
+
+    public interface IMethod3
+    {
+        Student<T1, T2, T3, T4, T5> Method3<T6, T7, T8, T9>(T1 p1)
             where T6 : unmanaged
             where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
             where T8 : class, System.Collections.Generic.IDictionary<int, string>

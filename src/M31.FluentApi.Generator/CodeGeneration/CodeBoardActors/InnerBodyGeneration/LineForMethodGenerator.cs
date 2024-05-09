@@ -3,6 +3,7 @@
 
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
@@ -50,14 +51,23 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         {
             return outerMethodParameters.Any(p =>
                 p.HasAnnotation(ParameterKinds.Ref) || p.HasAnnotation(ParameterKinds.Out))
-                ? BuildReflectionCodeWithParameterModifiers(infoFieldName, instancePrefix, outerMethodParameters)
-                : BuildDefaultReflectionCode(infoFieldName, instancePrefix, outerMethodParameters);
+                ? BuildReflectionCodeWithParameterModifiers(
+                    infoFieldName,
+                    instancePrefix,
+                    symbolInfo.GenericInfo,
+                    outerMethodParameters)
+                : BuildDefaultReflectionCode(
+                    infoFieldName,
+                    instancePrefix,
+                    symbolInfo.GenericInfo,
+                    outerMethodParameters);
         }
     }
 
     private List<string> BuildReflectionCodeWithParameterModifiers(
         string infoFieldName,
         string instancePrefix,
+        GenericInfo? genericInfo,
         IReadOnlyCollection<Parameter> outerMethodParameters)
     {
         List<string> lines = new List<string>();
@@ -66,8 +76,10 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         lines.Add(
             $"object?[] args = new object?[] {{ {string.Join(", ", outerMethodParameters.Select(GetArgument))} }};");
 
-        // semesterMethodInfo.Invoke(createStudent.student, args)
-        lines.Add($"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);");
+        // semesterMethodInfo.Invoke(createStudent.student, args) or
+        // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args)
+        lines.Add($"{infoFieldName}.{MakeGenericMethod(genericInfo)}" +
+                  $"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);");
 
         foreach (var parameter in outerMethodParameters.Select((p, i) => new { Value = p, Index = i }))
         {
@@ -95,14 +107,28 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
     private List<string> BuildDefaultReflectionCode(
         string infoFieldName,
         string instancePrefix,
+        GenericInfo? genericInfo,
         IReadOnlyCollection<Parameter> outerMethodParameters)
     {
         return new List<string>()
         {
-            // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester });
-            $"{infoFieldName}.Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
+            // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
+            // semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
+            //     .Invoke(createStudent.student, new object[] { semester });
+            $"{infoFieldName}.{MakeGenericMethod(genericInfo)}" +
+            $"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
             $"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});",
         };
+    }
+
+    private static string MakeGenericMethod(GenericInfo? genericInfo)
+    {
+        if (genericInfo == null)
+        {
+            return string.Empty;
+        }
+
+        return $"MakeGenericMethod({string.Join(", ", genericInfo.ParameterStrings.Select(p => $"typeof({p})"))}).";
     }
 
     protected override void InitializeInfoField(string fieldName, MethodSymbolInfo symbolInfo)

@@ -22,9 +22,29 @@ public partial class CodeGenerationTests
             .WithProperty5(0)
             .Method1(0, new ListAndDictionary<int,string>(), new Dictionary<int, string>(), new List<int>())
             .Method2("string1", null, 0, 0, 0, 0, new ListAndDictionary<int, string>(), new Dictionary<int, string>(),
-                new List<int>());
+                new List<int>())
+            .Method3<int, ListAndDictionary<int, string>, Dictionary<int, string>, List<int>>("string1");
 
-        List<string> expectedLogs = new List<string>() { "Called Method1", "Called Method2" };
+        List<string> expectedLogs = new List<string>() { "Called Method1", "Called Method2", "Called Method3" };
+        Assert.Equal(expectedLogs, student.Logs);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteGenericClassWithPrivateGenericMethods()
+    {
+        var student = TestClasses.Abstract.GenericClassWithPrivateGenericMethods
+            .CreateStudent<string, string?, int, int, int>
+            .WithProperty1("property1")
+            .WithProperty2(null)
+            .WithProperty3(0)
+            .WithProperty4(0)
+            .WithProperty5(0)
+            .Method1(0, new ListAndDictionary<int, string>(), new Dictionary<int, string>(), new List<int>())
+            .Method2("string1", null, 0, 0, 0, 0, new ListAndDictionary<int, string>(), new Dictionary<int, string>(),
+                new List<int>())
+            .Method3<int, ListAndDictionary<int, string>, Dictionary<int, string>, List<int>>("string1");
+
+        List<string> expectedLogs = new List<string>() { "Called Method1", "Called Method2", "Called Method3" };
         Assert.Equal(expectedLogs, student.Logs);
     }
 }

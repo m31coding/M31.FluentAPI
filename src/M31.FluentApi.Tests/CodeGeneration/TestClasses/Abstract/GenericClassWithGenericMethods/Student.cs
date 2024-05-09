@@ -50,4 +50,14 @@ public class Student<T1, T2, T3, T4, T5>
     {
         Logs.Add("Called Method2");
     }
+
+    [FluentMethod(8)]
+    public void Method3<T6, T7, T8, T9>(T1 p1)
+        where T6 : unmanaged
+        where T7 : List<int>, IDictionary<int, string>
+        where T8 : class, IDictionary<int, string>
+        where T9 : List<int>, new()
+    {
+        Logs.Add("Called Method3");
+    }
 }
