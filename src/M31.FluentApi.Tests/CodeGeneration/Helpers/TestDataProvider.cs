@@ -31,7 +31,7 @@ internal class TestDataProvider : IEnumerable<object[]>
             new object[] { "Abstract", "GenericClassWithGenericMethods", "Student" },
             new object[] { "Abstract", "GenericClassWithOverloadedGenericMethod", "Student" },
             new object[] { "Abstract", "GenericClassWithPrivateGenericMethods", "Student" },
-            // new object[] { "Abstract", "GenericClassWithPrivateOverloadedGenericMethod", "Student" },
+            new object[] { "Abstract", "GenericClassWithPrivateOverloadedGenericMethod", "Student" },
             new object[] { "Abstract", "GenericMethodWithConstraintsClass", "Student" },
             new object[] { "Abstract", "GetInitPropertyClass", "Student" },
             new object[] { "Abstract", "GetPrivateInitPropertyClass", "Student" },

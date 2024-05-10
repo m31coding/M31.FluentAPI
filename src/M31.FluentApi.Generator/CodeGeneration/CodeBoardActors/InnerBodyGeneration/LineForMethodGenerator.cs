@@ -51,7 +51,7 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         {
             return outerMethodParameters.Any(p =>
                 p.HasAnnotation(ParameterKinds.Ref) || p.HasAnnotation(ParameterKinds.Out))
-                ? BuildReflectionCodeWithParameterModifiers(
+                ? BuildReflectionCodeWithRefAndOutParameters(
                     infoFieldName,
                     instancePrefix,
                     symbolInfo.GenericInfo,
@@ -64,7 +64,7 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         }
     }
 
-    private List<string> BuildReflectionCodeWithParameterModifiers(
+    private List<string> BuildReflectionCodeWithRefAndOutParameters(
         string infoFieldName,
         string instancePrefix,
         GenericInfo? genericInfo,
@@ -142,26 +142,45 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
 
         // withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
         //     "WithName",
+        //     0,                                                   -> generic parameter count
         //     BindingFlags.Instance | BindingFlags.NonPublic,
-        //     new Type[] { typeof(string) })!;   or   new Type[] { Type.MakeGenericMethodParameter(0) })!;
+        //     null                                                 -> binder
+        //     new Type[] { typeof(string) },
+        //     null)!;                                              -> modifiers
+        //
+        // Generic types are created via Type.MakeGenericMethodParameter(int position). In addition, a ref type is
+        // specified via MakeByRefType().
         staticConstructor.AppendBodyLine($"{fieldName} = " +
                                          $"typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters}).GetMethod(");
         staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
+        staticConstructor.AppendBodyLine($"{indentation}{GetGenericParameterCount(symbolInfo.GenericInfo)},");
         staticConstructor.AppendBodyLine($"{indentation}{InfoFieldBindingFlagsArgument(symbolInfo)},");
-        staticConstructor.AppendBodyLine($"{indentation}{typeArguments})!;");
+        staticConstructor.AppendBodyLine($"{indentation}null,");
+        staticConstructor.AppendBodyLine($"{indentation}{typeArguments},");
+        staticConstructor.AppendBodyLine($"{indentation}null)!;");
 
         CodeBoard.CodeFile.AddUsing("System");
 
         static string CreateMethodParameter(ParameterSymbolInfo parameterInfo)
         {
-            if (parameterInfo.IsGenericParameter)
+            return parameterInfo.IsGenericParameter
+                ? $"Type.MakeGenericMethodParameter({parameterInfo.GenericTypeParameterPosition!.Value})" +
+                  $"{MakeByRefType(parameterInfo.ParameterKinds)}"
+                : $"typeof({parameterInfo.TypeForCodeGeneration}){MakeByRefType(parameterInfo.ParameterKinds)}";
+
+            static string MakeByRefType(ParameterKinds parameterKinds)
             {
-                return $"Type.MakeGenericMethodParameter({parameterInfo.GenericTypeParameterPosition!.Value})";
+                return parameterKinds.HasFlag(ParameterKinds.In) ||
+                       parameterKinds.HasFlag(ParameterKinds.Out) ||
+                       parameterKinds.HasFlag(ParameterKinds.Ref)
+                    ? ".MakeByRefType()"
+                    : string.Empty;
             }
-            else
-            {
-                return $"typeof({parameterInfo.TypeForCodeGeneration})";
-            }
+        }
+
+        static string GetGenericParameterCount(GenericInfo? genericInfo)
+        {
+            return genericInfo == null ? "0" : genericInfo.ParameterCount.ToString();
         }
     }
 }

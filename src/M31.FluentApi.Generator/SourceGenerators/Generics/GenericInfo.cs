@@ -18,6 +18,7 @@ internal class GenericInfo
     }
 
     internal IReadOnlyCollection<GenericTypeParameter> Parameters { get; }
+    internal int ParameterCount => Parameters.Count;
     internal IEnumerable<string> ParameterStrings => Parameters.Select(p => p.ParameterName);
     internal string ParameterListInAngleBrackets =>
         Parameters.Count == 0 ? string.Empty : $"<{string.Join(", ", ParameterStrings)}>";
