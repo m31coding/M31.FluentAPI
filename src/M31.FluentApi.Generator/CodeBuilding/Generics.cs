@@ -17,7 +17,6 @@ internal class Generics
     internal GenericParameters Parameters { get; }
     internal GenericConstraints Constraints { get; }
 
-
     internal void AddGenericParameter(string parameter, IEnumerable<string> constraints)
     {
         Parameters.Add(parameter);
