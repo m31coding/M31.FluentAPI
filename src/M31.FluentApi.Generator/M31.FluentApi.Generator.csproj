@@ -19,6 +19,7 @@
     <RepositoryUrl>https://github.com/m31coding/M31.FluentAPI.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>fluent-api-logo-128.jpg</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,6 +40,10 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>M31.FluentApi.Tests</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../media/fluent-api-logo-128.jpg" Pack="true" Visible="false" PackagePath="/"/>
   </ItemGroup>
 
 </Project>

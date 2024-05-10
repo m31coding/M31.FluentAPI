@@ -1,5 +1,7 @@
 # Fluent APIs in C#
 
+![M31.FluentApi logo](media/fluent-api-logo-256.jpg)
+
 Everybody wants to use fluent APIs but writing them is tedious. With this library providing fluent APIs for your classes becomes a breeze. Simply annotate them with attributes and the source code for the fluent API will be generated. The fluent API library leverages incremental source code generation at development time and your IDE will offer you the corresponding code completion immediately.
 
 The generated code follows the builder design pattern and allows you to construct objects step by step. This approach avoids big constructors and results in very readable code. 
@@ -14,13 +16,13 @@ Accompanying blog post: [www.m31coding.com>blog>fluent-api](https://www.m31codin
 
 ## Installing via NuGet
 
-Install the latest version of the package `M31.FluentAPI` via your IDE or use the package manager console:
+Install the latest version of the package `M31.FluentApi` via your IDE or use the package manager console:
 
 ```
 PM> Install-Package M31.FluentApi
 ```
 
-A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentAPI`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
+A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentApi`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
 
 ```xml
 <PackageReference Include="M31.FluentApi" Version="1.1.0" PrivateAssets="all"/>
