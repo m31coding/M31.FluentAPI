@@ -145,34 +145,43 @@ public class CreateStudent :
     public interface IOfAgeBornOn
     {
         IInSemester OfAge(int age);
+
         IInSemester BornOn(System.DateOnly dateOfBirth);
     }
 
     public interface IInSemester
     {
         ILivingIn InSemester(int semester);
+
         ILivingIn WhoStartsUniversity();
     }
 
     public interface ILivingIn
     {
         IWhoIsHappy LivingIn(string? city);
+
         IWhoIsHappy LivingInBoston();
+
         IWhoIsHappy InUnknownCity();
     }
 
     public interface IWhoIsHappy
     {
         IWhoseFriendsAre WhoIsHappy(bool? isHappy = true);
+
         IWhoseFriendsAre WhoIsSad();
+
         IWhoseFriendsAre WithUnknownMood();
     }
 
     public interface IWhoseFriendsAre
     {
         Student WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends);
+
         Student WhoseFriendsAre(params string[] friends);
+
         Student WhoseFriendIs(string friend);
+
         Student WhoHasNoFriends();
     }
 }

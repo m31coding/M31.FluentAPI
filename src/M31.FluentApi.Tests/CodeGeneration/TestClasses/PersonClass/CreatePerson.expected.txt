@@ -156,13 +156,16 @@ public class CreatePerson :
     public interface IWithMiddleNameWithLastName
     {
         IWithMiddleNameWithLastName WithMiddleName(string? middleName);
+
         IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad WithLastName(string lastName);
     }
 
     public interface IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad
     {
         Person WhoseAddressIsUnknown();
+
         IWithHouseNumber WhoLivesAtAddress();
+
         ILivingInCity WhoIsADigitalNomad();
     }
 

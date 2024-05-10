@@ -46,6 +46,7 @@ public class CreateStudent : CreateStudent.IBornOn
     public interface IBornOn
     {
         Student BornOn(System.DateOnly dateOfBirth);
+
         Student WithDefaultDateOfBirth();
     }
 }

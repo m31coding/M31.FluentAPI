@@ -51,6 +51,7 @@ public class CreateStudent : CreateStudent.IWithMiddleNameWithLastName
     public interface IWithMiddleNameWithLastName
     {
         IWithMiddleNameWithLastName WithMiddleName(string? middleName);
+
         Student WithLastName(string lastName);
     }
 }

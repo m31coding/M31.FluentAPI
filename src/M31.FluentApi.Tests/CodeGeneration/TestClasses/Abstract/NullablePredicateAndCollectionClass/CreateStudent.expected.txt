@@ -82,7 +82,9 @@ public class CreateStudent : CreateStudent.IWhoIsHappy
     public interface IWhoIsHappy
     {
         Student WhoIsHappy(bool? isHappy = true);
+
         Student WhoIsSad();
+
         Student WithUnknownMood();
     }
 }

@@ -100,16 +100,22 @@ public class CreateStudent :
     public interface IWithPets
     {
         IWithBackpackContent WithPets(System.Collections.Generic.IReadOnlyCollection<string> pets);
+
         IWithBackpackContent WithPets(params string[] pets);
+
         IWithBackpackContent WithPet(string pet);
+
         IWithBackpackContent WithZeroPets();
     }
 
     public interface IWithBackpackContent
     {
         Student WithBackpackContent(System.Collections.Generic.ISet<string> backpackContent);
+
         Student WithBackpackContent(params string[] backpackContent);
+
         Student WithBackpackContent(string backpackContent);
+
         Student WithNoBackpackContent();
     }
 }

@@ -74,6 +74,7 @@ public class CreateStudent :
     public interface IWhoIsHappy
     {
         IInSemester WhoIsHappy(bool isHappy = true);
+
         IInSemester WhoIsSad();
     }
 
@@ -85,8 +86,11 @@ public class CreateStudent :
     public interface IWhoseFriendsAre
     {
         Student WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends);
+
         Student WhoseFriendsAre(params string[] friends);
+
         Student WhoseFriendIs(string friend);
+
         Student WhoHasNoFriends();
     }
 }
