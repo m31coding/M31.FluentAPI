@@ -321,8 +321,8 @@ public int Age { get; private set; }
 [FluentMethod(1)]
 private void BornOn(DateOnldateOfBirth)
 {
-    DateOnly today = DateOnlFromDateTime(DateTime.Today);
-    int age = today.Year dateOfBirth.Year;
+    DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+    int age = today.Year - dateOfBirth.Year;
     if (dateOfBirth > today.AddYears(-age)) age--;
     Age = age;
 }
