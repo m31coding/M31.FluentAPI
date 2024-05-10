@@ -5,12 +5,12 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 internal class InnerBodyCreationDelegates
 {
     private readonly Dictionary<string, SetMemberCode> memberToSetMemberCode;
-    private readonly Dictionary<MethodIdentity, CallMethodCode> methodToCallMethodCode;
+    private readonly Dictionary<MethodSymbolInfo, CallMethodCode> methodToCallMethodCode;
 
     public InnerBodyCreationDelegates()
     {
         memberToSetMemberCode = new Dictionary<string, SetMemberCode>();
-        methodToCallMethodCode = new Dictionary<MethodIdentity, CallMethodCode>();
+        methodToCallMethodCode = new Dictionary<MethodSymbolInfo, CallMethodCode>();
     }
 
     internal void AssignSetMemberCode(string memberName, SetMemberCode setMemberCode)
@@ -31,19 +31,17 @@ internal class InnerBodyCreationDelegates
 
     internal void AssignCallMethodCode(MethodSymbolInfo methodSymbolInfo, CallMethodCode callMethodCode)
     {
-        MethodIdentity methodIdentity = MethodIdentity.Create(methodSymbolInfo);
-
-        if (methodToCallMethodCode.ContainsKey(methodIdentity))
+        if (methodToCallMethodCode.ContainsKey(methodSymbolInfo))
         {
             throw new GenerationException(
-                $"{nameof(CallMethodCode)} for method {methodIdentity.MethodName} has already been assigned.");
+                $"{nameof(CallMethodCode)} for method {methodSymbolInfo.Name} has already been assigned.");
         }
 
-        methodToCallMethodCode[methodIdentity] = callMethodCode;
+        methodToCallMethodCode[methodSymbolInfo] = callMethodCode;
     }
 
     internal CallMethodCode GetCallMethodCode(MethodSymbolInfo methodSymbolInfo)
     {
-        return methodToCallMethodCode[MethodIdentity.Create(methodSymbolInfo)];
+        return methodToCallMethodCode[methodSymbolInfo];
     }
 }
