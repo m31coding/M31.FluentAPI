@@ -1,10 +1,7 @@
 using System;
-using System.Threading;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Tests.CodeGeneration.Helpers;
 using M31.FluentApi.Tests.Helpers;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Xunit;
 
 namespace M31.FluentApi.Tests.CodeGeneration;
@@ -19,8 +16,9 @@ public class EqualityTests
     public void TwoInstanceOfFluentApiClassInfoHaveTheSameHashCode(params string[] testClassPathAndName)
     {
         Array.Reverse(testClassPathAndName);
-        ClassInfoResult result1 = CreateFluentApiClassInfoResult(testClassPathAndName);
-        ClassInfoResult result2 = CreateFluentApiClassInfoResult(testClassPathAndName);
+        TestClassCodeGenerator testClassCodeGenerator = TestClassCodeGenerator.Create(testClassPathAndName);
+        ClassInfoResult result1 = testClassCodeGenerator.CreateFluentApiClassInfoResult();
+        ClassInfoResult result2 = testClassCodeGenerator.CreateFluentApiClassInfoResult();
         Assert.NotNull(result1.ClassInfo);
         Assert.NotNull(result2.ClassInfo);
         Assert.Equal(result1.ClassInfo!.GetHashCode(), result2.ClassInfo!.GetHashCode());
@@ -31,23 +29,11 @@ public class EqualityTests
     public void TwoInstanceOfFluentApiClassInfoAreEqual(params string[] testClassPathAndName)
     {
         Array.Reverse(testClassPathAndName);
-        ClassInfoResult result1 = CreateFluentApiClassInfoResult(testClassPathAndName);
-        ClassInfoResult result2 = CreateFluentApiClassInfoResult(testClassPathAndName);
+        TestClassCodeGenerator testClassCodeGenerator = TestClassCodeGenerator.Create(testClassPathAndName);
+        ClassInfoResult result1 = testClassCodeGenerator.CreateFluentApiClassInfoResult();
+        ClassInfoResult result2 = testClassCodeGenerator.CreateFluentApiClassInfoResult();
         Assert.NotNull(result1.ClassInfo);
         Assert.NotNull(result2.ClassInfo);
         Assert.Equal(result1.ClassInfo, result2.ClassInfo);
-    }
-
-    private ClassInfoResult CreateFluentApiClassInfoResult(string[] testClassPathAndName)
-    {
-        TestClassCodeGenerator testClassCodeGenerator = TestClassCodeGenerator.Create(testClassPathAndName);
-        (SemanticModel semanticModel, TypeDeclarationSyntax? typeDeclaration) =
-            testClassCodeGenerator.GetSemanticModelAndTypeDeclaration();
-        Assert.NotNull(typeDeclaration);
-        return ClassInfoFactory.CreateFluentApiClassInfo(
-            semanticModel,
-            typeDeclaration!,
-            SourceGenerator.GeneratorConfig,
-            CancellationToken.None);
     }
 }

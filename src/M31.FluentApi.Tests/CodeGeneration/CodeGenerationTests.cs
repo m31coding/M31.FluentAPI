@@ -2,12 +2,14 @@ using System;
 using M31.FluentApi.Tests.CodeGeneration.Helpers;
 using M31.FluentApi.Tests.Helpers;
 using Xunit;
+using Xunit.Priority;
 
 namespace M31.FluentApi.Tests.CodeGeneration;
 
-public class CodeGenerationTests
+[TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+public partial class CodeGenerationTests
 {
-    [Theory]
+    [Theory, Priority(0)]
     [ClassData(typeof(TestDataProvider))]
     public void CanGenerateBuilderForAbstractTestClasses(params string[] testClassPathAndName)
     {

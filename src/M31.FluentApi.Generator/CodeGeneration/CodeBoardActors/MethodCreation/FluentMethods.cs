@@ -1,4 +1,3 @@
-using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
@@ -18,20 +17,8 @@ internal class FluentMethods : IBuilderMethodCreator
 
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
     {
-        List<Parameter> parameters = SymbolInfo.ParameterInfos
-            .Select(i => new Parameter(
-                i.TypeForCodeGeneration,
-                i.ParameterName,
-                i.DefaultValue,
-                new ParameterAnnotations(i.ParameterKinds)))
-            .ToList();
-
         BuilderMethod builderMethod =
-            methodCreator.BuilderMethodFactory.CreateBuilderMethod(
-                SymbolInfo.Name,
-                MethodAttributeInfo.FluentMethodName,
-                parameters);
-
+            methodCreator.BuilderMethodFactory.CreateBuilderMethod(SymbolInfo, MethodAttributeInfo.FluentMethodName);
         return new BuilderMethods(builderMethod);
     }
 }

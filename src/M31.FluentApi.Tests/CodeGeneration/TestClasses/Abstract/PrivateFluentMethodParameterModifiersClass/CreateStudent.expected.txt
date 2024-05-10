@@ -11,7 +11,11 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodParameterModifiersClass;
 
-public class CreateStudent : CreateStudent.IMethodWithRefParameter, CreateStudent.IMethodWithInParameter, CreateStudent.IMethodWithOutParameter, CreateStudent.IMethodWithRefInAndOutParameter
+public class CreateStudent :
+    CreateStudent.IMethodWithRefParameter,
+    CreateStudent.IMethodWithInParameter,
+    CreateStudent.IMethodWithOutParameter,
+    CreateStudent.IMethodWithRefInAndOutParameter
 {
     private readonly Student student;
     private static readonly MethodInfo methodWithParamsMethodInfo;
@@ -24,24 +28,39 @@ public class CreateStudent : CreateStudent.IMethodWithRefParameter, CreateStuden
     {
         methodWithParamsMethodInfo = typeof(Student).GetMethod(
             "MethodWithParams",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(int[]) })!;
+            null,
+            new Type[] { typeof(int[]) },
+            null)!;
         methodWithRefParameterMethodInfo = typeof(Student).GetMethod(
             "MethodWithRefParameter",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(int) })!;
+            null,
+            new Type[] { typeof(int).MakeByRefType() },
+            null)!;
         methodWithInParameterMethodInfo = typeof(Student).GetMethod(
             "MethodWithInParameter",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(int) })!;
+            null,
+            new Type[] { typeof(int).MakeByRefType() },
+            null)!;
         methodWithOutParameterMethodInfo = typeof(Student).GetMethod(
             "MethodWithOutParameter",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(int) })!;
+            null,
+            new Type[] { typeof(int).MakeByRefType() },
+            null)!;
         methodWithRefInAndOutParameterMethodInfo = typeof(Student).GetMethod(
             "MethodWithRefInAndOutParameter",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(int), typeof(int), typeof(int) })!;
+            null,
+            new Type[] { typeof(int).MakeByRefType(), typeof(int).MakeByRefType(), typeof(int).MakeByRefType() },
+            null)!;
     }
 
     private CreateStudent()

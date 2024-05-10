@@ -11,7 +11,9 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodClass;
 
-public class CreateStudent : CreateStudent.IBornOn, CreateStudent.IInSemester
+public class CreateStudent :
+    CreateStudent.IBornOn,
+    CreateStudent.IInSemester
 {
     private readonly Student student;
     private static readonly MethodInfo withNameMethodInfo;
@@ -22,16 +24,25 @@ public class CreateStudent : CreateStudent.IBornOn, CreateStudent.IInSemester
     {
         withNameMethodInfo = typeof(Student).GetMethod(
             "WithName",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string) })!;
+            null,
+            new Type[] { typeof(string) },
+            null)!;
         bornOnMethodInfo = typeof(Student).GetMethod(
             "BornOn",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(System.DateOnly) })!;
+            null,
+            new Type[] { typeof(System.DateOnly) },
+            null)!;
         inSemesterMethodInfo = typeof(Student).GetMethod(
             "InSemester",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(int) })!;
+            null,
+            new Type[] { typeof(int) },
+            null)!;
     }
 
     private CreateStudent()

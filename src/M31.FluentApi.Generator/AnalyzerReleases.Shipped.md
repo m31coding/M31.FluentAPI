@@ -32,3 +32,12 @@ Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 M31FA019 | M31.Usage | Error | Conflicting control attributes
 M31FA020 | M31.Usage | Error | Missing builder step
+
+
+## Release 1.2.0
+
+### Removed Rules
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+M31FA018 | M31.Usage | Error | Generic types are not supported

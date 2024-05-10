@@ -5,20 +5,16 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 
 internal class BuilderMethodFactory
 {
-    private readonly Dictionary<string, SetMemberCode> memberToSetMemberCode;
-    private readonly Dictionary<MethodIdentity, CallMethodCode> methodToCallMethodCode;
+    private readonly InnerBodyCreationDelegates innerBodyCreationDelegates;
 
-    internal BuilderMethodFactory(
-        Dictionary<string, SetMemberCode> memberToSetMemberCode,
-        Dictionary<MethodIdentity, CallMethodCode> methodToCallMethodCode)
+    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates)
     {
-        this.memberToSetMemberCode = memberToSetMemberCode;
-        this.methodToCallMethodCode = methodToCallMethodCode;
+        this.innerBodyCreationDelegates = innerBodyCreationDelegates;
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
     {
-        return new BuilderMethod(methodName, new List<Parameter>(), _ => new List<string>());
+        return new BuilderMethod(methodName, null, new List<Parameter>(), _ => new List<string>());
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, ComputeValueCode computeValue)
@@ -31,11 +27,12 @@ internal class BuilderMethodFactory
         {
             return new List<string>()
             {
-                memberToSetMemberCode[computeValue.TargetMember].BuildCode(instancePrefix, computeValue.Code),
+                innerBodyCreationDelegates.GetSetMemberCode(computeValue.TargetMember)
+                    .BuildCode(instancePrefix, computeValue.Code),
             };
         }
 
-        return new BuilderMethod(methodName, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, null, parameters, BuildBodyCode);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, List<ComputeValueCode> computeValues)
@@ -45,22 +42,30 @@ internal class BuilderMethodFactory
         List<string> BuildBodyCode(string instancePrefix)
         {
             return computeValues
-                .Select(v => memberToSetMemberCode[v.TargetMember].BuildCode(instancePrefix, v.Code))
+                .Select(v =>
+                    innerBodyCreationDelegates.GetSetMemberCode(v.TargetMember).BuildCode(instancePrefix, v.Code))
                 .ToList();
         }
 
-        return new BuilderMethod(methodName, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, null, parameters, BuildBodyCode);
     }
 
-    internal BuilderMethod CreateBuilderMethod(string methodSymbolName, string methodName, List<Parameter> parameters)
+    internal BuilderMethod CreateBuilderMethod(MethodSymbolInfo methodSymbolInfo, string methodName)
     {
-        MethodIdentity methodIdentity = MethodIdentity.Create(methodSymbolName, parameters.Select(p => p.Type));
+        List<Parameter> parameters = methodSymbolInfo.ParameterInfos
+            .Select(i => new Parameter(
+                i.TypeForCodeGeneration,
+                i.ParameterName,
+                i.DefaultValue,
+                i.GenericTypeParameterPosition,
+                new ParameterAnnotations(i.ParameterKinds)))
+            .ToList();
 
         List<string> BuildBodyCode(string instancePrefix)
         {
-            return methodToCallMethodCode[methodIdentity].BuildCode(instancePrefix, parameters);
+            return innerBodyCreationDelegates.GetCallMethodCode(methodSymbolInfo).BuildCode(instancePrefix, parameters);
         }
 
-        return new BuilderMethod(methodName, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, methodSymbolInfo.GenericInfo, parameters, BuildBodyCode);
     }
 }

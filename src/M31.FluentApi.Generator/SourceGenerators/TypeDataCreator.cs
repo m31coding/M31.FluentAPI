@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,6 +27,8 @@ internal class TypeDataCreator
             return null;
         }
 
+        GenericInfo? genericInfo = GetGenericInfo(type);
+
         AttributeDataExtended[] attributeData = type.GetAttributes().Select(AttributeDataExtended.Create)
             .OfType<AttributeDataExtended>().Where(a => a.FullName == Attributes.FullNames.FluentApiAttribute)
             .ToArray();
@@ -51,7 +54,7 @@ internal class TypeDataCreator
             return null;
         }
 
-        return new TypeData(type, attributeData[0], usingStatements);
+        return new TypeData(type, genericInfo, attributeData[0], usingStatements);
     }
 
     private IReadOnlyCollection<string>? GetUsingStatements(SyntaxNode syntaxNode)
@@ -68,5 +71,10 @@ internal class TypeDataCreator
         }
 
         return GetUsingStatements(syntaxNode.Parent);
+    }
+
+    private GenericInfo? GetGenericInfo(INamedTypeSymbol type)
+    {
+        return type.IsGenericType ? GenericInfo.Create(type.TypeParameters) : null;
     }
 }

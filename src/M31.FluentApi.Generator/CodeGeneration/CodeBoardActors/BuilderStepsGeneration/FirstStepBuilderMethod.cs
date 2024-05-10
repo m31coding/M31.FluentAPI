@@ -21,9 +21,10 @@ internal class FirstStepBuilderMethod : BuilderStepMethod
         MethodSignature methodSignature = CreateMethodSignature(ReturnType, "public", "static");
         Method method = new Method(methodSignature);
 
-        // CreateStudent createStudent = new CreateStudent();
+        // CreateStudent<T1, T2> createStudent = new CreateStudent<T1, T2>();
         method.AppendBodyLine(
-            $"{info.BuilderClassName} {info.BuilderInstanceName} = new {info.BuilderClassName}();");
+            $"{info.BuilderClassNameWithTypeParameters} {info.BuilderInstanceName} = " +
+            $"new {info.BuilderClassNameWithTypeParameters}();");
 
         // createStudent.student.Name = name;
         CreateBody(method, $"{info.BuilderInstanceName}.");

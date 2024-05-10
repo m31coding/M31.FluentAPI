@@ -10,7 +10,13 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodDefaultValuesClass;
 
-public class CreateStudent : CreateStudent.IWithLastName, CreateStudent.IBornOn, CreateStudent.IEnrolledIn, CreateStudent.IInSemester, CreateStudent.IWithNumberOfPassedExams, CreateStudent.IWithNumberOfFailedExams
+public class CreateStudent :
+    CreateStudent.IWithLastName,
+    CreateStudent.IBornOn,
+    CreateStudent.IEnrolledIn,
+    CreateStudent.IInSemester,
+    CreateStudent.IWithNumberOfPassedExams,
+    CreateStudent.IWithNumberOfFailedExams
 {
     private readonly Student student;
 

@@ -10,7 +10,9 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SameNameMemberClass;
 
-public class CreateStudent : CreateStudent.IWithName, CreateStudent.IWithName2
+public class CreateStudent :
+    CreateStudent.IWithName,
+    CreateStudent.IWithName2
 {
     private readonly Student student;
     private static readonly PropertyInfo semesterPropertyInfo;

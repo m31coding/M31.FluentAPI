@@ -20,7 +20,7 @@ internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
                 $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name} = {value}{GetPostfix(value)};");
-        CodeBoard.MemberToSetMemberCode[symbolInfo.Name] = setMemberCode;
+        CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
 
         string GetPostfix(string value)
         {
@@ -34,15 +34,15 @@ internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
                 $"{infoFieldName}.SetValue({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
-        CodeBoard.MemberToSetMemberCode[symbolInfo.Name] = setMemberCode;
+        CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
     }
 
     protected override void InitializeInfoField(string fieldName, MemberSymbolInfo symbolInfo)
     {
-        // semesterPropertyInfo = typeof(Student)
+        // semesterPropertyInfo = typeof(Student<T1, T2>)
         //     .GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic););
         string code = $"{fieldName} =" +
-                      $" typeof({CodeBoard.Info.FluentApiClassName})" +
+                      $" typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters})" +
                       $".Get{SymbolType(symbolInfo)}(\"{symbolInfo.Name}\", " +
                       $"{InfoFieldBindingFlagsArgument(symbolInfo)})!;";
 

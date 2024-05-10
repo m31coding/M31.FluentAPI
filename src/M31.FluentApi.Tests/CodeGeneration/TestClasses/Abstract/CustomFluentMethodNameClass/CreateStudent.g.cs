@@ -10,7 +10,10 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CustomFluentMethodNameClass;
 
-public class CreateStudent : CreateStudent.IWhoIsHappy, CreateStudent.IInSemester, CreateStudent.IWhoseFriendsAre
+public class CreateStudent :
+    CreateStudent.IWhoIsHappy,
+    CreateStudent.IInSemester,
+    CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
 
@@ -71,6 +74,7 @@ public class CreateStudent : CreateStudent.IWhoIsHappy, CreateStudent.IInSemeste
     public interface IWhoIsHappy
     {
         IInSemester WhoIsHappy(bool isHappy = true);
+
         IInSemester WhoIsSad();
     }
 
@@ -82,8 +86,11 @@ public class CreateStudent : CreateStudent.IWhoIsHappy, CreateStudent.IInSemeste
     public interface IWhoseFriendsAre
     {
         Student WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends);
+
         Student WhoseFriendsAre(params string[] friends);
+
         Student WhoseFriendIs(string friend);
+
         Student WhoHasNoFriends();
     }
 }

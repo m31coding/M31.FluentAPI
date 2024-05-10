@@ -4,6 +4,7 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Fork
 using M31.FluentApi.Generator.SourceAnalyzers;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
@@ -29,8 +30,7 @@ internal class CodeBoard
         BuilderClass = builderClass;
         Constructor = null;
         StaticConstructor = null;
-        MemberToSetMemberCode = new Dictionary<string, SetMemberCode>();
-        MethodToCallMethodCode = new Dictionary<MethodIdentity, CallMethodCode>();
+        InnerBodyCreationDelegates = new InnerBodyCreationDelegates();
         BuilderMethodToAttributeData = new Dictionary<BuilderMethod, AttributeDataExtended>();
         Forks = new List<Fork>();
         BuilderClassFields = new BuilderClassFields();
@@ -46,8 +46,7 @@ internal class CodeBoard
     internal Class BuilderClass { get; }
     internal Method? Constructor { get; set; }
     internal Method? StaticConstructor { get; set; }
-    internal Dictionary<string, SetMemberCode> MemberToSetMemberCode { get; }
-    internal Dictionary<MethodIdentity, CallMethodCode> MethodToCallMethodCode { get; }
+    internal InnerBodyCreationDelegates InnerBodyCreationDelegates { get; }
     internal Dictionary<BuilderMethod, AttributeDataExtended> BuilderMethodToAttributeData { get; }
     internal IReadOnlyList<Fork> Forks { get; set; }
     internal BuilderClassFields BuilderClassFields { get; }
@@ -81,6 +80,17 @@ internal class CodeBoard
         codeFile.AddPreprocessorDirective(
             "#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member");
         codeFile.AddPreprocessorDirective("#nullable enable");
+
+        if (builderAndTargetInfo.GenericInfo != null)
+        {
+            foreach (GenericTypeParameter genericTypeParameter in builderAndTargetInfo.GenericInfo.Parameters)
+            {
+                builderClass.AddGenericParameter(
+                    genericTypeParameter.ParameterName,
+                    genericTypeParameter.Constraints.GetConstraintsForCodeGeneration());
+            }
+        }
+
         builderClass.AddModifiers(builderAndTargetInfo.FluentApiTypeIsInternal ? "internal" : "public");
         codeFile.AddDefinition(builderClass);
 

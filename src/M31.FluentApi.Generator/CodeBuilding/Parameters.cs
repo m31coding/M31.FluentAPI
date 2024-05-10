@@ -2,22 +2,27 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class Parameters : ICode
 {
-    private readonly List<Parameter> parameters;
+    private readonly List<Parameter> values;
 
     internal Parameters()
     {
-        parameters = new List<Parameter>();
+        values = new List<Parameter>();
     }
 
-    internal IReadOnlyCollection<Parameter> Values => parameters;
+    internal Parameters(Parameters parameters)
+    {
+        values = parameters.values.ToList();
+    }
+
+    internal IReadOnlyCollection<Parameter> Values => values;
 
     internal void AddParameter(Parameter parameter)
     {
-        parameters.Add(parameter);
+        values.Add(parameter);
     }
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
-        return codeBuilder.Append("(").Append(parameters, ", ").Append(")");
+        return codeBuilder.Append("(").Append(values, ", ").Append(")");
     }
 }

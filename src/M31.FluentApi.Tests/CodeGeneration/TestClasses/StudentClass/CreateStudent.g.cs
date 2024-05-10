@@ -12,7 +12,12 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.StudentClass;
 
-public class CreateStudent : CreateStudent.IOfAgeBornOn, CreateStudent.IInSemester, CreateStudent.ILivingIn, CreateStudent.IWhoIsHappy, CreateStudent.IWhoseFriendsAre
+public class CreateStudent :
+    CreateStudent.IOfAgeBornOn,
+    CreateStudent.IInSemester,
+    CreateStudent.ILivingIn,
+    CreateStudent.IWhoIsHappy,
+    CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
     private static readonly PropertyInfo firstNamePropertyInfo;
@@ -31,8 +36,11 @@ public class CreateStudent : CreateStudent.IOfAgeBornOn, CreateStudent.IInSemest
         agePropertyInfo = typeof(Student).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
         bornOnMethodInfo = typeof(Student).GetMethod(
             "BornOn",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(System.DateOnly) })!;
+            null,
+            new Type[] { typeof(System.DateOnly) },
+            null)!;
         semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
         cityPropertyInfo = typeof(Student).GetProperty("City", BindingFlags.Instance | BindingFlags.Public)!;
         isHappyPropertyInfo = typeof(Student).GetProperty("IsHappy", BindingFlags.Instance | BindingFlags.Public)!;
@@ -137,34 +145,43 @@ public class CreateStudent : CreateStudent.IOfAgeBornOn, CreateStudent.IInSemest
     public interface IOfAgeBornOn
     {
         IInSemester OfAge(int age);
+
         IInSemester BornOn(System.DateOnly dateOfBirth);
     }
 
     public interface IInSemester
     {
         ILivingIn InSemester(int semester);
+
         ILivingIn WhoStartsUniversity();
     }
 
     public interface ILivingIn
     {
         IWhoIsHappy LivingIn(string? city);
+
         IWhoIsHappy LivingInBoston();
+
         IWhoIsHappy InUnknownCity();
     }
 
     public interface IWhoIsHappy
     {
         IWhoseFriendsAre WhoIsHappy(bool? isHappy = true);
+
         IWhoseFriendsAre WhoIsSad();
+
         IWhoseFriendsAre WithUnknownMood();
     }
 
     public interface IWhoseFriendsAre
     {
         Student WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends);
+
         Student WhoseFriendsAre(params string[] friends);
+
         Student WhoseFriendIs(string friend);
+
         Student WhoHasNoFriends();
     }
 }

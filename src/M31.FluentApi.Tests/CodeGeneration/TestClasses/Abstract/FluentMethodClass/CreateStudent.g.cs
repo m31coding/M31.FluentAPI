@@ -10,7 +10,9 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodClass;
 
-public class CreateStudent : CreateStudent.IBornOn, CreateStudent.IInSemester
+public class CreateStudent :
+    CreateStudent.IBornOn,
+    CreateStudent.IInSemester
 {
     private readonly Student student;
 

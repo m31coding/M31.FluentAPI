@@ -3,7 +3,7 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.DuplicateMethodsChecking;
 
-internal class DuplicateMethodsFinder
+internal static class DuplicateMethodsFinder
 {
     internal static IReadOnlyCollection<DuplicateMethods> FindGroupsOfDuplicateMethods(
         IReadOnlyCollection<BuilderMethod> builderMethods)
@@ -14,8 +14,9 @@ internal class DuplicateMethodsFinder
 
     private static BuilderMethodIdentity CreateBuilderMethodIdentity(BuilderMethod builderMethod)
     {
+        // Create method identities with the actual builder method names.
         MethodIdentity methodIdentity =
-            MethodIdentity.Create(builderMethod.MethodName, builderMethod.Parameters.Select(p => p.Type));
+            MethodIdentity.Create(builderMethod.MethodName, builderMethod.GenericInfo, builderMethod.Parameters);
 
         return new BuilderMethodIdentity(builderMethod, methodIdentity);
     }

@@ -11,7 +11,9 @@ using System.Collections.Generic;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NonGenericCollectionMemberClass;
 
-public class CreateStudent : CreateStudent.IWithPets, CreateStudent.IWithBackpackContent
+public class CreateStudent :
+    CreateStudent.IWithPets,
+    CreateStudent.IWithBackpackContent
 {
     private readonly Student student;
 
@@ -99,16 +101,22 @@ public class CreateStudent : CreateStudent.IWithPets, CreateStudent.IWithBackpac
     public interface IWithPets
     {
         IWithBackpackContent WithPets(System.Collections.IList pets);
+
         IWithBackpackContent WithPets(params object[] pets);
+
         IWithBackpackContent WithPet(object pet);
+
         IWithBackpackContent WithZeroPets();
     }
 
     public interface IWithBackpackContent
     {
         Student WithBackpackContent(System.Collections.ICollection backpackContent);
+
         Student WithBackpackContent(params object[] backpackContent);
+
         Student WithBackpackContent(object backpackContent);
+
         Student WithNoBackpackContent();
     }
 }

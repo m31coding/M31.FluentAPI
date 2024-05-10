@@ -16,9 +16,9 @@ internal class SourceGenerator : IIncrementalGenerator
         var infos = context.SyntaxProvider
             .CreateSyntaxProvider(CanBeFluentApiClass, GetFluentApiClassInfo)
             .Where(info => info is not null)
-            .Collect() // handle partial classes, get an array of related info objects into GenerateCode
+            .Collect() // Handle partial classes, get an array of related info objects into GenerateCode.
             .SelectMany((infos, _) =>
-                infos.Distinct()); // want to have every fluent API info object only once
+                infos.Distinct()); // Want to have every fluent API info object only once.
 
         context.RegisterSourceOutput(infos, SourceOutputAction!);
     }

@@ -7,8 +7,19 @@ internal class MethodSignature : ICode
         ReturnType = returnType;
         MethodName = methodName;
         IsStandAlone = isStandAlone;
+        Generics = new Generics();
         Parameters = new Parameters();
         Modifiers = new Modifiers();
+    }
+
+    private MethodSignature(MethodSignature methodSignature, bool isStandAlone)
+    {
+        ReturnType = methodSignature.ReturnType;
+        MethodName = methodSignature.MethodName;
+        IsStandAlone = isStandAlone;
+        Generics = new Generics(methodSignature.Generics);
+        Parameters = new Parameters(methodSignature.Parameters);
+        Modifiers = isStandAlone ? new Modifiers() : new Modifiers(methodSignature.Modifiers);
     }
 
     internal static MethodSignature Create(string returnType, string methodName, bool isStandAlone)
@@ -21,36 +32,17 @@ internal class MethodSignature : ICode
         return new MethodSignature(null, className, false);
     }
 
-    internal MethodSignature ToStandAloneMethodSignature()
-    {
-        MethodSignature newSignature = new MethodSignature(ReturnType, MethodName, true);
-
-        foreach (Parameter parameter in Parameters.Values)
-        {
-            newSignature.AddParameter(parameter);
-        }
-
-        return newSignature;
-    }
-
-    internal MethodSignature ToSignatureForMethodBody()
-    {
-        MethodSignature newSignature = new MethodSignature(ReturnType, MethodName, false);
-
-        foreach (Parameter parameter in Parameters.Values)
-        {
-            newSignature.AddParameter(parameter);
-        }
-
-        return newSignature;
-    }
-
     internal string? ReturnType { get; }
     internal string MethodName { get; }
     internal bool IsStandAlone { get; }
-
+    internal Generics Generics { get; }
     internal Parameters Parameters { get; }
     internal Modifiers Modifiers { get; }
+
+    internal void AddGenericParameter(string parameter, IEnumerable<string> constraints)
+    {
+        Generics.AddGenericParameter(parameter, constraints);
+    }
 
     internal void AddParameter(string type, string name)
     {
@@ -67,14 +59,39 @@ internal class MethodSignature : ICode
         Modifiers.Add(modifiers);
     }
 
+    internal MethodSignature ToStandAloneMethodSignature()
+    {
+        return new MethodSignature(this, true);
+    }
+
+    internal MethodSignature ToSignatureForMethodBody()
+    {
+        return new MethodSignature(this, false);
+    }
+
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
-        return codeBuilder
+        codeBuilder
             .StartLine()
             .Append(Modifiers)
             .Append($"{ReturnType} ", ReturnType != null)
             .Append(MethodName)
-            .Append(Parameters).Append(IsStandAlone ? ";" : null)
-            .EndLine();
+            .Append(Generics.Parameters)
+            .Append(Parameters);
+
+        if (Generics.Constraints.Count == 0)
+        {
+            return codeBuilder.Append(IsStandAlone ? ";" : null).EndLine();
+        }
+        else
+        {
+            return codeBuilder
+                .EndLine()
+                .Indent()
+                .Append(Generics.Constraints)
+                .Append(IsStandAlone ? ";" : null)
+                .EndLine()
+                .Unindent();
+        }
     }
 }

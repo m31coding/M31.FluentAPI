@@ -1,5 +1,8 @@
+using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using M31.FluentApi.Generator.SourceGenerators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -39,6 +42,22 @@ internal class TestClassCodeGenerator
         SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
         TypeDeclarationSyntax? typeDeclaration = syntaxTree.GetFluentApiTypeDeclaration();
         return (semanticModel, typeDeclaration);
+    }
+
+    internal ClassInfoResult CreateFluentApiClassInfoResult()
+    {
+        (SemanticModel semanticModel, TypeDeclarationSyntax? typeDeclaration) = GetSemanticModelAndTypeDeclaration();
+
+        if (typeDeclaration == null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return ClassInfoFactory.CreateFluentApiClassInfo(
+            semanticModel,
+            typeDeclaration!,
+            SourceGenerator.GeneratorConfig,
+            CancellationToken.None);
     }
 
     internal void WriteGeneratedCode(GeneratorOutput generatorOutput)

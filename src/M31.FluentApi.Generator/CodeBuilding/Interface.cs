@@ -30,7 +30,7 @@ internal class Interface : ICode
         return codeBuilder
             .AppendLine($"{AccessModifier} interface {Name}")
             .OpenBlock()
-            .Append(methodSignatures)
+            .AppendWithBlankLines(methodSignatures)
             .CloseBlock();
     }
 }

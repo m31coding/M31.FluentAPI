@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
+using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -55,6 +56,7 @@ internal class ClassInfoFactory
 
         FluentApiClassInfo? classInfo = CreateFluentApiClassInfo(
             typeData.Type,
+            typeData.GenericInfo,
             typeData.AttributeData,
             typeData.UsingStatements,
             isStruct,
@@ -72,6 +74,7 @@ internal class ClassInfoFactory
 
     private FluentApiClassInfo? CreateFluentApiClassInfo(
         INamedTypeSymbol type,
+        GenericInfo? genericInfo,
         AttributeDataExtended attributeDataExtended,
         IReadOnlyCollection<string> usingStatements,
         bool isStruct,
@@ -107,6 +110,7 @@ internal class ClassInfoFactory
         return new FluentApiClassInfo(
             className,
             @namespace,
+            genericInfo,
             isStruct,
             isInternal,
             hasPrivateConstructor,
