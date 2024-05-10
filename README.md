@@ -323,7 +323,7 @@ private void BornOn(DateOnldateOfBirth)
 {
     DateOnly today = DateOnlFromDateTime(DateTime.Today);
     int age = today.Year dateOfBirth.Year;
-    if (dateOfBirth > today.AddYea(-age)) age--;
+    if (dateOfBirth > today.AddYears(-age)) age--;
     Age = age;
 }
 ```
