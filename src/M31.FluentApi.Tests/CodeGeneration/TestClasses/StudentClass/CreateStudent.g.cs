@@ -36,8 +36,11 @@ public class CreateStudent :
         agePropertyInfo = typeof(Student).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
         bornOnMethodInfo = typeof(Student).GetMethod(
             "BornOn",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(System.DateOnly) })!;
+            null,
+            new Type[] { typeof(System.DateOnly) },
+            null)!;
         semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
         cityPropertyInfo = typeof(Student).GetProperty("City", BindingFlags.Instance | BindingFlags.Public)!;
         isHappyPropertyInfo = typeof(Student).GetProperty("IsHappy", BindingFlags.Instance | BindingFlags.Public)!;

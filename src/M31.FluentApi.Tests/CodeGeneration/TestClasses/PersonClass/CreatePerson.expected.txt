@@ -38,32 +38,53 @@ public class CreatePerson :
         lastNamePropertyInfo = typeof(Person).GetProperty("LastName", BindingFlags.Instance | BindingFlags.Public)!;
         whoseAddressIsUnknownMethodInfo = typeof(Person).GetMethod(
             "WhoseAddressIsUnknown",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] {  })!;
+            null,
+            new Type[] {  },
+            null)!;
         whoLivesAtAddressMethodInfo = typeof(Person).GetMethod(
             "WhoLivesAtAddress",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] {  })!;
+            null,
+            new Type[] {  },
+            null)!;
         withHouseNumberMethodInfo = typeof(Person).GetMethod(
             "WithHouseNumber",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string) })!;
+            null,
+            new Type[] { typeof(string) },
+            null)!;
         withStreetMethodInfo = typeof(Person).GetMethod(
             "WithStreet",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string) })!;
+            null,
+            new Type[] { typeof(string) },
+            null)!;
         inCityMethodInfo = typeof(Person).GetMethod(
             "InCity",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string) })!;
+            null,
+            new Type[] { typeof(string) },
+            null)!;
         whoIsADigitalNomadMethodInfo = typeof(Person).GetMethod(
             "WhoIsADigitalNomad",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] {  })!;
+            null,
+            new Type[] {  },
+            null)!;
         livingInCityMethodInfo = typeof(Person).GetMethod(
             "LivingInCity",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string) })!;
+            null,
+            new Type[] { typeof(string) },
+            null)!;
     }
 
     private CreatePerson()

@@ -21,12 +21,18 @@ public class CreateStudent
     {
         namedMethodInfo = typeof(Student).GetMethod(
             "Named",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string), typeof(string) })!;
+            null,
+            new Type[] { typeof(string), typeof(string) },
+            null)!;
         namedMethodInfo2 = typeof(Student).GetMethod(
             "Named",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string) })!;
+            null,
+            new Type[] { typeof(string) },
+            null)!;
     }
 
     private CreateStudent()

@@ -24,16 +24,25 @@ public class CreateStudent :
     {
         withNameMethodInfo = typeof(Student).GetMethod(
             "WithName",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(string) })!;
+            null,
+            new Type[] { typeof(string) },
+            null)!;
         bornOnMethodInfo = typeof(Student).GetMethod(
             "BornOn",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(System.DateOnly) })!;
+            null,
+            new Type[] { typeof(System.DateOnly) },
+            null)!;
         inSemesterMethodInfo = typeof(Student).GetMethod(
             "InSemester",
+            0,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(int) })!;
+            null,
+            new Type[] { typeof(int) },
+            null)!;
     }
 
     private CreateStudent()

@@ -35,16 +35,25 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
     {
         method1MethodInfo = typeof(Student<T1, T2, T3, T4, T5>).GetMethod(
             "Method1",
+            4,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { Type.MakeGenericMethodParameter(0), Type.MakeGenericMethodParameter(1), Type.MakeGenericMethodParameter(2), Type.MakeGenericMethodParameter(3) })!;
+            null,
+            new Type[] { Type.MakeGenericMethodParameter(0), Type.MakeGenericMethodParameter(1), Type.MakeGenericMethodParameter(2), Type.MakeGenericMethodParameter(3) },
+            null)!;
         method2MethodInfo = typeof(Student<T1, T2, T3, T4, T5>).GetMethod(
             "Method2",
+            4,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), Type.MakeGenericMethodParameter(0), Type.MakeGenericMethodParameter(1), Type.MakeGenericMethodParameter(2), Type.MakeGenericMethodParameter(3) })!;
+            null,
+            new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), Type.MakeGenericMethodParameter(0), Type.MakeGenericMethodParameter(1), Type.MakeGenericMethodParameter(2), Type.MakeGenericMethodParameter(3) },
+            null)!;
         method3MethodInfo = typeof(Student<T1, T2, T3, T4, T5>).GetMethod(
             "Method3",
+            4,
             BindingFlags.Instance | BindingFlags.NonPublic,
-            new Type[] { typeof(T1) })!;
+            null,
+            new Type[] { typeof(T1) },
+            null)!;
     }
 
     private CreateStudent()
