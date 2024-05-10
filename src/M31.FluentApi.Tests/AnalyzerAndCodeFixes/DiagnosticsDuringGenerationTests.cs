@@ -28,6 +28,18 @@ public class DiagnosticsDuringGenerationTests
         DuplicateMethodTest("DuplicateMethodClass3", "WithName", (14, 6), (20, 6));
     }
 
+    [Fact]
+    public void CanDetectDuplicateMethod4()
+    {
+        DuplicateMethodTest("DuplicateMethodClass4", "Method1", (11, 6), (16, 6), (21, 6));
+    }
+
+    [Fact]
+    public void CanDetectDuplicateMethod5()
+    {
+        DuplicateMethodTest("DuplicateMethodClass5", "Method1", (11, 6), (16, 6));
+    }
+
     private void DuplicateMethodTest(
         string testClassFolder,
         string duplicateMethodName,

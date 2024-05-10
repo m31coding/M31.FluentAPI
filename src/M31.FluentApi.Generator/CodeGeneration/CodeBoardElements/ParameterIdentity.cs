@@ -5,9 +5,9 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 internal class ParameterIdentity
 {
-    private ParameterIdentity(string parameterType, int? genericTypeParameterPosition, bool hasModifier)
+    private ParameterIdentity(string? nonGenericParameterType, int? genericTypeParameterPosition, bool hasModifier)
     {
-        ParameterType = parameterType;
+        NonGenericParameterType = nonGenericParameterType;
         GenericTypeParameterPosition = genericTypeParameterPosition;
         HasModifier = hasModifier;
     }
@@ -17,20 +17,23 @@ internal class ParameterIdentity
         int? genericTypeParameterPosition,
         ParameterKinds parameterKinds)
     {
+        bool isGeneric = genericTypeParameterPosition.HasValue;
+        string? nonGenericParameterType = isGeneric ? null : parameterType;
+
         bool hasModifier = parameterKinds.HasFlag(ParameterKinds.In) ||
                            parameterKinds.HasFlag(ParameterKinds.Out) ||
                            parameterKinds.HasFlag(ParameterKinds.Ref);
 
-        return new ParameterIdentity(parameterType, genericTypeParameterPosition, hasModifier);
+        return new ParameterIdentity(nonGenericParameterType, genericTypeParameterPosition, hasModifier);
     }
 
-    internal string ParameterType { get; }
+    internal string? NonGenericParameterType { get; }
     internal int? GenericTypeParameterPosition { get; }
     internal bool HasModifier { get; }
 
     protected bool Equals(ParameterIdentity other)
     {
-        return ParameterType == other.ParameterType &&
+        return NonGenericParameterType == other.NonGenericParameterType &&
                GenericTypeParameterPosition == other.GenericTypeParameterPosition &&
                HasModifier == other.HasModifier;
     }
@@ -45,14 +48,14 @@ internal class ParameterIdentity
 
     public override int GetHashCode()
     {
-        return new HashCode().Add(ParameterType, GenericTypeParameterPosition, HasModifier);
+        return new HashCode().Add(NonGenericParameterType, GenericTypeParameterPosition, HasModifier);
     }
 
     public override string ToString()
     {
         string typeString = GenericTypeParameterPosition.HasValue
             ? $"g{GenericTypeParameterPosition.Value}"
-            : ParameterType;
+            : NonGenericParameterType!;
 
         return HasModifier ? $"mod-{typeString}" : typeString;
     }
