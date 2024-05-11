@@ -165,6 +165,9 @@ internal class FluentApiInfoGroupCreator
             FluentBreakAttributeInfo breakAttributeInfo
                 => (new Step(null), fluentApiInfo.AdditionalInfo.ControlAttributeData[breakAttributeInfo]),
 
+            FluentReturnAttributeInfo returnAttributeInfo
+                => (new Step(null), fluentApiInfo.AdditionalInfo.ControlAttributeData[returnAttributeInfo]),
+
             _ => throw new ArgumentException($"Unknown control attribute info type: {attributeInfo.GetType()}")
         };
     }

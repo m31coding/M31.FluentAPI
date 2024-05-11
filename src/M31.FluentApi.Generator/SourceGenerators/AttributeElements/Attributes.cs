@@ -17,6 +17,7 @@ internal static class Attributes
 
         internal const string FluentContinueWithAttribute = "M31.FluentApi.Attributes.FluentContinueWithAttribute";
         internal const string FluentBreakAttribute = "M31.FluentApi.Attributes.FluentBreakAttribute";
+        internal const string FluentReturnAttribute = "M31.FluentApi.Attributes.FluentReturnAttribute";
     }
 
     private static class AttributeSets
@@ -39,6 +40,7 @@ internal static class Attributes
         {
             FullNames.FluentContinueWithAttribute,
             FullNames.FluentBreakAttribute,
+            FullNames.FluentReturnAttribute,
         };
     }
 
