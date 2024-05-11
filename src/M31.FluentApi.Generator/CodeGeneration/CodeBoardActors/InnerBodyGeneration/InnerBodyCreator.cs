@@ -2,12 +2,12 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
-internal class InnerBodyGenerator : ICodeBoardActor
+internal class InnerBodyCreator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
-        LineForMemberGenerator lineForMemberGenerator = new LineForMemberGenerator(codeBoard);
-        LineForMethodGenerator lineForMethodGenerator = new LineForMethodGenerator(codeBoard);
+        InnerBodyForMemberGenerator innerBodyForMemberGenerator = new InnerBodyForMemberGenerator(codeBoard);
+        InnerBodyForMethodGenerator innerBodyForMethodGenerator = new InnerBodyForMethodGenerator(codeBoard);
 
         foreach (FluentApiSymbolInfo symbolInfo in codeBoard.FluentApiInfos.Select(m => m.SymbolInfo))
         {
@@ -19,11 +19,11 @@ internal class InnerBodyGenerator : ICodeBoardActor
             switch (symbolInfo)
             {
                 case MemberSymbolInfo memberInfo:
-                    lineForMemberGenerator.GenerateLine(memberInfo);
+                    innerBodyForMemberGenerator.GenerateLine(memberInfo);
                     break;
 
                 case MethodSymbolInfo methodInfo:
-                    lineForMethodGenerator.GenerateLine(methodInfo);
+                    innerBodyForMethodGenerator.GenerateLine(methodInfo);
                     break;
 
                 default:
@@ -31,7 +31,7 @@ internal class InnerBodyGenerator : ICodeBoardActor
             }
         }
 
-        if (lineForMemberGenerator.ReflectionRequired || lineForMethodGenerator.ReflectionRequired)
+        if (innerBodyForMemberGenerator.ReflectionRequired || innerBodyForMethodGenerator.ReflectionRequired)
         {
             ImportReflectionNamespace(codeBoard);
         }

@@ -7,9 +7,9 @@ using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
-internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
+internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbolInfo>
 {
-    internal LineForMethodGenerator(CodeBoard codeBoard)
+    internal InnerBodyForMethodGenerator(CodeBoard codeBoard)
         : base(codeBoard)
     {
     }
@@ -28,10 +28,14 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         {
             return new List<string>()
             {
-                // createStudent.student.InSemester<T1, T2>(semester);
-                $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}" +
-                symbolInfo.GenericInfo?.ParameterListInAngleBrackets +
-                $"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});",
+                // createStudent.student.InSemester<T1, T2>(semester); or
+                // string result = createStudent.student.ToJson()
+                CodeBoard.NewCodeBuilder()
+                    .Append($"{symbolInfo.ReturnType} result = ", symbolInfo.ReturnType != "void")
+                    .Append($"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}")
+                    .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
+                    .Append($"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
+                    .ToString(),
             };
         }
 

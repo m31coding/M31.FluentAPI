@@ -4,12 +4,12 @@ using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
-internal abstract class LineGeneratorBase<TSymbolInfo>
+internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
     where TSymbolInfo : FluentApiSymbolInfo
 {
     protected CodeBoard CodeBoard { get; }
 
-    internal LineGeneratorBase(CodeBoard codeBoard)
+    internal InnerBodyGeneratorBase(CodeBoard codeBoard)
     {
         this.CodeBoard = codeBoard;
         ReflectionRequired = false;

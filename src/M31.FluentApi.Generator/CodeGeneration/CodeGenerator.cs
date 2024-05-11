@@ -34,7 +34,7 @@ internal static class CodeGenerator
         {
             new EntityFieldGenerator(),
             new ConstructorGenerator(),
-            new InnerBodyGenerator(),
+            new InnerBodyCreator(),
             new ForkCreator(),
             new DuplicateMethodsChecker(),
             new BuilderGenerator(),

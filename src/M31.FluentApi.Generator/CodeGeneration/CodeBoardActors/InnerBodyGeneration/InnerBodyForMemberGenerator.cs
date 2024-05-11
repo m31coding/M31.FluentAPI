@@ -2,9 +2,9 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
-internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
+internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbolInfo>
 {
-    internal LineForMemberGenerator(CodeBoard codeBoard)
+    internal InnerBodyForMemberGenerator(CodeBoard codeBoard)
         : base(codeBoard)
     {
     }
