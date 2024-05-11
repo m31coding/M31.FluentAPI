@@ -52,7 +52,7 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
     private BuilderMethods CreateBuilderMethods(MethodCreator methodCreator, FluentApiInfo info)
     {
         BuilderMethods builderMethods =
-            CreateMethodCreator(info.AttributeInfo, info.SymbolInfo).CreateBuilderMethods(methodCreator);
+            CreateMethodCreator(info).CreateBuilderMethods(methodCreator);
         AddAttributeRelationsToCodeBoard(builderMethods.Methods, info);
         return builderMethods;
     }
@@ -111,8 +111,11 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
         return builderMethods;
     }
 
-    private IBuilderMethodCreator CreateMethodCreator(AttributeInfoBase attributeInfo, FluentApiSymbolInfo symbolInfo)
+    private IBuilderMethodCreator CreateMethodCreator(FluentApiInfo info)
     {
+        AttributeInfoBase attributeInfo = info.AttributeInfo;
+        FluentApiSymbolInfo symbolInfo = info.SymbolInfo;
+
         return attributeInfo switch
         {
             FluentMemberAttributeInfo memberAttributeInfo
@@ -125,7 +128,10 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
                 => new CollectionMethods((MemberSymbolInfo)symbolInfo, collectionAttributeInfo),
 
             FluentMethodAttributeInfo methodAttributeInfo
-                => new FluentMethods((MethodSymbolInfo)symbolInfo, methodAttributeInfo),
+                => new FluentMethods(
+                    (MethodSymbolInfo)symbolInfo,
+                    methodAttributeInfo,
+                    info.AdditionalInfo.FluentReturnAttributeInfo),
 
             _ => throw new ArgumentException($"Unknown attribute info type: {attributeInfo.GetType()}")
         };

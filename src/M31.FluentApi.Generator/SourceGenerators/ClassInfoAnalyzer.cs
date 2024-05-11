@@ -114,7 +114,7 @@ internal class ClassInfoAnalyzer
     {
         IMethodSymbol methodSymbol = (IMethodSymbol)info.AdditionalInfo.Symbol;
 
-        if (!methodSymbol.ReturnsVoid)
+        if (!methodSymbol.ReturnsVoid && !info.AdditionalInfo.HasFluentReturn)
         {
             TypeSyntax typeSyntax = GetTypeSyntax(methodSymbol);
             report.ReportDiagnostic(InvalidFluentMethodReturnType.CreateDiagnostic(typeSyntax));

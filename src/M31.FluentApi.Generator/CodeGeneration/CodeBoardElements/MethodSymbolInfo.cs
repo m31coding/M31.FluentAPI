@@ -11,21 +11,25 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
         Accessibility accessibility,
         bool requiresReflection,
         GenericInfo? genericInfo,
-        IReadOnlyCollection<ParameterSymbolInfo> parameterInfos)
+        IReadOnlyCollection<ParameterSymbolInfo> parameterInfos,
+        string returnType)
         : base(name, accessibility, requiresReflection)
     {
         GenericInfo = genericInfo;
         ParameterInfos = parameterInfos;
+        ReturnType = returnType;
     }
 
     internal GenericInfo? GenericInfo { get; }
     internal IReadOnlyCollection<ParameterSymbolInfo> ParameterInfos { get; }
+    internal string ReturnType { get; }
 
     protected bool Equals(MethodSymbolInfo other)
     {
         return base.Equals(other) &&
                Equals(GenericInfo, other.GenericInfo) &&
-               ParameterInfos.SequenceEqual(other.ParameterInfos);
+               ParameterInfos.SequenceEqual(other.ParameterInfos) &&
+               ReturnType == other.ReturnType;
     }
 
     public override bool Equals(object? obj)
@@ -41,6 +45,7 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
         return new HashCode()
             .Add(base.GetHashCode())
             .Add(GenericInfo)
-            .AddSequence(ParameterInfos);
+            .AddSequence(ParameterInfos)
+            .Add(ReturnType);
     }
 }

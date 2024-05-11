@@ -62,7 +62,8 @@ internal static class SymbolInfoCreator
             methodSymbol.DeclaredAccessibility,
             RequiresReflection(methodSymbol),
             genericInfo,
-            parameterInfos);
+            parameterInfos,
+            CodeTypeExtractor.GetTypeForCodeGeneration(methodSymbol.ReturnType));
     }
 
     private static GenericInfo? GetGenericInfo(IMethodSymbol methodSymbol)

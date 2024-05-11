@@ -51,12 +51,16 @@ internal class FluentApiInfo
                 .Select(data => (data, CreateControlAttributeInfo(data)))
                 .ToArray();
 
+        FluentReturnAttributeInfo? fluentReturnAttributeInfo = controlDataAndInfos.Select(d => d.info)
+            .OfType<FluentReturnAttributeInfo>().FirstOrDefault();
+
         FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
         FluentApiAdditionalInfo additionalInfo = new FluentApiAdditionalInfo(
             symbol,
             attributeData.MainAttributeData,
             ToDictionary(orthogonalDataAndInfos),
-            ToDictionary(controlDataAndInfos));
+            ToDictionary(controlDataAndInfos),
+            fluentReturnAttributeInfo);
 
         return new FluentApiInfo(
             symbolInfo,

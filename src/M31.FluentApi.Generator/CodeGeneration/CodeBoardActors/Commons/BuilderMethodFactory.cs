@@ -14,7 +14,7 @@ internal class BuilderMethodFactory
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
     {
-        return new BuilderMethod(methodName, null, new List<Parameter>(), _ => new List<string>());
+        return new BuilderMethod(methodName, null, new List<Parameter>(), null, _ => new List<string>());
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, ComputeValueCode computeValue)
@@ -32,7 +32,7 @@ internal class BuilderMethodFactory
             };
         }
 
-        return new BuilderMethod(methodName, null, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, List<ComputeValueCode> computeValues)
@@ -47,10 +47,13 @@ internal class BuilderMethodFactory
                 .ToList();
         }
 
-        return new BuilderMethod(methodName, null, parameters, BuildBodyCode);
+        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode);
     }
 
-    internal BuilderMethod CreateBuilderMethod(MethodSymbolInfo methodSymbolInfo, string methodName)
+    internal BuilderMethod CreateBuilderMethod(
+        MethodSymbolInfo methodSymbolInfo,
+        string methodName,
+        bool respectReturnType)
     {
         List<Parameter> parameters = methodSymbolInfo.ParameterInfos
             .Select(i => new Parameter(
@@ -61,11 +64,18 @@ internal class BuilderMethodFactory
                 new ParameterAnnotations(i.ParameterKinds)))
             .ToList();
 
+        string? returnTypeToRespect = respectReturnType ? methodSymbolInfo.ReturnType : null;
+
         List<string> BuildBodyCode(string instancePrefix)
         {
             return innerBodyCreationDelegates.GetCallMethodCode(methodSymbolInfo).BuildCode(instancePrefix, parameters);
         }
 
-        return new BuilderMethod(methodName, methodSymbolInfo.GenericInfo, parameters, BuildBodyCode);
+        return new BuilderMethod(
+            methodName,
+            methodSymbolInfo.GenericInfo,
+            parameters,
+            returnTypeToRespect,
+            BuildBodyCode);
     }
 }

@@ -14,16 +14,20 @@ internal class FluentApiAdditionalInfo
         ISymbol symbol,
         AttributeDataExtended mainAttributeData,
         Dictionary<OrthogonalAttributeInfoBase, AttributeDataExtended> orthogonalAttributeData,
-        Dictionary<ControlAttributeInfoBase, AttributeDataExtended> controlAttributeData)
+        Dictionary<ControlAttributeInfoBase, AttributeDataExtended> controlAttributeData,
+        FluentReturnAttributeInfo? fluentReturnAttributeInfo)
     {
         Symbol = symbol;
         MainAttributeData = mainAttributeData;
         OrthogonalAttributeData = orthogonalAttributeData;
         ControlAttributeData = controlAttributeData;
+        FluentReturnAttributeInfo = fluentReturnAttributeInfo;
     }
 
     internal ISymbol Symbol { get; }
     internal AttributeDataExtended MainAttributeData { get; }
     internal Dictionary<OrthogonalAttributeInfoBase, AttributeDataExtended> OrthogonalAttributeData { get; }
     internal Dictionary<ControlAttributeInfoBase, AttributeDataExtended> ControlAttributeData { get; }
+    internal FluentReturnAttributeInfo? FluentReturnAttributeInfo { get; }
+    internal bool HasFluentReturn => FluentReturnAttributeInfo != null;
 }
