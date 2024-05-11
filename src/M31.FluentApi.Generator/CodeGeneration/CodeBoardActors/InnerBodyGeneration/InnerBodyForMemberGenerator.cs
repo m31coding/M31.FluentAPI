@@ -14,7 +14,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         return symbolInfo.IsProperty ? "Property" : "Field";
     }
 
-    protected override void GenerateLineWithoutReflection(MemberSymbolInfo symbolInfo)
+    protected override void GenerateInnerBodyWithoutReflection(MemberSymbolInfo symbolInfo)
     {
         // createStudent.student.Semester = semester;
         SetMemberCode setMemberCode =
@@ -28,7 +28,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         }
     }
 
-    protected override void GenerateLineWithReflection(MemberSymbolInfo symbolInfo, string infoFieldName)
+    protected override void GenerateInnerBodyWithReflection(MemberSymbolInfo symbolInfo, string infoFieldName)
     {
         // semesterPropertyInfo.SetValue(createStudent.student, semester);
         SetMemberCode setMemberCode =

@@ -21,21 +21,21 @@ internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
     {
         if (!symbolInfo.RequiresReflection)
         {
-            GenerateLineWithoutReflection(symbolInfo);
+            GenerateInnerBodyWithoutReflection(symbolInfo);
         }
         else
         {
-            GenerateLineWithReflectionAndFields(symbolInfo);
+            GenerateInnerBodyWithReflectionAndFields(symbolInfo);
             ReflectionRequired = true;
         }
     }
 
     protected abstract string SymbolType(TSymbolInfo symbolInfo);
-    protected abstract void GenerateLineWithoutReflection(TSymbolInfo symbolInfo);
-    protected abstract void GenerateLineWithReflection(TSymbolInfo symbolInfo, string infoFieldName);
+    protected abstract void GenerateInnerBodyWithoutReflection(TSymbolInfo symbolInfo);
+    protected abstract void GenerateInnerBodyWithReflection(TSymbolInfo symbolInfo, string infoFieldName);
     protected abstract void InitializeInfoField(string fieldName, TSymbolInfo symbolInfo);
 
-    private void GenerateLineWithReflectionAndFields(TSymbolInfo symbolInfo)
+    private void GenerateInnerBodyWithReflectionAndFields(TSymbolInfo symbolInfo)
     {
         string symbolType = SymbolType(symbolInfo);
 
@@ -46,7 +46,7 @@ internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
         GenerateInfoField(symbolType, infoFieldName);
         InitializeInfoField(infoFieldName, symbolInfo);
 
-        GenerateLineWithReflection(symbolInfo, infoFieldName);
+        GenerateInnerBodyWithReflection(symbolInfo, infoFieldName);
     }
 
     private void GenerateInfoField(string symbolType, string fieldName)

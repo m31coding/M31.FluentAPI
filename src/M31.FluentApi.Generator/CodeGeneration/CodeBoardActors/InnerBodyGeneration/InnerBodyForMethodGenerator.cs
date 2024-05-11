@@ -19,7 +19,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         return "Method";
     }
 
-    protected override void GenerateLineWithoutReflection(MethodSymbolInfo symbolInfo)
+    protected override void GenerateInnerBodyWithoutReflection(MethodSymbolInfo symbolInfo)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
@@ -46,7 +46,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         }
     }
 
-    protected override void GenerateLineWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
+    protected override void GenerateInnerBodyWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
