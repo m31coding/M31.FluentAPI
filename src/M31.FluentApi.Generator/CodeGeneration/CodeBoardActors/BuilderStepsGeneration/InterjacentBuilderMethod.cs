@@ -27,7 +27,7 @@ internal class InterjacentBuilderMethod : BuilderStepMethod
         CreateBody(method, string.Empty);
 
         // return this;
-        method.AppendBodyLine($"return this;");
+        CreateReturnStatement(method, "return this;");
 
         return method;
     }

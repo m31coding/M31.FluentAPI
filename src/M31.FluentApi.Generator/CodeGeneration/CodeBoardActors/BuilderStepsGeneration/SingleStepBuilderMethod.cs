@@ -28,7 +28,7 @@ internal class SingleStepBuilderMethod : BuilderStepMethod
         CreateBody(method, $"{info.BuilderInstanceName}.");
 
         // return createStudent.student;
-        method.AppendBodyLine($"return {info.BuilderInstanceName}.{info.ClassInstanceName};");
+        CreateReturnStatement(method, $"return {info.BuilderInstanceName}.{info.ClassInstanceName};");
 
         return method;
     }

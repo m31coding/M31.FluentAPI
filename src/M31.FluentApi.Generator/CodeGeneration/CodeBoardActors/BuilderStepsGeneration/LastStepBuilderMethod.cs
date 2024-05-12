@@ -25,7 +25,7 @@ internal class LastStepBuilderMethod : BuilderStepMethod
         CreateBody(method, string.Empty);
 
         // return student;
-        method.AppendBodyLine($"return {info.ClassInstanceName};");
+        CreateReturnStatement(method, $"return {info.ClassInstanceName};");
 
         return method;
     }

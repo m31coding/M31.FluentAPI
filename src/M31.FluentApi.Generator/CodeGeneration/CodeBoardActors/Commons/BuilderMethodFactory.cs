@@ -14,7 +14,7 @@ internal class BuilderMethodFactory
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
     {
-        return new BuilderMethod(methodName, null, new List<Parameter>(), null, _ => new List<string>());
+        return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _) => new List<string>());
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, ComputeValueCode computeValue)
@@ -23,7 +23,7 @@ internal class BuilderMethodFactory
             ? new List<Parameter>() { computeValue.Parameter }
             : new List<Parameter>();
 
-        List<string> BuildBodyCode(string instancePrefix)
+        List<string> BuildBodyCode(string instancePrefix, string? returnType)
         {
             return new List<string>()
             {
@@ -39,7 +39,7 @@ internal class BuilderMethodFactory
     {
         List<Parameter> parameters = computeValues.Select(v => v.Parameter).OfType<Parameter>().ToList();
 
-        List<string> BuildBodyCode(string instancePrefix)
+        List<string> BuildBodyCode(string instancePrefix, string? returnType)
         {
             return computeValues
                 .Select(v =>
@@ -66,9 +66,10 @@ internal class BuilderMethodFactory
 
         string? returnTypeToRespect = respectReturnType ? methodSymbolInfo.ReturnType : null;
 
-        List<string> BuildBodyCode(string instancePrefix)
+        List<string> BuildBodyCode(string instancePrefix, string? returnType)
         {
-            return innerBodyCreationDelegates.GetCallMethodCode(methodSymbolInfo).BuildCode(instancePrefix, parameters);
+            return innerBodyCreationDelegates.GetCallMethodCode(methodSymbolInfo)
+                .BuildCode(instancePrefix, parameters, returnType);
         }
 
         return new BuilderMethod(

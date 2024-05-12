@@ -24,14 +24,17 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
 
-        List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
+        List<string> BuildCallMethodCode(
+            string instancePrefix,
+            IReadOnlyCollection<Parameter> outerMethodParameters,
+            string? returnType)
         {
             return new List<string>()
             {
                 // createStudent.student.InSemester<T1, T2>(semester); or
-                // string result = createStudent.student.ToJson()
+                // return createStudent.student.ToJson();
                 CodeBoard.NewCodeBuilder()
-                    .Append($"{symbolInfo.ReturnType} result = ", symbolInfo.ReturnType != "void")
+                    .Append($"return ", symbolInfo.ReturnType is not null and not "void")
                     .Append($"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}")
                     .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
                     .Append($"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
@@ -51,7 +54,10 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
 
-        List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
+        List<string> BuildCallMethodCode(
+            string instancePrefix,
+            IReadOnlyCollection<Parameter> outerMethodParameters,
+            string? returnType)
         {
             return outerMethodParameters.Any(p =>
                 p.HasAnnotation(ParameterKinds.Ref) || p.HasAnnotation(ParameterKinds.Out))

@@ -30,7 +30,7 @@ internal class FirstStepBuilderMethod : BuilderStepMethod
         CreateBody(method, $"{info.BuilderInstanceName}.");
 
         // return createStudent;
-        method.AppendBodyLine($"return {info.BuilderInstanceName};");
+        CreateReturnStatement(method, $"return {info.BuilderInstanceName};");
 
         return method;
     }
