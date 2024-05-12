@@ -15,9 +15,7 @@ internal class SingleStepBuilderMethod : BuilderStepMethod
     internal override Method BuildMethodCode(BuilderAndTargetInfo info)
     {
         // public static Student<T1, T2> InSemester(int semester)
-        MethodSignature methodSignature =
-            CreateMethodSignature(info.FluentApiClassNameWithTypeParameters, "public", "static");
-        Method method = new Method(methodSignature);
+        Method method = CreateMethod(info.FluentApiClassNameWithTypeParameters, "public", "static");
 
         // CreateStudent<T1, T2> createStudent = new CreateStudent<T1, T2>();
         method.AppendBodyLine(

@@ -18,8 +18,7 @@ internal class FirstStepBuilderMethod : BuilderStepMethod
     internal override Method BuildMethodCode(BuilderAndTargetInfo info)
     {
         // public static IBornOn WithName(string name)
-        MethodSignature methodSignature = CreateMethodSignature(ReturnType, "public", "static");
-        Method method = new Method(methodSignature);
+        Method method = CreateMethod(ReturnType, "public", "static");
 
         // CreateStudent<T1, T2> createStudent = new CreateStudent<T1, T2>();
         method.AppendBodyLine(

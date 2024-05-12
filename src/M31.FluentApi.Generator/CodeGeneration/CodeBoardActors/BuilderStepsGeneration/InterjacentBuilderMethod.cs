@@ -20,8 +20,7 @@ internal class InterjacentBuilderMethod : BuilderStepMethod
     internal override Method BuildMethodCode(BuilderAndTargetInfo info)
     {
         // public IInSemester BornOn(System.DateOnly dateOfBirth)
-        MethodSignature methodSignature = CreateMethodSignature(ReturnType, "public");
-        Method method = new InterfaceMethod(methodSignature, InterfaceName);
+        Method method = CreateInterfaceMethod(InterfaceName, ReturnType, "public");
 
         // student.DateOfBirth = dateOfBirth;
         CreateBody(method, string.Empty);
