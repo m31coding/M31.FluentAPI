@@ -17,7 +17,7 @@ internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
 
     internal bool ReflectionRequired { get; private set; }
 
-    internal void GenerateLine(TSymbolInfo symbolInfo)
+    internal void GenerateInnerBody(TSymbolInfo symbolInfo)
     {
         if (!symbolInfo.RequiresReflection)
         {

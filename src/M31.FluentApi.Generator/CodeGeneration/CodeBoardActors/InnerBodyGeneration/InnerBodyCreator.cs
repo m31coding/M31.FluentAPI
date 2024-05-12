@@ -19,11 +19,11 @@ internal class InnerBodyCreator : ICodeBoardActor
             switch (symbolInfo)
             {
                 case MemberSymbolInfo memberInfo:
-                    innerBodyForMemberGenerator.GenerateLine(memberInfo);
+                    innerBodyForMemberGenerator.GenerateInnerBody(memberInfo);
                     break;
 
                 case MethodSymbolInfo methodInfo:
-                    innerBodyForMethodGenerator.GenerateLine(methodInfo);
+                    innerBodyForMethodGenerator.GenerateInnerBody(methodInfo);
                     break;
 
                 default:
