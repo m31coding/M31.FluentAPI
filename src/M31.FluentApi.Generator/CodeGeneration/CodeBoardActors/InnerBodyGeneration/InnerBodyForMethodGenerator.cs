@@ -65,12 +65,14 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                     infoFieldName,
                     instancePrefix,
                     symbolInfo.GenericInfo,
-                    outerMethodParameters)
+                    outerMethodParameters,
+                    returnType)
                 : BuildDefaultReflectionCode(
                     infoFieldName,
                     instancePrefix,
                     symbolInfo.GenericInfo,
-                    outerMethodParameters);
+                    outerMethodParameters,
+                    returnType);
         }
     }
 
@@ -78,7 +80,8 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         string infoFieldName,
         string instancePrefix,
         GenericInfo? genericInfo,
-        IReadOnlyCollection<Parameter> outerMethodParameters)
+        IReadOnlyCollection<Parameter> outerMethodParameters,
+        string? returnType)
     {
         List<string> lines = new List<string>();
 
@@ -118,16 +121,20 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         string infoFieldName,
         string instancePrefix,
         GenericInfo? genericInfo,
-        IReadOnlyCollection<Parameter> outerMethodParameters)
+        IReadOnlyCollection<Parameter> outerMethodParameters,
+        string? returnType)
     {
         return new List<string>()
         {
             // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
             // semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
             //     .Invoke(createStudent.student, new object[] { semester });
-            $"{infoFieldName}.{MakeGenericMethod(genericInfo)}" +
-            $"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
-            $"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});",
+            CodeBoard.NewCodeBuilder()
+                .Append($"return ({returnType}) ", returnType is not null and not "void")
+                .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+                .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
+                .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});")
+                .ToString(),
         };
     }
 
