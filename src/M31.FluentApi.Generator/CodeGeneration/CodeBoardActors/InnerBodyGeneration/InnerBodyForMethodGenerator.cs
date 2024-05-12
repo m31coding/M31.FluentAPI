@@ -34,7 +34,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                 // createStudent.student.InSemester<T1, T2>(semester); or
                 // return createStudent.student.ToJson();
                 CodeBoard.NewCodeBuilder()
-                    .Append($"return ", symbolInfo.ReturnType is not null and not "void")
+                    .Append($"return ", returnType is not null and not "void")
                     .Append($"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}")
                     .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
                     .Append($"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
