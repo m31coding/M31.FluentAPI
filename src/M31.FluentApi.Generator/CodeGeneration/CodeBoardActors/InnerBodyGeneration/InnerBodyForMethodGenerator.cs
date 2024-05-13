@@ -34,7 +34,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                 // createStudent.student.InSemester<T1, T2>(semester); or
                 // return createStudent.student.ToJson();
                 CodeBoard.NewCodeBuilder()
-                    .Append($"return ", returnType is not null and not "void")
+                    .Append($"return ", !IsNoneOrVoid(returnType))
                     .Append($"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}")
                     .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
                     .Append($"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
@@ -83,6 +83,9 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         IReadOnlyCollection<Parameter> outerMethodParameters,
         string? returnType)
     {
+        bool returnResult = !IsNoneOrVoid(returnType);
+        string variableName = returnResult ? GetVariableName("result", outerMethodParameters) : string.Empty;
+
         List<string> lines = new List<string>();
 
         // object?[] args = new object?[] { semester };
@@ -90,9 +93,13 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             $"object?[] args = new object?[] {{ {string.Join(", ", outerMethodParameters.Select(GetArgument))} }};");
 
         // semesterMethodInfo.Invoke(createStudent.student, args) or
-        // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args)
-        lines.Add($"{infoFieldName}.{MakeGenericMethod(genericInfo)}" +
-                  $"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);");
+        // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args) or
+        // string result = (string) toJsonMethodInfo.Invoke(createStudent.student, args)
+        lines.Add(CodeBoard.NewCodeBuilder()
+            .Append($"{returnType} {variableName} = ", returnResult)
+            .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+            .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);")
+            .ToString());
 
         foreach (var parameter in outerMethodParameters.Select((p, i) => new { Value = p, Index = i }))
         {
@@ -100,6 +107,11 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             {
                 lines.Add(AssignValueToArgument(parameter.Index, parameter.Value));
             }
+        }
+
+        if (returnResult)
+        {
+            lines.Add($"return {variableName};");
         }
 
         return lines;
@@ -117,6 +129,24 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         }
     }
 
+    private string GetVariableName(string desiredVariableName, IReadOnlyCollection<Parameter> outerMethodParameters)
+    {
+        string variableName = desiredVariableName;
+        int i = 2;
+
+        IEnumerable<string> reservedVariableNames = outerMethodParameters
+            .Select(p => p.Name)
+            .Concat(new string[] { CodeBoard.Info.ClassInstanceName, CodeBoard.Info.BuilderInstanceName });
+
+        // ReSharper disable once PossibleMultipleEnumeration
+        while (reservedVariableNames.Contains(variableName))
+        {
+            variableName = $"{variableName}{i++}";
+        }
+
+        return variableName;
+    }
+
     private List<string> BuildDefaultReflectionCode(
         string infoFieldName,
         string instancePrefix,
@@ -130,7 +160,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             // semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
             //     .Invoke(createStudent.student, new object[] { semester });
             CodeBoard.NewCodeBuilder()
-                .Append($"return ({returnType}) ", returnType is not null and not "void")
+                .Append($"return ({returnType}) ", !IsNoneOrVoid(returnType))
                 .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
                 .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
                 .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});")
@@ -199,5 +229,10 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         {
             return genericInfo == null ? "0" : genericInfo.ParameterCount.ToString();
         }
+    }
+
+    private static bool IsNoneOrVoid(string? returnType)
+    {
+        return returnType is null or "void";
     }
 }
