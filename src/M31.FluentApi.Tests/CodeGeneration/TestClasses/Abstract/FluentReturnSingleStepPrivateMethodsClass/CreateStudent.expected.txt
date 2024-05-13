@@ -66,20 +66,20 @@ public class CreateStudent
     public static int ReturnIntMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return (int) returnIntMethodMethodInfo.Invoke(createStudent.student, new object?[] {  });
+        return (int) returnIntMethodMethodInfo.Invoke(createStudent.student, new object?[] {  })!;
     }
 
     public static System.Collections.Generic.List<int> ReturnListMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(createStudent.student, new object?[] {  });
+        return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(createStudent.student, new object?[] {  })!;
     }
 
     public static int ReturnIntMethodWithRefParameter(ref string s)
     {
         CreateStudent createStudent = new CreateStudent();
         object?[] args = new object?[] { s };
-        int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(createStudent.student, args);
+        int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(createStudent.student, args)!;
         s = (string) args[0]!;
         return result;
     }

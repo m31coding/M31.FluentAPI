@@ -85,6 +85,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
     {
         bool returnResult = !IsNoneOrVoid(returnType);
         string variableName = returnResult ? GetVariableName("result", outerMethodParameters) : string.Empty;
+        string suppressNullability = returnResult ? "!" : string.Empty;
 
         List<string> lines = new List<string>();
 
@@ -98,7 +99,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         lines.Add(CodeBoard.NewCodeBuilder()
             .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
             .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
-            .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);")
+            .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args){suppressNullability};")
             .ToString());
 
         foreach (var parameter in outerMethodParameters.Select((p, i) => new { Value = p, Index = i }))
@@ -154,16 +155,20 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         IReadOnlyCollection<Parameter> outerMethodParameters,
         string? returnType)
     {
+        bool returnResult = !IsNoneOrVoid(returnType);
+        string suppressNullability = returnResult ? "!" : string.Empty;
+
         return new List<string>()
         {
             // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
             // semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
             //     .Invoke(createStudent.student, new object[] { semester });
             CodeBoard.NewCodeBuilder()
-                .Append($"return ({returnType}) ", !IsNoneOrVoid(returnType))
+                .Append($"return ({returnType}) ", returnResult)
                 .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
                 .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
-                .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});")
+                .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }})" +
+                        $"{suppressNullability};")
                 .ToString(),
         };
     }
