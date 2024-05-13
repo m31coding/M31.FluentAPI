@@ -19,21 +19,27 @@ public class CreateStudent
         student = new Student();
     }
 
-    public static void ReturnVoid()
+    public static void ReturnVoidMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        createStudent.student.ReturnVoid();
+        createStudent.student.ReturnVoidMethod();
     }
 
-    public static int ReturnInt()
+    public static int ReturnIntMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return createStudent.student.ReturnInt();
+        return createStudent.student.ReturnIntMethod();
     }
 
-    public static System.Collections.Generic.List<int> ReturnList()
+    public static System.Collections.Generic.List<int> ReturnListMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return createStudent.student.ReturnList();
+        return createStudent.student.ReturnListMethod();
+    }
+
+    public static int ReturnIntMethodWithRefParameter(ref string s)
+    {
+        CreateStudent createStudent = new CreateStudent();
+        return createStudent.student.ReturnIntMethodWithRefParameter(ref s);
     }
 }

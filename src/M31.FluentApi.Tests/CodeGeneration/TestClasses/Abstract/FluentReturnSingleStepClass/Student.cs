@@ -11,22 +11,29 @@ public class Student
 {
     [FluentMethod(0)]
     [FluentReturn]
-    public void ReturnVoid()
+    public void ReturnVoidMethod()
     {
         return;
     }
 
     [FluentMethod(0)]
     [FluentReturn]
-    public int ReturnInt()
+    public int ReturnIntMethod()
     {
         return 24;
     }
 
     [FluentMethod(0)]
     [FluentReturn]
-    public List<int> ReturnList()
+    public List<int> ReturnListMethod()
     {
         return new List<int>() { 1, 2, 3 };
+    }
+
+    [FluentMethod(0)]
+    [FluentReturn]
+    public int ReturnIntMethodWithRefParameter(ref string s)
+    {
+        return 28;
     }
 }

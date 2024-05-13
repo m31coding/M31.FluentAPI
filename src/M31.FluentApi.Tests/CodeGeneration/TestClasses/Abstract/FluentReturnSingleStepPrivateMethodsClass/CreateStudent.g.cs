@@ -15,32 +15,40 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnSi
 public class CreateStudent
 {
     private readonly Student student;
-    private static readonly MethodInfo returnVoidMethodInfo;
-    private static readonly MethodInfo returnIntMethodInfo;
-    private static readonly MethodInfo returnListMethodInfo;
+    private static readonly MethodInfo returnVoidMethodMethodInfo;
+    private static readonly MethodInfo returnIntMethodMethodInfo;
+    private static readonly MethodInfo returnListMethodMethodInfo;
+    private static readonly MethodInfo returnIntMethodWithRefParameterMethodInfo;
 
     static CreateStudent()
     {
-        returnVoidMethodInfo = typeof(Student).GetMethod(
-            "ReturnVoid",
+        returnVoidMethodMethodInfo = typeof(Student).GetMethod(
+            "ReturnVoidMethod",
             0,
             BindingFlags.Instance | BindingFlags.NonPublic,
             null,
             new Type[] {  },
             null)!;
-        returnIntMethodInfo = typeof(Student).GetMethod(
-            "ReturnInt",
+        returnIntMethodMethodInfo = typeof(Student).GetMethod(
+            "ReturnIntMethod",
             0,
             BindingFlags.Instance | BindingFlags.NonPublic,
             null,
             new Type[] {  },
             null)!;
-        returnListMethodInfo = typeof(Student).GetMethod(
-            "ReturnList",
+        returnListMethodMethodInfo = typeof(Student).GetMethod(
+            "ReturnListMethod",
             0,
             BindingFlags.Instance | BindingFlags.NonPublic,
             null,
             new Type[] {  },
+            null)!;
+        returnIntMethodWithRefParameterMethodInfo = typeof(Student).GetMethod(
+            "ReturnIntMethodWithRefParameter",
+            0,
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            null,
+            new Type[] { typeof(string).MakeByRefType() },
             null)!;
     }
 
@@ -49,21 +57,30 @@ public class CreateStudent
         student = new Student();
     }
 
-    public static void ReturnVoid()
+    public static void ReturnVoidMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        returnVoidMethodInfo.Invoke(createStudent.student, new object?[] {  });
+        returnVoidMethodMethodInfo.Invoke(createStudent.student, new object?[] {  });
     }
 
-    public static int ReturnInt()
+    public static int ReturnIntMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return (int) returnIntMethodInfo.Invoke(createStudent.student, new object?[] {  });
+        return (int) returnIntMethodMethodInfo.Invoke(createStudent.student, new object?[] {  });
     }
 
-    public static System.Collections.Generic.List<int> ReturnList()
+    public static System.Collections.Generic.List<int> ReturnListMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return (System.Collections.Generic.List<int>) returnListMethodInfo.Invoke(createStudent.student, new object?[] {  });
+        return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(createStudent.student, new object?[] {  });
+    }
+
+    public static int ReturnIntMethodWithRefParameter(ref string s)
+    {
+        CreateStudent createStudent = new CreateStudent();
+        object?[] args = new object?[] { s };
+        int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(createStudent.student, args);
+        s = (string) args[0]!;
+        return result;
     }
 }

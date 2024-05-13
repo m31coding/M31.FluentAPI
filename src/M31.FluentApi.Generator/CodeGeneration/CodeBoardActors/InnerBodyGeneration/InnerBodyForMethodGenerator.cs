@@ -96,7 +96,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args) or
         // string result = (string) toJsonMethodInfo.Invoke(createStudent.student, args)
         lines.Add(CodeBoard.NewCodeBuilder()
-            .Append($"{returnType} {variableName} = ", returnResult)
+            .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
             .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
             .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);")
             .ToString());
