@@ -60,9 +60,19 @@ internal class TestClassCodeGenerator
             CancellationToken.None);
     }
 
-    internal void WriteGeneratedCode(GeneratorOutput generatorOutput)
+    internal void WriteGeneratedCodeIfChanged(GeneratorOutput generatorOutput)
     {
-        File.WriteAllText(PathToTestDataFile(ClassPath, $"{generatorOutput.ClassName}.g.cs"), generatorOutput.Code);
+        string file = PathToTestDataFile(ClassPath, $"{generatorOutput.ClassName}.g.cs");
+        if (File.Exists(file))
+        {
+            string present = File.ReadAllText(file);
+            if (present == generatorOutput.Code)
+            {
+                return;
+            }
+        }
+
+        File.WriteAllText(file, generatorOutput.Code);
     }
 
     internal void WriteGeneratedCodeAsExpectedCode(GeneratorOutput generatorOutput)
