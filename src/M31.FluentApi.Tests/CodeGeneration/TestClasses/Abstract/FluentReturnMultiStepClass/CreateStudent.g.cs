@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
-using M31.FluentApi.Generator.SourceGenerators;
 using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnMultiStepClass;
