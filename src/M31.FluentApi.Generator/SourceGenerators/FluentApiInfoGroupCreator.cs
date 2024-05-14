@@ -159,14 +159,14 @@ internal class FluentApiInfoGroupCreator
         return attributeInfo switch
         {
             FluentContinueWithAttributeInfo continueWithAttributeInfo
-                => (new Step(continueWithAttributeInfo.ContinueWithBuilderStep),
+                => (new Step(continueWithAttributeInfo.ContinueWithBuilderStep, "continue"),
                     fluentApiInfo.AdditionalInfo.ControlAttributeData[continueWithAttributeInfo]),
 
             FluentBreakAttributeInfo breakAttributeInfo
-                => (new Step(null), fluentApiInfo.AdditionalInfo.ControlAttributeData[breakAttributeInfo]),
+                => (new Step(null, "break"), fluentApiInfo.AdditionalInfo.ControlAttributeData[breakAttributeInfo]),
 
             FluentReturnAttributeInfo returnAttributeInfo
-                => (new Step(null), fluentApiInfo.AdditionalInfo.ControlAttributeData[returnAttributeInfo]),
+                => (new Step(null, "return"), fluentApiInfo.AdditionalInfo.ControlAttributeData[returnAttributeInfo]),
 
             _ => throw new ArgumentException($"Unknown control attribute info type: {attributeInfo.GetType()}")
         };
