@@ -16,3 +16,4 @@ FullExample.Usage.UseTheGeneratedFluentApi();
 PersonExample2.Usage.UseTheGeneratedFluentApi();
 PersonExample3.Usage.UseTheGeneratedFluentApi();
 PersonExample4.Usage.UseTheGeneratedFluentApi();
+PersonExample5.Usage.UseTheGeneratedFluentApi();
