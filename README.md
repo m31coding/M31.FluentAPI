@@ -319,7 +319,7 @@ To create forks specify builder methods at the same builder step. The resulting 
 public int Age { get; private set; }
 
 [FluentMethod(1)]
-private void BornOn(DateOnldateOfBirth)
+private void BornOn(DateOnly dateOfBirth)
 {
     DateOnly today = DateOnly.FromDateTime(DateTime.Today);
     int age = today.Year - dateOfBirth.Year;
