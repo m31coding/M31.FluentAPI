@@ -103,7 +103,7 @@ The attributes `FluentPredicate` and `FluentCollection` can be used instead of a
 
 The `FluentMethod` attribute is used for custom builder method implementations.
 
-The control attribute `FluentContinueWith` indicates a jump to the specified builder step, and `FluentBreak` stops the builder.
+The control attribute `FluentContinueWith` indicates a jump to the specified builder step, and `FluentBreak` stops the builder. `FluentReturn` allows returning arbitrary types and values within the generated API.
 
 
 ### FluentApi
@@ -309,6 +309,24 @@ private void WhoseAddressIsUnknown()
 ```cs
 ...WhoseAddressIsUnknown();
 ```
+
+### FluentReturn
+
+Allows the builder to respect the return value of the decorated method, enabling the return of arbitrary types and values within the generated API. If a void method is decorated with this attribute, the builder method will also return void.
+                
+```cs
+[FluentMethod(1)]
+[FluentReturn]
+public string ToJson()
+{
+    return JsonSerializer.Serialize(this);
+}
+```
+
+```cs
+string serialized = ...ToJson();
+```
+
 
 ### Forks
 
