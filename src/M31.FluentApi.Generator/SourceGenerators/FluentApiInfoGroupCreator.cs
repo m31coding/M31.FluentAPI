@@ -28,9 +28,15 @@ internal class FluentApiInfoGroupCreator
             return Array.Empty<FluentApiInfoGroup>();
         }
 
-        IGrouping<(int builderStep, string fluentMethodName, Type type), FluentApiInfo>[] grouping = infos
+        // Group FluentApiInfos that have the same builder step, the same fluent method name, and represent
+        // FluentMembers (compounds).
+        (int builderStep, string fluentMethodName, Type type, FluentApiInfo[] infoArray)[] grouping = infos
             .GroupBy(i => (i.AttributeInfo.BuilderStep, i.FluentMethodName, i.AttributeInfo.GetType()))
-            .OrderBy(g => g.Key.BuilderStep)
+            .SelectMany(g =>
+                g.First().AttributeInfo.GetType() == typeof(FluentMemberAttributeInfo)
+                    ? new[] { (g.Key.BuilderStep, g.Key.FluentMethodName, g.Key.GetType(), g.ToArray()) }
+                    : g.Select(g2 => (g.Key.BuilderStep, g.Key.FluentMethodName, g.Key.GetType(), new[] { g2 })))
+            .OrderBy(g => g.BuilderStep)
             .ToArray();
 
         Dictionary<int, int?> stepToNextStep = GetStepToNextStepDictionary(grouping);
@@ -40,49 +46,22 @@ internal class FluentApiInfoGroupCreator
 
         foreach (var group in grouping)
         {
-            int? defaultNextBuilderStep = stepToNextStep[group.Key.builderStep];
-            AddGroups(group, defaultNextBuilderStep);
+            int? defaultNextBuilderStep = stepToNextStep[group.builderStep];
+            int? nextBuilderStep = GetNextBuilderStep(group.infoArray, defaultNextBuilderStep);
+            infoGroups.Add(new FluentApiInfoGroup(
+                group.builderStep,
+                nextBuilderStep,
+                group.fluentMethodName,
+                group.type, group.infoArray));
         }
 
         return infoGroups;
-
-        void AddGroups(
-            IGrouping<(int builderStep, string fluentMethodName, Type type), FluentApiInfo> group,
-            int? defaultNextBuilderStep)
-        {
-            var (builderStep, fluentMethodName, type) = group.Key;
-            FluentApiInfo[] infoArray = group.ToArray();
-            int? nextBuilderStep = GetNextBuilderStep(infoArray, defaultNextBuilderStep);
-
-            // single fluent API info or compound
-            if (infoArray.Length == 1 || type == typeof(FluentMemberAttributeInfo))
-            {
-                infoGroups.Add(new FluentApiInfoGroup(builderStep, nextBuilderStep, fluentMethodName, type, infoArray));
-                return;
-            }
-
-            if (type != typeof(FluentMethodAttributeInfo))
-            {
-                throw new GenerationException($"Unexpected group type: {type.Name}.");
-            }
-
-            // method overloads; split into separate groups
-            foreach (FluentApiInfo info in group)
-            {
-                infoGroups.Add(new FluentApiInfoGroup(
-                    builderStep,
-                    nextBuilderStep,
-                    fluentMethodName,
-                    type,
-                    new[] { info }));
-            }
-        }
     }
 
     private Dictionary<int, int?> GetStepToNextStepDictionary(
-        IGrouping<(int builderStep, string fluentMethodName, Type type), FluentApiInfo>[] grouping)
+        (int builderStep, string fluentMethodName, Type type, FluentApiInfo[] infoArray)[] grouping)
     {
-        int[] builderSteps = grouping.Select(g => g.Key.builderStep).Distinct().ToArray();
+        int[] builderSteps = grouping.Select(g => g.builderStep).Distinct().ToArray();
         Dictionary<int, int?> stepToNextStep = new Dictionary<int, int?>();
 
         for (int i = 0; i < builderSteps.Length - 1; i++)
@@ -159,11 +138,14 @@ internal class FluentApiInfoGroupCreator
         return attributeInfo switch
         {
             FluentContinueWithAttributeInfo continueWithAttributeInfo
-                => (new Step(continueWithAttributeInfo.ContinueWithBuilderStep),
+                => (new Step(continueWithAttributeInfo.ContinueWithBuilderStep, "continue"),
                     fluentApiInfo.AdditionalInfo.ControlAttributeData[continueWithAttributeInfo]),
 
             FluentBreakAttributeInfo breakAttributeInfo
-                => (new Step(null), fluentApiInfo.AdditionalInfo.ControlAttributeData[breakAttributeInfo]),
+                => (new Step(null, "break"), fluentApiInfo.AdditionalInfo.ControlAttributeData[breakAttributeInfo]),
+
+            FluentReturnAttributeInfo returnAttributeInfo
+                => (new Step(null, "return"), fluentApiInfo.AdditionalInfo.ControlAttributeData[returnAttributeInfo]),
 
             _ => throw new ArgumentException($"Unknown control attribute info type: {attributeInfo.GetType()}")
         };

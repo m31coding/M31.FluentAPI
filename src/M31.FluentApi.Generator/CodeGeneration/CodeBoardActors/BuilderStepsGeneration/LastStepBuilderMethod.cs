@@ -18,14 +18,13 @@ internal class LastStepBuilderMethod : BuilderStepMethod
     internal override Method BuildMethodCode(BuilderAndTargetInfo info)
     {
         // public Student<T1, T2> InSemester(int semester)
-        MethodSignature methodSignature = CreateMethodSignature(info.FluentApiClassNameWithTypeParameters, "public");
-        Method method = new InterfaceMethod(methodSignature, InterfaceName);
+        Method method = CreateInterfaceMethod(InterfaceName, info.FluentApiClassNameWithTypeParameters, "public");
 
         // student.Semester = semester;
         CreateBody(method, string.Empty);
 
         // return student;
-        method.AppendBodyLine($"return {info.ClassInstanceName};");
+        CreateReturnStatement(method, $"return {info.ClassInstanceName};");
 
         return method;
     }

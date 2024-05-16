@@ -25,7 +25,7 @@ PM> Install-Package M31.FluentApi
 A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentApi`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
 
 ```xml
-<PackageReference Include="M31.FluentApi" Version="1.2.0" PrivateAssets="all"/>
+<PackageReference Include="M31.FluentApi" Version="1.3.0" PrivateAssets="all"/>
 ```
 
 If you would like to examine the generated code, you may emit it by adding the following lines to your `csproj` file:
@@ -103,7 +103,7 @@ The attributes `FluentPredicate` and `FluentCollection` can be used instead of a
 
 The `FluentMethod` attribute is used for custom builder method implementations.
 
-The control attribute `FluentContinueWith` indicates a jump to the specified builder step, and `FluentBreak` stops the builder.
+The control attribute `FluentContinueWith` indicates a jump to the specified builder step, and `FluentBreak` stops the builder. `FluentReturn` allows returning arbitrary types and values within the generated API.
 
 
 ### FluentApi
@@ -310,6 +310,24 @@ private void WhoseAddressIsUnknown()
 ...WhoseAddressIsUnknown();
 ```
 
+### FluentReturn
+
+Allows the builder to respect the return value of the decorated method, enabling the return of arbitrary types and values within the generated API. If a void method is decorated with this attribute, the builder method will also return void.
+                
+```cs
+[FluentMethod(1)]
+[FluentReturn]
+public string ToJson()
+{
+    return JsonSerializer.Serialize(this);
+}
+```
+
+```cs
+string serialized = ...ToJson();
+```
+
+
 ### Forks
 
 To create forks specify builder methods at the same builder step. The resulting API offers all specified methods at this step but only one can be called:
@@ -319,11 +337,11 @@ To create forks specify builder methods at the same builder step. The resulting 
 public int Age { get; private set; }
 
 [FluentMethod(1)]
-private void BornOn(DateOnldateOfBirth)
+private void BornOn(DateOnly dateOfBirth)
 {
-    DateOnly today = DateOnlFromDateTime(DateTime.Today);
-    int age = today.Year dateOfBirth.Year;
-    if (dateOfBirth > today.AddYea(-age)) age--;
+    DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+    int age = today.Year - dateOfBirth.Year;
+    if (dateOfBirth > today.AddYears(-age)) age--;
     Age = age;
 }
 ```

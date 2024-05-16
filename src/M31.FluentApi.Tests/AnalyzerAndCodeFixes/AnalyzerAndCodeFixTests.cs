@@ -39,6 +39,20 @@ public class AnalyzerAndCodeFixTests
     }
 
     [Fact]
+    public async Task CanDetectConflictingControlAttributes3()
+    {
+        (string source, string fixedSource) = ReadSource("ConflictingControlAttributesClass3", "Student");
+
+        var expectedDiagnostic1 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
+            .WithLocation(15, 6);
+
+        var expectedDiagnostic2 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
+            .WithLocation(16, 6);
+
+        await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic1, expectedDiagnostic2);
+    }
+
+    [Fact]
     public async Task CanDetectDuplicateMainAttribute()
     {
         (string source, string fixedSource) = ReadSource("DuplicateMainAttributeClass", "Student");

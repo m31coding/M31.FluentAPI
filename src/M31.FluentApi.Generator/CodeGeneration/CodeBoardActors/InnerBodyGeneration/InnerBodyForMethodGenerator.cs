@@ -7,9 +7,9 @@ using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
-internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
+internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbolInfo>
 {
-    internal LineForMethodGenerator(CodeBoard codeBoard)
+    internal InnerBodyForMethodGenerator(CodeBoard codeBoard)
         : base(codeBoard)
     {
     }
@@ -19,19 +19,26 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         return "Method";
     }
 
-    protected override void GenerateLineWithoutReflection(MethodSymbolInfo symbolInfo)
+    protected override void GenerateInnerBodyWithoutReflection(MethodSymbolInfo symbolInfo)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
 
-        List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
+        List<string> BuildCallMethodCode(
+            string instancePrefix,
+            IReadOnlyCollection<Parameter> outerMethodParameters,
+            string? returnType)
         {
             return new List<string>()
             {
-                // createStudent.student.InSemester<T1, T2>(semester);
-                $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}" +
-                symbolInfo.GenericInfo?.ParameterListInAngleBrackets +
-                $"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});",
+                // createStudent.student.InSemester<T1, T2>(semester); or
+                // return createStudent.student.ToJson();
+                CodeBoard.NewCodeBuilder()
+                    .Append($"return ", !IsNoneOrVoid(returnType))
+                    .Append($"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}")
+                    .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
+                    .Append($"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
+                    .ToString(),
             };
         }
 
@@ -42,12 +49,15 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         }
     }
 
-    protected override void GenerateLineWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
+    protected override void GenerateInnerBodyWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
 
-        List<string> BuildCallMethodCode(string instancePrefix, IReadOnlyCollection<Parameter> outerMethodParameters)
+        List<string> BuildCallMethodCode(
+            string instancePrefix,
+            IReadOnlyCollection<Parameter> outerMethodParameters,
+            string? returnType)
         {
             return outerMethodParameters.Any(p =>
                 p.HasAnnotation(ParameterKinds.Ref) || p.HasAnnotation(ParameterKinds.Out))
@@ -55,12 +65,14 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
                     infoFieldName,
                     instancePrefix,
                     symbolInfo.GenericInfo,
-                    outerMethodParameters)
+                    outerMethodParameters,
+                    returnType)
                 : BuildDefaultReflectionCode(
                     infoFieldName,
                     instancePrefix,
                     symbolInfo.GenericInfo,
-                    outerMethodParameters);
+                    outerMethodParameters,
+                    returnType);
         }
     }
 
@@ -68,8 +80,13 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         string infoFieldName,
         string instancePrefix,
         GenericInfo? genericInfo,
-        IReadOnlyCollection<Parameter> outerMethodParameters)
+        IReadOnlyCollection<Parameter> outerMethodParameters,
+        string? returnType)
     {
+        bool returnResult = !IsNoneOrVoid(returnType);
+        string variableName = returnResult ? GetVariableName("result", outerMethodParameters) : string.Empty;
+        string suppressNullability = returnResult ? "!" : string.Empty;
+
         List<string> lines = new List<string>();
 
         // object?[] args = new object?[] { semester };
@@ -77,9 +94,13 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
             $"object?[] args = new object?[] {{ {string.Join(", ", outerMethodParameters.Select(GetArgument))} }};");
 
         // semesterMethodInfo.Invoke(createStudent.student, args) or
-        // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args)
-        lines.Add($"{infoFieldName}.{MakeGenericMethod(genericInfo)}" +
-                  $"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args);");
+        // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args) or
+        // string result = (string) toJsonMethodInfo.Invoke(createStudent.student, args)
+        lines.Add(CodeBoard.NewCodeBuilder()
+            .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
+            .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+            .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args){suppressNullability};")
+            .ToString());
 
         foreach (var parameter in outerMethodParameters.Select((p, i) => new { Value = p, Index = i }))
         {
@@ -87,6 +108,11 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
             {
                 lines.Add(AssignValueToArgument(parameter.Index, parameter.Value));
             }
+        }
+
+        if (returnResult)
+        {
+            lines.Add($"return {variableName};");
         }
 
         return lines;
@@ -104,20 +130,46 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         }
     }
 
+    private string GetVariableName(string desiredVariableName, IReadOnlyCollection<Parameter> outerMethodParameters)
+    {
+        string variableName = desiredVariableName;
+        int i = 2;
+
+        IEnumerable<string> reservedVariableNames = outerMethodParameters
+            .Select(p => p.Name)
+            .Concat(new string[] { CodeBoard.Info.ClassInstanceName, CodeBoard.Info.BuilderInstanceName });
+
+        // ReSharper disable once PossibleMultipleEnumeration
+        while (reservedVariableNames.Contains(variableName))
+        {
+            variableName = $"{variableName}{i++}";
+        }
+
+        return variableName;
+    }
+
     private List<string> BuildDefaultReflectionCode(
         string infoFieldName,
         string instancePrefix,
         GenericInfo? genericInfo,
-        IReadOnlyCollection<Parameter> outerMethodParameters)
+        IReadOnlyCollection<Parameter> outerMethodParameters,
+        string? returnType)
     {
+        bool returnResult = !IsNoneOrVoid(returnType);
+        string suppressNullability = returnResult ? "!" : string.Empty;
+
         return new List<string>()
         {
             // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
             // semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
             //     .Invoke(createStudent.student, new object[] { semester });
-            $"{infoFieldName}.{MakeGenericMethod(genericInfo)}" +
-            $"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, " +
-            $"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }});",
+            CodeBoard.NewCodeBuilder()
+                .Append($"return ({returnType}) ", returnResult)
+                .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+                .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
+                .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }})" +
+                        $"{suppressNullability};")
+                .ToString(),
         };
     }
 
@@ -182,5 +234,10 @@ internal class LineForMethodGenerator : LineGeneratorBase<MethodSymbolInfo>
         {
             return genericInfo == null ? "0" : genericInfo.ParameterCount.ToString();
         }
+    }
+
+    private static bool IsNoneOrVoid(string? returnType)
+    {
+        return returnType is null or "void";
     }
 }

@@ -51,12 +51,16 @@ internal class FluentApiInfo
                 .Select(data => (data, CreateControlAttributeInfo(data)))
                 .ToArray();
 
+        FluentReturnAttributeInfo? fluentReturnAttributeInfo = controlDataAndInfos.Select(d => d.info)
+            .OfType<FluentReturnAttributeInfo>().FirstOrDefault();
+
         FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
         FluentApiAdditionalInfo additionalInfo = new FluentApiAdditionalInfo(
             symbol,
             attributeData.MainAttributeData,
             ToDictionary(orthogonalDataAndInfos),
-            ToDictionary(controlDataAndInfos));
+            ToDictionary(controlDataAndInfos),
+            fluentReturnAttributeInfo);
 
         return new FluentApiInfo(
             symbolInfo,
@@ -116,6 +120,8 @@ internal class FluentApiInfo
                 FluentContinueWithAttributeInfo.Create(attributeDataExtended.AttributeData),
             FullNames.FluentBreakAttribute =>
                 FluentBreakAttributeInfo.Create(attributeDataExtended.AttributeData),
+            FullNames.FluentReturnAttribute =>
+                FluentReturnAttributeInfo.Create(attributeDataExtended.AttributeData),
             _ => throw new Exception($"Unexpected attribute class name: {attributeDataExtended.FullName}")
         };
     }

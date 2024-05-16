@@ -14,8 +14,22 @@ internal abstract class BuilderStepMethod : BuilderMethod
 
     internal abstract Method BuildMethodCode(BuilderAndTargetInfo info);
 
-    protected MethodSignature CreateMethodSignature(string returnType, params string[] modifiers)
+    protected Method CreateMethod(string defaultReturnType, params string[] modifiers)
     {
+        MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, modifiers);
+        return new Method(methodSignature);
+    }
+
+    protected Method CreateInterfaceMethod(string interfaceName, string defaultReturnType, params string[] modifiers)
+    {
+        MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, modifiers);
+        return new InterfaceMethod(methodSignature, interfaceName);
+    }
+
+    private MethodSignature CreateMethodSignature(string defaultReturnType, params string[] modifiers)
+    {
+        string returnType = ReturnTypeToRespect ?? defaultReturnType;
+
         MethodSignature signature = MethodSignature.Create(returnType, MethodName, false);
         signature.AddModifiers(modifiers);
 
@@ -39,10 +53,18 @@ internal abstract class BuilderStepMethod : BuilderMethod
 
     protected void CreateBody(Method method, string instancePrefix)
     {
-        List<string> bodyCode = BuildBodyCode(instancePrefix);
+        List<string> bodyCode = BuildBodyCode(instancePrefix, ReturnTypeToRespect);
         foreach (string bodyLine in bodyCode)
         {
             method.AppendBodyLine(bodyLine);
+        }
+    }
+
+    protected void CreateReturnStatement(Method method, string defaultReturnStatement)
+    {
+        if (ReturnTypeToRespect == null)
+        {
+            method.AppendBodyLine(defaultReturnStatement);
         }
     }
 }

@@ -17,7 +17,7 @@ public partial class CodeGenerationTests
         TestClassCodeGenerator testClassCodeGenerator = TestClassCodeGenerator.Create(testClassPathAndName);
         GeneratorOutput? generatorOutput = testClassCodeGenerator.RunGenerators();
         Assert.NotNull(generatorOutput);
-        testClassCodeGenerator.WriteGeneratedCode(generatorOutput!);
+        testClassCodeGenerator.WriteGeneratedCodeIfChanged(generatorOutput!);
         // testClassCodeGenerator.WriteGeneratedCodeAsExpectedCode(generatorOutput!);
         string expectedCode = testClassCodeGenerator.ReadExpectedCode(generatorOutput!.ClassName);
         Assert.Equal(expectedCode, generatorOutput.Code);

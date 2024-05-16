@@ -2,9 +2,9 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
-internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
+internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbolInfo>
 {
-    internal LineForMemberGenerator(CodeBoard codeBoard)
+    internal InnerBodyForMemberGenerator(CodeBoard codeBoard)
         : base(codeBoard)
     {
     }
@@ -14,7 +14,7 @@ internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
         return symbolInfo.IsProperty ? "Property" : "Field";
     }
 
-    protected override void GenerateLineWithoutReflection(MemberSymbolInfo symbolInfo)
+    protected override void GenerateInnerBodyWithoutReflection(MemberSymbolInfo symbolInfo)
     {
         // createStudent.student.Semester = semester;
         SetMemberCode setMemberCode =
@@ -28,7 +28,7 @@ internal class LineForMemberGenerator : LineGeneratorBase<MemberSymbolInfo>
         }
     }
 
-    protected override void GenerateLineWithReflection(MemberSymbolInfo symbolInfo, string infoFieldName)
+    protected override void GenerateInnerBodyWithReflection(MemberSymbolInfo symbolInfo, string infoFieldName)
     {
         // semesterPropertyInfo.SetValue(createStudent.student, semester);
         SetMemberCode setMemberCode =
