@@ -20,6 +20,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>fluent-api-logo-128.jpg</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,6 +45,7 @@
 
   <ItemGroup>
     <None Include="../../media/fluent-api-logo-128.jpg" Pack="true" Visible="false" PackagePath="/"/>
+    <None Include="../../README.md" Pack="true" Visible="true" PackagePath="/"/>
   </ItemGroup>
 
 </Project>
