@@ -1,6 +1,6 @@
 # Fluent APIs in C#
 
-![M31.FluentApi logo](media/fluent-api-logo-256.jpg)
+![M31.FluentApi logo](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/fluent-api-logo-256.jpg)
 
 Everybody wants to use fluent APIs but writing them is tedious. With this library providing fluent APIs for your classes becomes a breeze. Simply annotate them with attributes and the source code for the fluent API will be generated. The fluent API library leverages incremental source code generation at development time and your IDE will offer you the corresponding code completion immediately.
 
@@ -89,7 +89,7 @@ public class Student
  }
 ```
 
-![fluent-api-usage](media/fluent-api.gif)
+![fluent-api-usage](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/fluent-api.gif)
 
 You may have a look at the generated code for this example: [CreateStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/StudentClass/CreateStudent.g.cs). Note that if you use private members or properties with a private set accessor, as it is the case in this example, the generated code will use reflection to set the properties.
 
