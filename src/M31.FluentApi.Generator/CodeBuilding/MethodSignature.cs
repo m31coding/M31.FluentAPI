@@ -2,31 +2,39 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class MethodSignature : ICode
 {
-    private MethodSignature(string? returnType, string methodName, string? explicitInterfacePrefix, bool isStandAlone)
+    private MethodSignature(
+        string? returnType,
+        string methodName,
+        string? explicitInterfacePrefix,
+        bool isSignatureForInterface)
     {
         ReturnType = returnType;
         MethodName = methodName;
         ExplicitInterfacePrefix = explicitInterfacePrefix;
-        IsStandAlone = isStandAlone;
+        IsSignatureForInterface = isSignatureForInterface;
         Generics = new Generics();
         Parameters = new Parameters();
         Modifiers = new Modifiers();
     }
 
-    private MethodSignature(MethodSignature methodSignature, bool isStandAlone)
+    private MethodSignature(MethodSignature methodSignature, bool isSignatureForInterface)
     {
         ReturnType = methodSignature.ReturnType;
         MethodName = methodSignature.MethodName;
-        ExplicitInterfacePrefix = isStandAlone ? null : methodSignature.ExplicitInterfacePrefix;
-        IsStandAlone = isStandAlone;
+        ExplicitInterfacePrefix = isSignatureForInterface ? null : methodSignature.ExplicitInterfacePrefix;
+        IsSignatureForInterface = isSignatureForInterface;
         Generics = new Generics(methodSignature.Generics);
         Parameters = new Parameters(methodSignature.Parameters);
-        Modifiers = isStandAlone ? new Modifiers() : new Modifiers(methodSignature.Modifiers);
+        Modifiers = isSignatureForInterface ? new Modifiers() : new Modifiers(methodSignature.Modifiers);
     }
 
-    internal static MethodSignature Create(string returnType, string methodName, string? prefix, bool isStandAlone)
+    internal static MethodSignature Create(
+        string returnType,
+        string methodName,
+        string? prefix,
+        bool isSignatureForInterface)
     {
-        return new MethodSignature(returnType, methodName, prefix, isStandAlone);
+        return new MethodSignature(returnType, methodName, prefix, isSignatureForInterface);
     }
 
     internal static MethodSignature CreateConstructorSignature(string className)
@@ -37,10 +45,11 @@ internal class MethodSignature : ICode
     internal string? ReturnType { get; }
     internal string MethodName { get; }
     internal string? ExplicitInterfacePrefix { get; }
-    internal bool IsStandAlone { get; }
+    internal bool IsSignatureForInterface { get; }
     internal Generics Generics { get; }
     internal Parameters Parameters { get; }
     internal Modifiers Modifiers { get; }
+    internal bool IsSignatureForMethodBody => !IsSignatureForInterface;
     internal bool IsExplicitInterfaceImplementation => ExplicitInterfacePrefix != null;
 
     internal void AddGenericParameter(string parameter, IEnumerable<string> constraints)
@@ -63,7 +72,7 @@ internal class MethodSignature : ICode
         Modifiers.Add(modifiers);
     }
 
-    internal MethodSignature ToStandAloneMethodSignature()
+    internal MethodSignature ToSignatureForInterface()
     {
         return new MethodSignature(this, true);
     }
@@ -77,16 +86,16 @@ internal class MethodSignature : ICode
     {
         codeBuilder
             .StartLine()
-            .Append(Modifiers, !IsExplicitInterfaceImplementation)
+            .Append(Modifiers, IsSignatureForMethodBody && !IsExplicitInterfaceImplementation)
             .Append($"{ReturnType} ", ReturnType != null)
-            .Append($"{ExplicitInterfacePrefix}.", IsExplicitInterfaceImplementation)
+            .Append($"{ExplicitInterfacePrefix}.", IsSignatureForMethodBody && IsExplicitInterfaceImplementation)
             .Append(MethodName)
             .Append(Generics.Parameters)
             .Append(Parameters);
 
         if (Generics.Constraints.Count == 0)
         {
-            return codeBuilder.Append(IsStandAlone ? ";" : null).EndLine();
+            return codeBuilder.Append(IsSignatureForInterface ? ";" : null).EndLine();
         }
         else
         {
@@ -94,7 +103,7 @@ internal class MethodSignature : ICode
                 .EndLine()
                 .Indent()
                 .Append(Generics.Constraints)
-                .Append(IsStandAlone ? ";" : null)
+                .Append(IsSignatureForInterface ? ";" : null)
                 .EndLine()
                 .Unindent();
         }

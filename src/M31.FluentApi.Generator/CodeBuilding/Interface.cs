@@ -17,7 +17,7 @@ internal class Interface : ICode
 
     internal void AddMethodSignature(MethodSignature methodSignature)
     {
-        if (!methodSignature.IsStandAlone)
+        if (!methodSignature.IsSignatureForInterface)
         {
             throw new ArgumentException("Expected a stand-alone method signature.");
         }

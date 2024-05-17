@@ -36,7 +36,7 @@ internal class InterfaceGenerator : ICodeBoardActor
 
             foreach (InterfaceMethod method in group)
             {
-                @interface.AddMethodSignature(method.MethodSignature.ToStandAloneMethodSignature());
+                @interface.AddMethodSignature(method.MethodSignature.ToSignatureForInterface());
             }
 
             interfaces.Add(@interface);
