@@ -91,9 +91,10 @@ internal class MethodSignature : ICode
             .Append($"{ExplicitInterfacePrefix}.", IsSignatureForMethodBody && IsExplicitInterfaceImplementation)
             .Append(MethodName)
             .Append(Generics.Parameters)
-            .Append(Parameters);
+            .Append(Parameters, !(IsSignatureForMethodBody && IsExplicitInterfaceImplementation))
+            .Append(Parameters.WithoutDefaultValues(), IsSignatureForMethodBody && IsExplicitInterfaceImplementation);
 
-        if (Generics.Constraints.Count == 0)
+        if (Generics.Constraints.Count == 0 || (IsSignatureForMethodBody && IsExplicitInterfaceImplementation))
         {
             return codeBuilder.Append(IsSignatureForInterface ? ";" : null).EndLine();
         }
