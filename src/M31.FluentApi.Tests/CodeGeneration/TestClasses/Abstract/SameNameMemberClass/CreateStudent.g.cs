@@ -38,13 +38,13 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IWithName2 WithName(char initial)
+    IWithName2 IWithName.WithName(char initial)
     {
         initialPropertyInfo.SetValue(student, initial);
         return this;
     }
 
-    public Student WithName(string lastName)
+    Student IWithName2.WithName(string lastName)
     {
         lastNamePropertyInfo.SetValue(student, lastName);
         return student;

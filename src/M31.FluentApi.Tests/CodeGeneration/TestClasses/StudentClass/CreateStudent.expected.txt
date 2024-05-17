@@ -60,83 +60,83 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IInSemester OfAge(int age)
+    IInSemester IOfAgeBornOn.OfAge(int age)
     {
         agePropertyInfo.SetValue(student, age);
         return this;
     }
 
-    public IInSemester BornOn(System.DateOnly dateOfBirth)
+    IInSemester IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
     {
         bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
         return this;
     }
 
-    public ILivingIn InSemester(int semester)
+    ILivingIn IInSemester.InSemester(int semester)
     {
         semesterPropertyInfo.SetValue(student, semester);
         return this;
     }
 
-    public ILivingIn WhoStartsUniversity()
+    ILivingIn IInSemester.WhoStartsUniversity()
     {
         return this;
     }
 
-    public IWhoIsHappy LivingIn(string? city)
+    IWhoIsHappy ILivingIn.LivingIn(string? city)
     {
         cityPropertyInfo.SetValue(student, city);
         return this;
     }
 
-    public IWhoIsHappy LivingInBoston()
+    IWhoIsHappy ILivingIn.LivingInBoston()
     {
         return this;
     }
 
-    public IWhoIsHappy InUnknownCity()
+    IWhoIsHappy ILivingIn.InUnknownCity()
     {
         cityPropertyInfo.SetValue(student, null);
         return this;
     }
 
-    public IWhoseFriendsAre WhoIsHappy(bool? isHappy = true)
+    IWhoseFriendsAre IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
         isHappyPropertyInfo.SetValue(student, isHappy);
         return this;
     }
 
-    public IWhoseFriendsAre WhoIsSad()
+    IWhoseFriendsAre IWhoIsHappy.WhoIsSad()
     {
         isHappyPropertyInfo.SetValue(student, false);
         return this;
     }
 
-    public IWhoseFriendsAre WithUnknownMood()
+    IWhoseFriendsAre IWhoIsHappy.WithUnknownMood()
     {
         isHappyPropertyInfo.SetValue(student, null);
         return this;
     }
 
-    public Student WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
+    Student IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
         friendsPropertyInfo.SetValue(student, friends);
         return student;
     }
 
-    public Student WhoseFriendsAre(params string[] friends)
+    Student IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
     {
         friendsPropertyInfo.SetValue(student, friends);
         return student;
     }
 
-    public Student WhoseFriendIs(string friend)
+    Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
         friendsPropertyInfo.SetValue(student, new string[1]{ friend });
         return student;
     }
 
-    public Student WhoHasNoFriends()
+    Student IWhoseFriendsAre.WhoHasNoFriends()
     {
         friendsPropertyInfo.SetValue(student, new string[0]);
         return student;

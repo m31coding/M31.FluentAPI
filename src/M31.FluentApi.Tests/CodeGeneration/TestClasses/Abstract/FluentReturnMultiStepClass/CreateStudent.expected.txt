@@ -33,22 +33,22 @@ public class CreateStudent : CreateStudent.IReturnVoidMethodReturnIntMethodRetur
         return createStudent;
     }
 
-    public void ReturnVoidMethod()
+    void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
     {
         student.ReturnVoidMethod();
     }
 
-    public int ReturnIntMethod()
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
     {
         return student.ReturnIntMethod();
     }
 
-    public System.Collections.Generic.List<int> ReturnListMethod()
+    System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
     {
         return student.ReturnListMethod();
     }
 
-    public int ReturnIntMethodWithRefParameter(ref string s)
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
     {
         return student.ReturnIntMethodWithRefParameter(ref s);
     }

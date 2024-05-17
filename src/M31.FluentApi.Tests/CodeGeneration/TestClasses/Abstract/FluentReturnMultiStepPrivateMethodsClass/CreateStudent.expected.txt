@@ -66,22 +66,22 @@ public class CreateStudent : CreateStudent.IReturnVoidMethodReturnIntMethodRetur
         return createStudent;
     }
 
-    public void ReturnVoidMethod()
+    void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
     {
         returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
     }
 
-    public int ReturnIntMethod()
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
     {
         return (int) returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
     }
 
-    public System.Collections.Generic.List<int> ReturnListMethod()
+    System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
     {
         return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
     }
 
-    public int ReturnIntMethodWithRefParameter(ref string s)
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
     {
         object?[] args = new object?[] { s };
         int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;

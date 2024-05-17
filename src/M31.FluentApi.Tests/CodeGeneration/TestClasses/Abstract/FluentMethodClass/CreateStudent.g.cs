@@ -28,13 +28,13 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IInSemester BornOn(System.DateOnly date)
+    IInSemester IBornOn.BornOn(System.DateOnly date)
     {
         student.BornOn(date);
         return this;
     }
 
-    public Student InSemester(int semester)
+    Student IInSemester.InSemester(int semester)
     {
         student.InSemester(semester);
         return student;

@@ -32,37 +32,37 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IBornOn WithLastName(string? lastName = null)
+    IBornOn IWithLastName.WithLastName(string? lastName)
     {
         student.WithLastName(lastName);
         return this;
     }
 
-    public IEnrolledIn BornOn(System.DateOnly date = default)
+    IEnrolledIn IBornOn.BornOn(System.DateOnly date)
     {
         student.BornOn(date);
         return this;
     }
 
-    public IInSemester EnrolledIn(System.DateOnly date = default)
+    IInSemester IEnrolledIn.EnrolledIn(System.DateOnly date)
     {
         student.EnrolledIn(date);
         return this;
     }
 
-    public IWithNumberOfPassedExams InSemester(int semester = 3)
+    IWithNumberOfPassedExams IInSemester.InSemester(int semester)
     {
         student.InSemester(semester);
         return this;
     }
 
-    public IWithNumberOfFailedExams WithNumberOfPassedExams(int? numberOfPassedExams = default)
+    IWithNumberOfFailedExams IWithNumberOfPassedExams.WithNumberOfPassedExams(int? numberOfPassedExams)
     {
         student.WithNumberOfPassedExams(numberOfPassedExams);
         return this;
     }
 
-    public Student WithNumberOfFailedExams(int? numberOfFailedExams = default)
+    Student IWithNumberOfFailedExams.WithNumberOfFailedExams(int? numberOfFailedExams)
     {
         student.WithNumberOfFailedExams(numberOfFailedExams);
         return student;

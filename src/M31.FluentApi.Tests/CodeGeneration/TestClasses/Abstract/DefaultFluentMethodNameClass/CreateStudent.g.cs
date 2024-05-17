@@ -29,43 +29,43 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IWithSemester IsHappy(bool isHappy = true)
+    IWithSemester IIsHappy.IsHappy(bool isHappy)
     {
         student.IsHappy = isHappy;
         return this;
     }
 
-    public IWithSemester NotIsHappy()
+    IWithSemester IIsHappy.NotIsHappy()
     {
         student.IsHappy = false;
         return this;
     }
 
-    public IWithFriends WithSemester(int semester)
+    IWithFriends IWithSemester.WithSemester(int semester)
     {
         student.Semester = semester;
         return this;
     }
 
-    public Student WithFriends(System.Collections.Generic.IReadOnlyCollection<string> friends)
+    Student IWithFriends.WithFriends(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
         student.Friends = friends;
         return student;
     }
 
-    public Student WithFriends(params string[] friends)
+    Student IWithFriends.WithFriends(params string[] friends)
     {
         student.Friends = friends;
         return student;
     }
 
-    public Student WithFriend(string friend)
+    Student IWithFriends.WithFriend(string friend)
     {
         student.Friends = new string[1]{ friend };
         return student;
     }
 
-    public Student WithZeroFriends()
+    Student IWithFriends.WithZeroFriends()
     {
         student.Friends = new string[0];
         return student;

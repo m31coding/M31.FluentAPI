@@ -36,13 +36,13 @@ public class CreateStudent : CreateStudent.IWithMiddleNameWithLastName
         return createStudent;
     }
 
-    public IWithMiddleNameWithLastName WithMiddleName(string? middleName)
+    IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
     {
         middleNamePropertyInfo.SetValue(student, middleName);
         return this;
     }
 
-    public Student WithLastName(string lastName)
+    Student IWithMiddleNameWithLastName.WithLastName(string lastName)
     {
         lastNamePropertyInfo.SetValue(student, lastName);
         return student;

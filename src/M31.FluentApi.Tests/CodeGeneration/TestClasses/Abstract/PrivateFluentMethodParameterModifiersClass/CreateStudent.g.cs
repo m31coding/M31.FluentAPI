@@ -75,7 +75,7 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IMethodWithInParameter MethodWithRefParameter(ref int n1)
+    IMethodWithInParameter IMethodWithRefParameter.MethodWithRefParameter(ref int n1)
     {
         object?[] args = new object?[] { n1 };
         methodWithRefParameterMethodInfo.Invoke(student, args);
@@ -83,13 +83,13 @@ public class CreateStudent :
         return this;
     }
 
-    public IMethodWithOutParameter MethodWithInParameter(in int n2)
+    IMethodWithOutParameter IMethodWithInParameter.MethodWithInParameter(in int n2)
     {
         methodWithInParameterMethodInfo.Invoke(student, new object?[] { n2 });
         return this;
     }
 
-    public IMethodWithRefInAndOutParameter MethodWithOutParameter(out int n3)
+    IMethodWithRefInAndOutParameter IMethodWithOutParameter.MethodWithOutParameter(out int n3)
     {
         object?[] args = new object?[] { null };
         methodWithOutParameterMethodInfo.Invoke(student, args);
@@ -97,7 +97,7 @@ public class CreateStudent :
         return this;
     }
 
-    public Student MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
+    Student IMethodWithRefInAndOutParameter.MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
     {
         object?[] args = new object?[] { n4, n5, null };
         methodWithRefInAndOutParameterMethodInfo.Invoke(student, args);

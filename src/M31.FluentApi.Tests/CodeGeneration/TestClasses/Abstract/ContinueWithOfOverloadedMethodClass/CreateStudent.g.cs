@@ -43,13 +43,13 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IWithProperty2 WithProperty1(string property1)
+    IWithProperty2 IWithProperty1.WithProperty1(string property1)
     {
         property1PropertyInfo.SetValue(student, property1);
         return this;
     }
 
-    public Student WithProperty2(string property2)
+    Student IWithProperty2.WithProperty2(string property2)
     {
         property2PropertyInfo.SetValue(student, property2);
         return student;

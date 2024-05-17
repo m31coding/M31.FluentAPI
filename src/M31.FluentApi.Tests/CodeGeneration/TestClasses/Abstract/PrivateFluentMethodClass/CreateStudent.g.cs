@@ -57,13 +57,13 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IInSemester BornOn(System.DateOnly date)
+    IInSemester IBornOn.BornOn(System.DateOnly date)
     {
         bornOnMethodInfo.Invoke(student, new object?[] { date });
         return this;
     }
 
-    public Student InSemester(int semester)
+    Student IInSemester.InSemester(int semester)
     {
         inSemesterMethodInfo.Invoke(student, new object?[] { semester });
         return student;

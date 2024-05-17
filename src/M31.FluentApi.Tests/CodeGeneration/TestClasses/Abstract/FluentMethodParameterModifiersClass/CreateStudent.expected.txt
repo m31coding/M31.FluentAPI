@@ -29,25 +29,25 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IMethodWithInParameter MethodWithRefParameter(ref int n1)
+    IMethodWithInParameter IMethodWithRefParameter.MethodWithRefParameter(ref int n1)
     {
         student.MethodWithRefParameter(ref n1);
         return this;
     }
 
-    public IMethodWithOutParameter MethodWithInParameter(in int n2)
+    IMethodWithOutParameter IMethodWithInParameter.MethodWithInParameter(in int n2)
     {
         student.MethodWithInParameter(in n2);
         return this;
     }
 
-    public IMethodWithRefInAndOutParameter MethodWithOutParameter(out int n3)
+    IMethodWithRefInAndOutParameter IMethodWithOutParameter.MethodWithOutParameter(out int n3)
     {
         student.MethodWithOutParameter(out n3);
         return this;
     }
 
-    public Student MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
+    Student IMethodWithRefInAndOutParameter.MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
     {
         student.MethodWithRefInAndOutParameter(ref n4, in n5, out n6);
         return student;

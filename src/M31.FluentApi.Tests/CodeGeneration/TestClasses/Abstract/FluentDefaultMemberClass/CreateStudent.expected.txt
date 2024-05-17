@@ -32,13 +32,13 @@ public class CreateStudent : CreateStudent.IBornOn
         return createStudent;
     }
 
-    public Student BornOn(System.DateOnly dateOfBirth)
+    Student IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
         student.DateOfBirth = dateOfBirth;
         return student;
     }
 
-    public Student WithDefaultDateOfBirth()
+    Student IBornOn.WithDefaultDateOfBirth()
     {
         return student;
     }

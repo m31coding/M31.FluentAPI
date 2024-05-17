@@ -50,49 +50,49 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IWithBackpackContent WithPets(System.Collections.IList pets)
+    IWithBackpackContent IWithPets.WithPets(System.Collections.IList pets)
     {
         student.Pets = pets;
         return this;
     }
 
-    public IWithBackpackContent WithPets(params object[] pets)
+    IWithBackpackContent IWithPets.WithPets(params object[] pets)
     {
         student.Pets = new List<object>(pets);
         return this;
     }
 
-    public IWithBackpackContent WithPet(object pet)
+    IWithBackpackContent IWithPets.WithPet(object pet)
     {
         student.Pets = new List<object>(1){ pet };
         return this;
     }
 
-    public IWithBackpackContent WithZeroPets()
+    IWithBackpackContent IWithPets.WithZeroPets()
     {
         student.Pets = new List<object>(0);
         return this;
     }
 
-    public Student WithBackpackContent(System.Collections.ICollection backpackContent)
+    Student IWithBackpackContent.WithBackpackContent(System.Collections.ICollection backpackContent)
     {
         student.BackpackContent = backpackContent;
         return student;
     }
 
-    public Student WithBackpackContent(params object[] backpackContent)
+    Student IWithBackpackContent.WithBackpackContent(params object[] backpackContent)
     {
         student.BackpackContent = new List<object>(backpackContent);
         return student;
     }
 
-    public Student WithBackpackContent(object backpackContent)
+    Student IWithBackpackContent.WithBackpackContent(object backpackContent)
     {
         student.BackpackContent = new List<object>(1){ backpackContent };
         return student;
     }
 
-    public Student WithNoBackpackContent()
+    Student IWithBackpackContent.WithNoBackpackContent()
     {
         student.BackpackContent = new List<object>(0);
         return student;

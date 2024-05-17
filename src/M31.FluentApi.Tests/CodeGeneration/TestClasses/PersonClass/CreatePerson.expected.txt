@@ -99,55 +99,55 @@ public class CreatePerson :
         return createPerson;
     }
 
-    public IWithMiddleNameWithLastName WithMiddleName(string? middleName)
+    IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
     {
         middleNamePropertyInfo.SetValue(person, middleName);
         return this;
     }
 
-    public IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad WithLastName(string lastName)
+    IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad IWithMiddleNameWithLastName.WithLastName(string lastName)
     {
         lastNamePropertyInfo.SetValue(person, lastName);
         return this;
     }
 
-    public Person WhoseAddressIsUnknown()
+    Person IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoseAddressIsUnknown()
     {
         whoseAddressIsUnknownMethodInfo.Invoke(person, new object?[] {  });
         return person;
     }
 
-    public IWithHouseNumber WhoLivesAtAddress()
+    IWithHouseNumber IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoLivesAtAddress()
     {
         whoLivesAtAddressMethodInfo.Invoke(person, new object?[] {  });
         return this;
     }
 
-    public ILivingInCity WhoIsADigitalNomad()
+    ILivingInCity IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoIsADigitalNomad()
     {
         whoIsADigitalNomadMethodInfo.Invoke(person, new object?[] {  });
         return this;
     }
 
-    public IWithStreet WithHouseNumber(string houseNumber)
+    IWithStreet IWithHouseNumber.WithHouseNumber(string houseNumber)
     {
         withHouseNumberMethodInfo.Invoke(person, new object?[] { houseNumber });
         return this;
     }
 
-    public IInCity WithStreet(string street)
+    IInCity IWithStreet.WithStreet(string street)
     {
         withStreetMethodInfo.Invoke(person, new object?[] { street });
         return this;
     }
 
-    public Person InCity(string city)
+    Person IInCity.InCity(string city)
     {
         inCityMethodInfo.Invoke(person, new object?[] { city });
         return person;
     }
 
-    public Person LivingInCity(string city)
+    Person ILivingInCity.LivingInCity(string city)
     {
         livingInCityMethodInfo.Invoke(person, new object?[] { city });
         return person;
