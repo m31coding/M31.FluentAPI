@@ -2,10 +2,11 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class MethodSignature : ICode
 {
-    private MethodSignature(string? returnType, string methodName, bool isStandAlone)
+    private MethodSignature(string? returnType, string methodName, string? explicitInterfacePrefix, bool isStandAlone)
     {
         ReturnType = returnType;
         MethodName = methodName;
+        ExplicitInterfacePrefix = explicitInterfacePrefix;
         IsStandAlone = isStandAlone;
         Generics = new Generics();
         Parameters = new Parameters();
@@ -16,28 +17,31 @@ internal class MethodSignature : ICode
     {
         ReturnType = methodSignature.ReturnType;
         MethodName = methodSignature.MethodName;
+        ExplicitInterfacePrefix = isStandAlone ? null : methodSignature.ExplicitInterfacePrefix;
         IsStandAlone = isStandAlone;
         Generics = new Generics(methodSignature.Generics);
         Parameters = new Parameters(methodSignature.Parameters);
         Modifiers = isStandAlone ? new Modifiers() : new Modifiers(methodSignature.Modifiers);
     }
 
-    internal static MethodSignature Create(string returnType, string methodName, bool isStandAlone)
+    internal static MethodSignature Create(string returnType, string methodName, string? prefix, bool isStandAlone)
     {
-        return new MethodSignature(returnType, methodName, isStandAlone);
+        return new MethodSignature(returnType, methodName, prefix, isStandAlone);
     }
 
     internal static MethodSignature CreateConstructorSignature(string className)
     {
-        return new MethodSignature(null, className, false);
+        return new MethodSignature(null, className, null, false);
     }
 
     internal string? ReturnType { get; }
     internal string MethodName { get; }
+    internal string? ExplicitInterfacePrefix { get; }
     internal bool IsStandAlone { get; }
     internal Generics Generics { get; }
     internal Parameters Parameters { get; }
     internal Modifiers Modifiers { get; }
+    internal bool IsExplicitInterfaceImplementation => ExplicitInterfacePrefix != null;
 
     internal void AddGenericParameter(string parameter, IEnumerable<string> constraints)
     {
@@ -73,8 +77,9 @@ internal class MethodSignature : ICode
     {
         codeBuilder
             .StartLine()
-            .Append(Modifiers)
+            .Append(Modifiers, !IsExplicitInterfaceImplementation)
             .Append($"{ReturnType} ", ReturnType != null)
+            .Append($"{ExplicitInterfacePrefix}.", IsExplicitInterfaceImplementation)
             .Append(MethodName)
             .Append(Generics.Parameters)
             .Append(Parameters);

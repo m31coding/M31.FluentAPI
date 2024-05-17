@@ -16,21 +16,24 @@ internal abstract class BuilderStepMethod : BuilderMethod
 
     protected Method CreateMethod(string defaultReturnType, params string[] modifiers)
     {
-        MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, modifiers);
+        MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, null, modifiers);
         return new Method(methodSignature);
     }
 
     protected Method CreateInterfaceMethod(string interfaceName, string defaultReturnType, params string[] modifiers)
     {
-        MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, modifiers);
+        MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, interfaceName, modifiers);
         return new InterfaceMethod(methodSignature, interfaceName);
     }
 
-    private MethodSignature CreateMethodSignature(string defaultReturnType, params string[] modifiers)
+    private MethodSignature CreateMethodSignature(
+        string defaultReturnType,
+        string? explicitInterfacePrefix,
+        params string[] modifiers)
     {
         string returnType = ReturnTypeToRespect ?? defaultReturnType;
 
-        MethodSignature signature = MethodSignature.Create(returnType, MethodName, false);
+        MethodSignature signature = MethodSignature.Create(returnType, MethodName, explicitInterfacePrefix, false);
         signature.AddModifiers(modifiers);
 
         if (GenericInfo != null)

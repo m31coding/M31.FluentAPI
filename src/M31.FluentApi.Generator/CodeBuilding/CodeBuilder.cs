@@ -80,6 +80,16 @@ internal class CodeBuilder
         return this;
     }
 
+    internal CodeBuilder Append(ICode? code, bool condition)
+    {
+        if (condition)
+        {
+            Append(code);
+        }
+
+        return this;
+    }
+
     internal CodeBuilder Append(string? code, bool condition)
     {
         if (condition)
