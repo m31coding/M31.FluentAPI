@@ -20,11 +20,13 @@ internal class BuilderAndTargetInfo
         GenericInfo = genericInfo;
         FluentApiTypeIsStruct = fluentApiTypeIsStruct;
         FluentApiTypeIsInternal = fluentApiTypeIsInternal;
+        DefaultAccessModifier = fluentApiTypeIsInternal ? "internal" : "public";
         FluentApiTypeHasPrivateConstructor = fluentApiTypeHasPrivateConstructor;
         BuilderClassName = builderClassName;
         BuilderClassNameWithTypeParameters = WithTypeParameters(builderClassName, genericInfo);
         BuilderInstanceName = builderClassName.FirstCharToLower();
         ClassInstanceName = fluentApiClassName.FirstCharToLower();
+        InitialStepInterfaceName = $"I{builderClassName}";
     }
 
     internal string? Namespace { get; }
@@ -33,11 +35,13 @@ internal class BuilderAndTargetInfo
     internal GenericInfo? GenericInfo { get; }
     internal bool FluentApiTypeIsStruct { get; }
     internal bool FluentApiTypeIsInternal { get; }
+    internal string DefaultAccessModifier { get; }
     internal bool FluentApiTypeHasPrivateConstructor { get; }
     internal string BuilderClassName { get; }
     internal string BuilderClassNameWithTypeParameters { get; }
     internal string BuilderInstanceName { get; }
     internal string ClassInstanceName { get; }
+    internal string InitialStepInterfaceName { get; }
 
     private static string WithTypeParameters(string typeName, GenericInfo? genericInfo)
     {

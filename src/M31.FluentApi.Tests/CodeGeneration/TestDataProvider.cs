@@ -19,6 +19,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "ContinueWithSelfClass", "Student" },
                 new object[] { "Abstract", "CustomFluentMethodNameClass", "Student" },
                 new object[] { "Abstract", "DefaultFluentMethodNameClass", "Student" },
+                new object[] { "Abstract", "EmptyClass", "Student" },
                 new object[] { "Abstract", "FluentDefaultMemberClass", "Student" },
                 new object[] { "Abstract", "FluentMethodClass", "Student" },
                 new object[] { "Abstract", "FluentMethodDefaultValuesClass", "Student" },
@@ -79,5 +80,10 @@ internal class TestDataProvider : IEnumerable<object[]>
     private static List<object[]> Filter(string? test, List<object[]> tests)
     {
         return test == null ? tests : new List<object[]> { tests.First(t => (string)t[1] == test) };
+    }
+
+    private static List<object[]> Filter(string[] testsToFilter, List<object[]> tests)
+    {
+        return testsToFilter.Length == 0 ? tests : tests.Where(t => testsToFilter.Contains((string)t[1])).ToList();
     }
 }
