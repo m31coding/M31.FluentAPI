@@ -7,7 +7,7 @@
 
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.OneMemberClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.EmptyClass;
 
 public class CreateStudent
 {
@@ -16,12 +16,5 @@ public class CreateStudent
     private CreateStudent()
     {
         student = new Student();
-    }
-
-    public static Student InSemester(int semester)
-    {
-        CreateStudent createStudent = new CreateStudent();
-        createStudent.student.Semester = semester;
-        return createStudent.student;
     }
 }
