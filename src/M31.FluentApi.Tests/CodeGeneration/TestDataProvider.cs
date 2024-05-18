@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(null,
+        Filter(new string[] {},
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -76,11 +76,6 @@ internal class TestDataProvider : IEnumerable<object[]>
 
     public IEnumerator<object[]> GetEnumerator() => testClasses.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-    private static List<object[]> Filter(string? test, List<object[]> tests)
-    {
-        return test == null ? tests : new List<object[]> { tests.First(t => (string)t[1] == test) };
-    }
 
     private static List<object[]> Filter(string[] testsToFilter, List<object[]> tests)
     {
