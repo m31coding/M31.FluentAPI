@@ -49,73 +49,73 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
-    public void CanExecuteGenericClassWithOverloadedGenericMethod()
+    public void CanExecuteGenericOverloadedMethodClass()
     {
         string string1 = "string1";
         string string2 = "string2";
         int int0 = 0;
 
-        var student1 = TestClasses.Abstract.GenericClassWithOverloadedGenericMethod
+        var student1 = TestClasses.Abstract.GenericOverloadedMethodClass
             .CreateStudent.Method1(0, "string1");
         Assert.Equal(new string[] { "Called Method1(int, string)" }, student1.Logs);
 
-        var student2 = TestClasses.Abstract.GenericClassWithOverloadedGenericMethod
+        var student2 = TestClasses.Abstract.GenericOverloadedMethodClass
             .CreateStudent.Method1<int>(0, "string1");
         Assert.Equal(new string[] { "Called Method1<T>(int, string)" }, student2.Logs);
 
-        var student3 = TestClasses.Abstract.GenericClassWithOverloadedGenericMethod
+        var student3 = TestClasses.Abstract.GenericOverloadedMethodClass
             .CreateStudent.Method1<string>("string1", "string2");
         Assert.Equal(new string[] { "Called Method1<T>(T, string)" }, student3.Logs);
 
-        var student4 = TestClasses.Abstract.GenericClassWithOverloadedGenericMethod
+        var student4 = TestClasses.Abstract.GenericOverloadedMethodClass
             .CreateStudent.Method1<int, int>(0, "string1");
         Assert.Equal(new string[] { "Called Method1<S, T>(T, string)" }, student4.Logs);
 
-        var student5 = TestClasses.Abstract.GenericClassWithOverloadedGenericMethod
+        var student5 = TestClasses.Abstract.GenericOverloadedMethodClass
             .CreateStudent.Method1<int, int>(0, out string1);
         Assert.Equal(new string[] { "Called Method1<S, T>(T, out string)" }, student5.Logs);
 
-        var student6 = TestClasses.Abstract.GenericClassWithOverloadedGenericMethod
+        var student6 = TestClasses.Abstract.GenericOverloadedMethodClass
             .CreateStudent.Method1<int, int>(in int0, "string1");
         Assert.Equal(new string[] { "Called Method1<S, T>(in T, string)" }, student6.Logs);
 
-        var student7 = TestClasses.Abstract.GenericClassWithOverloadedGenericMethod
+        var student7 = TestClasses.Abstract.GenericOverloadedMethodClass
             .CreateStudent.Method1<int, int>(in int0, ref string2);
         Assert.Equal(new string[] { "Called Method1<S, T>(in T, ref string)" }, student7.Logs);
     }
 
     [Fact, Priority(1)]
-    public void CanExecuteGenericClassWithPrivateOverloadedGenericMethod()
+    public void CanExecuteGenericOverloadedPrivateMethodClass()
     {
         string string1 = "string1";
         string string2 = "string2";
         int int0 = 0;
 
-        var student1 = TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod
+        var student1 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
             .CreateStudent.Method1(0, "string1");
         Assert.Equal(new string[] { "Called Method1(int, string)" }, student1.Logs);
 
-        var student2 = TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod
+        var student2 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
             .CreateStudent.Method1<int>(0, "string1");
         Assert.Equal(new string[] { "Called Method1<T>(int, string)" }, student2.Logs);
 
-        var student3 = TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod
+        var student3 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
             .CreateStudent.Method1<string>("string1", "string2");
         Assert.Equal(new string[] { "Called Method1<T>(T, string)" }, student3.Logs);
 
-        var student4 = TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod
+        var student4 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
             .CreateStudent.Method1<int, int>(0, "string1");
         Assert.Equal(new string[] { "Called Method1<S, T>(T, string)" }, student4.Logs);
 
-        var student5 = TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod
+        var student5 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
             .CreateStudent.Method1<int, int>(0, out string1);
         Assert.Equal(new string[] { "Called Method1<S, T>(T, out string)" }, student5.Logs);
 
-        var student6 = TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod
+        var student6 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
             .CreateStudent.Method1<int, int>(in int0, "string1");
         Assert.Equal(new string[] { "Called Method1<S, T>(in T, string)" }, student6.Logs);
 
-        var student7 = TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod
+        var student7 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
             .CreateStudent.Method1<int, int>(in int0, ref string2);
         Assert.Equal(new string[] { "Called Method1<S, T>(in T, ref string)" }, student7.Logs);
     }

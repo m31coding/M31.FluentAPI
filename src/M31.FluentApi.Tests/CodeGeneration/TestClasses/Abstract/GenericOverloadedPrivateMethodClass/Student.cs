@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericOverloadedPrivateMethodClass;
 
 [FluentApi]
 public class Student

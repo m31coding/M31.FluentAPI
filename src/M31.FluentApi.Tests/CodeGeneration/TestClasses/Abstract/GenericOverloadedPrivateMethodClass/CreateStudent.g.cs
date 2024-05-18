@@ -10,7 +10,7 @@ using M31.FluentApi.Attributes;
 using System;
 using System.Reflection;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWithPrivateOverloadedGenericMethod;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericOverloadedPrivateMethodClass;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
