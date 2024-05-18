@@ -11,6 +11,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithOfOverloadedMethodClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IMethod1Method1,
     CreateStudent.IWithProperty1,
     CreateStudent.IWithProperty2
 {
@@ -29,6 +31,11 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWithProperty1 Method1()
     {
         CreateStudent createStudent = new CreateStudent();
@@ -36,11 +43,23 @@ public class CreateStudent :
         return createStudent;
     }
 
+    IWithProperty1 IMethod1Method1.Method1()
+    {
+        student.Method1();
+        return this;
+    }
+
     public static IWithProperty2 Method1(int p1)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Method1(p1);
         return createStudent;
+    }
+
+    IWithProperty2 IMethod1Method1.Method1(int p1)
+    {
+        student.Method1(p1);
+        return this;
     }
 
     IWithProperty2 IWithProperty1.WithProperty1(string property1)
@@ -53,6 +72,17 @@ public class CreateStudent :
     {
         property2PropertyInfo.SetValue(student, property2);
         return student;
+    }
+
+    public interface ICreateStudent : IMethod1Method1
+    {
+    }
+
+    public interface IMethod1Method1
+    {
+        IWithProperty1 Method1();
+
+        IWithProperty2 Method1(int p1);
     }
 
     public interface IWithProperty1

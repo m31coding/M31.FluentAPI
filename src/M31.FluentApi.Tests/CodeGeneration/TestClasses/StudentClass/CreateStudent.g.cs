@@ -13,6 +13,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.StudentClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.INamed,
     CreateStudent.IOfAgeBornOn,
     CreateStudent.IInSemester,
     CreateStudent.ILivingIn,
@@ -52,12 +54,24 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IOfAgeBornOn Named(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
         firstNamePropertyInfo.SetValue(createStudent.student, firstName);
         lastNamePropertyInfo.SetValue(createStudent.student, lastName);
         return createStudent;
+    }
+
+    IOfAgeBornOn INamed.Named(string firstName, string lastName)
+    {
+        firstNamePropertyInfo.SetValue(student, firstName);
+        lastNamePropertyInfo.SetValue(student, lastName);
+        return this;
     }
 
     IInSemester IOfAgeBornOn.OfAge(int age)
@@ -140,6 +154,15 @@ public class CreateStudent :
     {
         friendsPropertyInfo.SetValue(student, new string[0]);
         return student;
+    }
+
+    public interface ICreateStudent : INamed
+    {
+    }
+
+    public interface INamed
+    {
+        IOfAgeBornOn Named(string firstName, string lastName);
     }
 
     public interface IOfAgeBornOn

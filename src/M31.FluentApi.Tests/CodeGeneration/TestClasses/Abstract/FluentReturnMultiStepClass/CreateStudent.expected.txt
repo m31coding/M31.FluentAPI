@@ -11,7 +11,10 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnMultiStepClass;
 
-public class CreateStudent : CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
+    CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
 {
     private readonly Student student;
     private static readonly PropertyInfo namePropertyInfo;
@@ -26,11 +29,22 @@ public class CreateStudent : CreateStudent.IReturnVoidMethodReturnIntMethodRetur
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
         namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent;
+    }
+
+    IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter IWithName.WithName(string name)
+    {
+        namePropertyInfo.SetValue(student, name);
+        return this;
     }
 
     void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
@@ -51,6 +65,15 @@ public class CreateStudent : CreateStudent.IReturnVoidMethodReturnIntMethodRetur
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
     {
         return student.ReturnIntMethodWithRefParameter(ref s);
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name);
     }
 
     public interface IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter

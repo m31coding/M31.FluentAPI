@@ -11,13 +11,20 @@ using System.Collections.Generic;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.AliasNamespaceClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
 
     private CreateStudent()
     {
         student = new Student();
+    }
+
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
     }
 
     public static Student WhoseFriendsAre(System.Collections.Generic.IList<string> friends)
@@ -27,11 +34,23 @@ public class CreateStudent
         return createStudent.student;
     }
 
+    Student IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IList<string> friends)
+    {
+        student.Friends = friends;
+        return student;
+    }
+
     public static Student WhoseFriendsAre(params string[] friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new List<string>(friends);
         return createStudent.student;
+    }
+
+    Student IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
+    {
+        student.Friends = new List<string>(friends);
+        return student;
     }
 
     public static Student WhoseFriendIs(string friend)
@@ -41,10 +60,37 @@ public class CreateStudent
         return createStudent.student;
     }
 
+    Student IWhoseFriendsAre.WhoseFriendIs(string friend)
+    {
+        student.Friends = new List<string>(1){ friend };
+        return student;
+    }
+
     public static Student WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new List<string>(0);
         return createStudent.student;
+    }
+
+    Student IWhoseFriendsAre.WhoHasNoFriends()
+    {
+        student.Friends = new List<string>(0);
+        return student;
+    }
+
+    public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface IWhoseFriendsAre
+    {
+        Student WhoseFriendsAre(System.Collections.Generic.IList<string> friends);
+
+        Student WhoseFriendsAre(params string[] friends);
+
+        Student WhoseFriendIs(string friend);
+
+        Student WhoHasNoFriends();
     }
 }

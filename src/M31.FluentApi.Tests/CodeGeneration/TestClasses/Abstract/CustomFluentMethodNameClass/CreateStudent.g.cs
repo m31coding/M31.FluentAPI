@@ -11,6 +11,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CustomFluentMethodNameClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
     CreateStudent.IWhoIsHappy,
     CreateStudent.IInSemester,
     CreateStudent.IWhoseFriendsAre
@@ -22,11 +24,22 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWhoIsHappy WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.SetNameFromFirstNameAndLastName(firstName, lastName);
         return createStudent;
+    }
+
+    IWhoIsHappy IWithName.WithName(string firstName, string lastName)
+    {
+        student.SetNameFromFirstNameAndLastName(firstName, lastName);
+        return this;
     }
 
     IInSemester IWhoIsHappy.WhoIsHappy(bool isHappy)
@@ -69,6 +82,15 @@ public class CreateStudent :
     {
         student.Friends = new string[0];
         return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IWhoIsHappy WithName(string firstName, string lastName);
     }
 
     public interface IWhoIsHappy

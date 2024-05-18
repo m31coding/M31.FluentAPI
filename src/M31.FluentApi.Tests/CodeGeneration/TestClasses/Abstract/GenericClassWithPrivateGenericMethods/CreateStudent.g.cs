@@ -13,6 +13,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWithPrivateGenericMethods;
 
 public class CreateStudent<T1, T2, T3, T4, T5> :
+    CreateStudent<T1, T2, T3, T4, T5>.ICreateStudent,
+    CreateStudent<T1, T2, T3, T4, T5>.IWithProperty1,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty2,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty3,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty4,
@@ -61,11 +63,22 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
         student = new Student<T1, T2, T3, T4, T5>();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent<T1, T2, T3, T4, T5>();
+    }
+
     public static IWithProperty2 WithProperty1(T1 property1)
     {
         CreateStudent<T1, T2, T3, T4, T5> createStudent = new CreateStudent<T1, T2, T3, T4, T5>();
         createStudent.student.Property1 = property1;
         return createStudent;
+    }
+
+    IWithProperty2 IWithProperty1.WithProperty1(T1 property1)
+    {
+        student.Property1 = property1;
+        return this;
     }
 
     IWithProperty3 IWithProperty2.WithProperty2(T2 property2)
@@ -108,6 +121,15 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
     {
         method3MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1 });
         return student;
+    }
+
+    public interface ICreateStudent : IWithProperty1
+    {
+    }
+
+    public interface IWithProperty1
+    {
+        IWithProperty2 WithProperty1(T1 property1);
     }
 
     public interface IWithProperty2

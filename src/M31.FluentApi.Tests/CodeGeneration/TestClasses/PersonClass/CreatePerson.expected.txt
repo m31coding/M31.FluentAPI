@@ -12,6 +12,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.PersonClass;
 
 public class CreatePerson :
+    CreatePerson.ICreatePerson,
+    CreatePerson.IWithFirstName,
     CreatePerson.IWithMiddleNameWithLastName,
     CreatePerson.IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad,
     CreatePerson.IWithHouseNumber,
@@ -92,11 +94,22 @@ public class CreatePerson :
         person = new Person();
     }
 
+    public static ICreatePerson InitialStep()
+    {
+        return new CreatePerson();
+    }
+
     public static IWithMiddleNameWithLastName WithFirstName(string firstName)
     {
         CreatePerson createPerson = new CreatePerson();
         firstNamePropertyInfo.SetValue(createPerson.person, firstName);
         return createPerson;
+    }
+
+    IWithMiddleNameWithLastName IWithFirstName.WithFirstName(string firstName)
+    {
+        firstNamePropertyInfo.SetValue(person, firstName);
+        return this;
     }
 
     IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
@@ -151,6 +164,15 @@ public class CreatePerson :
     {
         livingInCityMethodInfo.Invoke(person, new object?[] { city });
         return person;
+    }
+
+    public interface ICreatePerson : IWithFirstName
+    {
+    }
+
+    public interface IWithFirstName
+    {
+        IWithMiddleNameWithLastName WithFirstName(string firstName);
     }
 
     public interface IWithMiddleNameWithLastName

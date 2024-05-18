@@ -10,13 +10,20 @@ using System.Collections.Generic;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FullyQualifiedTypeClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IBornOnWithFriends
 {
     private readonly Student student;
 
     private CreateStudent()
     {
         student = new Student();
+    }
+
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
     }
 
     public static Student BornOn(System.DateOnly dateOfBirth)
@@ -26,11 +33,23 @@ public class CreateStudent
         return createStudent.student;
     }
 
+    Student IBornOnWithFriends.BornOn(System.DateOnly dateOfBirth)
+    {
+        student.DateOfBirth = dateOfBirth;
+        return student;
+    }
+
     public static Student WithFriends(System.Collections.Generic.List<string> friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;
         return createStudent.student;
+    }
+
+    Student IBornOnWithFriends.WithFriends(System.Collections.Generic.List<string> friends)
+    {
+        student.Friends = friends;
+        return student;
     }
 
     public static Student WithFriends(params string[] friends)
@@ -40,6 +59,12 @@ public class CreateStudent
         return createStudent.student;
     }
 
+    Student IBornOnWithFriends.WithFriends(params string[] friends)
+    {
+        student.Friends = new List<string>(friends);
+        return student;
+    }
+
     public static Student WithFriend(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -47,10 +72,39 @@ public class CreateStudent
         return createStudent.student;
     }
 
+    Student IBornOnWithFriends.WithFriend(string friend)
+    {
+        student.Friends = new List<string>(1){ friend };
+        return student;
+    }
+
     public static Student WithZeroFriends()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new List<string>(0);
         return createStudent.student;
+    }
+
+    Student IBornOnWithFriends.WithZeroFriends()
+    {
+        student.Friends = new List<string>(0);
+        return student;
+    }
+
+    public interface ICreateStudent : IBornOnWithFriends
+    {
+    }
+
+    public interface IBornOnWithFriends
+    {
+        Student BornOn(System.DateOnly dateOfBirth);
+
+        Student WithFriends(System.Collections.Generic.List<string> friends);
+
+        Student WithFriends(params string[] friends);
+
+        Student WithFriend(string friend);
+
+        Student WithZeroFriends();
     }
 }

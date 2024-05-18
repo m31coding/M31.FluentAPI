@@ -9,7 +9,9 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TwoParameterCompoundClassReversedParameters;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName
 {
     private readonly Student student;
 
@@ -18,11 +20,32 @@ public class CreateStudent
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static Student WithName(string lastName, string firstName)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.LastName = lastName;
         createStudent.student.FirstName = firstName;
         return createStudent.student;
+    }
+
+    Student IWithName.WithName(string lastName, string firstName)
+    {
+        student.LastName = lastName;
+        student.FirstName = firstName;
+        return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        Student WithName(string lastName, string firstName);
     }
 }

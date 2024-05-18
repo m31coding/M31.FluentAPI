@@ -10,7 +10,9 @@ using System;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateConstructorClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IInSemester
 {
     private readonly Student student;
 
@@ -19,10 +21,30 @@ public class CreateStudent
         student = (Student) Activator.CreateInstance(typeof(Student), true)!;
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Semester = semester;
         return createStudent.student;
+    }
+
+    Student IInSemester.InSemester(int semester)
+    {
+        student.Semester = semester;
+        return student;
+    }
+
+    public interface ICreateStudent : IInSemester
+    {
+    }
+
+    public interface IInSemester
+    {
+        Student InSemester(int semester);
     }
 }

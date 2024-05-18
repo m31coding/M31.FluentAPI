@@ -10,7 +10,10 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithSelfClass;
 
-public class CreateStudent : CreateStudent.IWithMiddleNameWithLastName
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithFirstName,
+    CreateStudent.IWithMiddleNameWithLastName
 {
     private readonly Student student;
     private static readonly PropertyInfo firstNamePropertyInfo;
@@ -29,11 +32,22 @@ public class CreateStudent : CreateStudent.IWithMiddleNameWithLastName
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWithMiddleNameWithLastName WithFirstName(string firstName)
     {
         CreateStudent createStudent = new CreateStudent();
         firstNamePropertyInfo.SetValue(createStudent.student, firstName);
         return createStudent;
+    }
+
+    IWithMiddleNameWithLastName IWithFirstName.WithFirstName(string firstName)
+    {
+        firstNamePropertyInfo.SetValue(student, firstName);
+        return this;
     }
 
     IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
@@ -46,6 +60,15 @@ public class CreateStudent : CreateStudent.IWithMiddleNameWithLastName
     {
         lastNamePropertyInfo.SetValue(student, lastName);
         return student;
+    }
+
+    public interface ICreateStudent : IWithFirstName
+    {
+    }
+
+    public interface IWithFirstName
+    {
+        IWithMiddleNameWithLastName WithFirstName(string firstName);
     }
 
     public interface IWithMiddleNameWithLastName

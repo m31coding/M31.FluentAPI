@@ -11,6 +11,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodDefaultValuesClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithFirstName,
     CreateStudent.IWithLastName,
     CreateStudent.IBornOn,
     CreateStudent.IEnrolledIn,
@@ -25,11 +27,22 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWithLastName WithFirstName(string firstName = "Alice")
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.WithFirstName(firstName);
         return createStudent;
+    }
+
+    IWithLastName IWithFirstName.WithFirstName(string firstName)
+    {
+        student.WithFirstName(firstName);
+        return this;
     }
 
     IBornOn IWithLastName.WithLastName(string? lastName)
@@ -66,6 +79,15 @@ public class CreateStudent :
     {
         student.WithNumberOfFailedExams(numberOfFailedExams);
         return student;
+    }
+
+    public interface ICreateStudent : IWithFirstName
+    {
+    }
+
+    public interface IWithFirstName
+    {
+        IWithLastName WithFirstName(string firstName = "Alice");
     }
 
     public interface IWithLastName

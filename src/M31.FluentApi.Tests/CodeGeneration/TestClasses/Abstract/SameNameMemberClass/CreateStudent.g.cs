@@ -11,6 +11,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SameNameMemberClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IInSemester,
     CreateStudent.IWithName,
     CreateStudent.IWithName2
 {
@@ -31,11 +33,22 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWithName InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
         semesterPropertyInfo.SetValue(createStudent.student, semester);
         return createStudent;
+    }
+
+    IWithName IInSemester.InSemester(int semester)
+    {
+        semesterPropertyInfo.SetValue(student, semester);
+        return this;
     }
 
     IWithName2 IWithName.WithName(char initial)
@@ -48,6 +61,15 @@ public class CreateStudent :
     {
         lastNamePropertyInfo.SetValue(student, lastName);
         return student;
+    }
+
+    public interface ICreateStudent : IInSemester
+    {
+    }
+
+    public interface IInSemester
+    {
+        IWithName InSemester(int semester);
     }
 
     public interface IWithName

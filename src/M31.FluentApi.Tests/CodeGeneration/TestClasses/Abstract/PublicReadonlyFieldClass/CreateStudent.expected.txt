@@ -10,7 +10,9 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PublicReadonlyFieldClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IInSemester
 {
     private readonly Student student;
     private static readonly FieldInfo semesterFieldInfo;
@@ -25,10 +27,30 @@ public class CreateStudent
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
         semesterFieldInfo.SetValue(createStudent.student, semester);
         return createStudent.student;
+    }
+
+    Student IInSemester.InSemester(int semester)
+    {
+        semesterFieldInfo.SetValue(student, semester);
+        return student;
+    }
+
+    public interface ICreateStudent : IInSemester
+    {
+    }
+
+    public interface IInSemester
+    {
+        Student InSemester(int semester);
     }
 }

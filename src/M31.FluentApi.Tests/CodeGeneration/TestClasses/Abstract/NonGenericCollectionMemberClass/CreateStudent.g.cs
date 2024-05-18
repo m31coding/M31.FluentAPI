@@ -12,6 +12,8 @@ using System.Collections.Generic;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NonGenericCollectionMemberClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWhoseFriendsAre,
     CreateStudent.IWithPets,
     CreateStudent.IWithBackpackContent
 {
@@ -22,11 +24,22 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWithPets WhoseFriendsAre(System.Collections.IEnumerable friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;
         return createStudent;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(System.Collections.IEnumerable friends)
+    {
+        student.Friends = friends;
+        return this;
     }
 
     public static IWithPets WhoseFriendsAre(params object[] friends)
@@ -36,6 +49,12 @@ public class CreateStudent :
         return createStudent;
     }
 
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(params object[] friends)
+    {
+        student.Friends = friends;
+        return this;
+    }
+
     public static IWithPets WhoseFriendIs(object friend)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -43,11 +62,23 @@ public class CreateStudent :
         return createStudent;
     }
 
+    IWithPets IWhoseFriendsAre.WhoseFriendIs(object friend)
+    {
+        student.Friends = new object[1]{ friend };
+        return this;
+    }
+
     public static IWithPets WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new object[0];
         return createStudent;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoHasNoFriends()
+    {
+        student.Friends = new object[0];
+        return this;
     }
 
     IWithBackpackContent IWithPets.WithPets(System.Collections.IList pets)
@@ -96,6 +127,21 @@ public class CreateStudent :
     {
         student.BackpackContent = new List<object>(0);
         return student;
+    }
+
+    public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface IWhoseFriendsAre
+    {
+        IWithPets WhoseFriendsAre(System.Collections.IEnumerable friends);
+
+        IWithPets WhoseFriendsAre(params object[] friends);
+
+        IWithPets WhoseFriendIs(object friend);
+
+        IWithPets WhoHasNoFriends();
     }
 
     public interface IWithPets

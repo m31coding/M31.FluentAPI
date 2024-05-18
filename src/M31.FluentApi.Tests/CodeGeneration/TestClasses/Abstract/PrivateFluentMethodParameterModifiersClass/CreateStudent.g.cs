@@ -12,6 +12,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodParameterModifiersClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IMethodWithParams,
     CreateStudent.IMethodWithRefParameter,
     CreateStudent.IMethodWithInParameter,
     CreateStudent.IMethodWithOutParameter,
@@ -68,11 +70,22 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IMethodWithRefParameter MethodWithParams(params int[] numbers)
     {
         CreateStudent createStudent = new CreateStudent();
         methodWithParamsMethodInfo.Invoke(createStudent.student, new object?[] { numbers });
         return createStudent;
+    }
+
+    IMethodWithRefParameter IMethodWithParams.MethodWithParams(params int[] numbers)
+    {
+        methodWithParamsMethodInfo.Invoke(student, new object?[] { numbers });
+        return this;
     }
 
     IMethodWithInParameter IMethodWithRefParameter.MethodWithRefParameter(ref int n1)
@@ -104,6 +117,15 @@ public class CreateStudent :
         n4 = (int) args[0]!;
         n6 = (int) args[2]!;
         return student;
+    }
+
+    public interface ICreateStudent : IMethodWithParams
+    {
+    }
+
+    public interface IMethodWithParams
+    {
+        IMethodWithRefParameter MethodWithParams(params int[] numbers);
     }
 
     public interface IMethodWithRefParameter
