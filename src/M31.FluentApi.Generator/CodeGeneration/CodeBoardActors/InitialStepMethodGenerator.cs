@@ -23,7 +23,8 @@ internal class InitialStepMethodGenerator : ICodeBoardActor
             false);
         methodSignature.AddModifiers(codeBoard.Info.DefaultAccessModifier, "static");
         Method method = new Method(methodSignature);
-        method.AppendBodyLine($"return new {codeBoard.Info.BuilderClassName}();");
+        string parameterListInAngleBrackets = codeBoard.Info.GenericInfo?.ParameterListInAngleBrackets ?? string.Empty;
+        method.AppendBodyLine($"return new {codeBoard.Info.BuilderClassName}{parameterListInAngleBrackets}();");
         codeBoard.BuilderClass.AddMethod(method);
     }
 }
