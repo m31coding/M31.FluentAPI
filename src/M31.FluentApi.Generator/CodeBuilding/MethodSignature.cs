@@ -21,11 +21,11 @@ internal class MethodSignature : ICode
     {
         ReturnType = methodSignature.ReturnType;
         MethodName = methodSignature.MethodName;
-        ExplicitInterfacePrefix = isSignatureForInterface ? null : methodSignature.ExplicitInterfacePrefix;
+        ExplicitInterfacePrefix = methodSignature.ExplicitInterfacePrefix;
         IsSignatureForInterface = isSignatureForInterface;
         Generics = new Generics(methodSignature.Generics);
         Parameters = new Parameters(methodSignature.Parameters);
-        Modifiers = isSignatureForInterface ? new Modifiers() : new Modifiers(methodSignature.Modifiers);
+        Modifiers = new Modifiers(methodSignature.Modifiers);
     }
 
     internal static MethodSignature Create(
