@@ -41,3 +41,12 @@ M31FA020 | M31.Usage | Error | Missing builder step
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 M31FA018 | M31.Usage | Error | Generic types are not supported
+
+
+## Release 1.4.0
+
+### New Rules
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+M31FA021 | M31.Usage | Error | Reserved method name
