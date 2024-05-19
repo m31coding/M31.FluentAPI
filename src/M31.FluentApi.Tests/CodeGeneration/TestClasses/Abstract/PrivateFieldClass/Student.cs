@@ -10,4 +10,6 @@ public class Student
 {
     [FluentMember(0, "InSemester")]
     private int semester;
+
+    public int Semester => semester;
 }
