@@ -31,6 +31,7 @@ internal static class FluentApiDiagnostics
         CodeGenerationError.Descriptor,
         ConflictingControlAttributes.Descriptor,
         MissingBuilderStep.Descriptor,
+        ReservedMethodName.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -365,6 +366,24 @@ internal static class FluentApiDiagnostics
             Location location = attributeData.AttributeData.ApplicationSyntaxReference?
                 .GetSyntax().GetLocation() ?? Location.None;
             return Diagnostic.Create(Descriptor, location, missingBuilderStep);
+        }
+    }
+
+    internal static class ReservedMethodName
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA021",
+            title: "Reserved method name",
+            messageFormat: "The method name '{0}' is reserved and can not be used",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData, string methodName)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location, methodName);
         }
     }
 }

@@ -16,9 +16,10 @@ internal class InitialStepMethodGenerator : ICodeBoardActor
         // {
         //     return new CreateStudent();
         // }
+        string methodName = "InitialStep";
         MethodSignature methodSignature = MethodSignature.Create(
             codeBoard.Info.InitialStepInterfaceName,
-            "InitialStep",
+            methodName,
             null,
             false);
         methodSignature.AddModifiers(codeBoard.Info.DefaultAccessModifier, "static");
