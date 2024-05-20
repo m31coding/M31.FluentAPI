@@ -178,6 +178,16 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecutePrivateConstructorClass()
+    {
+        var student = TestClasses.Abstract.PrivateConstructorClass
+            .CreateStudent
+            .InSemester(2);
+
+        Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecutePrivateFieldClass()
     {
         var student = TestClasses.Abstract.PrivateFieldClass
@@ -198,6 +208,16 @@ public partial class CodeGenerationTests
 
         Assert.Equal("Alice", student.Name);
         Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecutePublicReadonlyFieldClass()
+    {
+        var student = TestClasses.Abstract.PublicReadonlyFieldClass
+            .CreateStudent
+            .InSemester(2);
+
         Assert.Equal(2, student.Semester);
     }
 
