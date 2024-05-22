@@ -1,5 +1,4 @@
 using System;
-using M31.FluentApi.Tests.CodeGeneration.Helpers;
 using M31.FluentApi.Tests.Helpers;
 using Xunit;
 using Xunit.Priority;
@@ -15,11 +14,14 @@ public partial class CodeGenerationTests
     {
         Array.Reverse(testClassPathAndName);
         TestClassCodeGenerator testClassCodeGenerator = TestClassCodeGenerator.Create(testClassPathAndName);
-        GeneratorOutput? generatorOutput = testClassCodeGenerator.RunGenerators();
-        Assert.NotNull(generatorOutput);
-        testClassCodeGenerator.WriteGeneratedCodeIfChanged(generatorOutput!);
-        // testClassCodeGenerator.WriteGeneratedCodeAsExpectedCode(generatorOutput!);
-        string expectedCode = testClassCodeGenerator.ReadExpectedCode(generatorOutput!.ClassName);
-        Assert.Equal(expectedCode, generatorOutput.Code);
+        GeneratorOutputs generatorOutputs = testClassCodeGenerator.RunGenerators();
+        Assert.NotNull(generatorOutputs.MainOutput);
+        foreach (GeneratorOutput generatorOutput in generatorOutputs.Outputs)
+        {
+            testClassCodeGenerator.WriteGeneratedCodeIfChanged(generatorOutput);
+            // testClassCodeGenerator.WriteGeneratedCodeAsExpectedCode(generatorOutput!);
+        }
+        string expectedCode = testClassCodeGenerator.ReadExpectedCode(generatorOutputs.MainOutput!.ClassName);
+        Assert.Equal(expectedCode, generatorOutputs.MainOutput.Code);
     }
 }

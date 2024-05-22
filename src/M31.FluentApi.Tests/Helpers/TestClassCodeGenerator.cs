@@ -27,7 +27,7 @@ internal class TestClassCodeGenerator
         return new TestClassCodeGenerator(classPath, className);
     }
 
-    internal GeneratorOutput? RunGenerators()
+    internal GeneratorOutputs RunGenerators()
     {
         string code = File.ReadAllText(PathToTestDataFile(ClassPath, $"{ClassName}.cs"));
         return ManualGenerator.RunGenerators(code);

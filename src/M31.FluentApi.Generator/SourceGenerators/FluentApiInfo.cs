@@ -39,7 +39,7 @@ internal class FluentApiInfo
     internal static FluentApiInfo Create(ISymbol symbol, FluentApiAttributeData attributeData)
     {
         AttributeInfoBase attributeInfo =
-            CreateAttributeInfo(attributeData.MainAttributeData, symbol.Name);
+            CreateAttributeInfo(attributeData.MainAttributeData, symbol);
 
         (AttributeDataExtended data, OrthogonalAttributeInfoBase info)[] orthogonalDataAndInfos =
             attributeData.OrthogonalAttributeData
@@ -82,8 +82,10 @@ internal class FluentApiInfo
         return dataAndInfoArray.Select(dataAndInfo => dataAndInfo.info).ToList();
     }
 
-    private static AttributeInfoBase CreateAttributeInfo(AttributeDataExtended attributeData, string memberName)
+    private static AttributeInfoBase CreateAttributeInfo(AttributeDataExtended attributeData, ISymbol symbol)
     {
+        string memberName = symbol.Name;
+
         return attributeData.FullName switch
         {
             FullNames.FluentMemberAttribute =>
@@ -92,10 +94,38 @@ internal class FluentApiInfo
                 FluentPredicateAttributeInfo.Create(attributeData.AttributeData, memberName),
             FullNames.FluentCollectionAttribute =>
                 FluentCollectionAttributeInfo.Create(attributeData.AttributeData, memberName),
+            FullNames.FluentLambdaAttribute =>
+                FluentLambdaAttributeInfo.Create(attributeData.AttributeData, memberName, GetLambdaBuilderInfo(symbol)),
             FullNames.FluentMethodAttribute =>
                 FluentMethodAttributeInfo.Create(attributeData.AttributeData, memberName),
             _ => throw new Exception($"Unexpected attribute class name: {attributeData.FullName}")
         };
+    }
+
+    private static LambdaBuilderInfo GetLambdaBuilderInfo(ISymbol symbol)
+    {
+        ITypeSymbol type = symbol is IPropertySymbol propertySymbol ? propertySymbol.Type :
+            symbol is IFieldSymbol fieldSymbol ? fieldSymbol.Type :
+            throw new GenerationException($"Unexpected symbol type: {symbol.GetType().Name}");
+
+        AttributeDataExtended[] parentData = type.GetAttributes().Select(AttributeDataExtended.Create)
+            .OfType<AttributeDataExtended>().Where(a => a.FullName == Attributes.FullNames.FluentApiAttribute)
+            .ToArray();
+
+        // todo: create diagnostics if parent is no FluentApi. Create FluentApiInfoCreator.
+        AttributeDataExtended parent = parentData.First();
+        FluentApiAttributeInfo info = FluentApiAttributeInfo.Create(parent.AttributeData, type.Name);
+        string builderClassName = info.BuilderClassName; // CreateAddress
+        string fluentApiTypeForCodeGeneration = CodeTypeExtractor.GetTypeForCodeGeneration(type); // Namespace.Address
+        string builderTypeForCodeGeneration =
+            GetBuilderTypeForCodeGeneration(fluentApiTypeForCodeGeneration, builderClassName); // Namespace.CreateAddress.
+        return new LambdaBuilderInfo(builderClassName, builderTypeForCodeGeneration);
+    }
+
+    private static string GetBuilderTypeForCodeGeneration(string fluentApiTypeForCodeGeneration, string builderClassName)
+    {
+        string[] split = fluentApiTypeForCodeGeneration.Split('.');
+        return string.Join(".", split.Take(split.Length - 1).Concat(new string[] { builderClassName }));
     }
 
     private static OrthogonalAttributeInfoBase CreateOrthogonalAttributeInfo(
