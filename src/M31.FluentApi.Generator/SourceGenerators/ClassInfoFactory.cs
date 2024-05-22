@@ -152,6 +152,7 @@ internal class ClassInfoFactory
             return null;
         }
 
-        return FluentApiInfo.Create(symbol, attributeData);
+        FluentApiInfoCreator fluentApiInfoCreator = new FluentApiInfoCreator(report);
+        return fluentApiInfoCreator.Create(symbol, attributeData);
     }
 }

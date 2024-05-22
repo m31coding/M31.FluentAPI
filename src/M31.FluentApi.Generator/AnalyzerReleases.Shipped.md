@@ -50,3 +50,4 @@ M31FA018 | M31.Usage | Error | Generic types are not supported
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 M31FA021 | M31.Usage | Error | Reserved method name
+M31FA022 | M31.Usage | Error | Fluent lambda member without Fluent API
