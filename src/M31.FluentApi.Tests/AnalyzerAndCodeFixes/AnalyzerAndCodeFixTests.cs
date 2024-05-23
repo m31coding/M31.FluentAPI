@@ -53,6 +53,18 @@ public class AnalyzerAndCodeFixTests
     }
 
     [Fact]
+    public async Task CanDetectFluentLambdaMemberWithoutFluentApiClass()
+    {
+        (string source, _) = ReadSource("FluentLambdaMemberWithoutFluentApiClass", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(FluentLambdaMemberWithoutFluentApi.Descriptor.Id)
+            .WithLocation(14, 6)
+            .WithArguments("Address");
+
+        await Verifier.VerifyCodeFixAsync(source, null, expectedDiagnostic);
+    }
+
+    [Fact]
     public async Task CanDetectDuplicateMainAttribute()
     {
         (string source, string fixedSource) = ReadSource("DuplicateMainAttributeClass", "Student");
