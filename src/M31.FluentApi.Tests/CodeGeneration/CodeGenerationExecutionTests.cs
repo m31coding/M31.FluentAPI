@@ -12,6 +12,19 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 public partial class CodeGenerationTests
 {
     [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaClass()
+    {
+        var student = TestClasses.Abstract.FluentLambdaClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddress(a => a.WithStreet("Market Street").WithHouseNumber("23"));
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal("Market Street", student.Address.Street);
+        Assert.Equal("23", student.Address.HouseNumber);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentMethodClass()
     {
         var student = TestClasses.Abstract.FluentMethodClass
