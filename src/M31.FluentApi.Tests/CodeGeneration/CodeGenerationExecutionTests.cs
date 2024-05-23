@@ -25,6 +25,17 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaSingleStepClass()
+    {
+        var student = TestClasses.Abstract.FluentLambdaSingleStepClass
+            .CreateStudent
+            .WithAddress(a => a.WithStreet("Market Street").WithHouseNumber("23"));
+
+        Assert.Equal("Market Street", student.Address.Street);
+        Assert.Equal("23", student.Address.HouseNumber);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentMethodClass()
     {
         var student = TestClasses.Abstract.FluentMethodClass
