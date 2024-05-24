@@ -16,10 +16,12 @@ public partial class CodeGenerationTests
         TestClassCodeGenerator testClassCodeGenerator = TestClassCodeGenerator.Create(testClassPathAndName);
         GeneratorOutputs generatorOutputs = testClassCodeGenerator.RunGenerators();
         Assert.NotNull(generatorOutputs.MainOutput);
+
         foreach (GeneratorOutput generatorOutput in generatorOutputs.Outputs)
         {
             testClassCodeGenerator.WriteGeneratedCodeIfChanged(generatorOutput);
         }
+
         // testClassCodeGenerator.WriteGeneratedCodeAsExpectedCode(generatorOutputs.MainOutput!);
         string expectedCode = testClassCodeGenerator.ReadExpectedCode(generatorOutputs.MainOutput!.ClassName);
         Assert.Equal(expectedCode, generatorOutputs.MainOutput.Code);
