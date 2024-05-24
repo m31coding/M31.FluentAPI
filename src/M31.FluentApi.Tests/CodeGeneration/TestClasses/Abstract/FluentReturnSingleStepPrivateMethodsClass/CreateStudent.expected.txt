@@ -67,41 +67,41 @@ public class CreateStudent :
     public static void ReturnVoidMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        returnVoidMethodMethodInfo.Invoke(createStudent.student, new object?[] {  });
+        CreateStudent.returnVoidMethodMethodInfo.Invoke(createStudent.student, new object?[] {  });
     }
 
     void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
     {
-        returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
+        CreateStudent.returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
     }
 
     public static int ReturnIntMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return (int) returnIntMethodMethodInfo.Invoke(createStudent.student, new object?[] {  })!;
+        return (int) CreateStudent.returnIntMethodMethodInfo.Invoke(createStudent.student, new object?[] {  })!;
     }
 
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
     {
-        return (int) returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        return (int) CreateStudent.returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
     }
 
     public static System.Collections.Generic.List<int> ReturnListMethod()
     {
         CreateStudent createStudent = new CreateStudent();
-        return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(createStudent.student, new object?[] {  })!;
+        return (System.Collections.Generic.List<int>) CreateStudent.returnListMethodMethodInfo.Invoke(createStudent.student, new object?[] {  })!;
     }
 
     System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
     {
-        return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        return (System.Collections.Generic.List<int>) CreateStudent.returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
     }
 
     public static int ReturnIntMethodWithRefParameter(ref string s)
     {
         CreateStudent createStudent = new CreateStudent();
         object?[] args = new object?[] { s };
-        int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(createStudent.student, args)!;
+        int result = (int) CreateStudent.returnIntMethodWithRefParameterMethodInfo.Invoke(createStudent.student, args)!;
         s = (string) args[0]!;
         return result;
     }
@@ -109,7 +109,7 @@ public class CreateStudent :
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
     {
         object?[] args = new object?[] { s };
-        int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;
+        int result = (int) CreateStudent.returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;
         s = (string) args[0]!;
         return result;
     }

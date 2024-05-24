@@ -19,8 +19,8 @@ public partial class CodeGenerationTests
         foreach (GeneratorOutput generatorOutput in generatorOutputs.Outputs)
         {
             testClassCodeGenerator.WriteGeneratedCodeIfChanged(generatorOutput);
-            // testClassCodeGenerator.WriteGeneratedCodeAsExpectedCode(generatorOutput!);
         }
+        // testClassCodeGenerator.WriteGeneratedCodeAsExpectedCode(generatorOutputs.MainOutput!);
         string expectedCode = testClassCodeGenerator.ReadExpectedCode(generatorOutputs.MainOutput!.ClassName);
         Assert.Equal(expectedCode, generatorOutputs.MainOutput.Code);
     }

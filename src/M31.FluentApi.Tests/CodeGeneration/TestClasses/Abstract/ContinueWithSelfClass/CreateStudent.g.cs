@@ -40,25 +40,25 @@ public class CreateStudent :
     public static IWithMiddleNameWithLastName WithFirstName(string firstName)
     {
         CreateStudent createStudent = new CreateStudent();
-        firstNamePropertyInfo.SetValue(createStudent.student, firstName);
+        CreateStudent.firstNamePropertyInfo.SetValue(createStudent.student, firstName);
         return createStudent;
     }
 
     IWithMiddleNameWithLastName IWithFirstName.WithFirstName(string firstName)
     {
-        firstNamePropertyInfo.SetValue(student, firstName);
+        CreateStudent.firstNamePropertyInfo.SetValue(student, firstName);
         return this;
     }
 
     IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
     {
-        middleNamePropertyInfo.SetValue(student, middleName);
+        CreateStudent.middleNamePropertyInfo.SetValue(student, middleName);
         return this;
     }
 
     Student IWithMiddleNameWithLastName.WithLastName(string lastName)
     {
-        lastNamePropertyInfo.SetValue(student, lastName);
+        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
         return student;
     }
 

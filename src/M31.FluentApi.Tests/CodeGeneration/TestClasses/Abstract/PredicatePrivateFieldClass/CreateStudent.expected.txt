@@ -35,26 +35,26 @@ public class CreateStudent :
     public static Student WhoIsHappy(bool isHappy = true)
     {
         CreateStudent createStudent = new CreateStudent();
-        isHappyFieldInfo.SetValue(createStudent.student, isHappy);
+        CreateStudent.isHappyFieldInfo.SetValue(createStudent.student, isHappy);
         return createStudent.student;
     }
 
     Student IWhoIsHappy.WhoIsHappy(bool isHappy)
     {
-        isHappyFieldInfo.SetValue(student, isHappy);
+        CreateStudent.isHappyFieldInfo.SetValue(student, isHappy);
         return student;
     }
 
     public static Student WhoIsSad()
     {
         CreateStudent createStudent = new CreateStudent();
-        isHappyFieldInfo.SetValue(createStudent.student, false);
+        CreateStudent.isHappyFieldInfo.SetValue(createStudent.student, false);
         return createStudent.student;
     }
 
     Student IWhoIsHappy.WhoIsSad()
     {
-        isHappyFieldInfo.SetValue(student, false);
+        CreateStudent.isHappyFieldInfo.SetValue(student, false);
         return student;
     }
 

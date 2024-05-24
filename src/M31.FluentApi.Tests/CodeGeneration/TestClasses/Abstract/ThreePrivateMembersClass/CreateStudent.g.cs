@@ -42,25 +42,25 @@ public class CreateStudent :
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, name);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent;
     }
 
     IBornOn IWithName.WithName(string name)
     {
-        namePropertyInfo.SetValue(student, name);
+        CreateStudent.namePropertyInfo.SetValue(student, name);
         return this;
     }
 
     IInSemester IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        dateOfBirthPropertyInfo.SetValue(student, dateOfBirth);
+        CreateStudent.dateOfBirthPropertyInfo.SetValue(student, dateOfBirth);
         return this;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        semesterPropertyInfo.SetValue(student, semester);
+        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
         return student;
     }
 

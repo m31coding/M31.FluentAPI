@@ -35,39 +35,39 @@ public class CreateStudent :
     public static Student WhoseFriendsAre(params string[]? friends)
     {
         CreateStudent createStudent = new CreateStudent();
-        friendsPropertyInfo.SetValue(createStudent.student, friends);
+        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, friends);
         return createStudent.student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
     {
-        friendsPropertyInfo.SetValue(student, friends);
+        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
         return student;
     }
 
     public static Student WhoseFriendIs(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
-        friendsPropertyInfo.SetValue(createStudent.student, new string[1]{ friend });
+        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, new string[1]{ friend });
         return createStudent.student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        friendsPropertyInfo.SetValue(student, new string[1]{ friend });
+        CreateStudent.friendsPropertyInfo.SetValue(student, new string[1]{ friend });
         return student;
     }
 
     public static Student WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
-        friendsPropertyInfo.SetValue(createStudent.student, new string[0]);
+        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, new string[0]);
         return createStudent.student;
     }
 
     Student IWhoseFriendsAre.WhoHasNoFriends()
     {
-        friendsPropertyInfo.SetValue(student, new string[0]);
+        CreateStudent.friendsPropertyInfo.SetValue(student, new string[0]);
         return student;
     }
 

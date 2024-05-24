@@ -91,52 +91,52 @@ public class CreateStudent :
     public static Student Method1(int p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        method1MethodInfo.Invoke(createStudent.student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo.Invoke(createStudent.student, new object?[] { p1, p2 });
         return createStudent.student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1(int p1, string p2)
     {
-        method1MethodInfo.Invoke(student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo.Invoke(student, new object?[] { p1, p2 });
         return student;
     }
 
     public static Student Method1<T>(int p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        method1MethodInfo2.MakeGenericMethod(typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo2.MakeGenericMethod(typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
         return createStudent.student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(int p1, string p2)
     {
-        method1MethodInfo2.MakeGenericMethod(typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo2.MakeGenericMethod(typeof(T)).Invoke(student, new object?[] { p1, p2 });
         return student;
     }
 
     public static Student Method1<T>(T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        method1MethodInfo3.MakeGenericMethod(typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo3.MakeGenericMethod(typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
         return createStudent.student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(T p1, string p2)
     {
-        method1MethodInfo3.MakeGenericMethod(typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo3.MakeGenericMethod(typeof(T)).Invoke(student, new object?[] { p1, p2 });
         return student;
     }
 
     public static Student Method1<S, T>(T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        method1MethodInfo4.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo4.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
         return createStudent.student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, string p2)
     {
-        method1MethodInfo4.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo4.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, new object?[] { p1, p2 });
         return student;
     }
 
@@ -144,7 +144,7 @@ public class CreateStudent :
     {
         CreateStudent createStudent = new CreateStudent();
         object?[] args = new object?[] { p1, null };
-        method1MethodInfo5.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, args);
+        CreateStudent.method1MethodInfo5.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, args);
         p2 = (string) args[1]!;
         return createStudent.student;
     }
@@ -152,7 +152,7 @@ public class CreateStudent :
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, out string p2)
     {
         object?[] args = new object?[] { p1, null };
-        method1MethodInfo5.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, args);
+        CreateStudent.method1MethodInfo5.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, args);
         p2 = (string) args[1]!;
         return student;
     }
@@ -160,13 +160,13 @@ public class CreateStudent :
     public static Student Method1<S, T>(in T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        method1MethodInfo6.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo6.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
         return createStudent.student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(in T p1, string p2)
     {
-        method1MethodInfo6.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CreateStudent.method1MethodInfo6.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, new object?[] { p1, p2 });
         return student;
     }
 
@@ -174,7 +174,7 @@ public class CreateStudent :
     {
         CreateStudent createStudent = new CreateStudent();
         object?[] args = new object?[] { p1, p2 };
-        method1MethodInfo7.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, args);
+        CreateStudent.method1MethodInfo7.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, args);
         p2 = (string) args[1]!;
         return createStudent.student;
     }
@@ -182,7 +182,7 @@ public class CreateStudent :
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(in T p1, ref string p2)
     {
         object?[] args = new object?[] { p1, p2 };
-        method1MethodInfo7.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, args);
+        CreateStudent.method1MethodInfo7.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, args);
         p2 = (string) args[1]!;
         return student;
     }

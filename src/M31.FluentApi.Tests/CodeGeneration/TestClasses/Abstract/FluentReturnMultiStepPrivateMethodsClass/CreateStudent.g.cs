@@ -70,35 +70,35 @@ public class CreateStudent :
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, name);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent;
     }
 
     IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter IWithName.WithName(string name)
     {
-        namePropertyInfo.SetValue(student, name);
+        CreateStudent.namePropertyInfo.SetValue(student, name);
         return this;
     }
 
     void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
     {
-        returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
+        CreateStudent.returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
     }
 
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
     {
-        return (int) returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        return (int) CreateStudent.returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
     }
 
     System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
     {
-        return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        return (System.Collections.Generic.List<int>) CreateStudent.returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
     }
 
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
     {
         object?[] args = new object?[] { s };
-        int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;
+        int result = (int) CreateStudent.returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;
         s = (string) args[0]!;
         return result;
     }

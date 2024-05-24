@@ -50,26 +50,26 @@ public class CreateStudent :
     public static Student Named(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        namedMethodInfo.Invoke(createStudent.student, new object?[] { firstName, lastName });
+        CreateStudent.namedMethodInfo.Invoke(createStudent.student, new object?[] { firstName, lastName });
         return createStudent.student;
     }
 
     Student INamedNamed.Named(string firstName, string lastName)
     {
-        namedMethodInfo.Invoke(student, new object?[] { firstName, lastName });
+        CreateStudent.namedMethodInfo.Invoke(student, new object?[] { firstName, lastName });
         return student;
     }
 
     public static Student Named(string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        namedMethodInfo2.Invoke(createStudent.student, new object?[] { lastName });
+        CreateStudent.namedMethodInfo2.Invoke(createStudent.student, new object?[] { lastName });
         return createStudent.student;
     }
 
     Student INamedNamed.Named(string lastName)
     {
-        namedMethodInfo2.Invoke(student, new object?[] { lastName });
+        CreateStudent.namedMethodInfo2.Invoke(student, new object?[] { lastName });
         return student;
     }
 

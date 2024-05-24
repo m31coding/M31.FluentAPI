@@ -62,33 +62,33 @@ public class CreateStudent :
     public static IOfAgeBornOn Named(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        firstNamePropertyInfo.SetValue(createStudent.student, firstName);
-        lastNamePropertyInfo.SetValue(createStudent.student, lastName);
+        CreateStudent.firstNamePropertyInfo.SetValue(createStudent.student, firstName);
+        CreateStudent.lastNamePropertyInfo.SetValue(createStudent.student, lastName);
         return createStudent;
     }
 
     IOfAgeBornOn INamed.Named(string firstName, string lastName)
     {
-        firstNamePropertyInfo.SetValue(student, firstName);
-        lastNamePropertyInfo.SetValue(student, lastName);
+        CreateStudent.firstNamePropertyInfo.SetValue(student, firstName);
+        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
         return this;
     }
 
     IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        agePropertyInfo.SetValue(student, age);
+        CreateStudent.agePropertyInfo.SetValue(student, age);
         return this;
     }
 
     IInSemester IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
+        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
         return this;
     }
 
     ILivingIn IInSemester.InSemester(int semester)
     {
-        semesterPropertyInfo.SetValue(student, semester);
+        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
         return this;
     }
 
@@ -99,7 +99,7 @@ public class CreateStudent :
 
     IWhoIsHappy ILivingIn.LivingIn(string? city)
     {
-        cityPropertyInfo.SetValue(student, city);
+        CreateStudent.cityPropertyInfo.SetValue(student, city);
         return this;
     }
 
@@ -110,49 +110,49 @@ public class CreateStudent :
 
     IWhoIsHappy ILivingIn.InUnknownCity()
     {
-        cityPropertyInfo.SetValue(student, null);
+        CreateStudent.cityPropertyInfo.SetValue(student, null);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        isHappyPropertyInfo.SetValue(student, isHappy);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, isHappy);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WhoIsSad()
     {
-        isHappyPropertyInfo.SetValue(student, false);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, false);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WithUnknownMood()
     {
-        isHappyPropertyInfo.SetValue(student, null);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, null);
         return this;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
-        friendsPropertyInfo.SetValue(student, friends);
+        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
     {
-        friendsPropertyInfo.SetValue(student, friends);
+        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        friendsPropertyInfo.SetValue(student, new string[1]{ friend });
+        CreateStudent.friendsPropertyInfo.SetValue(student, new string[1]{ friend });
         return student;
     }
 
     Student IWhoseFriendsAre.WhoHasNoFriends()
     {
-        friendsPropertyInfo.SetValue(student, new string[0]);
+        CreateStudent.friendsPropertyInfo.SetValue(student, new string[0]);
         return student;
     }
 

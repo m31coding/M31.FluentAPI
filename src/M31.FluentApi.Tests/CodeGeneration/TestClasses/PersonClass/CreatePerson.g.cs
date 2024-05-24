@@ -102,67 +102,67 @@ public class CreatePerson :
     public static IWithMiddleNameWithLastName WithFirstName(string firstName)
     {
         CreatePerson createPerson = new CreatePerson();
-        firstNamePropertyInfo.SetValue(createPerson.person, firstName);
+        CreatePerson.firstNamePropertyInfo.SetValue(createPerson.person, firstName);
         return createPerson;
     }
 
     IWithMiddleNameWithLastName IWithFirstName.WithFirstName(string firstName)
     {
-        firstNamePropertyInfo.SetValue(person, firstName);
+        CreatePerson.firstNamePropertyInfo.SetValue(person, firstName);
         return this;
     }
 
     IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
     {
-        middleNamePropertyInfo.SetValue(person, middleName);
+        CreatePerson.middleNamePropertyInfo.SetValue(person, middleName);
         return this;
     }
 
     IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad IWithMiddleNameWithLastName.WithLastName(string lastName)
     {
-        lastNamePropertyInfo.SetValue(person, lastName);
+        CreatePerson.lastNamePropertyInfo.SetValue(person, lastName);
         return this;
     }
 
     Person IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoseAddressIsUnknown()
     {
-        whoseAddressIsUnknownMethodInfo.Invoke(person, new object?[] {  });
+        CreatePerson.whoseAddressIsUnknownMethodInfo.Invoke(person, new object?[] {  });
         return person;
     }
 
     IWithHouseNumber IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoLivesAtAddress()
     {
-        whoLivesAtAddressMethodInfo.Invoke(person, new object?[] {  });
+        CreatePerson.whoLivesAtAddressMethodInfo.Invoke(person, new object?[] {  });
         return this;
     }
 
     ILivingInCity IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoIsADigitalNomad()
     {
-        whoIsADigitalNomadMethodInfo.Invoke(person, new object?[] {  });
+        CreatePerson.whoIsADigitalNomadMethodInfo.Invoke(person, new object?[] {  });
         return this;
     }
 
     IWithStreet IWithHouseNumber.WithHouseNumber(string houseNumber)
     {
-        withHouseNumberMethodInfo.Invoke(person, new object?[] { houseNumber });
+        CreatePerson.withHouseNumberMethodInfo.Invoke(person, new object?[] { houseNumber });
         return this;
     }
 
     IInCity IWithStreet.WithStreet(string street)
     {
-        withStreetMethodInfo.Invoke(person, new object?[] { street });
+        CreatePerson.withStreetMethodInfo.Invoke(person, new object?[] { street });
         return this;
     }
 
     Person IInCity.InCity(string city)
     {
-        inCityMethodInfo.Invoke(person, new object?[] { city });
+        CreatePerson.inCityMethodInfo.Invoke(person, new object?[] { city });
         return person;
     }
 
     Person ILivingInCity.LivingInCity(string city)
     {
-        livingInCityMethodInfo.Invoke(person, new object?[] { city });
+        CreatePerson.livingInCityMethodInfo.Invoke(person, new object?[] { city });
         return person;
     }
 

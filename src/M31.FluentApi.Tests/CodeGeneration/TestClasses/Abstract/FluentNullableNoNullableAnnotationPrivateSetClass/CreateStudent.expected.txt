@@ -35,26 +35,26 @@ public class CreateStudent :
     public static Student WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, name);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent.student;
     }
 
     Student IWithName.WithName(string name)
     {
-        namePropertyInfo.SetValue(student, name);
+        CreateStudent.namePropertyInfo.SetValue(student, name);
         return student;
     }
 
     public static Student WhoseNameIsUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, null);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, null);
         return createStudent.student;
     }
 
     Student IWithName.WhoseNameIsUnknown()
     {
-        namePropertyInfo.SetValue(student, null);
+        CreateStudent.namePropertyInfo.SetValue(student, null);
         return student;
     }
 

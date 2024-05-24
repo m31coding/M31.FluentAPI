@@ -64,13 +64,13 @@ public class CreateStudent :
 
     IWithProperty2 IWithProperty1.WithProperty1(string property1)
     {
-        property1PropertyInfo.SetValue(student, property1);
+        CreateStudent.property1PropertyInfo.SetValue(student, property1);
         return this;
     }
 
     Student IWithProperty2.WithProperty2(string property2)
     {
-        property2PropertyInfo.SetValue(student, property2);
+        CreateStudent.property2PropertyInfo.SetValue(student, property2);
         return student;
     }
 

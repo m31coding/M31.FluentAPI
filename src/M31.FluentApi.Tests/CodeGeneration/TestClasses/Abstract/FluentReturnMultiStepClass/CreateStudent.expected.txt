@@ -37,13 +37,13 @@ public class CreateStudent :
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, name);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent;
     }
 
     IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter IWithName.WithName(string name)
     {
-        namePropertyInfo.SetValue(student, name);
+        CreateStudent.namePropertyInfo.SetValue(student, name);
         return this;
     }
 

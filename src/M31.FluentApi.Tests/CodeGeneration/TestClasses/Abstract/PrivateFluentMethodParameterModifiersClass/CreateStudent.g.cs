@@ -78,34 +78,34 @@ public class CreateStudent :
     public static IMethodWithRefParameter MethodWithParams(params int[] numbers)
     {
         CreateStudent createStudent = new CreateStudent();
-        methodWithParamsMethodInfo.Invoke(createStudent.student, new object?[] { numbers });
+        CreateStudent.methodWithParamsMethodInfo.Invoke(createStudent.student, new object?[] { numbers });
         return createStudent;
     }
 
     IMethodWithRefParameter IMethodWithParams.MethodWithParams(params int[] numbers)
     {
-        methodWithParamsMethodInfo.Invoke(student, new object?[] { numbers });
+        CreateStudent.methodWithParamsMethodInfo.Invoke(student, new object?[] { numbers });
         return this;
     }
 
     IMethodWithInParameter IMethodWithRefParameter.MethodWithRefParameter(ref int n1)
     {
         object?[] args = new object?[] { n1 };
-        methodWithRefParameterMethodInfo.Invoke(student, args);
+        CreateStudent.methodWithRefParameterMethodInfo.Invoke(student, args);
         n1 = (int) args[0]!;
         return this;
     }
 
     IMethodWithOutParameter IMethodWithInParameter.MethodWithInParameter(in int n2)
     {
-        methodWithInParameterMethodInfo.Invoke(student, new object?[] { n2 });
+        CreateStudent.methodWithInParameterMethodInfo.Invoke(student, new object?[] { n2 });
         return this;
     }
 
     IMethodWithRefInAndOutParameter IMethodWithOutParameter.MethodWithOutParameter(out int n3)
     {
         object?[] args = new object?[] { null };
-        methodWithOutParameterMethodInfo.Invoke(student, args);
+        CreateStudent.methodWithOutParameterMethodInfo.Invoke(student, args);
         n3 = (int) args[0]!;
         return this;
     }
@@ -113,7 +113,7 @@ public class CreateStudent :
     Student IMethodWithRefInAndOutParameter.MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
     {
         object?[] args = new object?[] { n4, n5, null };
-        methodWithRefInAndOutParameterMethodInfo.Invoke(student, args);
+        CreateStudent.methodWithRefInAndOutParameterMethodInfo.Invoke(student, args);
         n4 = (int) args[0]!;
         n6 = (int) args[2]!;
         return student;

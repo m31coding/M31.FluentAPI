@@ -60,25 +60,25 @@ public class CreateStudent :
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        withNameMethodInfo.Invoke(createStudent.student, new object?[] { name });
+        CreateStudent.withNameMethodInfo.Invoke(createStudent.student, new object?[] { name });
         return createStudent;
     }
 
     IBornOn IWithName.WithName(string name)
     {
-        withNameMethodInfo.Invoke(student, new object?[] { name });
+        CreateStudent.withNameMethodInfo.Invoke(student, new object?[] { name });
         return this;
     }
 
     IInSemester IBornOn.BornOn(System.DateOnly date)
     {
-        bornOnMethodInfo.Invoke(student, new object?[] { date });
+        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { date });
         return this;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        inSemesterMethodInfo.Invoke(student, new object?[] { semester });
+        CreateStudent.inSemesterMethodInfo.Invoke(student, new object?[] { semester });
         return student;
     }
 

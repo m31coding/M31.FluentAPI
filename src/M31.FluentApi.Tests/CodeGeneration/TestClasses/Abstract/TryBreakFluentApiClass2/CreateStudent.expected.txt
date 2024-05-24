@@ -20,7 +20,7 @@ public class CreateStudent :
 
     static CreateStudent()
     {
-        CreateStudent.someMethodMethodInfo = typeof(Student).GetMethod(
+        someMethodMethodInfo = typeof(Student).GetMethod(
             "SomeMethod",
             0,
             BindingFlags.Instance | BindingFlags.NonPublic,

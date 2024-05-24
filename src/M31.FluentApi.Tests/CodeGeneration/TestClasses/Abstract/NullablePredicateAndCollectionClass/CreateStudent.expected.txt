@@ -101,19 +101,19 @@ public class CreateStudent :
 
     Student IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        isHappyPropertyInfo.SetValue(student, isHappy);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, isHappy);
         return student;
     }
 
     Student IWhoIsHappy.WhoIsSad()
     {
-        isHappyPropertyInfo.SetValue(student, false);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, false);
         return student;
     }
 
     Student IWhoIsHappy.WithUnknownMood()
     {
-        isHappyPropertyInfo.SetValue(student, null);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, null);
         return student;
     }
 

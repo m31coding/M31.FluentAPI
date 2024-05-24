@@ -41,25 +41,25 @@ public class CreateStudent :
     public static IWithName InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        semesterPropertyInfo.SetValue(createStudent.student, semester);
+        CreateStudent.semesterPropertyInfo.SetValue(createStudent.student, semester);
         return createStudent;
     }
 
     IWithName IInSemester.InSemester(int semester)
     {
-        semesterPropertyInfo.SetValue(student, semester);
+        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
         return this;
     }
 
     IWithName2 IWithName.WithName(char initial)
     {
-        initialPropertyInfo.SetValue(student, initial);
+        CreateStudent.initialPropertyInfo.SetValue(student, initial);
         return this;
     }
 
     Student IWithName2.WithName(string lastName)
     {
-        lastNamePropertyInfo.SetValue(student, lastName);
+        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
         return student;
     }
 

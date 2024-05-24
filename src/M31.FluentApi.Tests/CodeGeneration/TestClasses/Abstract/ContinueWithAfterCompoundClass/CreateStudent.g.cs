@@ -43,27 +43,27 @@ public class CreateStudent :
     public static IWithProperty2 WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        firstNamePropertyInfo.SetValue(createStudent.student, firstName);
-        lastNamePropertyInfo.SetValue(createStudent.student, lastName);
+        CreateStudent.firstNamePropertyInfo.SetValue(createStudent.student, firstName);
+        CreateStudent.lastNamePropertyInfo.SetValue(createStudent.student, lastName);
         return createStudent;
     }
 
     IWithProperty2 IWithName.WithName(string firstName, string lastName)
     {
-        firstNamePropertyInfo.SetValue(student, firstName);
-        lastNamePropertyInfo.SetValue(student, lastName);
+        CreateStudent.firstNamePropertyInfo.SetValue(student, firstName);
+        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
         return this;
     }
 
     IWithProperty2 IWithProperty1.WithProperty1(string property1)
     {
-        property1PropertyInfo.SetValue(student, property1);
+        CreateStudent.property1PropertyInfo.SetValue(student, property1);
         return this;
     }
 
     Student IWithProperty2.WithProperty2(string property2)
     {
-        property2PropertyInfo.SetValue(student, property2);
+        CreateStudent.property2PropertyInfo.SetValue(student, property2);
         return student;
     }
 

@@ -35,13 +35,13 @@ public class CreateStudent :
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        semesterPropertyInfo.SetValue(createStudent.student, semester);
+        CreateStudent.semesterPropertyInfo.SetValue(createStudent.student, semester);
         return createStudent.student;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        semesterPropertyInfo.SetValue(student, semester);
+        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
         return student;
     }
 
