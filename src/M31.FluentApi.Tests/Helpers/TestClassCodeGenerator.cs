@@ -55,7 +55,7 @@ internal class TestClassCodeGenerator
 
         return ClassInfoFactory.CreateFluentApiClassInfo(
             semanticModel,
-            typeDeclaration!,
+            typeDeclaration,
             SourceGenerator.GeneratorConfig,
             CancellationToken.None);
     }

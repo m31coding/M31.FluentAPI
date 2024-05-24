@@ -25,7 +25,7 @@ internal class CollectionMethods : IBuilderMethodCreator
             throw new GenerationException($"The collection type {SymbolInfo.Type} is not supported.");
         }
 
-        string genericTypeArgument = SymbolInfo.CollectionType.GenericTypeArgument ?? "object";
+        string genericTypeArgument = SymbolInfo.CollectionType.GenericTypeArgument;
 
         CollectionMethodCreator collectionMethodCreator = SymbolInfo.CollectionType.Collection switch
         {

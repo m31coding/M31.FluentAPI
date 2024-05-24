@@ -17,12 +17,11 @@ internal class ForkCreator : ICodeBoardActor
     {
         BuilderMethodFactory builderMethodFactory = new BuilderMethodFactory(codeBoard.InnerBodyCreationDelegates);
         MethodCreator methodCreator = new MethodCreator(builderMethodFactory);
-        CreateForks(codeBoard.FluentApiInfos, methodCreator, codeBoard);
+        CreateForks(methodCreator, codeBoard);
         codeBoard.Forks = GetForks();
     }
 
     private void CreateForks(
-        IReadOnlyCollection<FluentApiInfo> infos,
         MethodCreator methodCreator,
         CodeBoard codeBoard)
     {

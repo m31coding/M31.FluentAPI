@@ -6,4 +6,5 @@ Student alice = CreateStudent.Named("Alice", "King").OfAge(22).WhoStartsUniversi
 Student bob = CreateStudent.Named("Bob", "Bishop").BornOn(new DateOnly(2002, 8, 3)).InSemester(2)
     .LivingInBoston().WithUnknownMood().WhoseFriendIs("Alice");
 
-Console.WriteLine($"Alice: \"Hi {alice.Friends.First()}\"!");
+Console.WriteLine($"Alice: \"Hi {alice.Friends.First()}!\"");
+Console.WriteLine($"Bob: \"Hi {bob.Friends.First()}!\"");

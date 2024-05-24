@@ -1,5 +1,3 @@
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
-
 namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal class FluentApiClassAdditionalInfo

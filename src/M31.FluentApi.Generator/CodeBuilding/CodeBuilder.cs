@@ -5,7 +5,7 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 internal class CodeBuilder
 {
     private readonly string newLineString;
-    internal int IndentationLevel { get; set; } = 0;
+    internal int IndentationLevel { get; set; }
     private readonly StringBuilder stringBuilder;
     private bool endOfLine;
     private bool blankLine;
