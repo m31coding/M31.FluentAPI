@@ -54,6 +54,18 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaRecursiveClass()
+    {
+        var student = TestClasses.Abstract.FluentLambdaRecursiveClass
+            .CreateStudent
+            .WithFriend(s => s.WithFriend(s2 => s2.WithoutFriend()));
+
+        Assert.NotNull(student.Friend);
+        Assert.NotNull(student.Friend!.Friend);
+        Assert.Null(student.Friend!.Friend!.Friend);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaSingleStepClass()
     {
         var student = TestClasses.Abstract.FluentLambdaSingleStepClass
