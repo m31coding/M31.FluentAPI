@@ -15,21 +15,22 @@ internal class FirstStepBuilderMethod : BuilderStepMethod
 
     internal string ReturnType { get; }
 
-    internal override Method BuildMethodCode(BuilderAndTargetInfo info)
+    internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
     {
         // public static IBornOn WithName(string name)
         Method method = CreateMethod(ReturnType, "public", "static");
 
         // CreateStudent<T1, T2> createStudent = new CreateStudent<T1, T2>();
+        string builderInstanceVariableName = reservedVariableNames.GetNewLocalVariableName(info.BuilderInstanceName);
         method.AppendBodyLine(
-            $"{info.BuilderClassNameWithTypeParameters} {info.BuilderInstanceName} = " +
+            $"{info.BuilderClassNameWithTypeParameters} {builderInstanceVariableName} = " +
             $"new {info.BuilderClassNameWithTypeParameters}();");
 
         // createStudent.student.Name = name;
-        CreateBody(method, $"{info.BuilderInstanceName}.");
+        CreateBody(method, $"{builderInstanceVariableName}.", reservedVariableNames);
 
         // return createStudent;
-        CreateReturnStatement(method, $"return {info.BuilderInstanceName};");
+        CreateReturnStatement(method, $"return {builderInstanceVariableName};");
 
         return method;
     }

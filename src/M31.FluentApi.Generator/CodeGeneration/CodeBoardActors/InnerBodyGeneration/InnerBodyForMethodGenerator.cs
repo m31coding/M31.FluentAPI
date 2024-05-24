@@ -27,6 +27,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         List<string> BuildCallMethodCode(
             string instancePrefix,
             IReadOnlyCollection<Parameter> outerMethodParameters,
+            ReservedVariableNames reservedVariableNames,
             string? returnType)
         {
             return new List<string>()
@@ -57,6 +58,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         List<string> BuildCallMethodCode(
             string instancePrefix,
             IReadOnlyCollection<Parameter> outerMethodParameters,
+            ReservedVariableNames reservedVariableNames,
             string? returnType)
         {
             return outerMethodParameters.Any(p =>
@@ -66,6 +68,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                     instancePrefix,
                     symbolInfo.GenericInfo,
                     outerMethodParameters,
+                    reservedVariableNames,
                     returnType)
                 : BuildDefaultReflectionCode(
                     infoFieldName,
@@ -81,10 +84,13 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         string instancePrefix,
         GenericInfo? genericInfo,
         IReadOnlyCollection<Parameter> outerMethodParameters,
+        ReservedVariableNames reservedVariableNames,
         string? returnType)
     {
         bool returnResult = !IsNoneOrVoid(returnType);
-        string variableName = returnResult ? GetVariableName("result", outerMethodParameters) : string.Empty;
+        string variableName = returnResult
+            ? reservedVariableNames.GetNewLocalVariableName("result")
+            : string.Empty;
         string suppressNullability = returnResult ? "!" : string.Empty;
 
         List<string> lines = new List<string>();
@@ -128,24 +134,6 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             // semester = (int) args[0];
             return $"{parameter.Name} = ({parameter.Type}) args[{index}]!;";
         }
-    }
-
-    private string GetVariableName(string desiredVariableName, IReadOnlyCollection<Parameter> outerMethodParameters)
-    {
-        string variableName = desiredVariableName;
-        int i = 2;
-
-        IEnumerable<string> reservedVariableNames = outerMethodParameters
-            .Select(p => p.Name)
-            .Concat(new string[] { CodeBoard.Info.ClassInstanceName, CodeBoard.Info.BuilderInstanceName });
-
-        // ReSharper disable once PossibleMultipleEnumeration
-        while (reservedVariableNames.Contains(variableName))
-        {
-            variableName = $"{variableName}{i++}";
-        }
-
-        return variableName;
     }
 
     private List<string> BuildDefaultReflectionCode(

@@ -7,7 +7,7 @@ internal class EntityFieldGenerator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
-        string fieldName = codeBoard.ReservedVariableNames.GetNewFieldName(codeBoard.Info.ClassInstanceName);
+        string fieldName = codeBoard.ReservedVariableNames.GetNewGlobalVariableName(codeBoard.Info.ClassInstanceName);
 
         // private readonly Student<T1, T2> student;
         Field field = new Field(codeBoard.Info.FluentApiClassName, fieldName);

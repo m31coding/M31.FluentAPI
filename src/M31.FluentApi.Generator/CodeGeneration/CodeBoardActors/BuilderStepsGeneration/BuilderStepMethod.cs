@@ -12,7 +12,7 @@ internal abstract class BuilderStepMethod : BuilderMethod
     {
     }
 
-    internal abstract Method BuildMethodCode(BuilderAndTargetInfo info);
+    internal abstract Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames);
 
     protected Method CreateMethod(string defaultReturnType, params string[] modifiers)
     {
@@ -54,9 +54,9 @@ internal abstract class BuilderStepMethod : BuilderMethod
         return signature;
     }
 
-    protected void CreateBody(Method method, string instancePrefix)
+    protected void CreateBody(Method method, string instancePrefix, ReservedVariableNames reservedVariableNames)
     {
-        List<string> bodyCode = BuildBodyCode(instancePrefix, ReturnTypeToRespect);
+        List<string> bodyCode = BuildBodyCode(instancePrefix, reservedVariableNames, ReturnTypeToRespect);
         foreach (string bodyLine in bodyCode)
         {
             method.AppendBodyLine(bodyLine);

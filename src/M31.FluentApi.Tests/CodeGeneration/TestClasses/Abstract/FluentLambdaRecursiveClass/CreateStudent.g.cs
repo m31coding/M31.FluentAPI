@@ -28,9 +28,9 @@ public class CreateStudent :
 
     public static Student WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent)
     {
-        CreateStudent createStudent = new CreateStudent();
-        createStudent.student.Friend = createStudent(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.InitialStep());
-        return createStudent.student;
+        CreateStudent createStudent2 = new CreateStudent();
+        createStudent2.student.Friend = createStudent(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.InitialStep());
+        return createStudent2.student;
     }
 
     Student IWithFriend.WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent)
