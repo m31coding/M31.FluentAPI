@@ -8,6 +8,9 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRe
 [FluentApi]
 public class Student
 {
+    [FluentMember(0)]
+    public string Name { get; set; }
+
     [FluentLambda(1)]
     [FluentNullable]
     public Student? Friend { get; set; }

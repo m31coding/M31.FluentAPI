@@ -58,10 +58,16 @@ public partial class CodeGenerationTests
     {
         var student = TestClasses.Abstract.FluentLambdaRecursiveClass
             .CreateStudent
-            .WithFriend(s => s.WithFriend(s2 => s2.WithoutFriend()));
+            .WithName("Alice")
+            .WithFriend(f => f
+                .WithName("Bob")
+                .WithFriend(f2 => f2
+                    .WithName("Eve")
+                    .WithoutFriend()));
 
-        Assert.NotNull(student.Friend);
-        Assert.NotNull(student.Friend!.Friend);
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal("Bob", student.Friend!.Name);
+        Assert.Equal("Eve", student.Friend!.Friend!.Name);
         Assert.Null(student.Friend!.Friend!.Friend);
     }
 

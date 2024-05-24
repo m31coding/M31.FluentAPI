@@ -12,6 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRe
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
     CreateStudent.IWithFriend
 {
     private readonly Student student;
@@ -26,11 +27,17 @@ public class CreateStudent :
         return new CreateStudent();
     }
 
-    public static Student WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent)
+    public static IWithFriend WithName(string name)
     {
-        CreateStudent createStudent2 = new CreateStudent();
-        createStudent2.student.Friend = createStudent(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.InitialStep());
-        return createStudent2.student;
+        CreateStudent createStudent = new CreateStudent();
+        createStudent.student.Name = name;
+        return createStudent;
+    }
+
+    IWithFriend IWithName.WithName(string name)
+    {
+        student.Name = name;
+        return this;
     }
 
     Student IWithFriend.WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent)
@@ -39,21 +46,19 @@ public class CreateStudent :
         return student;
     }
 
-    public static Student WithoutFriend()
-    {
-        CreateStudent createStudent = new CreateStudent();
-        createStudent.student.Friend = null;
-        return createStudent.student;
-    }
-
     Student IWithFriend.WithoutFriend()
     {
         student.Friend = null;
         return student;
     }
 
-    public interface ICreateStudent : IWithFriend
+    public interface ICreateStudent : IWithName
     {
+    }
+
+    public interface IWithName
+    {
+        IWithFriend WithName(string name);
     }
 
     public interface IWithFriend
