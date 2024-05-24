@@ -40,9 +40,9 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
 
     protected override void InitializeInfoField(string fieldName, MemberSymbolInfo symbolInfo)
     {
-        // CreateStudent.semesterPropertyInfo = typeof(Student<T1, T2>)
+        // semesterPropertyInfo = typeof(Student<T1, T2>)
         //     .GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic););
-        string code = $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{fieldName} =" +
+        string code = $"{fieldName} =" +
                       $" typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters})" +
                       $".Get{SymbolType(symbolInfo)}(\"{symbolInfo.Name}\", " +
                       $"{InfoFieldBindingFlagsArgument(symbolInfo)})!;";

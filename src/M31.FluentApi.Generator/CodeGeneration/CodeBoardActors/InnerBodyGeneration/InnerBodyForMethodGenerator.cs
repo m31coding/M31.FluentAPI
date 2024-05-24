@@ -182,7 +182,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             @$"new Type[] {{ {string.Join(", ",
                 symbolInfo.ParameterInfos.Select(CreateMethodParameter))} }}";
 
-        // CreateStudent.withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
+        // withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
         //     "WithName",
         //     0,                                                   -> generic parameter count
         //     BindingFlags.Instance | BindingFlags.NonPublic,
@@ -192,7 +192,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         //
         // Generic types are created via Type.MakeGenericMethodParameter(int position). In addition, a ref type is
         // specified via MakeByRefType().
-        staticConstructor.AppendBodyLine($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{fieldName} = " +
+        staticConstructor.AppendBodyLine($"{fieldName} = " +
                                          $"typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters}).GetMethod(");
         staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
         staticConstructor.AppendBodyLine($"{indentation}{GetGenericParameterCount(symbolInfo.GenericInfo)},");
