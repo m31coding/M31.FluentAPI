@@ -30,18 +30,19 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
 
     protected override void GenerateInnerBodyWithReflection(MemberSymbolInfo symbolInfo, string infoFieldName)
     {
-        // semesterPropertyInfo.SetValue(createStudent.student, semester);
+        // CreateStudent.semesterPropertyInfo.SetValue(createStudent.student, semester);
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
-                $"{infoFieldName}.SetValue({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
+                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}" +
+                $".SetValue({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
         CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
     }
 
     protected override void InitializeInfoField(string fieldName, MemberSymbolInfo symbolInfo)
     {
-        // semesterPropertyInfo = typeof(Student<T1, T2>)
+        // CreateStudent.semesterPropertyInfo = typeof(Student<T1, T2>)
         //     .GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic););
-        string code = $"{fieldName} =" +
+        string code = $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{fieldName} =" +
                       $" typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters})" +
                       $".Get{SymbolType(symbolInfo)}(\"{symbolInfo.Name}\", " +
                       $"{InfoFieldBindingFlagsArgument(symbolInfo)})!;";

@@ -5,9 +5,8 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System;
 using M31.FluentApi.Attributes;
-using M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWithGenericMethods;
+using System;
 using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass1;
@@ -21,7 +20,7 @@ public class CreateStudent :
 
     static CreateStudent()
     {
-        someMethodMethodInfo = typeof(Student).GetMethod(
+        CreateStudent.someMethodMethodInfo = typeof(Student).GetMethod(
             "SomeMethod",
             0,
             BindingFlags.Instance | BindingFlags.NonPublic,
@@ -43,13 +42,13 @@ public class CreateStudent :
     public static Student SomeMethod(string someMethodMethodInfo)
     {
         CreateStudent createStudent = new CreateStudent();
-        someMethodMethodInfo.Invoke(createStudent.student, new object?[] { someMethodMethodInfo });
+        CreateStudent.someMethodMethodInfo.Invoke(createStudent.student, new object?[] { someMethodMethodInfo });
         return createStudent.student;
     }
 
     Student ISomeMethod.SomeMethod(string someMethodMethodInfo)
     {
-        someMethodMethodInfo.Invoke(student, new object?[] { someMethodMethodInfo });
+        CreateStudent.someMethodMethodInfo.Invoke(student, new object?[] { someMethodMethodInfo });
         return student;
     }
 

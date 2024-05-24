@@ -99,12 +99,13 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         lines.Add(
             $"object?[] args = new object?[] {{ {string.Join(", ", outerMethodParameters.Select(GetArgument))} }};");
 
-        // semesterMethodInfo.Invoke(createStudent.student, args) or
-        // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args) or
+        // CreateStudent.semesterMethodInfo.Invoke(createStudent.student, args) or
+        // CreateStudent.semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2))
+        //     .Invoke(createStudent.student, args) or
         // string result = (string) toJsonMethodInfo.Invoke(createStudent.student, args)
         lines.Add(CodeBoard.NewCodeBuilder()
             .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
-            .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+            .Append($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}.{MakeGenericMethod(genericInfo)}")
             .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args){suppressNullability};")
             .ToString());
 
@@ -148,12 +149,13 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
 
         return new List<string>()
         {
-            // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
-            // semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
+            // CreateStudent.semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
+            // CreateStudent.semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
             //     .Invoke(createStudent.student, new object[] { semester });
             CodeBoard.NewCodeBuilder()
                 .Append($"return ({returnType}) ", returnResult)
-                .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+                .Append($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}" +
+                        $".{MakeGenericMethod(genericInfo)}")
                 .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
                 .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }})" +
                         $"{suppressNullability};")
@@ -180,7 +182,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             @$"new Type[] {{ {string.Join(", ",
                 symbolInfo.ParameterInfos.Select(CreateMethodParameter))} }}";
 
-        // withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
+        // CreateStudent.withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
         //     "WithName",
         //     0,                                                   -> generic parameter count
         //     BindingFlags.Instance | BindingFlags.NonPublic,
@@ -190,7 +192,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         //
         // Generic types are created via Type.MakeGenericMethodParameter(int position). In addition, a ref type is
         // specified via MakeByRefType().
-        staticConstructor.AppendBodyLine($"{fieldName} = " +
+        staticConstructor.AppendBodyLine($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{fieldName} = " +
                                          $"typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters}).GetMethod(");
         staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
         staticConstructor.AppendBodyLine($"{indentation}{GetGenericParameterCount(symbolInfo.GenericInfo)},");
