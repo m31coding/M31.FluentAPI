@@ -9,17 +9,7 @@ internal class BuilderClassFields
         this.fieldNames = new HashSet<string>();
     }
 
-    internal void ReserveFieldName(string fieldName)
-    {
-        if (fieldNames.Contains(fieldName))
-        {
-            throw new ArgumentException($"A field with name {fieldName} already exists.");
-        }
-
-        fieldNames.Add(fieldName);
-    }
-
-    internal string GetFieldName(string desiredFieldName)
+    internal string GetNewFieldName(string desiredFieldName)
     {
         string fieldName = desiredFieldName;
         int i = 2;
