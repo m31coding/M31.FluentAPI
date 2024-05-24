@@ -1,6 +1,8 @@
 #define TEST_GENERATED_CODE
 #if TEST_GENERATED_CODE
 
+// ReSharper disable NotAccessedVariable
+
 using System;
 using System.Collections.Generic;
 using M31.FluentApi.Tests.CodeGeneration.Helpers;
@@ -47,7 +49,7 @@ public partial class CodeGenerationTests
         var student3 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
             .CreateStudent
             .WithName("Alice")
-            .WithAddress(a => null);
+            .WithAddress(_ => null);
 
         Assert.Equal("Alice", student3.Name);
         Assert.Null(student3.Address);

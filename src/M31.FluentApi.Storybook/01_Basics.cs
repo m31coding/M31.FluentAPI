@@ -1,7 +1,6 @@
 ﻿// Non-nullable member is uninitialized
 #pragma warning disable CS8618
-
-// ReSharper disable CheckNamespace
+// ReSharper disable All
 
 using M31.FluentApi.Attributes;
 

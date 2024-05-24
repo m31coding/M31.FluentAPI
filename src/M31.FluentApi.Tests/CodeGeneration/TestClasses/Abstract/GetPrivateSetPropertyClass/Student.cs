@@ -1,4 +1,5 @@
 using M31.FluentApi.Attributes;
+// ReSharper disable All
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GetPrivateSetPropertyClass;
 

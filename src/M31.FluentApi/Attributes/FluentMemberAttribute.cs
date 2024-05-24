@@ -1,3 +1,5 @@
+// ReSharper disable UnusedParameter.Local
+
 namespace M31.FluentApi.Attributes;
 
 /// <summary>

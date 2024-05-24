@@ -1,6 +1,5 @@
 using System;
 using M31.FluentApi.Generator.SourceGenerators;
-using M31.FluentApi.Tests.CodeGeneration.Helpers;
 using M31.FluentApi.Tests.Helpers;
 using Xunit;
 

@@ -1,8 +1,8 @@
 // Non-nullable member is uninitialized
 #pragma warning disable CS8618
-
 // Field is never used
 #pragma warning disable CS0169
+// ReSharper disable All
 
 using M31.FluentApi.Attributes;
 
