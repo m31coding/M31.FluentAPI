@@ -1,12 +1,12 @@
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
-internal class BuilderClassFields
+internal class ReservedVariableNames
 {
-    private readonly HashSet<string> fieldNames;
+    private readonly HashSet<string> reservedFieldNames;
 
-    internal BuilderClassFields()
+    internal ReservedVariableNames()
     {
-        this.fieldNames = new HashSet<string>();
+        reservedFieldNames = new HashSet<string>();
     }
 
     internal string GetNewFieldName(string desiredFieldName)
@@ -14,12 +14,12 @@ internal class BuilderClassFields
         string fieldName = desiredFieldName;
         int i = 2;
 
-        while (fieldNames.Contains(fieldName))
+        while (reservedFieldNames.Contains(fieldName))
         {
             fieldName = $"{desiredFieldName}{i++}";
         }
 
-        fieldNames.Add(fieldName);
+        reservedFieldNames.Add(fieldName);
 
         return fieldName;
     }

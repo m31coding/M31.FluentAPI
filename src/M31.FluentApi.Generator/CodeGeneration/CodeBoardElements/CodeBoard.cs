@@ -34,7 +34,7 @@ internal class CodeBoard
         InnerBodyCreationDelegates = new InnerBodyCreationDelegates();
         BuilderMethodToAttributeData = new Dictionary<BuilderMethod, AttributeDataExtended>();
         Forks = new List<Fork>();
-        BuilderClassFields = new BuilderClassFields();
+        ReservedVariableNames = new ReservedVariableNames();
         diagnostics = new List<Diagnostic>();
         NewLineString = newLineString;
         CancellationToken = cancellationToken;
@@ -50,7 +50,7 @@ internal class CodeBoard
     internal InnerBodyCreationDelegates InnerBodyCreationDelegates { get; }
     internal Dictionary<BuilderMethod, AttributeDataExtended> BuilderMethodToAttributeData { get; }
     internal IReadOnlyList<Fork> Forks { get; set; }
-    internal BuilderClassFields BuilderClassFields { get; }
+    internal ReservedVariableNames ReservedVariableNames { get; }
     internal IReadOnlyCollection<Diagnostic> Diagnostics => diagnostics;
     internal string NewLineString { get; }
     internal CancellationToken CancellationToken { get; }
