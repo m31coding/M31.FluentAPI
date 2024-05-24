@@ -41,7 +41,7 @@ internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
 
         // semesterPropertyInfo / semesterFieldInfo / semesterMethodInfo
         string infoFieldName = $"{symbolInfo.NameInCamelCase}{symbolType}Info";
-        infoFieldName = CodeBoard.BuilderClassFields.GetFieldName(symbolInfo, infoFieldName);
+        infoFieldName = CodeBoard.BuilderClassFields.GetFieldName(infoFieldName);
 
         GenerateInfoField(symbolType, infoFieldName);
         InitializeInfoField(infoFieldName, symbolInfo);

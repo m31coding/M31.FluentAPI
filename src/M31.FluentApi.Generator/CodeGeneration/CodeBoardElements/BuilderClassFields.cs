@@ -19,7 +19,7 @@ internal class BuilderClassFields
         fieldNames.Add(fieldName);
     }
 
-    internal string GetFieldName(FluentApiSymbolInfo symbolInfo, string desiredFieldName)
+    internal string GetFieldName(string desiredFieldName)
     {
         string fieldName = desiredFieldName;
         int i = 2;

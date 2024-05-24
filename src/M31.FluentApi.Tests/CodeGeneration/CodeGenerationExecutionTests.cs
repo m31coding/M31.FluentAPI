@@ -25,6 +25,35 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaNullablePropertyClass()
+    {
+        var student1 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddress(a => a.WithStreet("Market Street").WithHouseNumber("23"));
+
+        Assert.Equal("Alice", student1.Name);
+        Assert.Equal("Market Street", student1.Address!.Street);
+        Assert.Equal("23", student1.Address.HouseNumber);
+
+        var student2 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithoutAddress();
+
+        Assert.Equal("Alice", student2.Name);
+        Assert.Null(student2.Address);
+
+        var student3 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddress(a => null);
+
+        Assert.Equal("Alice", student3.Name);
+        Assert.Null(student3.Address);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaSingleStepClass()
     {
         var student = TestClasses.Abstract.FluentLambdaSingleStepClass
