@@ -14,7 +14,7 @@
     <PackageVersion>1.3.0</PackageVersion>
     <Authors>Kevin Schaal</Authors>
     <Description>The generator package for M31.FluentAPI. Don't install this package explicitly, install M31.FluentAPI instead.</Description>
-    <PackageTags>FluentAPI CodeGeneration</PackageTags>
+    <PackageTags>fluentapi fluentbuilder fluentinterface fluentdesign fluent codegeneration</PackageTags>
     <PackageProjectUrl>https://github.com/m31coding/M31.FluentAPI</PackageProjectUrl>
     <RepositoryUrl>https://github.com/m31coding/M31.FluentAPI.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
