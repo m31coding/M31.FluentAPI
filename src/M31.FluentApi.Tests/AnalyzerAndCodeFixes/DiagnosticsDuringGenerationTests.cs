@@ -48,7 +48,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic = new ExpectedDiagnostic(
             DuplicateFluentApiMethod.Descriptor,
             "Method1",
-            (11, 6), (16, 6), (21, 6));
+            (12, 6), (17, 6), (22, 6));
 
         RunGeneratorAndCheckDiagnostics("DuplicateMethodClass4", expectedDiagnostic);
     }
@@ -59,7 +59,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic = new ExpectedDiagnostic(
             DuplicateFluentApiMethod.Descriptor,
             "Method1",
-            (11, 6), (16, 6));
+            (12, 6), (17, 6));
 
         RunGeneratorAndCheckDiagnostics("DuplicateMethodClass5", expectedDiagnostic);
     }
@@ -86,7 +86,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic1 = new ExpectedDiagnostic(
             ReservedMethodName.Descriptor,
             "InitialStep",
-            (11, 6));
+            (12, 6));
 
         RunGeneratorAndCheckDiagnostics("ReservedMethodClass2", expectedDiagnostic1);
     }
