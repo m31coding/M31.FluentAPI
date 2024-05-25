@@ -108,7 +108,6 @@ internal class ClassInfoFactory
 
         IReadOnlyCollection<FluentApiInfoGroup> groups = FluentApiInfoGroupCreator.CreateGroups(infos, report);
 
-// todo: pass FluentApiAttributeInfo
         return new FluentApiClassInfo(
             className,
             @namespace,
