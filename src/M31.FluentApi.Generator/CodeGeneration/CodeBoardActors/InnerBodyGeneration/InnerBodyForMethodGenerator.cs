@@ -105,7 +105,8 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         // string result = (string) toJsonMethodInfo.Invoke(createStudent.student, args)
         lines.Add(CodeBoard.NewCodeBuilder()
             .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
-            .Append($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+            .Append(
+                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}.{MakeGenericMethod(genericInfo)}")
             .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args){suppressNullability};")
             .ToString());
 
@@ -208,7 +209,18 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             return parameterInfo.IsGenericParameter
                 ? $"Type.MakeGenericMethodParameter({parameterInfo.GenericTypeParameterPosition!.Value})" +
                   $"{MakeByRefType(parameterInfo.ParameterKinds)}"
-                : $"typeof({parameterInfo.TypeForCodeGeneration}){MakeByRefType(parameterInfo.ParameterKinds)}";
+                : $"typeof({GetTypeOfArgument(parameterInfo)}){MakeByRefType(parameterInfo.ParameterKinds)}";
+
+            static string GetTypeOfArgument(ParameterSymbolInfo parameterInfo)
+            {
+                if (parameterInfo.IsReferenceType && parameterInfo.TypeForCodeGeneration.EndsWith("?"))
+                {
+                    return parameterInfo.TypeForCodeGeneration
+                        .Substring(0, parameterInfo.TypeForCodeGeneration.Length - 1);
+                }
+
+                return parameterInfo.TypeForCodeGeneration;
+            }
 
             static string MakeByRefType(ParameterKinds parameterKinds)
             {

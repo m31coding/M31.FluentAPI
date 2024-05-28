@@ -285,6 +285,20 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecutePrivateMethodFluentNullableParameterClass()
+    {
+        var student = TestClasses.Abstract.PrivateFluentMethodNullableParameterClass
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(null);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Null(student.Semester);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecutePublicReadonlyFieldClass()
     {
         var student = TestClasses.Abstract.PublicReadonlyFieldClass

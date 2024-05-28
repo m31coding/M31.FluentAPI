@@ -23,3 +23,16 @@ Person person3 = CreatePerson.WithFirstName("Eve").WithLastName("Johnson").WhoIs
 Console.WriteLine(JsonSerializer.Serialize(person1));
 Console.WriteLine(JsonSerializer.Serialize(person2));
 Console.WriteLine(JsonSerializer.Serialize(person3));
+
+// Node
+//
+
+Node<int> tree = CreateTree<int>.Root(8)
+    .Left(3, n => n
+        .Left(1)
+        .Right(6))
+    .Right(10, n => n
+        .LeftNull()
+        .Right(14));
+
+Console.WriteLine(JsonSerializer.Serialize(tree));

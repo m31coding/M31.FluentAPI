@@ -114,6 +114,7 @@ internal static class SymbolInfoCreator
             parameterSymbol.Name,
             typeForCodeGeneration,
             parameterSymbol.NullableAnnotation == NullableAnnotation.Annotated,
+            parameterSymbol.Type.IsReferenceType,
             GetDefaultValueAsCode(parameterSymbol),
             genericTypeParameterPosition,
             GetParameterKinds(parameterSymbol));
