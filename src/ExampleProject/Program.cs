@@ -24,6 +24,14 @@ Console.WriteLine(JsonSerializer.Serialize(person1));
 Console.WriteLine(JsonSerializer.Serialize(person2));
 Console.WriteLine(JsonSerializer.Serialize(person3));
 
+// HashCode
+//
+
+int hashCode = CreateHashCode
+    .Add(42).Add(3.14).AddSequence(new[] { 1, 2, 3 }).Add("Hello world").Value();
+
+Console.WriteLine(hashCode);
+
 // Node
 //
 
