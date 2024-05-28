@@ -44,3 +44,19 @@ Node<int> tree = CreateTree<int>.Root(8)
         .Right(14));
 
 Console.WriteLine(JsonSerializer.Serialize(tree));
+
+// Docker file
+//
+// Example from https://mitesh1612.github.io/blog/2021/08/11/how-to-design-fluent-api.
+//
+
+string dockerFile = CreateDockerFile
+    .FromImage("node:12")
+    .CopyFiles("package*.json", "./")
+    .RunCommand("npm install")
+    .WithEnvironmentVariable("PORT", "8080")
+    .ExposePort(8080)
+    .WithCommand("npm start")
+    .ToString();
+
+Console.WriteLine(dockerFile);
