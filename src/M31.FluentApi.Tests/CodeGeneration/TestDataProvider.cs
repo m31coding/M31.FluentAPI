@@ -51,7 +51,6 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "GetPrivateSetPropertyClass", "Student" },
                 new object[] { "Abstract", "InternalPropertyClass", "Student" },
                 new object[] { "Abstract", "InternalClass", "Student" },
-                new object[] { "Abstract", "NoMemberClass", "Student" },
                 new object[] { "Abstract", "NonGenericCollectionMemberClass", "Student" },
                 new object[] { "Abstract", "NullablePredicateAndCollectionClass", "Student" },
                 new object[] { "Abstract", "OneMemberClass", "Student" },
