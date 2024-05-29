@@ -18,7 +18,7 @@ Console.WriteLine(JsonSerializer.Serialize(student2));
 Person person1 = CreatePerson.WithFirstName("Alice").WithMiddleName("Sophia").WithLastName("King").WhoLivesAtAddress()
     .WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco");
 Person person2 = CreatePerson.WithFirstName("Bob").WithLastName("Bishop").WhoseAddressIsUnknown();
-Person person3 = CreatePerson.WithFirstName("Eve").WithLastName("Johnson").WhoIsADigitalNomad().LivingInCity("Berlin");
+Person person3 = CreatePerson.WithFirstName("Eve").WithLastName("Knight").WhoIsADigitalNomad().LivingInCity("Berlin");
 
 Console.WriteLine(JsonSerializer.Serialize(person1));
 Console.WriteLine(JsonSerializer.Serialize(person2));

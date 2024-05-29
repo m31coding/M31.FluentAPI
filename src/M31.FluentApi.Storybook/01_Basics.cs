@@ -38,7 +38,7 @@ namespace CustomNamesExample
        element.
        This approach renders your attributes more robust against name refactorings of the decorated
        elements, however, this comes with the cost of less readability of the attributes. In this file I opted for a
-       greater readability and use this feature only in this example and only for the FluentApiAttribute. */
+       greater readability and use this feature only in this example and only for the FluentApi attribute. */
 
     [FluentApi("New{Name}")]
     public class Student
@@ -247,16 +247,11 @@ namespace FluentMethodExample
 
 namespace FullExample
 {
-    /* Here is one final example with all the things you have learned in this overview. Note that this time
-       I have modeled the BornOn method with a fluent method instead of a property.
+    /* Here is an example with all the things you have learned in this overview so far. Note that this time I have
+       modeled the BornOn method with a fluent method instead of a property.
        Moreover, the names of all the methods that are generated are specified explicitly. When you use this library I
        would like you to take some time and find good names for the builder methods. In this way I am confident that you
-       will get an expressive and readable fluent API.
-       In the next chapter, you will learn how to create non-linear paths with control attributes.
-
-       PS: If you are interested in the generated code of the examples compile the Storybook application and have a look
-       in the obj/Generated folder. You may also have a look at the files in M31.FluentApi.Tests/CodeGeneration/
-       TestClasses. */
+       will obtain an expressive and readable fluent API. */
 
     [FluentApi]
     public class Student
@@ -305,6 +300,73 @@ namespace FullExample
 
             Student bob = CreateStudent.Named("Bob", "Bishop").BornOn(new DateOnly(2002, 8, 3)).InSemester(2)
                 .LivingInBoston().WithUnknownMood().WhoseFriendIs("Alice");
+        }
+    }
+}
+
+namespace FluentLambdaExample
+{
+    /* Last but not least, I would like to introduce the FluentLambda attribute. It can be applied to fields and
+       properties whose types have their own Fluent API. The FluentLambda attribute results in an additional builder
+       method that accepts a lambda expression for creating the decorated member. In the example below, the Student
+       class has an Address property, and the Address class has its own Fluent API. The advantage of the lambda method
+       is that the user does not have to figure out the builder name of the Address class when creating a student, as
+       shown in the usage examples below.
+
+       In the next chapter, you will learn how to create non-linear paths with control attributes.
+
+       PS: If you are interested in the generated code of the examples compile the Storybook application and have a look
+       in the obj/Generated folder. You may also have a look at the example classes in the ExampleProject. */
+
+    [FluentApi]
+    public class Student
+    {
+        [FluentMember(0, "Named", 0)]
+        public string FirstName { get; private set; }
+
+        [FluentMember(0, "Named", 1)]
+        public string LastName { get; private set; }
+
+        [FluentLambda(1)]
+        public Address Address { get; private set; }
+    }
+
+    [FluentApi]
+    public class Address
+    {
+        public Address(string houseNumber, string street, string city)
+        {
+            HouseNumber = houseNumber;
+            Street = street;
+            City = city;
+        }
+
+        private Address()
+        {
+        }
+
+        [FluentMember(0)]
+        public string HouseNumber { get; private set; }
+
+        [FluentMember(1)]
+        public string Street { get; private set; }
+
+        [FluentMember(2, "InCity")]
+        public string City { get; private set; }
+    }
+
+    public static class Usage
+    {
+        public static void UseTheGeneratedFluentApi()
+        {
+            Student alice = CreateStudent.Named("Alice", "King")
+                .WithAddress(new Address("111", "5th Avenue", "New York"));
+
+            Student bob = CreateStudent.Named("Bob", "Bishop")
+                .WithAddress(CreateAddress.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
+
+            Student eve = CreateStudent.Named("Eve", "Knight")
+                .WithAddress(a => a.WithHouseNumber("82").WithStreet("Friedrichstraße").InCity("Berlin"));
         }
     }
 }
