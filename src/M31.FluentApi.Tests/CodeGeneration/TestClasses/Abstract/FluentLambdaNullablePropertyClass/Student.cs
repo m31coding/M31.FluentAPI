@@ -20,8 +20,11 @@ public class Student
 public class Address
 {
     [FluentMember(0)]
-    public string Street { get; set; }
+    public string HouseNumber { get; set; }
 
     [FluentMember(1)]
-    public string HouseNumber { get; set; }
+    public string Street { get; set; }
+
+    [FluentMember(2, "InCity")]
+    public string City { get; set; }
 }

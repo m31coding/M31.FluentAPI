@@ -12,8 +12,9 @@ namespace SomeOtherNamespace;
 
 public class CreateAddress :
     CreateAddress.ICreateAddress,
+    CreateAddress.IWithHouseNumber,
     CreateAddress.IWithStreet,
-    CreateAddress.IWithHouseNumber
+    CreateAddress.IInCity
 {
     private readonly Address address;
 
@@ -27,36 +28,47 @@ public class CreateAddress :
         return new CreateAddress();
     }
 
-    public static IWithHouseNumber WithStreet(string street)
+    public static IWithStreet WithHouseNumber(string houseNumber)
     {
         CreateAddress createAddress = new CreateAddress();
-        createAddress.address.Street = street;
+        createAddress.address.HouseNumber = houseNumber;
         return createAddress;
     }
 
-    IWithHouseNumber IWithStreet.WithStreet(string street)
+    IWithStreet IWithHouseNumber.WithHouseNumber(string houseNumber)
+    {
+        address.HouseNumber = houseNumber;
+        return this;
+    }
+
+    IInCity IWithStreet.WithStreet(string street)
     {
         address.Street = street;
         return this;
     }
 
-    Address IWithHouseNumber.WithHouseNumber(string houseNumber)
+    Address IInCity.InCity(string city)
     {
-        address.HouseNumber = houseNumber;
+        address.City = city;
         return address;
     }
 
-    public interface ICreateAddress : IWithStreet
+    public interface ICreateAddress : IWithHouseNumber
     {
-    }
-
-    public interface IWithStreet
-    {
-        IWithHouseNumber WithStreet(string street);
     }
 
     public interface IWithHouseNumber
     {
-        Address WithHouseNumber(string houseNumber);
+        IWithStreet WithHouseNumber(string houseNumber);
+    }
+
+    public interface IWithStreet
+    {
+        IInCity WithStreet(string street);
+    }
+
+    public interface IInCity
+    {
+        Address InCity(string city);
     }
 }
