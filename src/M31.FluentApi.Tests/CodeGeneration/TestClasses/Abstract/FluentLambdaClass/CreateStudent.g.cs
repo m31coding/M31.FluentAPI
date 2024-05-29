@@ -40,6 +40,12 @@ public class CreateStudent :
         return this;
     }
 
+    Student IWithAddress.WithAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaClass.Address address)
+    {
+        student.Address = address;
+        return student;
+    }
+
     Student IWithAddress.WithAddress(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaClass.Address> createAddress)
     {
         student.Address = createAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaClass.CreateAddress.InitialStep());
@@ -57,6 +63,8 @@ public class CreateStudent :
 
     public interface IWithAddress
     {
+        Student WithAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaClass.Address address);
+
         Student WithAddress(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaClass.Address> createAddress);
     }
 }

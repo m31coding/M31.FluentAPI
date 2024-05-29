@@ -20,6 +20,9 @@ internal class LambdaMethod : IBuilderMethodCreator
 
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
     {
+        BuilderMethod memberBuilderMethod =
+            methodCreator.CreateMethod(SymbolInfo, LambdaAttributeInfo.FluentMethodName);
+
         string builderType = LambdaAttributeInfo.BuilderInfo.BuilderTypeForCodeGeneration;
         string builderInstanceName = LambdaAttributeInfo.BuilderInfo.BuilderInstanceName;
         string initialStepInterfaceName = LambdaAttributeInfo.BuilderInfo.InitialStepInterfaceName;
@@ -33,11 +36,14 @@ internal class LambdaMethod : IBuilderMethodCreator
                 $"Func<{builderType}.{initialStepInterfaceName}, " +
                 $"{SymbolInfo.TypeForCodeGeneration}>",
                 builderInstanceName);
-        BuilderMethod builderMethod = methodCreator.CreateMethodWithComputedValue(
+        BuilderMethod lambdaBuilderMethod = methodCreator.CreateMethodWithComputedValue(
             SymbolInfo,
             LambdaAttributeInfo.Method,
             parameter,
             p => $"{p}({builderType}.InitialStep())");
-        return new BuilderMethods(new List<BuilderMethod>() { builderMethod }, new HashSet<string>() { "System" });
+
+        return new BuilderMethods(
+            new List<BuilderMethod>() { memberBuilderMethod, lambdaBuilderMethod },
+            new HashSet<string>() { "System" });
     }
 }

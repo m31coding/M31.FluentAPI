@@ -40,6 +40,12 @@ public class CreateStudent :
         return this;
     }
 
+    Student IWithFriend.WithFriend(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student? friend)
+    {
+        student.Friend = friend;
+        return student;
+    }
+
     Student IWithFriend.WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent)
     {
         student.Friend = createStudent(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.InitialStep());
@@ -63,6 +69,8 @@ public class CreateStudent :
 
     public interface IWithFriend
     {
+        Student WithFriend(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student? friend);
+
         Student WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent);
 
         Student WithoutFriend();
