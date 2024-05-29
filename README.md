@@ -55,7 +55,7 @@ Moreover, you may find several Fluent API examples and their [usage](src/Example
 - [DockerFile](src/ExampleProject/DockerFile.cs)
 - ...
 
-Here is the full example from the introduction to the basics:
+Here is an example from the introduction to the basics:
 
 ```cs
 [FluentApi]
@@ -223,7 +223,7 @@ public IReadOnlyCollection<string> Friends { get; private set; }
 FluentLambda(int builderStep, string method = "With{Name}")
 ```
 
-Can be used instead of the `FluentMember` attribute if the decorated member has its own Fluent API. Generates a builder method that accepts a lambda expression for creating the target field or property.
+Can be used instead of the `FluentMember` attribute if the decorated member has its own Fluent API. Generates an additional builder method that accepts a lambda expression for creating the target field or property.
         
 ```cs
 [FluentLambda(1)]
@@ -231,7 +231,8 @@ public Address Address { get; private set; }
 ```
 
 ```cs
-...WithAddress(a => a.WithStreet("Market Street").WithHouseNumber("23"))...
+...WithAddress(new Address("23", "Market Street", "San Francisco"))...
+...WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"))...
 ```
    
 
