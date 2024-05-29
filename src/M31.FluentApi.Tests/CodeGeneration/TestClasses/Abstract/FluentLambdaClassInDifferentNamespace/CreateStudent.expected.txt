@@ -41,6 +41,12 @@ public class CreateStudent :
         return this;
     }
 
+    Student IWithAddress.WithAddress(SomeOtherNamespace.Address address)
+    {
+        student.Address = address;
+        return student;
+    }
+
     Student IWithAddress.WithAddress(Func<SomeOtherNamespace.CreateAddress.ICreateAddress, SomeOtherNamespace.Address> createAddress)
     {
         student.Address = createAddress(SomeOtherNamespace.CreateAddress.InitialStep());
@@ -58,6 +64,8 @@ public class CreateStudent :
 
     public interface IWithAddress
     {
+        Student WithAddress(SomeOtherNamespace.Address address);
+
         Student WithAddress(Func<SomeOtherNamespace.CreateAddress.ICreateAddress, SomeOtherNamespace.Address> createAddress);
     }
 }
