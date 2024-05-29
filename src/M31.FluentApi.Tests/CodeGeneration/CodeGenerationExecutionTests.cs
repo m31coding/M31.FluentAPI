@@ -19,11 +19,12 @@ public partial class CodeGenerationTests
         var student = TestClasses.Abstract.FluentLambdaClass
             .CreateStudent
             .WithName("Alice")
-            .WithAddress(a => a.WithStreet("Market Street").WithHouseNumber("23"));
+            .WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
 
         Assert.Equal("Alice", student.Name);
-        Assert.Equal("Market Street", student.Address.Street);
         Assert.Equal("23", student.Address.HouseNumber);
+        Assert.Equal("Market Street", student.Address.Street);
+        Assert.Equal("San Francisco", student.Address.City);
     }
 
     [Fact, Priority(1)]
@@ -32,11 +33,12 @@ public partial class CodeGenerationTests
         var student1 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
             .CreateStudent
             .WithName("Alice")
-            .WithAddress(a => a.WithStreet("Market Street").WithHouseNumber("23"));
+            .WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
 
         Assert.Equal("Alice", student1.Name);
+        Assert.Equal("23", student1.Address!.HouseNumber);
         Assert.Equal("Market Street", student1.Address!.Street);
-        Assert.Equal("23", student1.Address.HouseNumber);
+        Assert.Equal("San Francisco", student1.Address!.City);
 
         var student2 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
             .CreateStudent
@@ -78,10 +80,11 @@ public partial class CodeGenerationTests
     {
         var student = TestClasses.Abstract.FluentLambdaSingleStepClass
             .CreateStudent
-            .WithAddress(a => a.WithStreet("Market Street").WithHouseNumber("23"));
+            .WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
 
-        Assert.Equal("Market Street", student.Address.Street);
         Assert.Equal("23", student.Address.HouseNumber);
+        Assert.Equal("Market Street", student.Address.Street);
+        Assert.Equal("San Francisco", student.Address.City);
     }
 
     [Fact, Priority(1)]
