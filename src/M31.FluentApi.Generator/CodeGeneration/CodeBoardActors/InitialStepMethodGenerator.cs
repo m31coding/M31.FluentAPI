@@ -7,11 +7,6 @@ internal class InitialStepMethodGenerator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
-        if (codeBoard.Forks.Count == 0)
-        {
-            return;
-        }
-
         // public static ICreateStudent InitialStep()
         // {
         //     return new CreateStudent();

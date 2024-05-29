@@ -9,12 +9,21 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.EmptyClass;
 
-public class CreateStudent
+public class CreateStudent : CreateStudent.ICreateStudent
 {
     private readonly Student student;
 
     private CreateStudent()
     {
         student = new Student();
+    }
+
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
+    public interface ICreateStudent
+    {
     }
 }

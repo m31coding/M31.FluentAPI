@@ -24,13 +24,16 @@ internal class InterfaceGenerator : ICodeBoardActor
         List<Interface> interfaces = new List<Interface>(methodsGroupedByInterface.Length);
 
         string? firstInterfaceName = methodsGroupedByInterface.Select(g => g.Key).FirstOrDefault();
+
+        Interface initialStepInterface =
+            new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.InitialStepInterfaceName);
+
         if (firstInterfaceName != null)
         {
-            Interface initialStepInterface =
-                new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.InitialStepInterfaceName);
             initialStepInterface.AddBaseInterface(firstInterfaceName);
-            interfaces.Add(initialStepInterface);
         }
+
+        interfaces.Add(initialStepInterface);
 
         foreach (IGrouping<string, InterfaceMethod> group in methodsGroupedByInterface)
         {
