@@ -16,6 +16,11 @@ internal class Parameter : ICode
         ParameterAnnotations = parameterAnnotations;
     }
 
+    internal Parameter WithoutDefaultValue()
+    {
+        return new Parameter(Type, Name, null, GenericTypeParameterPosition, ParameterAnnotations);
+    }
+
     internal string Type { get; }
     internal string Name { get; }
     internal string? DefaultValue { get; }

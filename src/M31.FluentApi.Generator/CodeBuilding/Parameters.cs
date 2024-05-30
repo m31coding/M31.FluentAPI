@@ -4,6 +4,11 @@ internal class Parameters : ICode
 {
     private readonly List<Parameter> values;
 
+    private Parameters(List<Parameter> parameters)
+    {
+        values = parameters;
+    }
+
     internal Parameters()
     {
         values = new List<Parameter>();
@@ -12,6 +17,11 @@ internal class Parameters : ICode
     internal Parameters(Parameters parameters)
     {
         values = parameters.values.ToList();
+    }
+
+    internal Parameters WithoutDefaultValues()
+    {
+        return new Parameters(values.Select(v => v.WithoutDefaultValue()).ToList());
     }
 
     internal IReadOnlyCollection<Parameter> Values => values;

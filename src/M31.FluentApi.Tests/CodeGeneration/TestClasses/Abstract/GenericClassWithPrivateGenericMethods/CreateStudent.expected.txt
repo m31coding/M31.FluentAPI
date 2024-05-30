@@ -13,6 +13,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWithPrivateGenericMethods;
 
 public class CreateStudent<T1, T2, T3, T4, T5> :
+    CreateStudent<T1, T2, T3, T4, T5>.ICreateStudent,
+    CreateStudent<T1, T2, T3, T4, T5>.IWithProperty1,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty2,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty3,
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty4,
@@ -61,6 +63,11 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
         student = new Student<T1, T2, T3, T4, T5>();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent<T1, T2, T3, T4, T5>();
+    }
+
     public static IWithProperty2 WithProperty1(T1 property1)
     {
         CreateStudent<T1, T2, T3, T4, T5> createStudent = new CreateStudent<T1, T2, T3, T4, T5>();
@@ -68,58 +75,61 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
         return createStudent;
     }
 
-    public IWithProperty3 WithProperty2(T2 property2)
+    IWithProperty2 IWithProperty1.WithProperty1(T1 property1)
+    {
+        student.Property1 = property1;
+        return this;
+    }
+
+    IWithProperty3 IWithProperty2.WithProperty2(T2 property2)
     {
         student.Property2 = property2;
         return this;
     }
 
-    public IWithProperty4 WithProperty3(T3 property3)
+    IWithProperty4 IWithProperty3.WithProperty3(T3 property3)
     {
         student.Property3 = property3;
         return this;
     }
 
-    public IWithProperty5 WithProperty4(T4 property4)
+    IWithProperty5 IWithProperty4.WithProperty4(T4 property4)
     {
         student.Property4 = property4;
         return this;
     }
 
-    public IMethod1 WithProperty5(T5 property5)
+    IMethod1 IWithProperty5.WithProperty5(T5 property5)
     {
         student.Property5 = property5;
         return this;
     }
 
-    public IMethod2 Method1<T6, T7, T8, T9>(T6 p1, T7 p2, T8 p3, T9 p4)
-        where T6 : unmanaged
-        where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
-        where T8 : class, System.Collections.Generic.IDictionary<int, string>
-        where T9 : System.Collections.Generic.List<int>, new()
+    IMethod2 IMethod1.Method1<T6, T7, T8, T9>(T6 p1, T7 p2, T8 p3, T9 p4)
     {
-        method1MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1, p2, p3, p4 });
+        CreateStudent<T1, T2, T3, T4, T5>.method1MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1, p2, p3, p4 });
         return this;
     }
 
-    public IMethod3 Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
-        where T6 : unmanaged
-        where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
-        where T8 : class, System.Collections.Generic.IDictionary<int, string>
-        where T9 : System.Collections.Generic.List<int>, new()
+    IMethod3 IMethod2.Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
     {
-        method2MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1, p2, p3, p4, p5, p6, p7, p8, p9 });
+        CreateStudent<T1, T2, T3, T4, T5>.method2MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1, p2, p3, p4, p5, p6, p7, p8, p9 });
         return this;
     }
 
-    public Student<T1, T2, T3, T4, T5> Method3<T6, T7, T8, T9>(T1 p1)
-        where T6 : unmanaged
-        where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
-        where T8 : class, System.Collections.Generic.IDictionary<int, string>
-        where T9 : System.Collections.Generic.List<int>, new()
+    Student<T1, T2, T3, T4, T5> IMethod3.Method3<T6, T7, T8, T9>(T1 p1)
     {
-        method3MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1 });
+        CreateStudent<T1, T2, T3, T4, T5>.method3MethodInfo.MakeGenericMethod(typeof(T6), typeof(T7), typeof(T8), typeof(T9)).Invoke(student, new object?[] { p1 });
         return student;
+    }
+
+    public interface ICreateStudent : IWithProperty1
+    {
+    }
+
+    public interface IWithProperty1
+    {
+        IWithProperty2 WithProperty1(T1 property1);
     }
 
     public interface IWithProperty2

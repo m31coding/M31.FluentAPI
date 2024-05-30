@@ -10,13 +10,20 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ForkClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IOfAgeBornOn
 {
     private readonly Student student;
 
     private CreateStudent()
     {
         student = new Student();
+    }
+
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
     }
 
     public static Student OfAge(int age)
@@ -26,10 +33,33 @@ public class CreateStudent
         return createStudent.student;
     }
 
+    Student IOfAgeBornOn.OfAge(int age)
+    {
+        student.Age = age;
+        return student;
+    }
+
     public static Student BornOn(System.DateOnly dateOfBirth)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.DateOfBirth = dateOfBirth;
         return createStudent.student;
+    }
+
+    Student IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
+    {
+        student.DateOfBirth = dateOfBirth;
+        return student;
+    }
+
+    public interface ICreateStudent : IOfAgeBornOn
+    {
+    }
+
+    public interface IOfAgeBornOn
+    {
+        Student OfAge(int age);
+
+        Student BornOn(System.DateOnly dateOfBirth);
     }
 }

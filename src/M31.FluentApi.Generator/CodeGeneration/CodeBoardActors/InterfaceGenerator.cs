@@ -18,12 +18,22 @@ internal class InterfaceGenerator : ICodeBoardActor
 
     private List<Interface> CreateInterfaces(CodeBoard codeBoard)
     {
-        string interfaceAccessModifier = codeBoard.Info.FluentApiTypeIsInternal ? "internal" : "public";
-
         IGrouping<string, InterfaceMethod>[] methodsGroupedByInterface = codeBoard.BuilderClass.Methods
             .OfType<InterfaceMethod>().GroupBy(m => m!.InterfaceName).ToArray();
 
         List<Interface> interfaces = new List<Interface>(methodsGroupedByInterface.Length);
+
+        string? firstInterfaceName = methodsGroupedByInterface.Select(g => g.Key).FirstOrDefault();
+
+        Interface initialStepInterface =
+            new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.InitialStepInterfaceName);
+
+        if (firstInterfaceName != null)
+        {
+            initialStepInterface.AddBaseInterface(firstInterfaceName);
+        }
+
+        interfaces.Add(initialStepInterface);
 
         foreach (IGrouping<string, InterfaceMethod> group in methodsGroupedByInterface)
         {
@@ -32,11 +42,11 @@ internal class InterfaceGenerator : ICodeBoardActor
                 break;
             }
 
-            Interface @interface = new Interface(interfaceAccessModifier, group.Key);
+            Interface @interface = new Interface(codeBoard.Info.DefaultAccessModifier, group.Key);
 
             foreach (InterfaceMethod method in group)
             {
-                @interface.AddMethodSignature(method.MethodSignature.ToStandAloneMethodSignature());
+                @interface.AddMethodSignature(method.MethodSignature.ToSignatureForInterface());
             }
 
             interfaces.Add(@interface);

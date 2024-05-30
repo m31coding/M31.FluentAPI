@@ -12,6 +12,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.PersonClass;
 
 public class CreatePerson :
+    CreatePerson.ICreatePerson,
+    CreatePerson.IWithFirstName,
     CreatePerson.IWithMiddleNameWithLastName,
     CreatePerson.IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad,
     CreatePerson.IWithHouseNumber,
@@ -92,65 +94,85 @@ public class CreatePerson :
         person = new Person();
     }
 
+    public static ICreatePerson InitialStep()
+    {
+        return new CreatePerson();
+    }
+
     public static IWithMiddleNameWithLastName WithFirstName(string firstName)
     {
         CreatePerson createPerson = new CreatePerson();
-        firstNamePropertyInfo.SetValue(createPerson.person, firstName);
+        CreatePerson.firstNamePropertyInfo.SetValue(createPerson.person, firstName);
         return createPerson;
     }
 
-    public IWithMiddleNameWithLastName WithMiddleName(string? middleName)
+    IWithMiddleNameWithLastName IWithFirstName.WithFirstName(string firstName)
     {
-        middleNamePropertyInfo.SetValue(person, middleName);
+        CreatePerson.firstNamePropertyInfo.SetValue(person, firstName);
         return this;
     }
 
-    public IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad WithLastName(string lastName)
+    IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
     {
-        lastNamePropertyInfo.SetValue(person, lastName);
+        CreatePerson.middleNamePropertyInfo.SetValue(person, middleName);
         return this;
     }
 
-    public Person WhoseAddressIsUnknown()
+    IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad IWithMiddleNameWithLastName.WithLastName(string lastName)
     {
-        whoseAddressIsUnknownMethodInfo.Invoke(person, new object?[] {  });
+        CreatePerson.lastNamePropertyInfo.SetValue(person, lastName);
+        return this;
+    }
+
+    Person IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoseAddressIsUnknown()
+    {
+        CreatePerson.whoseAddressIsUnknownMethodInfo.Invoke(person, new object?[] {  });
         return person;
     }
 
-    public IWithHouseNumber WhoLivesAtAddress()
+    IWithHouseNumber IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoLivesAtAddress()
     {
-        whoLivesAtAddressMethodInfo.Invoke(person, new object?[] {  });
+        CreatePerson.whoLivesAtAddressMethodInfo.Invoke(person, new object?[] {  });
         return this;
     }
 
-    public ILivingInCity WhoIsADigitalNomad()
+    ILivingInCity IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoIsADigitalNomad()
     {
-        whoIsADigitalNomadMethodInfo.Invoke(person, new object?[] {  });
+        CreatePerson.whoIsADigitalNomadMethodInfo.Invoke(person, new object?[] {  });
         return this;
     }
 
-    public IWithStreet WithHouseNumber(string houseNumber)
+    IWithStreet IWithHouseNumber.WithHouseNumber(string houseNumber)
     {
-        withHouseNumberMethodInfo.Invoke(person, new object?[] { houseNumber });
+        CreatePerson.withHouseNumberMethodInfo.Invoke(person, new object?[] { houseNumber });
         return this;
     }
 
-    public IInCity WithStreet(string street)
+    IInCity IWithStreet.WithStreet(string street)
     {
-        withStreetMethodInfo.Invoke(person, new object?[] { street });
+        CreatePerson.withStreetMethodInfo.Invoke(person, new object?[] { street });
         return this;
     }
 
-    public Person InCity(string city)
+    Person IInCity.InCity(string city)
     {
-        inCityMethodInfo.Invoke(person, new object?[] { city });
+        CreatePerson.inCityMethodInfo.Invoke(person, new object?[] { city });
         return person;
     }
 
-    public Person LivingInCity(string city)
+    Person ILivingInCity.LivingInCity(string city)
     {
-        livingInCityMethodInfo.Invoke(person, new object?[] { city });
+        CreatePerson.livingInCityMethodInfo.Invoke(person, new object?[] { city });
         return person;
+    }
+
+    public interface ICreatePerson : IWithFirstName
+    {
+    }
+
+    public interface IWithFirstName
+    {
+        IWithMiddleNameWithLastName WithFirstName(string firstName);
     }
 
     public interface IWithMiddleNameWithLastName

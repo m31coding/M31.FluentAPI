@@ -41,7 +41,7 @@ internal static class ManualGenerator
         return diagnostics;
     }
 
-    internal static GeneratorOutput? RunGenerators(string sourceCode)
+    internal static GeneratorOutputs RunGenerators(string sourceCode)
     {
         CSharpCompilation compilation = GetCompilation(sourceCode);
         SourceGenerator generator = new SourceGenerator();
@@ -53,21 +53,23 @@ internal static class ManualGenerator
                 out var diagnostics);
 
         Assert.Equal(0, diagnostics.Count(d => d.Severity == DiagnosticSeverity.Error));
-        SyntaxTree? outputSyntaxTree = outputCompilation.SyntaxTrees.Skip(1).LastOrDefault();
-        // First syntax tree is the input syntax tree. Last syntax tree is the generated one.
+        GeneratorOutput[] generatorOutputs =
+            outputCompilation.SyntaxTrees.Skip(1).Select(GetGeneratorOutput).OfType<GeneratorOutput>().ToArray();
+        // First syntax tree is the input syntax tree, the second syntax tree is the first output of interest. For some
+        // tests more than one generator output is created, e.g. for the FluentLambdaClass test.
 
-        if (outputSyntaxTree == null)
-        {
-            return null;
-        }
+        return new GeneratorOutputs(generatorOutputs);
+    }
 
-        TypeDeclarationSyntax? typeDeclaration = outputSyntaxTree.GetFluentApiTypeDeclaration();
+    private static GeneratorOutput? GetGeneratorOutput(SyntaxTree syntaxTree)
+    {
+        TypeDeclarationSyntax? typeDeclaration = syntaxTree.GetFluentApiTypeDeclaration();
 
         if (typeDeclaration == null)
         {
             return null;
         }
 
-        return new GeneratorOutput(outputSyntaxTree.ToString(), typeDeclaration.Identifier.Text);
+        return new GeneratorOutput(syntaxTree.ToString(), typeDeclaration.Identifier.Text);
     }
 }

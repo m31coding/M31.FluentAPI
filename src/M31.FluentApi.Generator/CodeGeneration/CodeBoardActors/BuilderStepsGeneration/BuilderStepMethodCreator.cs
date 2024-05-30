@@ -37,11 +37,15 @@ internal class BuilderStepMethodCreator
 
         foreach (ForkBuilderMethod builderMethod in fork.BuilderMethods)
         {
-            yield return CreateBuilderStepMethod(isFirstStep, fork.InterfaceName, builderMethod);
+            foreach (BuilderStepMethod builderStepMethod in
+                     CreateBuilderStepMethods(isFirstStep, fork.InterfaceName, builderMethod))
+            {
+                yield return builderStepMethod;
+            }
         }
     }
 
-    private BuilderStepMethod CreateBuilderStepMethod(
+    private BuilderStepMethod[] CreateBuilderStepMethods(
         bool isFirstStep,
         string interfaceName,
         ForkBuilderMethod builderMethod)
@@ -51,20 +55,34 @@ internal class BuilderStepMethodCreator
 
         if (isFirstStep && isLastStep)
         {
-            return new SingleStepBuilderMethod(builderMethod.Value);
+            return new BuilderStepMethod[]
+            {
+                new SingleStepBuilderMethod(builderMethod.Value),
+                new LastStepBuilderMethod(builderMethod.Value, interfaceName),
+            };
         }
 
         if (isFirstStep)
         {
-            return new FirstStepBuilderMethod(builderMethod.Value, nextInterfaceName!);
+            return new BuilderStepMethod[]
+            {
+                new FirstStepBuilderMethod(builderMethod.Value, nextInterfaceName!),
+                new InterjacentBuilderMethod(builderMethod.Value, nextInterfaceName!, interfaceName),
+            };
         }
 
         if (isLastStep)
         {
-            return new LastStepBuilderMethod(builderMethod.Value, interfaceName);
+            return new BuilderStepMethod[]
+            {
+                new LastStepBuilderMethod(builderMethod.Value, interfaceName),
+            };
         }
 
-        return new InterjacentBuilderMethod(builderMethod.Value, nextInterfaceName!, interfaceName);
+        return new BuilderStepMethod[]
+        {
+            new InterjacentBuilderMethod(builderMethod.Value, nextInterfaceName!, interfaceName),
+        };
     }
 
     private string? GetNextInterfaceName(int? nextBuilderStep)

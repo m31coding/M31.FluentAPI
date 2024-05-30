@@ -12,6 +12,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
     CreateStudent.IBornOn,
     CreateStudent.IInSemester
 {
@@ -50,23 +52,43 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        withNameMethodInfo.Invoke(createStudent.student, new object?[] { name });
+        CreateStudent.withNameMethodInfo.Invoke(createStudent.student, new object?[] { name });
         return createStudent;
     }
 
-    public IInSemester BornOn(System.DateOnly date)
+    IBornOn IWithName.WithName(string name)
     {
-        bornOnMethodInfo.Invoke(student, new object?[] { date });
+        CreateStudent.withNameMethodInfo.Invoke(student, new object?[] { name });
         return this;
     }
 
-    public Student InSemester(int semester)
+    IInSemester IBornOn.BornOn(System.DateOnly date)
     {
-        inSemesterMethodInfo.Invoke(student, new object?[] { semester });
+        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { date });
+        return this;
+    }
+
+    Student IInSemester.InSemester(int semester)
+    {
+        CreateStudent.inSemesterMethodInfo.Invoke(student, new object?[] { semester });
         return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IBornOn WithName(string name);
     }
 
     public interface IBornOn

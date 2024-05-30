@@ -11,6 +11,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CustomFluentMethodNameClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
     CreateStudent.IWhoIsHappy,
     CreateStudent.IInSemester,
     CreateStudent.IWhoseFriendsAre
@@ -22,6 +24,11 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWhoIsHappy WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -29,46 +36,61 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IInSemester WhoIsHappy(bool isHappy = true)
+    IWhoIsHappy IWithName.WithName(string firstName, string lastName)
+    {
+        student.SetNameFromFirstNameAndLastName(firstName, lastName);
+        return this;
+    }
+
+    IInSemester IWhoIsHappy.WhoIsHappy(bool isHappy)
     {
         student.IsHappy = isHappy;
         return this;
     }
 
-    public IInSemester WhoIsSad()
+    IInSemester IWhoIsHappy.WhoIsSad()
     {
         student.IsHappy = false;
         return this;
     }
 
-    public IWhoseFriendsAre InSemester(int semester)
+    IWhoseFriendsAre IInSemester.InSemester(int semester)
     {
         student.Semester = semester;
         return this;
     }
 
-    public Student WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
+    Student IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
         student.Friends = friends;
         return student;
     }
 
-    public Student WhoseFriendsAre(params string[] friends)
+    Student IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
     {
         student.Friends = friends;
         return student;
     }
 
-    public Student WhoseFriendIs(string friend)
+    Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
         student.Friends = new string[1]{ friend };
         return student;
     }
 
-    public Student WhoHasNoFriends()
+    Student IWhoseFriendsAre.WhoHasNoFriends()
     {
         student.Friends = new string[0];
         return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IWhoIsHappy WithName(string firstName, string lastName);
     }
 
     public interface IWhoIsHappy

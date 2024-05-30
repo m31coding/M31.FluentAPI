@@ -12,7 +12,10 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass;
 
-public class CreateStudent : CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
+    CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
 {
     private readonly Student student;
     private static readonly PropertyInfo namePropertyInfo;
@@ -59,34 +62,54 @@ public class CreateStudent : CreateStudent.IReturnVoidMethodReturnIntMethodRetur
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, name);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent;
     }
 
-    public void ReturnVoidMethod()
+    IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter IWithName.WithName(string name)
     {
-        returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
+        CreateStudent.namePropertyInfo.SetValue(student, name);
+        return this;
     }
 
-    public int ReturnIntMethod()
+    void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
     {
-        return (int) returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        CreateStudent.returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
     }
 
-    public System.Collections.Generic.List<int> ReturnListMethod()
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
     {
-        return (System.Collections.Generic.List<int>) returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        return (int) CreateStudent.returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
     }
 
-    public int ReturnIntMethodWithRefParameter(ref string s)
+    System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
+    {
+        return (System.Collections.Generic.List<int>) CreateStudent.returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
+    }
+
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
     {
         object?[] args = new object?[] { s };
-        int result = (int) returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;
+        int result = (int) CreateStudent.returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;
         s = (string) args[0]!;
         return result;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name);
     }
 
     public interface IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter

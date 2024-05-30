@@ -1,9 +1,6 @@
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.Commons;
-using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
-using Microsoft.CodeAnalysis;
-using static M31.FluentApi.Generator.SourceGenerators.AttributeElements.Attributes;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
@@ -35,96 +32,6 @@ internal class FluentApiInfo
     internal IReadOnlyCollection<ControlAttributeInfoBase> ControlAttributeInfos { get; }
     internal FluentApiAdditionalInfo AdditionalInfo { get; }
     internal string FluentMethodName => AttributeInfo.FluentMethodName;
-
-    internal static FluentApiInfo Create(ISymbol symbol, FluentApiAttributeData attributeData)
-    {
-        AttributeInfoBase attributeInfo =
-            CreateAttributeInfo(attributeData.MainAttributeData, symbol.Name);
-
-        (AttributeDataExtended data, OrthogonalAttributeInfoBase info)[] orthogonalDataAndInfos =
-            attributeData.OrthogonalAttributeData
-                .Select(data => (data, CreateOrthogonalAttributeInfo(data, symbol.Name)))
-                .ToArray();
-
-        (AttributeDataExtended data, ControlAttributeInfoBase info)[] controlDataAndInfos =
-            attributeData.ControlAttributeData
-                .Select(data => (data, CreateControlAttributeInfo(data)))
-                .ToArray();
-
-        FluentReturnAttributeInfo? fluentReturnAttributeInfo = controlDataAndInfos.Select(d => d.info)
-            .OfType<FluentReturnAttributeInfo>().FirstOrDefault();
-
-        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
-        FluentApiAdditionalInfo additionalInfo = new FluentApiAdditionalInfo(
-            symbol,
-            attributeData.MainAttributeData,
-            ToDictionary(orthogonalDataAndInfos),
-            ToDictionary(controlDataAndInfos),
-            fluentReturnAttributeInfo);
-
-        return new FluentApiInfo(
-            symbolInfo,
-            attributeInfo,
-            ToInfos(orthogonalDataAndInfos),
-            ToInfos(controlDataAndInfos),
-            additionalInfo);
-    }
-
-    private static Dictionary<TAttributeInfoBase, AttributeDataExtended> ToDictionary<TAttributeInfoBase>(
-        (AttributeDataExtended data, TAttributeInfoBase info)[] dataAndInfoArray)
-    {
-        return dataAndInfoArray.ToDictionary(dataAndInfo => dataAndInfo.info, dataAndInfo => dataAndInfo.data);
-    }
-
-    private static List<TAttributeInfoBase> ToInfos<TAttributeInfoBase>(
-        (AttributeDataExtended data, TAttributeInfoBase info)[] dataAndInfoArray)
-    {
-        return dataAndInfoArray.Select(dataAndInfo => dataAndInfo.info).ToList();
-    }
-
-    private static AttributeInfoBase CreateAttributeInfo(AttributeDataExtended attributeData, string memberName)
-    {
-        return attributeData.FullName switch
-        {
-            FullNames.FluentMemberAttribute =>
-                FluentMemberAttributeInfo.Create(attributeData.AttributeData, memberName),
-            FullNames.FluentPredicateAttribute =>
-                FluentPredicateAttributeInfo.Create(attributeData.AttributeData, memberName),
-            FullNames.FluentCollectionAttribute =>
-                FluentCollectionAttributeInfo.Create(attributeData.AttributeData, memberName),
-            FullNames.FluentMethodAttribute =>
-                FluentMethodAttributeInfo.Create(attributeData.AttributeData, memberName),
-            _ => throw new Exception($"Unexpected attribute class name: {attributeData.FullName}")
-        };
-    }
-
-    private static OrthogonalAttributeInfoBase CreateOrthogonalAttributeInfo(
-        AttributeDataExtended attributeDataExtended,
-        string memberName)
-    {
-        return attributeDataExtended.FullName switch
-        {
-            FullNames.FluentNullableAttribute =>
-                FluentNullableAttributeInfo.Create(attributeDataExtended.AttributeData, memberName),
-            FullNames.FluentDefaultAttribute =>
-                FluentDefaultAttributeInfo.Create(attributeDataExtended.AttributeData, memberName),
-            _ => throw new Exception($"Unexpected attribute class name: {attributeDataExtended.FullName}")
-        };
-    }
-
-    private static ControlAttributeInfoBase CreateControlAttributeInfo(AttributeDataExtended attributeDataExtended)
-    {
-        return attributeDataExtended.FullName switch
-        {
-            FullNames.FluentContinueWithAttribute =>
-                FluentContinueWithAttributeInfo.Create(attributeDataExtended.AttributeData),
-            FullNames.FluentBreakAttribute =>
-                FluentBreakAttributeInfo.Create(attributeDataExtended.AttributeData),
-            FullNames.FluentReturnAttribute =>
-                FluentReturnAttributeInfo.Create(attributeDataExtended.AttributeData),
-            _ => throw new Exception($"Unexpected attribute class name: {attributeDataExtended.FullName}")
-        };
-    }
 
     protected bool Equals(FluentApiInfo other)
     {

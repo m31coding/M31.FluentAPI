@@ -10,7 +10,9 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PredicatePrivateFieldClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWhoIsHappy
 {
     private readonly Student student;
     private static readonly FieldInfo isHappyFieldInfo;
@@ -25,17 +27,45 @@ public class CreateStudent
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static Student WhoIsHappy(bool isHappy = true)
     {
         CreateStudent createStudent = new CreateStudent();
-        isHappyFieldInfo.SetValue(createStudent.student, isHappy);
+        CreateStudent.isHappyFieldInfo.SetValue(createStudent.student, isHappy);
         return createStudent.student;
+    }
+
+    Student IWhoIsHappy.WhoIsHappy(bool isHappy)
+    {
+        CreateStudent.isHappyFieldInfo.SetValue(student, isHappy);
+        return student;
     }
 
     public static Student WhoIsSad()
     {
         CreateStudent createStudent = new CreateStudent();
-        isHappyFieldInfo.SetValue(createStudent.student, false);
+        CreateStudent.isHappyFieldInfo.SetValue(createStudent.student, false);
         return createStudent.student;
+    }
+
+    Student IWhoIsHappy.WhoIsSad()
+    {
+        CreateStudent.isHappyFieldInfo.SetValue(student, false);
+        return student;
+    }
+
+    public interface ICreateStudent : IWhoIsHappy
+    {
+    }
+
+    public interface IWhoIsHappy
+    {
+        Student WhoIsHappy(bool isHappy = true);
+
+        Student WhoIsSad();
     }
 }

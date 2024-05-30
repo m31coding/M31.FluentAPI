@@ -11,6 +11,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CollectionMemberClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWhoseFriendsAre,
     CreateStudent.IWithPets,
     CreateStudent.IWithBackpackContent
 {
@@ -21,11 +23,22 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWithPets WhoseFriendsAre(System.Collections.Generic.List<string> friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;
         return createStudent;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.List<string> friends)
+    {
+        student.Friends = friends;
+        return this;
     }
 
     public static IWithPets WhoseFriendsAre(params string[] friends)
@@ -35,11 +48,23 @@ public class CreateStudent :
         return createStudent;
     }
 
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
+    {
+        student.Friends = new List<string>(friends);
+        return this;
+    }
+
     public static IWithPets WhoseFriendIs(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new List<string>(1){ friend };
         return createStudent;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendIs(string friend)
+    {
+        student.Friends = new List<string>(1){ friend };
+        return this;
     }
 
     public static IWithPets WhoHasNoFriends()
@@ -49,46 +74,67 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IWithBackpackContent WithPets(params string[] pets)
+    IWithPets IWhoseFriendsAre.WhoHasNoFriends()
+    {
+        student.Friends = new List<string>(0);
+        return this;
+    }
+
+    IWithBackpackContent IWithPets.WithPets(params string[] pets)
     {
         student.Pets = pets;
         return this;
     }
 
-    public IWithBackpackContent WithPet(string pet)
+    IWithBackpackContent IWithPets.WithPet(string pet)
     {
         student.Pets = new string[1]{ pet };
         return this;
     }
 
-    public IWithBackpackContent WithZeroPets()
+    IWithBackpackContent IWithPets.WithZeroPets()
     {
         student.Pets = new string[0];
         return this;
     }
 
-    public Student WithBackpackContent(System.Collections.Generic.HashSet<string> backpackContent)
+    Student IWithBackpackContent.WithBackpackContent(System.Collections.Generic.HashSet<string> backpackContent)
     {
         student.BackpackContent = backpackContent;
         return student;
     }
 
-    public Student WithBackpackContent(params string[] backpackContent)
+    Student IWithBackpackContent.WithBackpackContent(params string[] backpackContent)
     {
         student.BackpackContent = new HashSet<string>(backpackContent);
         return student;
     }
 
-    public Student WithBackpackContent(string backpackContent)
+    Student IWithBackpackContent.WithBackpackContent(string backpackContent)
     {
         student.BackpackContent = new HashSet<string>(1){ backpackContent };
         return student;
     }
 
-    public Student WithNoBackpackContent()
+    Student IWithBackpackContent.WithNoBackpackContent()
     {
         student.BackpackContent = new HashSet<string>(0);
         return student;
+    }
+
+    public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface IWhoseFriendsAre
+    {
+        IWithPets WhoseFriendsAre(System.Collections.Generic.List<string> friends);
+
+        IWithPets WhoseFriendsAre(params string[] friends);
+
+        IWithPets WhoseFriendIs(string friend);
+
+        IWithPets WhoHasNoFriends();
     }
 
     public interface IWithPets

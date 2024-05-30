@@ -9,13 +9,20 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentNullableNoNullableAnnotationClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName
 {
     private readonly Student student;
 
     private CreateStudent()
     {
         student = new Student();
+    }
+
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
     }
 
     public static Student WithName(string name)
@@ -25,10 +32,33 @@ public class CreateStudent
         return createStudent.student;
     }
 
+    Student IWithName.WithName(string name)
+    {
+        student.Name = name;
+        return student;
+    }
+
     public static Student WhoseNameIsUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Name = null!;
         return createStudent.student;
+    }
+
+    Student IWithName.WhoseNameIsUnknown()
+    {
+        student.Name = null!;
+        return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        Student WithName(string name);
+
+        Student WhoseNameIsUnknown();
     }
 }

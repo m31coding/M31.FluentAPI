@@ -11,7 +11,10 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NullablePredicateAndCollectionClass;
 
-public class CreateStudent : CreateStudent.IWhoIsHappy
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWhoseFriendsAre,
+    CreateStudent.IWhoIsHappy
 {
     private readonly Student student;
     private static readonly PropertyInfo isHappyPropertyInfo;
@@ -26,11 +29,22 @@ public class CreateStudent : CreateStudent.IWhoIsHappy
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWhoIsHappy WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string>? friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;
         return createStudent;
+    }
+
+    IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string>? friends)
+    {
+        student.Friends = friends;
+        return this;
     }
 
     public static IWhoIsHappy WhoseFriendsAre(params string[]? friends)
@@ -40,11 +54,23 @@ public class CreateStudent : CreateStudent.IWhoIsHappy
         return createStudent;
     }
 
+    IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
+    {
+        student.Friends = friends;
+        return this;
+    }
+
     public static IWhoIsHappy WhoseFriendIs(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new string[1]{ friend };
         return createStudent;
+    }
+
+    IWhoIsHappy IWhoseFriendsAre.WhoseFriendIs(string friend)
+    {
+        student.Friends = new string[1]{ friend };
+        return this;
     }
 
     public static IWhoIsHappy WhoHasNoFriends()
@@ -54,6 +80,12 @@ public class CreateStudent : CreateStudent.IWhoIsHappy
         return createStudent;
     }
 
+    IWhoIsHappy IWhoseFriendsAre.WhoHasNoFriends()
+    {
+        student.Friends = new string[0];
+        return this;
+    }
+
     public static IWhoIsHappy WhoseFriendsAreUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
@@ -61,22 +93,45 @@ public class CreateStudent : CreateStudent.IWhoIsHappy
         return createStudent;
     }
 
-    public Student WhoIsHappy(bool? isHappy = true)
+    IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAreUnknown()
     {
-        isHappyPropertyInfo.SetValue(student, isHappy);
+        student.Friends = null;
+        return this;
+    }
+
+    Student IWhoIsHappy.WhoIsHappy(bool? isHappy)
+    {
+        CreateStudent.isHappyPropertyInfo.SetValue(student, isHappy);
         return student;
     }
 
-    public Student WhoIsSad()
+    Student IWhoIsHappy.WhoIsSad()
     {
-        isHappyPropertyInfo.SetValue(student, false);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, false);
         return student;
     }
 
-    public Student WithUnknownMood()
+    Student IWhoIsHappy.WithUnknownMood()
     {
-        isHappyPropertyInfo.SetValue(student, null);
+        CreateStudent.isHappyPropertyInfo.SetValue(student, null);
         return student;
+    }
+
+    public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface IWhoseFriendsAre
+    {
+        IWhoIsHappy WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string>? friends);
+
+        IWhoIsHappy WhoseFriendsAre(params string[]? friends);
+
+        IWhoIsHappy WhoseFriendIs(string friend);
+
+        IWhoIsHappy WhoHasNoFriends();
+
+        IWhoIsHappy WhoseFriendsAreUnknown();
     }
 
     public interface IWhoIsHappy

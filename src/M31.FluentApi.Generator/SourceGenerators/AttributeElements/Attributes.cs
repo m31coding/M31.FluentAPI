@@ -9,6 +9,7 @@ internal static class Attributes
         internal const string FluentMemberAttribute = "M31.FluentApi.Attributes.FluentMemberAttribute";
         internal const string FluentPredicateAttribute = "M31.FluentApi.Attributes.FluentPredicateAttribute";
         internal const string FluentCollectionAttribute = "M31.FluentApi.Attributes.FluentCollectionAttribute";
+        internal const string FluentLambdaAttribute = "M31.FluentApi.Attributes.FluentLambdaAttribute";
 
         internal const string FluentNullableAttribute = "M31.FluentApi.Attributes.FluentNullableAttribute";
         internal const string FluentDefaultAttribute = "M31.FluentApi.Attributes.FluentDefaultAttribute";
@@ -27,6 +28,7 @@ internal static class Attributes
             FullNames.FluentMemberAttribute,
             FullNames.FluentPredicateAttribute,
             FullNames.FluentCollectionAttribute,
+            FullNames.FluentLambdaAttribute,
             FullNames.FluentMethodAttribute,
         };
 

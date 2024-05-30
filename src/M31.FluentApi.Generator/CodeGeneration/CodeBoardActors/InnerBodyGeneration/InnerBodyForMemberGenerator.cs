@@ -30,10 +30,11 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
 
     protected override void GenerateInnerBodyWithReflection(MemberSymbolInfo symbolInfo, string infoFieldName)
     {
-        // semesterPropertyInfo.SetValue(createStudent.student, semester);
+        // CreateStudent.semesterPropertyInfo.SetValue(createStudent.student, semester);
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
-                $"{infoFieldName}.SetValue({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
+                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}" +
+                $".SetValue({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
         CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
     }
 

@@ -31,6 +31,8 @@ internal static class FluentApiDiagnostics
         CodeGenerationError.Descriptor,
         ConflictingControlAttributes.Descriptor,
         MissingBuilderStep.Descriptor,
+        ReservedMethodName.Descriptor,
+        FluentLambdaMemberWithoutFluentApi.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -128,7 +130,8 @@ internal static class FluentApiDiagnostics
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: "M31FA006",
             title: "Several main attributes",
-            messageFormat: "Use only one of FluentMember, FluentPredicate, FluentCollection and FluentMethod",
+            messageFormat: "Use only one of FluentMember, FluentPredicate, FluentCollection, FluentLambda and " +
+                           "FluentMethod",
             category: "M31.Usage",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true);
@@ -365,6 +368,43 @@ internal static class FluentApiDiagnostics
             Location location = attributeData.AttributeData.ApplicationSyntaxReference?
                 .GetSyntax().GetLocation() ?? Location.None;
             return Diagnostic.Create(Descriptor, location, missingBuilderStep);
+        }
+    }
+
+    internal static class ReservedMethodName
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA021",
+            title: "Reserved method name",
+            messageFormat: "The method name '{0}' is reserved and can not be used",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData, string methodName)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location, methodName);
+        }
+    }
+
+    internal static class FluentLambdaMemberWithoutFluentApi
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA022",
+            title: "Fluent lambda member without Fluent API",
+            messageFormat: "FluentLambda can not be used on a member of type '{0}'. " +
+                           "Type '{0}' does not have a Fluent API.",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData, string type)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location, type);
         }
     }
 }

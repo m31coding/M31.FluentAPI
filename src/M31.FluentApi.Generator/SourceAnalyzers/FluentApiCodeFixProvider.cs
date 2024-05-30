@@ -83,7 +83,7 @@ internal class FluentApiCodeFixProvider : CodeFixProvider
 
         AccessorListSyntax newAccessorList = accessorList.AddAccessors(accessorDeclarationSyntax);
 
-        SyntaxNode? newRoot = root.ReplaceNode(accessorList, newAccessorList);
+        SyntaxNode newRoot = root.ReplaceNode(accessorList, newAccessorList);
         return context.Document.WithSyntaxRoot(newRoot);
     }
 
@@ -105,7 +105,7 @@ internal class FluentApiCodeFixProvider : CodeFixProvider
         TypeSyntax typeSyntax = methodDeclarationSyntax.ReturnType;
         TypeSyntax newTypeSyntax = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword));
 
-        SyntaxNode? newRoot = root.ReplaceNode(typeSyntax, newTypeSyntax);
+        SyntaxNode newRoot = root.ReplaceNode(typeSyntax, newTypeSyntax);
         return context.Document.WithSyntaxRoot(newRoot);
     }
 

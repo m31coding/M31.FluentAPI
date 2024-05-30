@@ -17,13 +17,13 @@ internal class InterjacentBuilderMethod : BuilderStepMethod
     internal string ReturnType { get; }
     internal string InterfaceName { get; }
 
-    internal override Method BuildMethodCode(BuilderAndTargetInfo info)
+    internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
     {
         // public IInSemester BornOn(System.DateOnly dateOfBirth)
         Method method = CreateInterfaceMethod(InterfaceName, ReturnType, "public");
 
         // student.DateOfBirth = dateOfBirth;
-        CreateBody(method, string.Empty);
+        CreateBody(method, string.Empty, reservedVariableNames);
 
         // return this;
         CreateReturnStatement(method, "return this;");

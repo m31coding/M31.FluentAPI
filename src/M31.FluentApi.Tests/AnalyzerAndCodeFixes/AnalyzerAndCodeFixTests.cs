@@ -16,10 +16,10 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("ConflictingControlAttributesClass1", "Student");
 
         var expectedDiagnostic1 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
-            .WithLocation(12, 6);
+            .WithLocation(13, 6);
 
         var expectedDiagnostic2 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
-            .WithLocation(13, 6);
+            .WithLocation(14, 6);
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic1, expectedDiagnostic2);
     }
@@ -30,10 +30,10 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("ConflictingControlAttributesClass2", "Student");
 
         var expectedDiagnostic1 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
-            .WithLocation(12, 6);
+            .WithLocation(13, 6);
 
         var expectedDiagnostic2 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
-            .WithLocation(16, 6);
+            .WithLocation(17, 6);
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic1, expectedDiagnostic2);
     }
@@ -44,12 +44,24 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("ConflictingControlAttributesClass3", "Student");
 
         var expectedDiagnostic1 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
-            .WithLocation(15, 6);
-
-        var expectedDiagnostic2 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
             .WithLocation(16, 6);
 
+        var expectedDiagnostic2 = Verifier.Diagnostic(ConflictingControlAttributes.Descriptor.Id)
+            .WithLocation(17, 6);
+
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic1, expectedDiagnostic2);
+    }
+
+    [Fact]
+    public async Task CanDetectFluentLambdaMemberWithoutFluentApiClass()
+    {
+        (string source, _) = ReadSource("FluentLambdaMemberWithoutFluentApiClass", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(FluentLambdaMemberWithoutFluentApi.Descriptor.Id)
+            .WithLocation(14, 6)
+            .WithArguments("Address");
+
+        await Verifier.VerifyCodeFixAsync(source, null, expectedDiagnostic);
     }
 
     [Fact]
@@ -58,7 +70,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("DuplicateMainAttributeClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(DuplicateMainAttribute.Descriptor.Id)
-            .WithLocation(9, 6);
+            .WithLocation(11, 6);
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
     }
@@ -69,7 +81,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("GetMissingSetClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(MissingSetAccessor.Descriptor.Id)
-            .WithLocation(9, 9)
+            .WithLocation(11, 9)
             .WithArguments("Semester");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
@@ -81,7 +93,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("InvalidCollectionTypeClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(UnsupportedFluentCollectionType.Descriptor.Id)
-            .WithLocation(12, 12)
+            .WithLocation(13, 12)
             .WithArguments("string");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
@@ -105,7 +117,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("InvalidFluentPredicateTypeClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(InvalidFluentPredicateType.Descriptor.Id)
-            .WithLocation(12, 12)
+            .WithLocation(13, 12)
             .WithArguments("string");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
@@ -165,7 +177,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("OrthogonalAttributeInCompoundClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(OrthogonalAttributeMisusedWithCompound.Descriptor.Id)
-            .WithLocation(15, 6)
+            .WithLocation(16, 6)
             .WithArguments("FluentDefault");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
@@ -177,7 +189,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("OrthogonalAttributeWithoutMainAttributeClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(OrthogonalAttributeMisused.Descriptor.Id)
-            .WithLocation(8, 6)
+            .WithLocation(10, 6)
             .WithArguments("FluentDefault");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
@@ -189,7 +201,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("PartialClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(UnsupportedPartialType.Descriptor.Id)
-            .WithLocation(6, 8)
+            .WithLocation(8, 8)
             .WithArguments("Student");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
@@ -201,7 +213,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("PrivateGetMissingSetClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(MissingSetAccessor.Descriptor.Id)
-            .WithLocation(9, 17)
+            .WithLocation(11, 17)
             .WithArguments("Semester");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);
@@ -213,7 +225,7 @@ public class AnalyzerAndCodeFixTests
         (string source, string fixedSource) = ReadSource("PublicGetMissingSetClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(MissingSetAccessor.Descriptor.Id)
-            .WithLocation(9, 16)
+            .WithLocation(11, 16)
             .WithArguments("Semester");
 
         await Verifier.VerifyCodeFixAsync(source, fixedSource, expectedDiagnostic);

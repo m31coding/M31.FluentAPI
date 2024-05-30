@@ -11,6 +11,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWithConstraints;
 
 public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.ICreateStudent,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty1,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty2,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty3,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty4,
@@ -36,6 +38,11 @@ public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
         student = new Student<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
+    }
+
     public static IWithProperty2 WithProperty1(T1 property1)
     {
         CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> createStudent = new CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
@@ -43,52 +50,67 @@ public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
         return createStudent;
     }
 
-    public IWithProperty3 WithProperty2(T2 property2)
+    IWithProperty2 IWithProperty1.WithProperty1(T1 property1)
+    {
+        student.Property1 = property1;
+        return this;
+    }
+
+    IWithProperty3 IWithProperty2.WithProperty2(T2 property2)
     {
         student.Property2 = property2;
         return this;
     }
 
-    public IWithProperty4 WithProperty3(T3 property3)
+    IWithProperty4 IWithProperty3.WithProperty3(T3 property3)
     {
         student.Property3 = property3;
         return this;
     }
 
-    public IWithProperty5 WithProperty4(T4 property4)
+    IWithProperty5 IWithProperty4.WithProperty4(T4 property4)
     {
         student.Property4 = property4;
         return this;
     }
 
-    public IWithProperty6 WithProperty5(T5 property5)
+    IWithProperty6 IWithProperty5.WithProperty5(T5 property5)
     {
         student.Property5 = property5;
         return this;
     }
 
-    public IWithProperty7 WithProperty6(T6 property6)
+    IWithProperty7 IWithProperty6.WithProperty6(T6 property6)
     {
         student.Property6 = property6;
         return this;
     }
 
-    public IWithProperty8 WithProperty7(T7 property7)
+    IWithProperty8 IWithProperty7.WithProperty7(T7 property7)
     {
         student.Property7 = property7;
         return this;
     }
 
-    public IWithProperty9 WithProperty8(T8 property8)
+    IWithProperty9 IWithProperty8.WithProperty8(T8 property8)
     {
         student.Property8 = property8;
         return this;
     }
 
-    public Student<T1, T2, T3, T4, T5, T6, T7, T8, T9> WithProperty9(T9 property9)
+    Student<T1, T2, T3, T4, T5, T6, T7, T8, T9> IWithProperty9.WithProperty9(T9 property9)
     {
         student.Property9 = property9;
         return student;
+    }
+
+    public interface ICreateStudent : IWithProperty1
+    {
+    }
+
+    public interface IWithProperty1
+    {
+        IWithProperty2 WithProperty1(T1 property1);
     }
 
     public interface IWithProperty2

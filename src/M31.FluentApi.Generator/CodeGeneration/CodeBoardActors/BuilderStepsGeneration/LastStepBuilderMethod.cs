@@ -15,13 +15,13 @@ internal class LastStepBuilderMethod : BuilderStepMethod
 
     internal string InterfaceName { get; }
 
-    internal override Method BuildMethodCode(BuilderAndTargetInfo info)
+    internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
     {
         // public Student<T1, T2> InSemester(int semester)
         Method method = CreateInterfaceMethod(InterfaceName, info.FluentApiClassNameWithTypeParameters, "public");
 
         // student.Semester = semester;
-        CreateBody(method, string.Empty);
+        CreateBody(method, string.Empty, reservedVariableNames);
 
         // return student;
         CreateReturnStatement(method, $"return {info.ClassInstanceName};");

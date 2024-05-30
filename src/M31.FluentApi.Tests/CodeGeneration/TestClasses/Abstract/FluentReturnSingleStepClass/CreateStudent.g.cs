@@ -10,7 +10,9 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnSingleStepClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
 {
     private readonly Student student;
 
@@ -19,10 +21,20 @@ public class CreateStudent
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static void ReturnVoidMethod()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.ReturnVoidMethod();
+    }
+
+    void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
+    {
+        student.ReturnVoidMethod();
     }
 
     public static int ReturnIntMethod()
@@ -31,15 +43,45 @@ public class CreateStudent
         return createStudent.student.ReturnIntMethod();
     }
 
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
+    {
+        return student.ReturnIntMethod();
+    }
+
     public static System.Collections.Generic.List<int> ReturnListMethod()
     {
         CreateStudent createStudent = new CreateStudent();
         return createStudent.student.ReturnListMethod();
     }
 
+    System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
+    {
+        return student.ReturnListMethod();
+    }
+
     public static int ReturnIntMethodWithRefParameter(ref string s)
     {
         CreateStudent createStudent = new CreateStudent();
         return createStudent.student.ReturnIntMethodWithRefParameter(ref s);
+    }
+
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
+    {
+        return student.ReturnIntMethodWithRefParameter(ref s);
+    }
+
+    public interface ICreateStudent : IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
+    {
+    }
+
+    public interface IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
+    {
+        void ReturnVoidMethod();
+
+        int ReturnIntMethod();
+
+        System.Collections.Generic.List<int> ReturnListMethod();
+
+        int ReturnIntMethodWithRefParameter(ref string s);
     }
 }

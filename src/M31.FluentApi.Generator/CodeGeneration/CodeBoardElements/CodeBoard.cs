@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.CodeBuilding;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
 using M31.FluentApi.Generator.SourceAnalyzers;
@@ -33,7 +34,7 @@ internal class CodeBoard
         InnerBodyCreationDelegates = new InnerBodyCreationDelegates();
         BuilderMethodToAttributeData = new Dictionary<BuilderMethod, AttributeDataExtended>();
         Forks = new List<Fork>();
-        BuilderClassFields = new BuilderClassFields();
+        ReservedVariableNames = new ReservedVariableNames();
         diagnostics = new List<Diagnostic>();
         NewLineString = newLineString;
         CancellationToken = cancellationToken;
@@ -49,12 +50,13 @@ internal class CodeBoard
     internal InnerBodyCreationDelegates InnerBodyCreationDelegates { get; }
     internal Dictionary<BuilderMethod, AttributeDataExtended> BuilderMethodToAttributeData { get; }
     internal IReadOnlyList<Fork> Forks { get; set; }
-    internal BuilderClassFields BuilderClassFields { get; }
+    internal ReservedVariableNames ReservedVariableNames { get; }
     internal IReadOnlyCollection<Diagnostic> Diagnostics => diagnostics;
     internal string NewLineString { get; }
     internal CancellationToken CancellationToken { get; }
     internal bool CancellationRequested => CancellationToken.IsCancellationRequested;
     internal bool HasErrors => diagnostics.HaveErrors();
+    internal bool HasInterfaceMethods => BuilderClass.Methods.OfType<InterfaceMethod>().Any();
 
     internal static CodeBoard Create(
         BuilderAndTargetInfo builderAndTargetInfo,
@@ -90,7 +92,7 @@ internal class CodeBoard
             }
         }
 
-        builderClass.AddModifiers(builderAndTargetInfo.FluentApiTypeIsInternal ? "internal" : "public");
+        builderClass.AddModifiers(builderAndTargetInfo.DefaultAccessModifier);
         codeFile.AddDefinition(builderClass);
 
         foreach (string usingStatement in usingStatements)

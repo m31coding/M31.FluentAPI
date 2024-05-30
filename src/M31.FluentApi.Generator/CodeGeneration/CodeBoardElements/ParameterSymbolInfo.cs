@@ -9,6 +9,7 @@ internal class ParameterSymbolInfo
         string parameterName,
         string typeForCodeGeneration,
         bool isNullable,
+        bool isReferenceType,
         string? defaultValue,
         int? genericTypeParameterPosition,
         ParameterKinds parameterKinds)
@@ -16,6 +17,7 @@ internal class ParameterSymbolInfo
         ParameterName = parameterName;
         TypeForCodeGeneration = typeForCodeGeneration;
         IsNullable = isNullable;
+        IsReferenceType = isReferenceType;
         DefaultValue = defaultValue;
         GenericTypeParameterPosition = genericTypeParameterPosition;
         ParameterKinds = parameterKinds;
@@ -24,6 +26,7 @@ internal class ParameterSymbolInfo
     internal string ParameterName { get; }
     internal string TypeForCodeGeneration { get; }
     internal bool IsNullable { get; }
+    internal bool IsReferenceType { get; }
     internal string? DefaultValue { get; }
     internal int? GenericTypeParameterPosition { get; }
     internal ParameterKinds ParameterKinds { get; }
@@ -34,6 +37,7 @@ internal class ParameterSymbolInfo
         return ParameterName == other.ParameterName &&
                TypeForCodeGeneration == other.TypeForCodeGeneration &&
                IsNullable == other.IsNullable &&
+               IsReferenceType == other.IsReferenceType &&
                DefaultValue == other.DefaultValue &&
                ParameterKinds == other.ParameterKinds;
     }
@@ -48,6 +52,8 @@ internal class ParameterSymbolInfo
 
     public override int GetHashCode()
     {
-        return new HashCode().Add(ParameterName, TypeForCodeGeneration, IsNullable, DefaultValue, ParameterKinds);
+        return new HashCode()
+            .Add(ParameterName, TypeForCodeGeneration, IsNullable, IsReferenceType)
+            .Add(DefaultValue, ParameterKinds);
     }
 }

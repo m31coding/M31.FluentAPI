@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
+using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -85,8 +86,8 @@ internal class ClassInfoFactory
         string? @namespace = type.ContainingNamespace.IsGlobalNamespace ? null : type.ContainingNamespace.ToString();
         bool isInternal = type.DeclaredAccessibility == Accessibility.Internal;
         bool hasPrivateConstructor = HasPrivateConstructor(type);
-        string builderClassNameTemplate = attributeDataExtended.AttributeData.GetConstructorArguments<string>();
-        string builderClassName = NameCreator.CreateName(builderClassNameTemplate, className);
+        FluentApiAttributeInfo fluentApiAttributeInfo =
+            FluentApiAttributeInfo.Create(attributeDataExtended.AttributeData, className);
 
         List<FluentApiInfo> infos = new List<FluentApiInfo>();
 
@@ -114,7 +115,7 @@ internal class ClassInfoFactory
             isStruct,
             isInternal,
             hasPrivateConstructor,
-            builderClassName,
+            fluentApiAttributeInfo.BuilderClassName,
             newLineString,
             infos,
             usingStatements,
@@ -150,6 +151,7 @@ internal class ClassInfoFactory
             return null;
         }
 
-        return FluentApiInfo.Create(symbol, attributeData);
+        FluentApiInfoCreator fluentApiInfoCreator = new FluentApiInfoCreator(report);
+        return fluentApiInfoCreator.Create(symbol, attributeData);
     }
 }

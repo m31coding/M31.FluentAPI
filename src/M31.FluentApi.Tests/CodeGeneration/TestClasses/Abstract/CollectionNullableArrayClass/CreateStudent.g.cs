@@ -10,7 +10,9 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CollectionNullableArrayClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
     private static readonly PropertyInfo friendsPropertyInfo;
@@ -25,24 +27,60 @@ public class CreateStudent
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static Student WhoseFriendsAre(params string[]? friends)
     {
         CreateStudent createStudent = new CreateStudent();
-        friendsPropertyInfo.SetValue(createStudent.student, friends);
+        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, friends);
         return createStudent.student;
+    }
+
+    Student IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
+    {
+        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
+        return student;
     }
 
     public static Student WhoseFriendIs(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
-        friendsPropertyInfo.SetValue(createStudent.student, new string[1]{ friend });
+        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, new string[1]{ friend });
         return createStudent.student;
+    }
+
+    Student IWhoseFriendsAre.WhoseFriendIs(string friend)
+    {
+        CreateStudent.friendsPropertyInfo.SetValue(student, new string[1]{ friend });
+        return student;
     }
 
     public static Student WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
-        friendsPropertyInfo.SetValue(createStudent.student, new string[0]);
+        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, new string[0]);
         return createStudent.student;
+    }
+
+    Student IWhoseFriendsAre.WhoHasNoFriends()
+    {
+        CreateStudent.friendsPropertyInfo.SetValue(student, new string[0]);
+        return student;
+    }
+
+    public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface IWhoseFriendsAre
+    {
+        Student WhoseFriendsAre(params string[]? friends);
+
+        Student WhoseFriendIs(string friend);
+
+        Student WhoHasNoFriends();
     }
 }

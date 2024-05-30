@@ -10,7 +10,9 @@ using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentNullableNoNullableAnnotationPrivateSetClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName
 {
     private readonly Student student;
     private static readonly PropertyInfo namePropertyInfo;
@@ -25,17 +27,45 @@ public class CreateStudent
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static Student WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, name);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent.student;
+    }
+
+    Student IWithName.WithName(string name)
+    {
+        CreateStudent.namePropertyInfo.SetValue(student, name);
+        return student;
     }
 
     public static Student WhoseNameIsUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
-        namePropertyInfo.SetValue(createStudent.student, null);
+        CreateStudent.namePropertyInfo.SetValue(createStudent.student, null);
         return createStudent.student;
+    }
+
+    Student IWithName.WhoseNameIsUnknown()
+    {
+        CreateStudent.namePropertyInfo.SetValue(student, null);
+        return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        Student WithName(string name);
+
+        Student WhoseNameIsUnknown();
     }
 }

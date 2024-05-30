@@ -27,6 +27,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         List<string> BuildCallMethodCode(
             string instancePrefix,
             IReadOnlyCollection<Parameter> outerMethodParameters,
+            ReservedVariableNames reservedVariableNames,
             string? returnType)
         {
             return new List<string>()
@@ -57,6 +58,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         List<string> BuildCallMethodCode(
             string instancePrefix,
             IReadOnlyCollection<Parameter> outerMethodParameters,
+            ReservedVariableNames reservedVariableNames,
             string? returnType)
         {
             return outerMethodParameters.Any(p =>
@@ -66,6 +68,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                     instancePrefix,
                     symbolInfo.GenericInfo,
                     outerMethodParameters,
+                    reservedVariableNames,
                     returnType)
                 : BuildDefaultReflectionCode(
                     infoFieldName,
@@ -81,10 +84,13 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         string instancePrefix,
         GenericInfo? genericInfo,
         IReadOnlyCollection<Parameter> outerMethodParameters,
+        ReservedVariableNames reservedVariableNames,
         string? returnType)
     {
         bool returnResult = !IsNoneOrVoid(returnType);
-        string variableName = returnResult ? GetVariableName("result", outerMethodParameters) : string.Empty;
+        string variableName = returnResult
+            ? reservedVariableNames.GetNewLocalVariableName("result")
+            : string.Empty;
         string suppressNullability = returnResult ? "!" : string.Empty;
 
         List<string> lines = new List<string>();
@@ -93,12 +99,14 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         lines.Add(
             $"object?[] args = new object?[] {{ {string.Join(", ", outerMethodParameters.Select(GetArgument))} }};");
 
-        // semesterMethodInfo.Invoke(createStudent.student, args) or
-        // semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2)).Invoke(createStudent.student, args) or
+        // CreateStudent.semesterMethodInfo.Invoke(createStudent.student, args) or
+        // CreateStudent.semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2))
+        //     .Invoke(createStudent.student, args) or
         // string result = (string) toJsonMethodInfo.Invoke(createStudent.student, args)
         lines.Add(CodeBoard.NewCodeBuilder()
             .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
-            .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+            .Append(
+                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}.{MakeGenericMethod(genericInfo)}")
             .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args){suppressNullability};")
             .ToString());
 
@@ -130,24 +138,6 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         }
     }
 
-    private string GetVariableName(string desiredVariableName, IReadOnlyCollection<Parameter> outerMethodParameters)
-    {
-        string variableName = desiredVariableName;
-        int i = 2;
-
-        IEnumerable<string> reservedVariableNames = outerMethodParameters
-            .Select(p => p.Name)
-            .Concat(new string[] { CodeBoard.Info.ClassInstanceName, CodeBoard.Info.BuilderInstanceName });
-
-        // ReSharper disable once PossibleMultipleEnumeration
-        while (reservedVariableNames.Contains(variableName))
-        {
-            variableName = $"{variableName}{i++}";
-        }
-
-        return variableName;
-    }
-
     private List<string> BuildDefaultReflectionCode(
         string infoFieldName,
         string instancePrefix,
@@ -160,12 +150,13 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
 
         return new List<string>()
         {
-            // semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
-            // semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
+            // CreateStudent.semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
+            // CreateStudent.semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
             //     .Invoke(createStudent.student, new object[] { semester });
             CodeBoard.NewCodeBuilder()
                 .Append($"return ({returnType}) ", returnResult)
-                .Append($"{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+                .Append($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}" +
+                        $".{MakeGenericMethod(genericInfo)}")
                 .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
                 .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }})" +
                         $"{suppressNullability};")
@@ -218,7 +209,18 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             return parameterInfo.IsGenericParameter
                 ? $"Type.MakeGenericMethodParameter({parameterInfo.GenericTypeParameterPosition!.Value})" +
                   $"{MakeByRefType(parameterInfo.ParameterKinds)}"
-                : $"typeof({parameterInfo.TypeForCodeGeneration}){MakeByRefType(parameterInfo.ParameterKinds)}";
+                : $"typeof({GetTypeOfArgument(parameterInfo)}){MakeByRefType(parameterInfo.ParameterKinds)}";
+
+            static string GetTypeOfArgument(ParameterSymbolInfo parameterInfo)
+            {
+                if (parameterInfo.IsReferenceType && parameterInfo.TypeForCodeGeneration.EndsWith("?"))
+                {
+                    return parameterInfo.TypeForCodeGeneration
+                        .Substring(0, parameterInfo.TypeForCodeGeneration.Length - 1);
+                }
+
+                return parameterInfo.TypeForCodeGeneration;
+            }
 
             static string MakeByRefType(ParameterKinds parameterKinds)
             {

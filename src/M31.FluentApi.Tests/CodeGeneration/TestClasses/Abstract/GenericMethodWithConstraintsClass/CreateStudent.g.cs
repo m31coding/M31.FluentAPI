@@ -10,13 +10,20 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericMethodWithConstraintsClass;
 
-public class CreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IMethod1
 {
     private readonly Student student;
 
     private CreateStudent()
     {
         student = new Student();
+    }
+
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
     }
 
     public static Student Method1<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
@@ -33,5 +40,29 @@ public class CreateStudent
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Method1<T1, T2, T3, T4, T5, T6, T7, T8, T9>(p1, p2, p3, p4, p5, p6, p7, p8, p9);
         return createStudent.student;
+    }
+
+    Student IMethod1.Method1<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+    {
+        student.Method1<T1, T2, T3, T4, T5, T6, T7, T8, T9>(p1, p2, p3, p4, p5, p6, p7, p8, p9);
+        return student;
+    }
+
+    public interface ICreateStudent : IMethod1
+    {
+    }
+
+    public interface IMethod1
+    {
+        Student Method1<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+            where T1 : class
+            where T2 : class?
+            where T3 : struct
+            where T4 : notnull
+            where T5 : new()
+            where T6 : unmanaged
+            where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
+            where T8 : class, System.Collections.Generic.IDictionary<int, string>
+            where T9 : System.Collections.Generic.List<int>, new();
     }
 }

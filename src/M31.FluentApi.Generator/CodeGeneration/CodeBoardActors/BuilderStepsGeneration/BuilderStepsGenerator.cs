@@ -17,7 +17,12 @@ internal class BuilderGenerator : ICodeBoardActor
                 break;
             }
 
-            Method method = builderStepMethod.BuildMethodCode(codeBoard.Info);
+            ReservedVariableNames reservedVariableNames = codeBoard.ReservedVariableNames.NewLocalScope();
+            reservedVariableNames.ReserveLocalVariableNames(builderStepMethod.Parameters.Select(p => p.Name));
+
+            Method method = builderStepMethod.BuildMethodCode(
+                codeBoard.Info,
+                reservedVariableNames);
             codeBoard.BuilderClass.AddMethod(method);
         }
     }

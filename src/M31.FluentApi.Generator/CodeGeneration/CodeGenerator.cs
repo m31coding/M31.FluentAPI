@@ -37,6 +37,7 @@ internal static class CodeGenerator
             new InnerBodyCreator(),
             new ForkCreator(),
             new DuplicateMethodsChecker(),
+            new InitialStepMethodGenerator(),
             new BuilderGenerator(),
             new InterfaceGenerator(),
         };

@@ -10,6 +10,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodParameterModifiersClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IMethodWithParams,
     CreateStudent.IMethodWithRefParameter,
     CreateStudent.IMethodWithInParameter,
     CreateStudent.IMethodWithOutParameter,
@@ -22,6 +24,11 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IMethodWithRefParameter MethodWithParams(params int[] numbers)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -29,28 +36,43 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IMethodWithInParameter MethodWithRefParameter(ref int n1)
+    IMethodWithRefParameter IMethodWithParams.MethodWithParams(params int[] numbers)
+    {
+        student.MethodWithParams(numbers);
+        return this;
+    }
+
+    IMethodWithInParameter IMethodWithRefParameter.MethodWithRefParameter(ref int n1)
     {
         student.MethodWithRefParameter(ref n1);
         return this;
     }
 
-    public IMethodWithOutParameter MethodWithInParameter(in int n2)
+    IMethodWithOutParameter IMethodWithInParameter.MethodWithInParameter(in int n2)
     {
         student.MethodWithInParameter(in n2);
         return this;
     }
 
-    public IMethodWithRefInAndOutParameter MethodWithOutParameter(out int n3)
+    IMethodWithRefInAndOutParameter IMethodWithOutParameter.MethodWithOutParameter(out int n3)
     {
         student.MethodWithOutParameter(out n3);
         return this;
     }
 
-    public Student MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
+    Student IMethodWithRefInAndOutParameter.MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
     {
         student.MethodWithRefInAndOutParameter(ref n4, in n5, out n6);
         return student;
+    }
+
+    public interface ICreateStudent : IMethodWithParams
+    {
+    }
+
+    public interface IMethodWithParams
+    {
+        IMethodWithRefParameter MethodWithParams(params int[] numbers);
     }
 
     public interface IMethodWithRefParameter

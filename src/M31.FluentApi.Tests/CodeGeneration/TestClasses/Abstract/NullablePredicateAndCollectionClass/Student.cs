@@ -1,3 +1,5 @@
+// ReSharper disable All
+
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
 

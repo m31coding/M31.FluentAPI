@@ -16,13 +16,16 @@ internal class CallMethodCode
     internal List<string> BuildCode(
         string instancePrefix,
         IReadOnlyCollection<Parameter> outerMethodParameters,
+        ReservedVariableNames reservedVariableNames,
         string? returnType)
     {
-        return buildCallMethodCode(instancePrefix, outerMethodParameters, returnType);
+        return buildCallMethodCode(instancePrefix, outerMethodParameters, reservedVariableNames, returnType);
     }
 
     public override string ToString()
     {
-        return string.Join(newLineString, buildCallMethodCode(string.Empty, Array.Empty<Parameter>(), null));
+        return string.Join(
+            newLineString,
+            buildCallMethodCode(string.Empty, Array.Empty<Parameter>(), new ReservedVariableNames(), null));
     }
 }

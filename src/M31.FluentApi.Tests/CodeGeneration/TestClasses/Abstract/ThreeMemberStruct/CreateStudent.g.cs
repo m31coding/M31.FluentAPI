@@ -11,6 +11,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreeMemberStruct;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
     CreateStudent.IBornOn,
     CreateStudent.IInSemester
 {
@@ -21,6 +23,11 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -28,16 +35,31 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IInSemester BornOn(System.DateOnly dateOfBirth)
+    IBornOn IWithName.WithName(string name)
+    {
+        student.Name = name;
+        return this;
+    }
+
+    IInSemester IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
         student.DateOfBirth = dateOfBirth;
         return this;
     }
 
-    public Student InSemester(int semester)
+    Student IInSemester.InSemester(int semester)
     {
         student.Semester = semester;
         return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IBornOn WithName(string name);
     }
 
     public interface IBornOn

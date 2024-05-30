@@ -1,6 +1,6 @@
 # Fluent APIs in C#
 
-![M31.FluentApi logo](media/fluent-api-logo-256.jpg)
+![M31.FluentApi logo](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/fluent-api-logo-256.jpg)
 
 Everybody wants to use fluent APIs but writing them is tedious. With this library providing fluent APIs for your classes becomes a breeze. Simply annotate them with attributes and the source code for the fluent API will be generated. The fluent API library leverages incremental source code generation at development time and your IDE will offer you the corresponding code completion immediately.
 
@@ -25,7 +25,7 @@ PM> Install-Package M31.FluentApi
 A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentApi`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
 
 ```xml
-<PackageReference Include="M31.FluentApi" Version="1.3.0" PrivateAssets="all"/>
+<PackageReference Include="M31.FluentApi" Version="1.4.0" PrivateAssets="all"/>
 ```
 
 If you would like to examine the generated code, you may emit it by adding the following lines to your `csproj` file:
@@ -46,8 +46,16 @@ If you use this library for the first time I recommend that you read the storybo
 - [01 Basics](src/M31.FluentApi.Storybook/01_Basics.cs)
 - [02 Control attributes](src/M31.FluentApi.Storybook/02_ControlAttributes.cs)
 
+Moreover, you may find several Fluent API examples and their [usage](src/ExampleProject/Program.cs) in the example project:
 
-Here is the full example from the introduction to the basics:
+- [Student](src/ExampleProject/Student.cs)
+- [Person](src/ExampleProject/Person.cs)
+- [HashCode](src/ExampleProject/HashCode.cs)
+- [Node](src/ExampleProject/Node.cs)
+- [DockerFile](src/ExampleProject/DockerFile.cs)
+- ...
+
+Here is an example from the introduction to the basics:
 
 ```cs
 [FluentApi]
@@ -89,7 +97,7 @@ public class Student
  }
 ```
 
-![fluent-api-usage](media/fluent-api.gif)
+![fluent-api-usage](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/fluent-api.gif)
 
 You may have a look at the generated code for this example: [CreateStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/StudentClass/CreateStudent.g.cs). Note that if you use private members or properties with a private set accessor, as it is the case in this example, the generated code will use reflection to set the properties.
 
@@ -97,7 +105,7 @@ You may have a look at the generated code for this example: [CreateStudent.g.cs]
 
 The attributes `FluentApi` and `FluentMember` are all you need in order to get started. 
 
-The attributes `FluentPredicate` and `FluentCollection` can be used instead of a `FluentMember` attribute if the decorated member is a boolean or a collection, respectively. 
+The attributes `FluentPredicate`, `FluentCollection`, and `FluentLambda` can be used instead of the `FluentMember` attribute if the decorated member is a boolean, a collection, or has its own Fluent API, respectively. 
 
 `FluentDefault` and `FluentNullable` can be used in combination with these attributes to set a default value or null, respectively. 
 
@@ -118,8 +126,17 @@ Use this attribute for your class / struct / record. The optional parameter allo
 public class Student
 ```
 
+You can create instances by statically accessing the generated `CreateStudent` class:
+
 ```cs
-Student alice = CreateStudent...
+Student alice = CreateStudent.WithFirstName("Alice")...
+```
+
+Alternatively, you can call `InitialStep` to get a new builder instance:
+
+```cs
+ICreateStudent createStudent = CreateStudent.InitialStep();
+Student alice = createStudent.WithFirstName("Alice")...
 ```
 
 ### FluentMember
@@ -160,7 +177,7 @@ public string LastName { get; private set; }
 FluentPredicate(int builderStep, string method = "{Name}", string negatedMethod = "Not{Name}")
 ```
 
-Can be used instead of a `FluentMember` attribute if the decorated member is of type `bool`. This attribute generates three methods, one for setting the value of the member to `true`, one for setting it to `false`, and one for passing the boolean value.
+Can be used instead of the `FluentMember` attribute if the decorated member is of type `bool`. This attribute generates three methods, one for setting the value of the member to `true`, one for setting it to `false`, and one for passing the boolean value.
 
 ```cs
 [FluentPredicate(4, "WhoIsHappy", "WhoIsSad")]
@@ -185,7 +202,7 @@ FluentCollection(
     string withZeroItems = "WithZero{Name}")
 ```
 
-Can be used instead of a `FluentMember` attribute if the decorated member is a collection. This attribute generates methods for setting multiple items, one item and zero items. The supported collection types can be seen in the source file [CollectionInference.cs](src/M31.FluentApi.Generator/SourceGenerators/Collections/CollectionInference.cs). 
+Can be used instead of the `FluentMember` attribute if the decorated member is a collection. This attribute generates methods for setting multiple items, one item and zero items. The supported collection types can be seen in the source file [CollectionInference.cs](src/M31.FluentApi.Generator/SourceGenerators/Collections/CollectionInference.cs). 
 
 ```cs
 [FluentCollection(5, "Friend", "WhoseFriendsAre", "WhoseFriendIs", "WhoHasNoFriends")]
@@ -193,12 +210,31 @@ public IReadOnlyCollection<string> Friends { get; private set; }
 ```
 
 ```cs
-....WhoseFriendsAre(new string[] { "Bob", "Carol", "Eve" })...
+...WhoseFriendsAre(new string[] { "Bob", "Carol", "Eve" })...
 ...WhoseFriendsAre("Bob", "Carol", "Eve")...
 ...WhoseFriendIs("Alice")...
 ...WhoHasNoFriends()...
 ```
 
+
+### FluentLambda
+
+```cs
+FluentLambda(int builderStep, string method = "With{Name}")
+```
+
+Can be used instead of the `FluentMember` attribute if the decorated member has its own Fluent API. Generates an additional builder method that accepts a lambda expression for creating the target field or property.
+        
+```cs
+[FluentLambda(1)]
+public Address Address { get; private set; }
+```
+
+```cs
+...WithAddress(new Address("23", "Market Street", "San Francisco"))...
+...WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"))...
+```
+   
 
 ### FluentDefault
 
@@ -328,6 +364,9 @@ string serialized = ...ToJson();
 ```
 
 
+## Miscellaneous
+
+
 ### Forks
 
 To create forks specify builder methods at the same builder step. The resulting API offers all specified methods at this step but only one can be called:
@@ -352,9 +391,28 @@ private void BornOn(DateOnly dateOfBirth)
 ```
 
 
+### Lambda pattern
+                       
+Instances of Fluent API classes can be created and passed into methods of other classes using the lambda pattern. For example, given a `University` class that needs to be augmented with an `AddStudent` method, the following code demonstrates the lambda pattern:
+
+```cs
+public void AddStudent(Func<CreateStudent.ICreateStudent, Student> createStudent)
+{
+    Student student = createStudent(CreateStudent.InitialStep());
+    students.Add(student);
+}
+```
+
+```cs
+university.AddStudent(s => s.Named("Alice", "King").OfAge(22)...);
+```
+
+Note that if you want to set a single field or property on a Fluent API class, you can instead use the `FluentLambda` attribute.
+
+
 ## Problems with the IDE
 
-As of 2023 code generation with Roslyn is still a relatively new feature but is already supported quite well in Visual Studio and Rider. Since code generation is potentially triggered with every single key stroke, there are sometimes situations where the code completion index of the IDE does not keep up with all the changes.
+Since code generation is potentially triggered with every single key stroke, there are sometimes situations where the code completion index of the IDE does not keep up with all the changes.
 
 In particular, if your IDE visually indicates that there are errors in your code but it compiles and runs just fine, try the following things:
 

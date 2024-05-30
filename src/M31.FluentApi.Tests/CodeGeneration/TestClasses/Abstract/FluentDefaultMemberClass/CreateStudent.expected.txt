@@ -10,13 +10,21 @@ using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentDefaultMemberClass;
 
-public class CreateStudent : CreateStudent.IBornOn
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
+    CreateStudent.IBornOn
 {
     private readonly Student student;
 
     private CreateStudent()
     {
         student = new Student();
+    }
+
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
     }
 
     public static IBornOn WithName(string name)
@@ -26,21 +34,43 @@ public class CreateStudent : CreateStudent.IBornOn
         return createStudent;
     }
 
+    IBornOn IWithName.WithName(string name)
+    {
+        student.Name = name;
+        return this;
+    }
+
     public static IBornOn WithUnknownName()
     {
         CreateStudent createStudent = new CreateStudent();
         return createStudent;
     }
 
-    public Student BornOn(System.DateOnly dateOfBirth)
+    IBornOn IWithName.WithUnknownName()
+    {
+        return this;
+    }
+
+    Student IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
         student.DateOfBirth = dateOfBirth;
         return student;
     }
 
-    public Student WithDefaultDateOfBirth()
+    Student IBornOn.WithDefaultDateOfBirth()
     {
         return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IBornOn WithName(string name);
+
+        IBornOn WithUnknownName();
     }
 
     public interface IBornOn

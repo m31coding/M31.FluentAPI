@@ -11,6 +11,8 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DefaultFluentMethodNameClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
     CreateStudent.IIsHappy,
     CreateStudent.IWithSemester,
     CreateStudent.IWithFriends
@@ -22,6 +24,11 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IIsHappy WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -29,46 +36,61 @@ public class CreateStudent :
         return createStudent;
     }
 
-    public IWithSemester IsHappy(bool isHappy = true)
+    IIsHappy IWithName.WithName(string firstName, string lastName)
+    {
+        student.WithName(firstName, lastName);
+        return this;
+    }
+
+    IWithSemester IIsHappy.IsHappy(bool isHappy)
     {
         student.IsHappy = isHappy;
         return this;
     }
 
-    public IWithSemester NotIsHappy()
+    IWithSemester IIsHappy.NotIsHappy()
     {
         student.IsHappy = false;
         return this;
     }
 
-    public IWithFriends WithSemester(int semester)
+    IWithFriends IWithSemester.WithSemester(int semester)
     {
         student.Semester = semester;
         return this;
     }
 
-    public Student WithFriends(System.Collections.Generic.IReadOnlyCollection<string> friends)
+    Student IWithFriends.WithFriends(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
         student.Friends = friends;
         return student;
     }
 
-    public Student WithFriends(params string[] friends)
+    Student IWithFriends.WithFriends(params string[] friends)
     {
         student.Friends = friends;
         return student;
     }
 
-    public Student WithFriend(string friend)
+    Student IWithFriends.WithFriend(string friend)
     {
         student.Friends = new string[1]{ friend };
         return student;
     }
 
-    public Student WithZeroFriends()
+    Student IWithFriends.WithZeroFriends()
     {
         student.Friends = new string[0];
         return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IIsHappy WithName(string firstName, string lastName);
     }
 
     public interface IIsHappy

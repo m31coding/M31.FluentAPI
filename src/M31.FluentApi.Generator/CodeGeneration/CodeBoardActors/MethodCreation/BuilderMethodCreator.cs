@@ -119,13 +119,16 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
         return attributeInfo switch
         {
             FluentMemberAttributeInfo memberAttributeInfo
-                => new MemberMethods((MemberSymbolInfo)symbolInfo, memberAttributeInfo),
+                => new MemberMethod((MemberSymbolInfo)symbolInfo, memberAttributeInfo),
 
             FluentPredicateAttributeInfo predicateAttributeInfo
                 => new PredicateMethods((MemberSymbolInfo)symbolInfo, predicateAttributeInfo),
 
             FluentCollectionAttributeInfo collectionAttributeInfo
                 => new CollectionMethods((MemberSymbolInfo)symbolInfo, collectionAttributeInfo),
+
+            FluentLambdaAttributeInfo lambdaAttributeInfo
+                => new LambdaMethod((MemberSymbolInfo)symbolInfo, lambdaAttributeInfo),
 
             FluentMethodAttributeInfo methodAttributeInfo
                 => new FluentMethods(

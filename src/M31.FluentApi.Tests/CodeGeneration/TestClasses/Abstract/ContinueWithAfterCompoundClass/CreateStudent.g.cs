@@ -11,6 +11,8 @@ using System.Reflection;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithAfterCompoundClass;
 
 public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.IWithName,
     CreateStudent.IWithProperty1,
     CreateStudent.IWithProperty2
 {
@@ -33,24 +35,45 @@ public class CreateStudent :
         student = new Student();
     }
 
+    public static ICreateStudent InitialStep()
+    {
+        return new CreateStudent();
+    }
+
     public static IWithProperty2 WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        firstNamePropertyInfo.SetValue(createStudent.student, firstName);
-        lastNamePropertyInfo.SetValue(createStudent.student, lastName);
+        CreateStudent.firstNamePropertyInfo.SetValue(createStudent.student, firstName);
+        CreateStudent.lastNamePropertyInfo.SetValue(createStudent.student, lastName);
         return createStudent;
     }
 
-    public IWithProperty2 WithProperty1(string property1)
+    IWithProperty2 IWithName.WithName(string firstName, string lastName)
     {
-        property1PropertyInfo.SetValue(student, property1);
+        CreateStudent.firstNamePropertyInfo.SetValue(student, firstName);
+        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
         return this;
     }
 
-    public Student WithProperty2(string property2)
+    IWithProperty2 IWithProperty1.WithProperty1(string property1)
     {
-        property2PropertyInfo.SetValue(student, property2);
+        CreateStudent.property1PropertyInfo.SetValue(student, property1);
+        return this;
+    }
+
+    Student IWithProperty2.WithProperty2(string property2)
+    {
+        CreateStudent.property2PropertyInfo.SetValue(student, property2);
         return student;
+    }
+
+    public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface IWithName
+    {
+        IWithProperty2 WithName(string firstName, string lastName);
     }
 
     public interface IWithProperty1

@@ -1,17 +1,17 @@
 ﻿// Non-nullable member is uninitialized
 #pragma warning disable CS8618
-
-// ReSharper disable CheckNamespace
+// ReSharper disable All
 
 using M31.FluentApi.Attributes;
 
 namespace BasicExample
 {
-    /* Generates a builder class with name CreateStudent and methods WithFirstName and WithLastName.
-       The methods can only be accessed in the specified order, WithFirstName (builder step 0) has to be called before
-       WithLastName (builder step 1).
+    /* Generates a builder class with name CreateStudent and methods WithFirstName and WithLastName. The methods have to
+       be called in the specified order, WithFirstName (builder step 0) has to be called before WithLastName (builder
+       step 1). As shown in the usage examples below, a student can be either created by calling the static
+       WithFirstName method on the CreateStudent class, or by first creating a new builder instance.
        Although I use classes with properties in all examples of this file, the FluentApi attribute can also be applied
-       to structs and records and the FluentMember attribute also works with fields. */
+       to structs and records, and the FluentMember attribute also works with fields. */
 
     [FluentApi]
     public class Student
@@ -27,7 +27,10 @@ namespace BasicExample
     {
         public static void UseTheGeneratedFluentApi()
         {
-            Student student = CreateStudent.WithFirstName("Alice").WithLastName("King");
+            Student student1 = CreateStudent.WithFirstName("Alice").WithLastName("King");
+
+            CreateStudent.ICreateStudent createStudent = CreateStudent.InitialStep();
+            Student student2 = createStudent.WithFirstName("Bob").WithLastName("Bishop");
         }
     }
 }
@@ -35,11 +38,11 @@ namespace BasicExample
 namespace CustomNamesExample
 {
     /* The desired name of the builder class and its methods can be specified in the attributes.
-       For these name parameters you may use the template {Name}, which will be replaced by the name of the decorated
+       For these name parameters, you may use the template {Name}, which will be replaced by the name of the decorated
        element.
-       This approach renders your attributes more robust against name refactorings of the decorated
-       elements, however, this comes with the cost of less readability of the attributes. In this file I opted for a
-       greater readability and use this feature only in this example and only for the FluentApiAttribute. */
+       This approach renders your attributes more robust against name refactorings of the decorated elements, however,
+       it comes with the cost of less readability of the attributes. In this file, I opted for a greater readability and
+       use this feature only in this example and only for the FluentApi attribute. */
 
     [FluentApi("New{Name}")]
     public class Student
@@ -87,9 +90,9 @@ namespace CompoundExample
 
 namespace ForkExample
 {
-    /* You can create a fork by specifying FluentMember attributes with the same builder step but different names. In
-       this example a compound method called Named is created and a fork with the methods OfAge and BornOn. After the
-       Named method your IDE will offer you the OfAge method and the BornOn method but you can only choose one. */
+    /* You can create a fork by specifying FluentMember attributes with the same builder step but with different names.
+       In this example a compound method called Named is created, and a fork with the methods OfAge and BornOn. After
+       the Named method your IDE will offer you the OfAge method and the BornOn method but you can only choose one. */
 
     [FluentApi]
     public class Student
@@ -130,11 +133,11 @@ namespace ForkExample
 
 namespace SpecialMembersExample
 {
-    /* The FluentMember attribute can be applied to all property and field types. However, for booleans and collections
+    /* The FluentMember attribute can be applied to all property and field types. However, for booleans and collections,
        you can also use the more specific attributes FluentPredicate and FluentCollection, respectively.
        The FluentPredicate attribute results in two builder methods, one for setting the value to true and one for
        setting it to false.
-       The FluentCollection attribute can be used for lists, arrays, sets and related interfaces. It generates methods
+       The FluentCollection attribute can be used for lists, arrays, sets, and related interfaces. It generates methods
        for setting multiple items, one item and zero items. */
 
     [FluentApi]
@@ -166,11 +169,11 @@ namespace SpecialMembersExample
 namespace OrthogonalAttributesExample
 {
     /* Additional attributes ('orthogonal attributes') can be used in combination with FluentMember, FluentPredicate and
-       FluentCollection. These are the attributes FluentDefault and FluentNullable.
+       FluentCollection. These attributes are FluentDefault and FluentNullable.
        The FluentDefault attribute generates a builder method that does not change the initial value of the field or
        property.
        The FluentNullable attribute generates a builder method that sets the value to null.
-       As you can see for the City property, it is possible to use both of them at the same time. */
+       As you can see with the City property, it is possible to use both of these attributes at the same time. */
 
     [FluentApi]
     public class Student
@@ -203,10 +206,10 @@ namespace OrthogonalAttributesExample
 namespace FluentMethodExample
 {
     /* The generated builder methods simply set the values of the fields and properties. For public fields and
-       properties this is straightforward, for private fields and private set accessors reflection will be used.
-       Nevertheless, in both cases the builder methods merely set the values to the given arguments.
-       There might be use cases where you want to have more control over the builder methods, e.g. for setting the value
-       in a particular way or for triggering additional behavior. To this end you can define custom methods that return
+       properties, this is straightforward. For private fields and private set accessors, reflection will be used.
+       Nevertheless, in both cases, the builder methods merely set the values to the given arguments.
+       There might be use cases where you want to have more control over the builder methods, such as setting the value
+       in a particular way or triggering additional behavior. To this end you, can define custom methods that return
        void and decorate them with FluentMethod attributes. */
 
     [FluentApi]
@@ -248,16 +251,11 @@ namespace FluentMethodExample
 
 namespace FullExample
 {
-    /* Here is one final example with all the things you have learned in this overview. Note that this time
-       I have modeled the BornOn method with a fluent method instead of a property.
-       Moreover, the names of all the methods that are generated are specified explicitly. When you use this library I
-       would like you to take some time and find good names for the builder methods. In this way I am confident that you
-       will get an expressive and readable fluent API.
-       In the next chapter, you will learn how to create non-linear paths with control attributes.
-
-       PS: If you are interested in the generated code of the examples compile the Storybook application and have a look
-       in the obj/Generated folder. You may also have a look at the files in M31.FluentApi.Tests/CodeGeneration/
-       TestClasses. */
+    /* Here is an example incorporating all the things you have learned in this overview so far. Note that this time, I
+       have modeled the BornOn method with a fluent method instead of a property. Moreover, the names of all the
+       generated methods are specified explicitly.
+       When you use this library, I encourage you to take some time to find good names for the builder methods. In this
+       way, I am confident that you will achieve an expressive and readable fluent API. */
 
     [FluentApi]
     public class Student
@@ -306,6 +304,73 @@ namespace FullExample
 
             Student bob = CreateStudent.Named("Bob", "Bishop").BornOn(new DateOnly(2002, 8, 3)).InSemester(2)
                 .LivingInBoston().WithUnknownMood().WhoseFriendIs("Alice");
+        }
+    }
+}
+
+namespace FluentLambdaExample
+{
+    /* Last but not least, I would like to introduce the FluentLambda attribute. It can be applied to fields and
+       properties whose types have their own Fluent API. The FluentLambda attribute results in an additional builder
+       method that accepts a lambda expression to create the decorated member.
+       In the example below, the Student class has an Address property, and the Address class has its own Fluent API.
+       The advantage of the lambda method is that the user does not have to figure out the builder name of the Address
+       class when creating a student, as shown in the usage examples below.
+
+       In the next chapter, you will learn how to create non-linear paths with control attributes.
+
+       PS: If you are interested in the generated code of the examples, compile the Storybook application and have a
+       look in the obj/Generated folder. You may also look at the example classes in the ExampleProject. */
+
+    [FluentApi]
+    public class Student
+    {
+        [FluentMember(0, "Named", 0)]
+        public string FirstName { get; private set; }
+
+        [FluentMember(0, "Named", 1)]
+        public string LastName { get; private set; }
+
+        [FluentLambda(1)]
+        public Address Address { get; private set; }
+    }
+
+    [FluentApi]
+    public class Address
+    {
+        public Address(string houseNumber, string street, string city)
+        {
+            HouseNumber = houseNumber;
+            Street = street;
+            City = city;
+        }
+
+        private Address()
+        {
+        }
+
+        [FluentMember(0)]
+        public string HouseNumber { get; private set; }
+
+        [FluentMember(1)]
+        public string Street { get; private set; }
+
+        [FluentMember(2, "InCity")]
+        public string City { get; private set; }
+    }
+
+    public static class Usage
+    {
+        public static void UseTheGeneratedFluentApi()
+        {
+            Student student1 = CreateStudent.Named("Alice", "King")
+                .WithAddress(new Address("111", "5th Avenue", "New York"));
+
+            Student student2 = CreateStudent.Named("Bob", "Bishop")
+                .WithAddress(CreateAddress.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
+
+            Student student3 = CreateStudent.Named("Eve", "Knight")
+                .WithAddress(a => a.WithHouseNumber("82").WithStreet("Friedrichstraße").InCity("Berlin"));
         }
     }
 }

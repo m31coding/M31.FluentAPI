@@ -4,9 +4,9 @@ using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 
-internal class MemberMethods : IBuilderMethodCreator
+internal class MemberMethod : IBuilderMethodCreator
 {
-    internal MemberMethods(MemberSymbolInfo symbolInfo, FluentMemberAttributeInfo memberAttributeInfo)
+    internal MemberMethod(MemberSymbolInfo symbolInfo, FluentMemberAttributeInfo memberAttributeInfo)
     {
         SymbolInfo = symbolInfo;
         MemberAttributeInfo = memberAttributeInfo;

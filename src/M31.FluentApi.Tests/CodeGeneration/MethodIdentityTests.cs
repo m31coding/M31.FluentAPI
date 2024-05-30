@@ -17,7 +17,7 @@ public class MethodIdentityTests
     {
         string[] testClassPathAndName = new string[]
         {
-            "..", "..", "..", "CodeGeneration", "TestClasses", "Abstract", "GenericClassWithOverloadedGenericMethod",
+            "..", "..", "..", "CodeGeneration", "TestClasses", "Abstract", "GenericOverloadedMethodClass",
             "Student"
         };
         TestClassCodeGenerator testClassCodeGenerator = TestClassCodeGenerator.Create(testClassPathAndName);

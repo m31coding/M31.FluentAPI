@@ -31,7 +31,7 @@ public class CodeBuildingTests
         static Interface CreateIMoveInterface()
         {
             Interface @interface = new Interface("public", "IMove");
-            MethodSignature moveSignature = MethodSignature.Create("void", "Move", true);
+            MethodSignature moveSignature = MethodSignature.Create("void", "Move", null, true);
             moveSignature.AddParameter("double", "deltaX");
             moveSignature.AddParameter("double", "deltaY");
             @interface.AddMethodSignature(moveSignature);
@@ -99,7 +99,7 @@ public class CodeBuildingTests
 
         static Method CreateAssignTaskMethod()
         {
-            MethodSignature signature = MethodSignature.Create("void", "AssignTask", false);
+            MethodSignature signature = MethodSignature.Create("void", "AssignTask", null, false);
             signature.AddModifiers("public");
             signature.AddParameter("string", "task");
             Method method = new Method(signature);
