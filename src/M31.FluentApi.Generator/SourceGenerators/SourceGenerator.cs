@@ -16,7 +16,7 @@ internal class SourceGenerator : IIncrementalGenerator
         var infos = context.SyntaxProvider
             .CreateSyntaxProvider(CanBeFluentApiClass, GetFluentApiClassInfo)
             .Where(info => info is not null)
-            .Collect() // Handle partial classes, get an array of related info objects into GenerateCode.
+            .Collect() // Handle partial classes, get an array of related info objects.
             .SelectMany((infos, _) =>
                 infos.Distinct()); // Want to have every fluent API info object only once.
 
@@ -112,6 +112,8 @@ internal class SourceGenerator : IIncrementalGenerator
         }
 
         string? name = ExtractName(attributeSyntax.Name);
+
+        // Note that we drop alias support for better performance.
         return name is "FluentApi" or "FluentApiAttribute";
     }
 
