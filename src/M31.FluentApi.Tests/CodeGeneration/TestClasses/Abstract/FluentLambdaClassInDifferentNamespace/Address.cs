@@ -4,18 +4,17 @@
 
 using M31.FluentApi.Attributes;
 
-namespace SomeOtherNamespace
+namespace SomeOtherNamespace;
+
+[FluentApi]
+public class Address
 {
-    [FluentApi]
-    public class Address
-    {
-        [FluentMember(0)]
-        public string HouseNumber { get; set; }
+    [FluentMember(0)]
+    public string HouseNumber { get; set; }
 
-        [FluentMember(1)]
-        public string Street { get; set; }
+    [FluentMember(1)]
+    public string Street { get; set; }
 
-        [FluentMember(2, "InCity")]
-        public string City { get; set; }
-    }
+    [FluentMember(2, "InCity")]
+    public string City { get; set; }
 }
