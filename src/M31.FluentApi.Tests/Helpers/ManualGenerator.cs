@@ -12,7 +12,7 @@ namespace M31.FluentApi.Tests.Helpers;
 
 internal static class ManualGenerator
 {
-    internal static CSharpCompilation GetCompilation(List<string> sourceCode)
+    internal static CSharpCompilation GetCompilation(IReadOnlyCollection<string> sourceCode)
     {
         SyntaxTree[] inputSyntaxTrees = sourceCode.Select(c => CSharpSyntaxTree.ParseText(c)).ToArray();
         IEnumerable<MetadataReference> references = AppDomain.CurrentDomain.GetAssemblies()
@@ -28,7 +28,7 @@ internal static class ManualGenerator
         return compilation;
     }
 
-    internal static ImmutableArray<Diagnostic> RunGeneratorsAndGetDiagnostics(List<string> sourceCode)
+    internal static ImmutableArray<Diagnostic> RunGeneratorsAndGetDiagnostics(IReadOnlyCollection<string> sourceCode)
     {
         CSharpCompilation compilation = GetCompilation(sourceCode);
         SourceGenerator generator = new SourceGenerator();
@@ -41,7 +41,7 @@ internal static class ManualGenerator
         return diagnostics;
     }
 
-    internal static GeneratorOutputs RunGenerators(List<string> sourceCode)
+    internal static GeneratorOutputs RunGenerators(IReadOnlyCollection<string> sourceCode)
     {
         CSharpCompilation compilation = GetCompilation(sourceCode);
         SourceGenerator generator = new SourceGenerator();

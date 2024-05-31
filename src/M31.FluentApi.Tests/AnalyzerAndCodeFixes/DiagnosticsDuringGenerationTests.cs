@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using M31.FluentApi.Tests.Helpers;
 using Microsoft.CodeAnalysis;
@@ -92,11 +91,12 @@ public class DiagnosticsDuringGenerationTests
         RunGeneratorAndCheckDiagnostics("ReservedMethodClass2", expectedDiagnostic1);
     }
 
-    private void RunGeneratorAndCheckDiagnostics(string testClassFolder,
+    private void RunGeneratorAndCheckDiagnostics(
+        string testClassFolder,
         params ExpectedDiagnostic[] expectedDiagnostics)
     {
         (string source, _) = ReadSource(testClassFolder, "Student");
-        List<string> sourceCode = new List<string>() { source };
+        string[] sourceCode = new string[] { source };
         Diagnostic[] diagnostics = ManualGenerator.RunGeneratorsAndGetDiagnostics(sourceCode).ToArray();
 
         Assert.Equal(expectedDiagnostics.Length, diagnostics.Length);

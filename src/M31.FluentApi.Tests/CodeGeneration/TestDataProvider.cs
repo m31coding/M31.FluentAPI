@@ -55,6 +55,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "NullablePredicateAndCollectionClass", "Student" },
                 new object[] { "Abstract", "OneMemberClass", "Student" },
                 new object[] { "Abstract", "OverloadedMethodClass", "Student" },
+                new object[] { "Abstract", "PartialClass", "Student1|Student2" },
                 new object[] { "Abstract", "PredicateClass", "Student" },
                 new object[] { "Abstract", "PredicatePrivateFieldClass", "Student" },
                 new object[] { "Abstract", "PrivateConstructorClass", "Student" },

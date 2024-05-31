@@ -254,6 +254,18 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecutePartialClass()
+    {
+        var student = TestClasses.Abstract.PartialClass
+            .CreateStudent
+            .WithFirstName("Alice")
+            .WithLastName("King");
+
+        Assert.Equal("Alice", student.FirstName);
+        Assert.Equal("King", student.LastName);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecutePrivateConstructorClass()
     {
         var student = TestClasses.Abstract.PrivateConstructorClass

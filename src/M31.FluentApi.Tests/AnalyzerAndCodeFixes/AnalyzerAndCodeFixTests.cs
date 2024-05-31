@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers;
 using Microsoft.CodeAnalysis.Testing;
@@ -208,7 +207,7 @@ public class AnalyzerAndCodeFixTests
         SourceWithFix source2 = ReadSource("PartialClass", "Student2");
 
         await Verifier.VerifyCodeFixAsync(
-            new List<SourceWithFix>() { source1, source2 },
+            new SourceWithFix[] { source1, source2 },
             DiagnosticResult.EmptyDiagnosticResults);
     }
 

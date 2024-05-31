@@ -27,11 +27,11 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
         SourceWithFix source,
         params DiagnosticResult[] expected)
     {
-        await VerifyCodeFixAsync(new List<SourceWithFix>() { source }, expected);
+        await VerifyCodeFixAsync(new SourceWithFix[] { source }, expected);
     }
 
     internal static async Task VerifyCodeFixAsync(
-        List<SourceWithFix> sourceCode,
+        IReadOnlyCollection<SourceWithFix> sourceCode,
         params DiagnosticResult[] expected)
     {
         var test = new CodeFixTest(sourceCode, expected);
@@ -41,7 +41,7 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
     private class CodeFixTest : CSharpCodeFixTest<TAnalyzer, TCodeFix, XUnitVerifier>
     {
         internal CodeFixTest(
-            List<SourceWithFix> sourceCode,
+            IReadOnlyCollection<SourceWithFix> sourceCode,
             params DiagnosticResult[] expected)
         {
             foreach (SourceWithFix source in sourceCode)
