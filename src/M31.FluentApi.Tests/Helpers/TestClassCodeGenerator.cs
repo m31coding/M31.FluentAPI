@@ -31,20 +31,20 @@ internal class TestClassCodeGenerator
 
     internal GeneratorOutputs RunGenerators()
     {
-        return ManualGenerator.RunGenerators(ReadSourceCodes());
+        return ManualGenerator.RunGenerators(ReadSourceCode());
     }
 
     internal (SemanticModel semanticModel, TypeDeclarationSyntax? typeDeclaration)
         GetSemanticModelAndTypeDeclaration()
     {
-        CSharpCompilation compilation = ManualGenerator.GetCompilation(ReadSourceCodes());
+        CSharpCompilation compilation = ManualGenerator.GetCompilation(ReadSourceCode());
         SyntaxTree syntaxTree = compilation.SyntaxTrees.First();
         SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
         TypeDeclarationSyntax? typeDeclaration = syntaxTree.GetFluentApiTypeDeclaration();
         return (semanticModel, typeDeclaration);
     }
 
-    private string[] ReadSourceCodes()
+    private string[] ReadSourceCode()
     {
         return ClassNames.Select(n => File.ReadAllText(PathToTestDataFile(ClassPath, $"{n}.cs"))).ToArray();
     }
