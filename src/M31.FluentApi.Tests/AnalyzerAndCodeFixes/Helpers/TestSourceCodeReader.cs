@@ -4,11 +4,11 @@ namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers;
 
 internal static class TestSourceCodeReader
 {
-    internal static (string source, string fixedSource) ReadSource(string testClassFolder, string @class)
+    internal static SourceWithFix ReadSource(string testClassFolder, string @class)
     {
         string source = ReadTestClassCode(testClassFolder, $"{@class}.cs");
         string fixedSource = TryReadTestClassCode(testClassFolder, $"{@class}.fixed.txt") ?? source;
-        return (source, fixedSource);
+        return new SourceWithFix(source, fixedSource);
     }
 
     private static string ReadTestClassCode(string testClassFolder, string file)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using M31.FluentApi.Tests.Helpers;
 using Microsoft.CodeAnalysis;
@@ -95,7 +96,8 @@ public class DiagnosticsDuringGenerationTests
         params ExpectedDiagnostic[] expectedDiagnostics)
     {
         (string source, _) = ReadSource(testClassFolder, "Student");
-        Diagnostic[] diagnostics = ManualGenerator.RunGeneratorsAndGetDiagnostics(source).ToArray();
+        List<string> sourceCode = new List<string>() { source };
+        Diagnostic[] diagnostics = ManualGenerator.RunGeneratorsAndGetDiagnostics(sourceCode).ToArray();
 
         Assert.Equal(expectedDiagnostics.Length, diagnostics.Length);
 

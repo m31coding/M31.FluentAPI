@@ -10,7 +10,7 @@ internal static class SyntaxExtensions
     internal static TypeDeclarationSyntax? GetFluentApiTypeDeclaration(this SyntaxTree syntaxTree)
     {
         SyntaxNode root = syntaxTree.GetRoot();
-        TypeDeclarationSyntax? typeDeclaration = (TypeDeclarationSyntax?)root.Find(n => n.IsTypeDeclarationOfInterest());
+        TypeDeclarationSyntax? typeDeclaration = (TypeDeclarationSyntax?)root.Find(n => n.IsClassStructOrRecordSyntax());
         return typeDeclaration;
     }
 

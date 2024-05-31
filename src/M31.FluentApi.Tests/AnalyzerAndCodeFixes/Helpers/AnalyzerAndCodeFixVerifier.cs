@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,26 +24,34 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
     }
 
     internal static async Task VerifyCodeFixAsync(
-        string source,
-        string? fixedSource,
+        SourceWithFix source,
         params DiagnosticResult[] expected)
     {
-        var test = new CodeFixTest(source, fixedSource, expected);
+        await VerifyCodeFixAsync(new List<SourceWithFix>() { source }, expected);
+    }
+
+    internal static async Task VerifyCodeFixAsync(
+        List<SourceWithFix> sourceCode,
+        params DiagnosticResult[] expected)
+    {
+        var test = new CodeFixTest(sourceCode, expected);
         await test.RunAsync(CancellationToken.None);
     }
 
     private class CodeFixTest : CSharpCodeFixTest<TAnalyzer, TCodeFix, XUnitVerifier>
     {
         internal CodeFixTest(
-            string source,
-            string? fixedSource,
+            List<SourceWithFix> sourceCode,
             params DiagnosticResult[] expected)
         {
-            TestCode = source;
-
-            if (fixedSource != null)
+            foreach (SourceWithFix source in sourceCode)
             {
-                FixedCode = fixedSource;
+                TestState.Sources.Add(source.Source);
+
+                if (source.FixedSource != null)
+                {
+                    FixedState.Sources.Add(source.FixedSource);
+                }
             }
 
             ExpectedDiagnostics.AddRange(expected);

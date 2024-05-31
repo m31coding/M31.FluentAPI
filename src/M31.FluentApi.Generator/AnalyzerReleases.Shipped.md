@@ -51,3 +51,12 @@ Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 M31FA021 | M31.Usage | Error | Reserved method name
 M31FA022 | M31.Usage | Error | Fluent lambda member without Fluent API
+           
+
+## Release 1.5.0
+
+### Removed Rules
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+M31FA007 | M31.Usage | Error | Partial types are not supported
