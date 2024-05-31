@@ -30,9 +30,4 @@
         <ProjectReference Include="..\M31.FluentApi\M31.FluentApi.csproj" />
     </ItemGroup>
 
-
-    <ItemGroup>
-      <Compile Remove="Usings.cs" />
-    </ItemGroup>
-
 </Project>
