@@ -6,12 +6,14 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaNullablePropertyClass;
 
 [FluentApi]
-public class Student
+public class Address
 {
     [FluentMember(0)]
-    public string Name { get; set; }
+    public string HouseNumber { get; set; }
 
-    [FluentLambda(1)]
-    [FluentNullable]
-    public Address? Address { get; set; }
+    [FluentMember(1)]
+    public string Street { get; set; }
+
+    [FluentMember(2, "InCity")]
+    public string City { get; set; }
 }
