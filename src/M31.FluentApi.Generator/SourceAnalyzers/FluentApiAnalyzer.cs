@@ -20,7 +20,12 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration);
+        context.RegisterSyntaxNodeAction(
+            AnalyzeNode,
+            SyntaxKind.ClassDeclaration,
+            SyntaxKind.StructDeclaration,
+            SyntaxKind.RecordDeclaration,
+            SyntaxKind.RecordStructDeclaration);
     }
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
@@ -51,21 +56,7 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        ImmutableArray<SyntaxReference> syntaxReferences = symbol.DeclaringSyntaxReferences;
-
-        if (syntaxReferences.Length == 0)
-        {
-            return;
-        }
-
-        SyntaxNode syntaxNode = syntaxReferences.First().GetSyntax();
-
-        if (!syntaxNode.IsTypeDeclarationOfInterest(out TypeDeclarationSyntax typeDeclaration))
-        {
-            return;
-        }
-
-        if (ReportErrorDiagnosticForPartialKeyword(context, typeDeclaration, symbol))
+        if (context.Node is not TypeDeclarationSyntax typeDeclaration)
         {
             return;
         }
@@ -91,24 +82,5 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
         {
             context.ReportDiagnostic(diagnostic);
         }
-    }
-
-    private bool ReportErrorDiagnosticForPartialKeyword(
-        SyntaxNodeAnalysisContext context,
-        TypeDeclarationSyntax typeDeclaration,
-        INamedTypeSymbol symbol)
-    {
-        SyntaxToken partialKeyword = typeDeclaration.Modifiers.FirstOrDefault(
-            m => m.IsKind(SyntaxKind.PartialKeyword));
-
-        if (partialKeyword != default)
-        {
-            context.ReportDiagnostic(UnsupportedPartialType.CreateDiagnostic(
-                partialKeyword,
-                symbol.Name));
-            return true;
-        }
-
-        return false;
     }
 }

@@ -6,7 +6,6 @@
 #nullable enable
 
 using M31.FluentApi.Attributes;
-using SomeOtherNamespace;
 
 namespace SomeOtherNamespace;
 

@@ -16,7 +16,7 @@ internal class SourceGenerator : IIncrementalGenerator
         var infos = context.SyntaxProvider
             .CreateSyntaxProvider(CanBeFluentApiClass, GetFluentApiClassInfo)
             .Where(info => info is not null)
-            .Collect() // Handle partial classes, get an array of related info objects into GenerateCode.
+            .Collect() // Handle partial classes, get an array of related info objects.
             .SelectMany((infos, _) =>
                 infos.Distinct()); // Want to have every fluent API info object only once.
 
@@ -73,7 +73,7 @@ internal class SourceGenerator : IIncrementalGenerator
     {
         SyntaxNode? syntaxNode = ctx.Node.Parent?.Parent;
 
-        if (!syntaxNode.IsTypeDeclarationOfInterest(out TypeDeclarationSyntax typeDeclaration))
+        if (!syntaxNode.IsClassStructOrRecordSyntax(out TypeDeclarationSyntax typeDeclaration))
         {
             return null;
         }
@@ -106,22 +106,11 @@ internal class SourceGenerator : IIncrementalGenerator
         // The parent of the attribute is a list of attributes, the parent of the parent is the class.
         SyntaxNode? syntaxNode = attributeSyntax.Parent?.Parent;
 
-        if (!syntaxNode.IsTypeDeclarationOfInterest())
+        if (!syntaxNode.IsClassStructOrRecordSyntax())
         {
             return false;
         }
 
-        string? name = ExtractName(attributeSyntax.Name);
-        return name is "FluentApi" or "FluentApiAttribute";
-    }
-
-    private string? ExtractName(NameSyntax nameSyntax)
-    {
-        return nameSyntax switch
-        {
-            SimpleNameSyntax simpleNameSyntax => simpleNameSyntax.Identifier.Text, // without namespace
-            QualifiedNameSyntax qualifiedNameSyntax => qualifiedNameSyntax.Right.Identifier.Text, // fully qualified
-            _ => null
-        };
+        return attributeSyntax.IsFluentApiAttributeSyntax();
     }
 }

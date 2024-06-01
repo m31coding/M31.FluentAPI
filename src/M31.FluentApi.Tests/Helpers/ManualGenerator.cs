@@ -12,23 +12,23 @@ namespace M31.FluentApi.Tests.Helpers;
 
 internal static class ManualGenerator
 {
-    internal static CSharpCompilation GetCompilation(string sourceCode)
+    internal static CSharpCompilation GetCompilation(IReadOnlyCollection<string> sourceCode)
     {
-        SyntaxTree inputSyntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
+        SyntaxTree[] inputSyntaxTrees = sourceCode.Select(c => CSharpSyntaxTree.ParseText(c)).ToArray();
         IEnumerable<MetadataReference> references = AppDomain.CurrentDomain.GetAssemblies()
             .Where(assembly => !assembly.IsDynamic)
             .Select(assembly => MetadataReference
                 .CreateFromFile(assembly.Location));
 
         CSharpCompilation compilation = CSharpCompilation.Create("SourceGeneratorTests",
-            new[] { inputSyntaxTree },
+            inputSyntaxTrees,
             references,
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
         return compilation;
     }
 
-    internal static ImmutableArray<Diagnostic> RunGeneratorsAndGetDiagnostics(string sourceCode)
+    internal static ImmutableArray<Diagnostic> RunGeneratorsAndGetDiagnostics(IReadOnlyCollection<string> sourceCode)
     {
         CSharpCompilation compilation = GetCompilation(sourceCode);
         SourceGenerator generator = new SourceGenerator();
@@ -41,7 +41,7 @@ internal static class ManualGenerator
         return diagnostics;
     }
 
-    internal static GeneratorOutputs RunGenerators(string sourceCode)
+    internal static GeneratorOutputs RunGenerators(IReadOnlyCollection<string> sourceCode)
     {
         CSharpCompilation compilation = GetCompilation(sourceCode);
         SourceGenerator generator = new SourceGenerator();
@@ -54,8 +54,11 @@ internal static class ManualGenerator
 
         Assert.Equal(0, diagnostics.Count(d => d.Severity == DiagnosticSeverity.Error));
         GeneratorOutput[] generatorOutputs =
-            outputCompilation.SyntaxTrees.Skip(1).Select(GetGeneratorOutput).OfType<GeneratorOutput>().ToArray();
-        // First syntax tree is the input syntax tree, the second syntax tree is the first output of interest. For some
+            outputCompilation.SyntaxTrees
+                .Skip(sourceCode.Count)
+                .Select(GetGeneratorOutput)
+                .OfType<GeneratorOutput>().ToArray();
+        // First syntax trees are the input trees, the next syntax trees are the outputs of interest. For some
         // tests more than one generator output is created, e.g. for the FluentLambdaClass test.
 
         return new GeneratorOutputs(generatorOutputs);

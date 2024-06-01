@@ -18,7 +18,6 @@ internal static class FluentApiDiagnostics
         DuplicateAttribute.Descriptor,
         OrthogonalAttributeMisused.Descriptor,
         DuplicateMainAttribute.Descriptor,
-        UnsupportedPartialType.Descriptor,
         InvalidFluentPredicateType.Descriptor,
         InvalidFluentNullableType.Descriptor,
         FluentNullableTypeWithoutNullableAnnotation.Descriptor,
@@ -141,22 +140,6 @@ internal static class FluentApiDiagnostics
             Location location = attributeData.AttributeData.ApplicationSyntaxReference?
                 .GetSyntax().GetLocation() ?? Location.None;
             return Diagnostic.Create(Descriptor, location);
-        }
-    }
-
-    internal static class UnsupportedPartialType
-    {
-        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            id: "M31FA007",
-            title: "Partial types are not supported",
-            messageFormat: "Partial types are not supported. Remove partial keyword from type '{0}'.",
-            category: "M31.Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        internal static Diagnostic CreateDiagnostic(SyntaxToken partialKeyword, string typeName)
-        {
-            return Diagnostic.Create(Descriptor, partialKeyword.GetLocation(), typeName);
         }
     }
 

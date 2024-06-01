@@ -7,8 +7,14 @@ using M31.FluentApi.Attributes;
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass;
 
 [FluentApi]
-public class Student
+public class Address
 {
-    [FluentLambda(0)]
-    public Address Address { get; set; }
+    [FluentMember(0)]
+    public string HouseNumber { get; set; }
+
+    [FluentMember(1)]
+    public string Street { get; set; }
+
+    [FluentMember(2, "InCity")]
+    public string City { get; set; }
 }

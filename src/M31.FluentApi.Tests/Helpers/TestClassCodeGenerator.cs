@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,37 +12,41 @@ namespace M31.FluentApi.Tests.Helpers;
 
 internal class TestClassCodeGenerator
 {
-    private TestClassCodeGenerator(string classPath, string className)
+    private TestClassCodeGenerator(string classPath, IReadOnlyCollection<string> classNames)
     {
         ClassPath = classPath;
-        ClassName = className;
+        ClassNames = classNames;
     }
 
     internal string ClassPath { get; }
-    internal string ClassName { get; }
+    internal IReadOnlyCollection<string> ClassNames { get; }
 
     internal static TestClassCodeGenerator Create(params string[] testClassPathAndName)
     {
         string classPath = Path.Join(testClassPathAndName[0..^1]);
-        string className = testClassPathAndName[^1];
-        return new TestClassCodeGenerator(classPath, className);
+        string classes = testClassPathAndName[^1];
+        string[] splitClasses = classes.Split('|');
+        return new TestClassCodeGenerator(classPath, splitClasses);
     }
 
     internal GeneratorOutputs RunGenerators()
     {
-        string code = File.ReadAllText(PathToTestDataFile(ClassPath, $"{ClassName}.cs"));
-        return ManualGenerator.RunGenerators(code);
+        return ManualGenerator.RunGenerators(ReadSourceCode());
     }
 
     internal (SemanticModel semanticModel, TypeDeclarationSyntax? typeDeclaration)
         GetSemanticModelAndTypeDeclaration()
     {
-        string code = File.ReadAllText(PathToTestDataFile(ClassPath, $"{ClassName}.cs"));
-        CSharpCompilation compilation = ManualGenerator.GetCompilation(code);
+        CSharpCompilation compilation = ManualGenerator.GetCompilation(ReadSourceCode());
         SyntaxTree syntaxTree = compilation.SyntaxTrees.First();
         SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
         TypeDeclarationSyntax? typeDeclaration = syntaxTree.GetFluentApiTypeDeclaration();
         return (semanticModel, typeDeclaration);
+    }
+
+    private string[] ReadSourceCode()
+    {
+        return ClassNames.Select(n => File.ReadAllText(PathToTestDataFile(ClassPath, $"{n}.cs"))).ToArray();
     }
 
     internal ClassInfoResult CreateFluentApiClassInfoResult()
