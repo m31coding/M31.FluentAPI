@@ -109,9 +109,11 @@ internal class FluentApiInfoCreator
             FullNames.FluentContinueWithAttribute =>
                 FluentContinueWithAttributeInfo.Create(attributeDataExtended.AttributeData),
             FullNames.FluentBreakAttribute =>
-                FluentBreakAttributeInfo.Create(attributeDataExtended.AttributeData),
+                FluentBreakAttributeInfo.Create(),
             FullNames.FluentReturnAttribute =>
                 FluentReturnAttributeInfo.Create(attributeDataExtended.AttributeData),
+            FullNames.FluentSkippableAttribute =>
+                FluentSkippableAttributeInfo.Create(),
             _ => throw new Exception($"Unexpected attribute class name: {attributeDataExtended.FullName}")
         };
     }
