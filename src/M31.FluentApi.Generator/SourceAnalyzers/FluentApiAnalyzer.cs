@@ -56,7 +56,7 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        if (context.Node is not TypeDeclarationSyntax typeDeclarationSyntax)
+        if (context.Node is not TypeDeclarationSyntax typeDeclaration)
         {
             return;
         }
@@ -74,7 +74,7 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
         ClassInfoResult classInfoResult =
             ClassInfoFactory.CreateFluentApiClassInfo(
                 context.SemanticModel,
-                typeDeclarationSyntax,
+                typeDeclaration,
                 SourceGenerator.GeneratorConfig,
                 context.CancellationToken);
 

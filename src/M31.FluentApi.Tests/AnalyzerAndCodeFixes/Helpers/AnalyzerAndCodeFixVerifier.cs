@@ -34,7 +34,7 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
         IReadOnlyCollection<SourceWithFix> sourceCode,
         params DiagnosticResult[] expected)
     {
-        var test = new CodeFixTest(sourceCode, expected);
+        CodeFixTest test = new CodeFixTest(sourceCode, expected);
         await test.RunAsync(CancellationToken.None);
     }
 
