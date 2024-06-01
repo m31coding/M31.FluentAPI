@@ -1,4 +1,5 @@
 using System.Linq;
+using M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers;
 using M31.FluentApi.Tests.Helpers;
 using Microsoft.CodeAnalysis;
 using Xunit;
@@ -17,7 +18,7 @@ public class DiagnosticsDuringGenerationTests
             "WithName",
             (11, 6), (14, 6));
 
-        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass1", expectedDiagnostic);
+        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass1", "Student", expectedDiagnostic);
     }
 
     [Fact]
@@ -28,7 +29,7 @@ public class DiagnosticsDuringGenerationTests
             "WithFriend",
             (12, 6), (15, 6));
 
-        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass2", expectedDiagnostic);
+        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass2", "Student", expectedDiagnostic);
     }
 
     [Fact]
@@ -39,7 +40,7 @@ public class DiagnosticsDuringGenerationTests
             "WithName",
             (14, 6), (20, 6));
 
-        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass3", expectedDiagnostic);
+        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass3", "Student", expectedDiagnostic);
     }
 
     [Fact]
@@ -50,7 +51,7 @@ public class DiagnosticsDuringGenerationTests
             "Method1",
             (12, 6), (17, 6), (22, 6));
 
-        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass4", expectedDiagnostic);
+        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass4", "Student", expectedDiagnostic);
     }
 
     [Fact]
@@ -61,7 +62,17 @@ public class DiagnosticsDuringGenerationTests
             "Method1",
             (12, 6), (17, 6));
 
-        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass5", expectedDiagnostic);
+        RunGeneratorAndCheckDiagnostics("DuplicateMethodClass5", "Student", expectedDiagnostic);
+    }
+
+    [Fact]
+    public void CanDetectDuplicateMethodPartialClass()
+    {
+        ExpectedDiagnostic expectedDiagnostic = new ExpectedDiagnostic(
+            DuplicateFluentApiMethod.Descriptor,
+            "WithName",
+            (10, 6), (11, 6));
+        RunGeneratorAndCheckDiagnostics("DuplicateMethodPartialClass", "Student1|Student2", expectedDiagnostic);
     }
 
     [Fact]
@@ -77,7 +88,7 @@ public class DiagnosticsDuringGenerationTests
             "InitialStep",
             (17, 6));
 
-        RunGeneratorAndCheckDiagnostics("ReservedMethodClass1", expectedDiagnostic1, expectedDiagnostic2);
+        RunGeneratorAndCheckDiagnostics("ReservedMethodClass1", "Student", expectedDiagnostic1, expectedDiagnostic2);
     }
 
     [Fact]
@@ -88,15 +99,17 @@ public class DiagnosticsDuringGenerationTests
             "InitialStep",
             (12, 6));
 
-        RunGeneratorAndCheckDiagnostics("ReservedMethodClass2", expectedDiagnostic1);
+        RunGeneratorAndCheckDiagnostics("ReservedMethodClass2", "Student", expectedDiagnostic1);
     }
 
     private void RunGeneratorAndCheckDiagnostics(
         string testClassFolder,
+        string classes,
         params ExpectedDiagnostic[] expectedDiagnostics)
     {
-        (string source, _) = ReadSource(testClassFolder, "Student");
-        string[] sourceCode = new string[] { source };
+        string[] splitClasses = classes.Split('|');
+        SourceWithFix[] sourceCodeWithFixes = splitClasses.Select(c => ReadSource(testClassFolder, c)).ToArray();
+        string[] sourceCode = sourceCodeWithFixes.Select(c => c.Source).ToArray();
         Diagnostic[] diagnostics = ManualGenerator.RunGeneratorsAndGetDiagnostics(sourceCode).ToArray();
 
         Assert.Equal(expectedDiagnostics.Length, diagnostics.Length);
