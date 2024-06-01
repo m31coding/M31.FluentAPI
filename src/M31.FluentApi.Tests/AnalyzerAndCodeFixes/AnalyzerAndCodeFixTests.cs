@@ -90,6 +90,42 @@ public class AnalyzerAndCodeFixTests
     }
 
     [Fact]
+    public async Task CanDetectGetMissingSetAndAddSetAccessorForRecords()
+    {
+        SourceWithFix source = ReadSource("GetMissingSetRecord", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(MissingSetAccessor.Descriptor.Id)
+            .WithLocation(11, 9)
+            .WithArguments("Semester");
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
+    }
+
+    [Fact]
+    public async Task CanDetectGetMissingSetAndAddSetAccessorForRecordStructs()
+    {
+        SourceWithFix source = ReadSource("GetMissingSetRecordStruct", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(MissingSetAccessor.Descriptor.Id)
+            .WithLocation(11, 9)
+            .WithArguments("Semester");
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
+    }
+
+    [Fact]
+    public async Task CanDetectGetMissingSetAndAddSetAccessorForStructs()
+    {
+        SourceWithFix source = ReadSource("GetMissingSetStruct", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(MissingSetAccessor.Descriptor.Id)
+            .WithLocation(11, 9)
+            .WithArguments("Semester");
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
+    }
+
+    [Fact]
     public async Task CanDetectInvalidCollectionType()
     {
         SourceWithFix source = ReadSource("InvalidCollectionTypeClass", "Student");
