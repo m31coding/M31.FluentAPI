@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace M31.FluentApi.Tests.CodeGeneration.Helpers;
@@ -11,50 +12,50 @@ public class ListAndDictionary<TKey, TValue> : List<TKey>, IDictionary<TKey, TVa
 {
     public new IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public void Add(KeyValuePair<TKey, TValue> item)
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public bool Contains(KeyValuePair<TKey, TValue> item)
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public bool Remove(KeyValuePair<TKey, TValue> item)
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public bool IsReadOnly { get; } = false;
 
     public void Add(TKey key, TValue value)
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public bool ContainsKey(TKey key)
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public bool TryGetValue(TKey key, out TValue value)
     {
-        throw new System.NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public TValue this[TKey key]
     {
-        get => throw new System.NotImplementedException();
-        set => throw new System.NotImplementedException();
+        get => throw new NotSupportedException();
+        set => throw new NotSupportedException();
     }
 
     public ICollection<TKey> Keys { get; } = new List<TKey>();
