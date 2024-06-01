@@ -24,9 +24,9 @@ internal class TestClassCodeGenerator
     internal static TestClassCodeGenerator Create(params string[] testClassPathAndName)
     {
         string classPath = Path.Join(testClassPathAndName[0..^1]);
-        string className = testClassPathAndName[^1];
-        string[] classNames = className.Split('|');
-        return new TestClassCodeGenerator(classPath, classNames);
+        string classes = testClassPathAndName[^1];
+        string[] splitClasses = classes.Split('|');
+        return new TestClassCodeGenerator(classPath, splitClasses);
     }
 
     internal GeneratorOutputs RunGenerators()
