@@ -43,6 +43,7 @@ internal class ForkCreator : ICodeBoardActor
             AddBuilderMethodsToFork(
                 group.BuilderStep,
                 group.NextBuilderStep,
+                group.IsSkippable,
                 group.FluentMethodName,
                 builderMethods.Methods);
         }
@@ -51,6 +52,7 @@ internal class ForkCreator : ICodeBoardActor
     private void AddBuilderMethodsToFork(
         int builderStep,
         int? nextBuilderStep,
+        bool skippable,
         string interfacePartialName,
         IEnumerable<BuilderMethod> builderMethods)
     {
@@ -60,7 +62,7 @@ internal class ForkCreator : ICodeBoardActor
         }
 
         ForkBuilderMethod[] forkBuilderMethods =
-            builderMethods.Select(b => new ForkBuilderMethod(b, nextBuilderStep)).ToArray();
+            builderMethods.Select(b => new ForkBuilderMethod(b, nextBuilderStep, skippable)).ToArray();
         forkUnderConstruction.AddBuilderMethods(interfacePartialName, forkBuilderMethods);
     }
 

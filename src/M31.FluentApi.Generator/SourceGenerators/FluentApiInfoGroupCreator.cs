@@ -46,10 +46,15 @@ internal class FluentApiInfoGroupCreator
         foreach (var group in grouping)
         {
             int? defaultNextBuilderStep = stepToNextStep[group.builderStep];
-            int? nextBuilderStep = GetNextBuilderStep(group.infoArray, defaultNextBuilderStep);
+            int? nextBuilderStep = GetNextBuilderStep(
+                group.infoArray, defaultNextBuilderStep, out bool groupIsSkippable);
+
+            // todo: NextBuilderStep == null && groupIsSkippable => diagnostic: last step can not be skipped.
+
             infoGroups.Add(new FluentApiInfoGroup(
                 group.builderStep,
                 nextBuilderStep,
+                groupIsSkippable,
                 group.fluentMethodName,
                 group.type, group.infoArray));
         }
@@ -89,14 +94,24 @@ internal class FluentApiInfoGroupCreator
         }
     }
 
-    private int? GetNextBuilderStep(FluentApiInfo[] fluentApiInfos, int? defaultNextBuilderStep)
+    private int? GetNextBuilderStep(
+        FluentApiInfo[] fluentApiInfos,
+        int? defaultNextBuilderStep,
+        out bool groupIsSkippable)
     {
         Dictionary<Step, List<AttributeDataExtended>> nextSteps = new Dictionary<Step, List<AttributeDataExtended>>();
+        groupIsSkippable = false;
 
         foreach (FluentApiInfo fluentApiInfo in fluentApiInfos)
         {
             foreach (ControlAttributeInfoBase controlAttributeInfo in fluentApiInfo.ControlAttributeInfos)
             {
+                if (controlAttributeInfo is FluentSkippableAttributeInfo)
+                {
+                    groupIsSkippable = true;
+                    continue;
+                }
+
                 var (nextBuilderStep, attributeDataExtended) = ToNextBuilderStep(controlAttributeInfo, fluentApiInfo);
 
                 if (nextSteps.TryGetValue(nextBuilderStep, out List<AttributeDataExtended> present))

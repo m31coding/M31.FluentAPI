@@ -324,6 +324,28 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteSkippableMemberClass()
+    {
+        var student1 = TestClasses.Abstract.SkippableMemberClass
+            .CreateStudent
+            .WithFirstName("Alice")
+            .WithMiddleName("Sophia")
+            .WithLastName("King");
+
+        Assert.Equal("Alice", student1.FirstName);
+        Assert.Equal("Sophia", student1.MiddleName);
+        Assert.Equal("King", student1.LastName);
+
+        var student2 = TestClasses.Abstract.SkippableMemberClass
+            .CreateStudent
+            .WithFirstName("Alice")
+            .WithLastName("King");
+
+        Assert.Equal("Alice", student2.FirstName);
+        Assert.Equal("King", student2.LastName);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteThreeMemberClass()
     {
         var student = TestClasses.Abstract.ThreeMemberClass

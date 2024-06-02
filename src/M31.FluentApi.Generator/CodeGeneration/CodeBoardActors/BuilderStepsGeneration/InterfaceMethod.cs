@@ -4,11 +4,13 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGen
 
 internal class InterfaceMethod : Method
 {
-    internal InterfaceMethod(MethodSignature methodSignature, string interfaceName)
+    internal InterfaceMethod(MethodSignature methodSignature, string interfaceName, BaseInterface? baseInterface)
         : base(methodSignature)
     {
         InterfaceName = interfaceName;
+        BaseInterface = baseInterface;
     }
 
     internal string InterfaceName { get; }
+    internal BaseInterface? BaseInterface { get; }
 }

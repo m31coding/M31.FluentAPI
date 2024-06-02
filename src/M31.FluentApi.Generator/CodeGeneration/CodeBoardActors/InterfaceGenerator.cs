@@ -1,6 +1,7 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors;
 
@@ -44,9 +45,25 @@ internal class InterfaceGenerator : ICodeBoardActor
 
             Interface @interface = new Interface(codeBoard.Info.DefaultAccessModifier, group.Key);
 
+            List<BaseInterface> baseInterfaces = new List<BaseInterface>();
+
             foreach (InterfaceMethod method in group)
             {
                 @interface.AddMethodSignature(method.MethodSignature.ToSignatureForInterface());
+                if (method.BaseInterface != null)
+                {
+                    baseInterfaces.Add(method.BaseInterface);
+                }
+            }
+
+            string[] baseInterfaceNames = baseInterfaces
+                .DistinctBy(i => i.Name)
+                .OrderBy(i => i.Step)
+                .Select(i => i.Name).ToArray();
+
+            foreach (string baseInterface in baseInterfaceNames)
+            {
+                @interface.AddBaseInterface(baseInterface);
             }
 
             interfaces.Add(@interface);
