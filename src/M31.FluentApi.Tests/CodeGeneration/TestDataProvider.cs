@@ -70,6 +70,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "SameNameMemberClass", "Student" },
                 new object[] { "Abstract", "SkippableFirstMemberClass", "Student" },
                 new object[] { "Abstract", "SkippableMemberClass", "Student" },
+                new object[] { "Abstract", "SkippableSeveralMembersClass", "Student" },
                 new object[] { "Abstract", "ThreeMemberClass", "Student" },
                 new object[] { "Abstract", "ThreeMemberRecord", "Student" },
                 new object[] { "Abstract", "ThreeMemberStruct", "Student" },

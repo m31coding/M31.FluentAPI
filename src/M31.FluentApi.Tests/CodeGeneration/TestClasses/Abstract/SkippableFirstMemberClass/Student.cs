@@ -9,8 +9,8 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SkippableFirst
 [FluentApi]
 public class Student
 {
-    [FluentSkippable]
     [FluentMember(0)]
+    [FluentSkippable]
     public string? FirstName { get; set; }
 
     [FluentMember(1)]
