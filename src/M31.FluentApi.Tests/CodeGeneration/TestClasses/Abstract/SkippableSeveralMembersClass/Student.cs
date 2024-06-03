@@ -23,5 +23,4 @@ public class Student
 
     [FluentMember(4)]
     public string Member4 { get; set; }
-
 }
