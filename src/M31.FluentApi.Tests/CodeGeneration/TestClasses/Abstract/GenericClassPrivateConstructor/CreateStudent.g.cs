@@ -33,17 +33,17 @@ public class CreateStudent<T1, T2> :
         return createStudent.student;
     }
 
-    Student<T1, T2> IWithProperty1WithProperty2.WithProperty1(T1 property1)
-    {
-        student.Property1 = property1;
-        return student;
-    }
-
     public static Student<T1, T2> WithProperty2(T2 property2)
     {
         CreateStudent<T1, T2> createStudent = new CreateStudent<T1, T2>();
         createStudent.student.Property2 = property2;
         return createStudent.student;
+    }
+
+    Student<T1, T2> IWithProperty1WithProperty2.WithProperty1(T1 property1)
+    {
+        student.Property1 = property1;
+        return student;
     }
 
     Student<T1, T2> IWithProperty1WithProperty2.WithProperty2(T2 property2)

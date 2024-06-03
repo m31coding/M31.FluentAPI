@@ -36,23 +36,11 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWithPets IWhoseFriendsAre.WhoseFriendsAre(System.Collections.IEnumerable friends)
-    {
-        student.Friends = friends;
-        return this;
-    }
-
     public static IWithPets WhoseFriendsAre(params object[] friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;
         return createStudent;
-    }
-
-    IWithPets IWhoseFriendsAre.WhoseFriendsAre(params object[] friends)
-    {
-        student.Friends = friends;
-        return this;
     }
 
     public static IWithPets WhoseFriendIs(object friend)
@@ -62,17 +50,29 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWithPets IWhoseFriendsAre.WhoseFriendIs(object friend)
-    {
-        student.Friends = new object[1]{ friend };
-        return this;
-    }
-
     public static IWithPets WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new object[0];
         return createStudent;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(System.Collections.IEnumerable friends)
+    {
+        student.Friends = friends;
+        return this;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(params object[] friends)
+    {
+        student.Friends = friends;
+        return this;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendIs(object friend)
+    {
+        student.Friends = new object[1]{ friend };
+        return this;
     }
 
     IWithPets IWhoseFriendsAre.WhoHasNoFriends()

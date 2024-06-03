@@ -34,16 +34,16 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IBornOn IWithName.WithName(string name)
-    {
-        student.Name = name;
-        return this;
-    }
-
     public static IBornOn WithUnknownName()
     {
         CreateStudent createStudent = new CreateStudent();
         return createStudent;
+    }
+
+    IBornOn IWithName.WithName(string name)
+    {
+        student.Name = name;
+        return this;
     }
 
     IBornOn IWithName.WithUnknownName()

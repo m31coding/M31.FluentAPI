@@ -16,48 +16,46 @@ internal class BuilderStepMethodCreator
     }
 
     private readonly IReadOnlyList<Fork> forks;
-    private readonly Fork firstFork;
+    private readonly ListDictionary<Fork, BuilderStepMethod> forkToBuilderStepMethod;
     private readonly Dictionary<int, Fork> builderStepToFork;
 
     private BuilderStepMethodCreator(IReadOnlyList<Fork> forks)
     {
         this.forks = forks;
-        firstFork = forks.First();
+        forkToBuilderStepMethod = new ListDictionary<Fork, BuilderStepMethod>();
         builderStepToFork = forks.ToDictionary(f => f.BuilderStep);
     }
 
     private IReadOnlyCollection<BuilderStepMethod> Create()
     {
-        return forks.SelectMany(CreateBuilderStepMethods).ToArray();
+        BuilderStepMethod[] builderStepMethods = forks.SelectMany(CreateBuilderStepMethods).ToArray();
+        return CreateStaticBuilderStepMethods().Concat(builderStepMethods).ToArray();
     }
 
     private IEnumerable<BuilderStepMethod> CreateBuilderStepMethods(Fork fork)
     {
-        bool isFirstStep = fork == firstFork;
-
         foreach (ForkBuilderMethod builderMethod in fork.BuilderMethods)
         {
             foreach (BuilderStepMethod builderStepMethod in
-                     CreateBuilderStepMethods(isFirstStep, fork.InterfaceName, builderMethod))
+                     CreateBuilderStepMethods(fork.InterfaceName, builderMethod))
             {
+                forkToBuilderStepMethod.AddItem(fork, builderStepMethod);
                 yield return builderStepMethod;
             }
         }
     }
 
     private BuilderStepMethod[] CreateBuilderStepMethods(
-        bool isFirstStep,
         string interfaceName,
         ForkBuilderMethod builderMethod)
     {
         Fork? nextFork = TryGetNextFork(builderMethod.NextBuilderStep);
         return nextFork == null
-            ? CreateBuilderStepMethodsForLastStep(isFirstStep, interfaceName, builderMethod)
-            : CreateBuilderStepMethods(isFirstStep, interfaceName, builderMethod, nextFork);
+            ? CreateBuilderStepMethodsForLastStep(interfaceName, builderMethod)
+            : CreateBuilderStepMethods(interfaceName, builderMethod, nextFork);
     }
 
     private BuilderStepMethod[] CreateBuilderStepMethods(
-        bool isFirstStep,
         string interfaceName,
         ForkBuilderMethod builderMethod,
         Fork nextFork)
@@ -67,14 +65,14 @@ internal class BuilderStepMethodCreator
         BaseInterface? baseInterface =
             builderMethod.IsSkippable ? new BaseInterface(nextInterfaceName, nextFork.BuilderStep) : null;
 
-        if (isFirstStep)
-        {
-            return new BuilderStepMethod[]
-            {
-                new FirstStepBuilderMethod(builderMethod.Value, nextInterfaceName),
-                new InterjacentBuilderMethod(builderMethod.Value, nextInterfaceName, interfaceName, baseInterface),
-            };
-        }
+        // if (isFirstStep)
+        // {
+        //     return new BuilderStepMethod[]
+        //     {
+        //         new FirstStepBuilderMethod(builderMethod.Value, nextInterfaceName),
+        //         new InterjacentBuilderMethod(builderMethod.Value, nextInterfaceName, interfaceName, baseInterface),
+        //     };
+        // }
 
         return new BuilderStepMethod[]
         {
@@ -83,23 +81,53 @@ internal class BuilderStepMethodCreator
     }
 
     private BuilderStepMethod[] CreateBuilderStepMethodsForLastStep(
-        bool isFirstStep,
         string interfaceName,
         ForkBuilderMethod builderMethod)
     {
-        if (isFirstStep)
-        {
-            return new BuilderStepMethod[]
-            {
-                new SingleStepBuilderMethod(builderMethod.Value),
-                new LastStepBuilderMethod(builderMethod.Value, interfaceName, null),
-            };
-        }
+        // if (isFirstStep)
+        // {
+        //     return new BuilderStepMethod[]
+        //     {
+        //         new SingleStepBuilderMethod(builderMethod.Value),
+        //         new LastStepBuilderMethod(builderMethod.Value, interfaceName, null),
+        //     };
+        // }
 
         return new BuilderStepMethod[]
         {
             new LastStepBuilderMethod(builderMethod.Value, interfaceName, null),
         };
+    }
+
+    private IReadOnlyCollection<BuilderStepMethod> CreateStaticBuilderStepMethods()
+    {
+        List<BuilderStepMethod> staticBuilderStepMethods = new List<BuilderStepMethod>();
+
+        Fork firstFork = forks.First();
+        if (!forkToBuilderStepMethod.TryGetValue(firstFork, out List<BuilderStepMethod> methods))
+        {
+            return Array.Empty<BuilderStepMethod>();
+        }
+
+        foreach (BuilderStepMethod method in methods)
+        {
+            switch (method)
+            {
+                case InterjacentBuilderMethod interjacentBuilderMethod:
+                    staticBuilderStepMethods.Add(
+                        new FirstStepBuilderMethod(method, interjacentBuilderMethod.ReturnType));
+                    break;
+
+                case LastStepBuilderMethod:
+                    staticBuilderStepMethods.Add(new SingleStepBuilderMethod(method));
+                    break;
+
+                default:
+                    throw new ArgumentException($"Unexpected builder step method type: {method.GetType()}.");
+            }
+        }
+
+        return staticBuilderStepMethods;
     }
 
     private Fork? TryGetNextFork(int? nextBuilderStep)

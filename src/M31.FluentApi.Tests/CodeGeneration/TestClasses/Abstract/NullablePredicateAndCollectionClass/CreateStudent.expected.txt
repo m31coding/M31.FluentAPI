@@ -41,23 +41,11 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string>? friends)
-    {
-        student.Friends = friends;
-        return this;
-    }
-
     public static IWhoIsHappy WhoseFriendsAre(params string[]? friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;
         return createStudent;
-    }
-
-    IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
-    {
-        student.Friends = friends;
-        return this;
     }
 
     public static IWhoIsHappy WhoseFriendIs(string friend)
@@ -67,12 +55,6 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWhoIsHappy IWhoseFriendsAre.WhoseFriendIs(string friend)
-    {
-        student.Friends = new string[1]{ friend };
-        return this;
-    }
-
     public static IWhoIsHappy WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
@@ -80,17 +62,35 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWhoIsHappy IWhoseFriendsAre.WhoHasNoFriends()
-    {
-        student.Friends = new string[0];
-        return this;
-    }
-
     public static IWhoIsHappy WhoseFriendsAreUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = null;
         return createStudent;
+    }
+
+    IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string>? friends)
+    {
+        student.Friends = friends;
+        return this;
+    }
+
+    IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
+    {
+        student.Friends = friends;
+        return this;
+    }
+
+    IWhoIsHappy IWhoseFriendsAre.WhoseFriendIs(string friend)
+    {
+        student.Friends = new string[1]{ friend };
+        return this;
+    }
+
+    IWhoIsHappy IWhoseFriendsAre.WhoHasNoFriends()
+    {
+        student.Friends = new string[0];
+        return this;
     }
 
     IWhoIsHappy IWhoseFriendsAre.WhoseFriendsAreUnknown()

@@ -39,12 +39,6 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
-    {
-        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
-        return student;
-    }
-
     public static Student WhoseFriendIs(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -52,17 +46,23 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IWhoseFriendsAre.WhoseFriendIs(string friend)
-    {
-        CreateStudent.friendsPropertyInfo.SetValue(student, new string[1]{ friend });
-        return student;
-    }
-
     public static Student WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
         CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, new string[0]);
         return createStudent.student;
+    }
+
+    Student IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
+    {
+        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
+        return student;
+    }
+
+    Student IWhoseFriendsAre.WhoseFriendIs(string friend)
+    {
+        CreateStudent.friendsPropertyInfo.SetValue(student, new string[1]{ friend });
+        return student;
     }
 
     Student IWhoseFriendsAre.WhoHasNoFriends()
