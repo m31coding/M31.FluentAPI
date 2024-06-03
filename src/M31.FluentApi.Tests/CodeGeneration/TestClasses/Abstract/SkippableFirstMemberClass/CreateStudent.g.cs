@@ -33,6 +33,13 @@ public class CreateStudent :
         return createStudent;
     }
 
+    public static Student WithLastName(string lastName)
+    {
+        CreateStudent createStudent = new CreateStudent();
+        createStudent.student.LastName = lastName;
+        return createStudent.student;
+    }
+
     IWithLastName IWithFirstName.WithFirstName(string? firstName)
     {
         student.FirstName = firstName;

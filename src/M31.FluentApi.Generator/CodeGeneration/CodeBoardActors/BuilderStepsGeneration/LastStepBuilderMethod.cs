@@ -9,22 +9,19 @@ internal class LastStepBuilderMethod : BuilderStepMethod
 {
     internal LastStepBuilderMethod(
         BuilderMethod builderMethod,
-        string interfaceName,
-        BaseInterface? baseInterface)
+        string interfaceName)
         : base(builderMethod)
     {
         InterfaceName = interfaceName;
-        BaseInterface = baseInterface;
     }
 
     internal string InterfaceName { get; }
-    internal BaseInterface? BaseInterface { get; }
 
     internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
     {
         // public Student<T1, T2> InSemester(int semester)
         InterfaceMethod method = CreateInterfaceMethod(
-            InterfaceName, BaseInterface, info.FluentApiClassNameWithTypeParameters, "public");
+            InterfaceName, null, info.FluentApiClassNameWithTypeParameters, "public");
 
         // student.Semester = semester;
         CreateBody(method, string.Empty, reservedVariableNames);

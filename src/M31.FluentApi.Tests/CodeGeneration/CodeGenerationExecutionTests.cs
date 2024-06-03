@@ -342,6 +342,26 @@ public partial class CodeGenerationTests
             .WithLastName("King");
 
         Assert.Equal("Alice", student2.FirstName);
+        Assert.Null(student2.MiddleName);
+        Assert.Equal("King", student2.LastName);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteSkippableFirstMemberClass()
+    {
+        var student1 = TestClasses.Abstract.SkippableFirstMemberClass
+            .CreateStudent
+            .WithFirstName("Alice")
+            .WithLastName("King");
+
+        Assert.Equal("Alice", student1.FirstName);
+        Assert.Equal("King", student1.LastName);
+
+        var student2 = TestClasses.Abstract.SkippableFirstMemberClass
+            .CreateStudent
+            .WithLastName("King");
+
+        Assert.Null(student2.FirstName);
         Assert.Equal("King", student2.LastName);
     }
 

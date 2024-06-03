@@ -11,13 +11,13 @@ internal class BuilderStepMethodCreator
     }
 
     private readonly IReadOnlyList<Fork> forks;
-    private readonly ListDictionary<Fork, BuilderStepMethod> forkToBuilderStepMethod;
+    private readonly ListDictionary<string, BuilderStepMethod> interfaceNameToBuilderMethods;
     private readonly Dictionary<int, Fork> builderStepToFork;
 
     private BuilderStepMethodCreator(IReadOnlyList<Fork> forks)
     {
         this.forks = forks;
-        forkToBuilderStepMethod = new ListDictionary<Fork, BuilderStepMethod>();
+        interfaceNameToBuilderMethods = new ListDictionary<string, BuilderStepMethod>();
         builderStepToFork = forks.ToDictionary(f => f.BuilderStep);
     }
 
@@ -32,7 +32,7 @@ internal class BuilderStepMethodCreator
         foreach (ForkBuilderMethod builderMethod in fork.BuilderMethods)
         {
             BuilderStepMethod builderStepMethod = CreateBuilderStepMethod(fork.InterfaceName, builderMethod);
-            forkToBuilderStepMethod.AddItem(fork, builderStepMethod);
+            interfaceNameToBuilderMethods.AddItem(fork.InterfaceName, builderStepMethod);
             yield return builderStepMethod;
         }
     }
@@ -63,38 +63,50 @@ internal class BuilderStepMethodCreator
         string interfaceName,
         ForkBuilderMethod builderMethod)
     {
-        return new LastStepBuilderMethod(builderMethod.Value, interfaceName, null);
+        return new LastStepBuilderMethod(builderMethod.Value, interfaceName);
     }
 
     private IReadOnlyCollection<BuilderStepMethod> CreateStaticBuilderStepMethods()
     {
-        List<BuilderStepMethod> staticBuilderStepMethods = new List<BuilderStepMethod>();
+        List<BuilderStepMethod> staticBuilderMethods = new List<BuilderStepMethod>();
+        UniqueQueue<string> interfaces = new UniqueQueue<string>();
+        interfaces.EnqueueIfNotPresent(forks.First().InterfaceName);
 
-        Fork firstFork = forks.First();
-        if (!forkToBuilderStepMethod.TryGetValue(firstFork, out List<BuilderStepMethod> methods))
+        while (!interfaces.IsEmpty)
         {
-            return Array.Empty<BuilderStepMethod>();
-        }
+            string @interface = interfaces.Dequeue();
 
-        foreach (BuilderStepMethod method in methods)
-        {
-            switch (method)
+            if (!interfaceNameToBuilderMethods.TryGetValue(@interface, out List<BuilderStepMethod> methods))
             {
-                case InterjacentBuilderMethod interjacentBuilderMethod:
-                    staticBuilderStepMethods.Add(
-                        new FirstStepBuilderMethod(method, interjacentBuilderMethod.ReturnType));
-                    break;
+                continue;
+            }
 
-                case LastStepBuilderMethod:
-                    staticBuilderStepMethods.Add(new SingleStepBuilderMethod(method));
-                    break;
+            foreach (BuilderStepMethod method in methods)
+            {
+                switch (method)
+                {
+                    case InterjacentBuilderMethod interjacentBuilderMethod:
+                        staticBuilderMethods.Add(
+                            new FirstStepBuilderMethod(method, interjacentBuilderMethod.ReturnType));
 
-                default:
-                    throw new ArgumentException($"Unexpected builder step method type: {method.GetType()}.");
+                        if (interjacentBuilderMethod.BaseInterface != null)
+                        {
+                            interfaces.EnqueueIfNotPresent(interjacentBuilderMethod.BaseInterface.Name);
+                        }
+
+                        break;
+
+                    case LastStepBuilderMethod:
+                        staticBuilderMethods.Add(new SingleStepBuilderMethod(method));
+                        break;
+
+                    default:
+                        throw new ArgumentException($"Unexpected builder step method type: {method.GetType()}.");
+                }
             }
         }
 
-        return staticBuilderStepMethods;
+        return staticBuilderMethods;
     }
 
     private Fork? TryGetNextFork(int? nextBuilderStep)
