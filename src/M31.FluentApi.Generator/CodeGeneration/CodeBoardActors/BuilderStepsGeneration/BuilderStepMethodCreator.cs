@@ -69,10 +69,13 @@ internal class BuilderStepMethodCreator
     private IReadOnlyCollection<BuilderStepMethod> CreateStaticBuilderStepMethods()
     {
         List<BuilderStepMethod> staticBuilderMethods = new List<BuilderStepMethod>();
-        UniqueQueue<string> interfaces = new UniqueQueue<string>();
-        interfaces.EnqueueIfNotPresent(forks.First().InterfaceName);
+        HashSet<string> seenInterfaces = new HashSet<string>();
+        Queue<string> interfaces = new Queue<string>();
+        string firstInterface = forks.First().InterfaceName;
+        seenInterfaces.Add(firstInterface);
+        interfaces.Enqueue(firstInterface);
 
-        while (!interfaces.IsEmpty)
+        while (interfaces.Count != 0)
         {
             string @interface = interfaces.Dequeue();
 
@@ -89,9 +92,10 @@ internal class BuilderStepMethodCreator
                         staticBuilderMethods.Add(
                             new FirstStepBuilderMethod(method, interjacentBuilderMethod.ReturnType));
 
-                        if (interjacentBuilderMethod.BaseInterface != null)
+                        string? baseInterface = interjacentBuilderMethod.BaseInterface?.Name;
+                        if (baseInterface != null && seenInterfaces.Add(baseInterface))
                         {
-                            interfaces.EnqueueIfNotPresent(interjacentBuilderMethod.BaseInterface.Name);
+                            interfaces.Enqueue(baseInterface);
                         }
 
                         break;

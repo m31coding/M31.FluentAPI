@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(new string[] { },
+        Filter(new string[] { "SkippableLoopClass" },
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -69,6 +69,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "PublicReadonlyFieldClass", "Student" },
                 new object[] { "Abstract", "SameNameMemberClass", "Student" },
                 new object[] { "Abstract", "SkippableFirstMemberClass", "Student" },
+                new object[] { "Abstract", "SkippableLoopClass", "Student" },
                 new object[] { "Abstract", "SkippableMemberClass", "Student" },
                 new object[] { "Abstract", "SkippableSeveralMembersClass", "Student" },
                 new object[] { "Abstract", "ThreeMemberClass", "Student" },
