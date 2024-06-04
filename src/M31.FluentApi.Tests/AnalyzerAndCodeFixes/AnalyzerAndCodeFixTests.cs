@@ -270,4 +270,26 @@ public class AnalyzerAndCodeFixTests
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
     }
+
+    [Fact]
+    public async Task CanDetectSkippableLastStep1()
+    {
+        SourceWithFix source = ReadSource("SkippableLastStepClass1", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(LastBuilderStepCannotBeSkipped.Descriptor.Id)
+            .WithLocation(16, 6);
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
+    }
+
+    [Fact]
+    public async Task CanDetectSkippableLastStep2()
+    {
+        SourceWithFix source = ReadSource("SkippableLastStepClass2", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(LastBuilderStepCannotBeSkipped.Descriptor.Id)
+            .WithLocation(13, 6);
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
+    }
 }

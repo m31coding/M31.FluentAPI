@@ -47,9 +47,19 @@ internal class FluentApiInfoGroupCreator
         {
             int? defaultNextBuilderStep = stepToNextStep[group.builderStep];
             int? nextBuilderStep = GetNextBuilderStep(
-                group.infoArray, defaultNextBuilderStep, out bool groupIsSkippable);
+                group.infoArray,
+                defaultNextBuilderStep,
+                out List<AttributeDataExtended> skippableAttributeData);
 
-            // todo: NextBuilderStep == null && groupIsSkippable => diagnostic: last step can not be skipped.
+            bool groupIsSkippable = skippableAttributeData.Count > 0;
+
+            if (nextBuilderStep == null && groupIsSkippable)
+            {
+                foreach (AttributeDataExtended skippableData in skippableAttributeData)
+                {
+                    classInfoReport.ReportDiagnostic(LastBuilderStepCannotBeSkipped.CreateDiagnostic(skippableData));
+                }
+            }
 
             infoGroups.Add(new FluentApiInfoGroup(
                 group.builderStep,
@@ -97,18 +107,18 @@ internal class FluentApiInfoGroupCreator
     private int? GetNextBuilderStep(
         FluentApiInfo[] fluentApiInfos,
         int? defaultNextBuilderStep,
-        out bool groupIsSkippable)
+        out List<AttributeDataExtended> skippableAttributeData)
     {
         Dictionary<Step, List<AttributeDataExtended>> nextSteps = new Dictionary<Step, List<AttributeDataExtended>>();
-        groupIsSkippable = false;
+        skippableAttributeData = new List<AttributeDataExtended>();
 
         foreach (FluentApiInfo fluentApiInfo in fluentApiInfos)
         {
             foreach (ControlAttributeInfoBase controlAttributeInfo in fluentApiInfo.ControlAttributeInfos)
             {
-                if (controlAttributeInfo is FluentSkippableAttributeInfo)
+                if (controlAttributeInfo is FluentSkippableAttributeInfo skippableInfo)
                 {
-                    groupIsSkippable = true;
+                    skippableAttributeData.Add(fluentApiInfo.AdditionalInfo.ControlAttributeData[skippableInfo]);
                     continue;
                 }
 
