@@ -56,7 +56,6 @@ internal class CodeBoard
     internal CancellationToken CancellationToken { get; }
     internal bool CancellationRequested => CancellationToken.IsCancellationRequested;
     internal bool HasErrors => diagnostics.HaveErrors();
-    internal bool HasInterfaceMethods => BuilderClass.Methods.OfType<InterfaceMethod>().Any();
 
     internal static CodeBoard Create(
         BuilderAndTargetInfo builderAndTargetInfo,

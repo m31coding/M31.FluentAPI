@@ -39,7 +39,6 @@ internal static class CodeGenerator
             new DuplicateMethodsChecker(),
             new InitialStepMethodGenerator(),
             new BuilderGenerator(),
-            new InterfaceGenerator(),
         };
 
         foreach (ICodeBoardActor actor in actors)
