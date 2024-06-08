@@ -14,6 +14,35 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 public partial class CodeGenerationTests
 {
     [Fact, Priority(1)]
+    public void CanExecuteContinueWithInForkClass()
+    {
+        var student1 = TestClasses.Abstract.ContinueWithInForkClass
+            .CreateStudent
+            .WithMember1("1")
+            .WithMember2A("2A")
+            .WithMember3("3")
+            .WithMember4("4");
+
+        var student2 = TestClasses.Abstract.ContinueWithInForkClass
+            .CreateStudent
+            .WithMember1("1")
+            .WithMember2B("2B")
+            .WithMember4("4");
+
+        Assert.Equal("1", student1.Member1);
+        Assert.Equal("2A", student1.Member2A);
+        Assert.Null(student1.Member2B);
+        Assert.Equal("3", student1.Member3);
+        Assert.Equal("4", student1.Member4);
+
+        Assert.Equal("1", student2.Member1);
+        Assert.Null(student2.Member2A);
+        Assert.Equal("2B", student2.Member2B);
+        Assert.Null(student2.Member3);
+        Assert.Equal("4", student2.Member4);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaClass()
     {
         var student = TestClasses.Abstract.FluentLambdaClass
