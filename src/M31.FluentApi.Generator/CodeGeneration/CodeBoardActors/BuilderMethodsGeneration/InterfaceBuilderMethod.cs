@@ -1,6 +1,6 @@
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 
-namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration;
 
 internal abstract class InterfaceBuilderMethod : BuilderStepMethod
 {

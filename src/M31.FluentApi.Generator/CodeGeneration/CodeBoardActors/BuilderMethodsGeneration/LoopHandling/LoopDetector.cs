@@ -1,4 +1,4 @@
-namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration.LoopHandling;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration.LoopHandling;
 
 internal static class LoopDetector
 {

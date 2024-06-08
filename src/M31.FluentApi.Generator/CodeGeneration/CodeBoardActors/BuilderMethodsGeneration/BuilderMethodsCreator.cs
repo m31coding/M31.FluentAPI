@@ -1,8 +1,8 @@
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration.LoopHandling;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration.LoopHandling;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
 using M31.FluentApi.Generator.Commons;
 
-namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration;
 
 internal class BuilderMethodsCreator
 {

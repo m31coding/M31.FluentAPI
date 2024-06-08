@@ -1,4 +1,4 @@
-namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration.LoopHandling;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration.LoopHandling;
 
 // Tarjan's strongly connected components algorithm, see also
 // https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm.

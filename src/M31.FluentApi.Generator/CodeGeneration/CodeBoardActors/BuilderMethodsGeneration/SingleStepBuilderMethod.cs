@@ -2,23 +2,20 @@ using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
-namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration;
 
-// code generation comments are with respect to the unit test ThreeMemberClass.Student
-internal class FirstStepBuilderMethod : BuilderStepMethod
+// code generation comments are with respect to the unit test OneMemberClass.Student
+internal class SingleStepBuilderMethod : BuilderStepMethod
 {
-    internal FirstStepBuilderMethod(BuilderMethod builderMethod, string returnType)
+    internal SingleStepBuilderMethod(BuilderMethod builderMethod)
         : base(builderMethod)
     {
-        ReturnType = returnType;
     }
-
-    internal string ReturnType { get; }
 
     internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
     {
-        // public static IBornOn WithName(string name)
-        Method method = CreateMethod(ReturnType, "public", "static");
+        // public static Student<T1, T2> InSemester(int semester)
+        Method method = CreateMethod(info.FluentApiClassNameWithTypeParameters, "public", "static");
 
         // CreateStudent<T1, T2> createStudent = new CreateStudent<T1, T2>();
         string builderInstanceVariableName = reservedVariableNames.GetNewLocalVariableName(info.BuilderInstanceName);
@@ -26,11 +23,11 @@ internal class FirstStepBuilderMethod : BuilderStepMethod
             $"{info.BuilderClassNameWithTypeParameters} {builderInstanceVariableName} = " +
             $"new {info.BuilderClassNameWithTypeParameters}();");
 
-        // createStudent.student.Name = name;
+        // createStudent.student.Semester = semester;
         CreateBody(method, $"{builderInstanceVariableName}.", reservedVariableNames);
 
-        // return createStudent;
-        CreateReturnStatement(method, $"return {builderInstanceVariableName};");
+        // return createStudent.student;
+        CreateReturnStatement(method, $"return {builderInstanceVariableName}.{info.ClassInstanceName};");
 
         return method;
     }
