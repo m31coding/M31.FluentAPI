@@ -36,12 +36,9 @@ internal class BuilderGenerator : ICodeBoardActor
 
             foreach (InterfaceBuilderMethod interfaceMethod in builderInterface.Methods)
             {
-                if (interfaceMethod is not EmptyInterfaceBuilderMethod)
-                {
-                    Method method = CreateMethod(interfaceMethod, codeBoard);
-                    codeBoard.BuilderClass.AddMethod(method);
-                    @interface.AddMethodSignature(method.MethodSignature.ToSignatureForInterface());
-                }
+                Method method = CreateMethod(interfaceMethod, codeBoard);
+                codeBoard.BuilderClass.AddMethod(method);
+                @interface.AddMethodSignature(method.MethodSignature.ToSignatureForInterface());
             }
 
             @interface.AddBaseInterfaces(builderInterface.BaseInterfaces);
