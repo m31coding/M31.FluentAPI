@@ -366,6 +366,21 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteSkippableLoopClass()
+    {
+        var student = TestClasses.Abstract.SkippableLoopClass
+            .CreateStudent
+            .WithMember3("3")
+            .WithMember1("1")
+            .WithMember4("4");
+
+        Assert.Equal("1", student.Member1);
+        Assert.Null(student.Member2);
+        Assert.Equal("3", student.Member3);
+        Assert.Equal("4", student.Member4);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteSkippableSeveralMembersClass()
     {
         var student1 = TestClasses.Abstract.SkippableSeveralMembersClass
