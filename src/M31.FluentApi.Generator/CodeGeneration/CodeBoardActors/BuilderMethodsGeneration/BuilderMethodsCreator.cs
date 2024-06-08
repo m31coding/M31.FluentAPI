@@ -142,7 +142,7 @@ internal class BuilderMethodsCreator
                 {
                     case InterjacentBuilderMethod interjacentBuilderMethod:
                         staticBuilderMethods.Add(
-                            new FirstStepBuilderMethod(method, interjacentBuilderMethod.ReturnType));
+                            new StaticBuilderMethod(method, interjacentBuilderMethod.ReturnType));
 
                         string? baseInterface = interjacentBuilderMethod.BaseInterface?.Name;
                         if (baseInterface != null && seenInterfaces.Add(baseInterface))
@@ -153,7 +153,7 @@ internal class BuilderMethodsCreator
                         break;
 
                     case LastStepBuilderMethod:
-                        staticBuilderMethods.Add(new SingleStepBuilderMethod(method));
+                        staticBuilderMethods.Add(new StaticSingleStepBuilderMethod(method));
                         break;
 
                     default:

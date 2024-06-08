@@ -4,18 +4,21 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration;
 
-// code generation comments are with respect to the unit test OneMemberClass.Student
-internal class SingleStepBuilderMethod : BuilderStepMethod
+// code generation comments are with respect to the unit test ThreeMemberClass.Student
+internal class StaticBuilderMethod : BuilderStepMethod
 {
-    internal SingleStepBuilderMethod(BuilderMethod builderMethod)
+    internal StaticBuilderMethod(BuilderMethod builderMethod, string returnType)
         : base(builderMethod)
     {
+        ReturnType = returnType;
     }
+
+    internal string ReturnType { get; }
 
     internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
     {
-        // public static Student<T1, T2> InSemester(int semester)
-        Method method = CreateMethod(info.FluentApiClassNameWithTypeParameters, "public", "static");
+        // public static IBornOn WithName(string name)
+        Method method = CreateMethod(ReturnType, "public", "static");
 
         // CreateStudent<T1, T2> createStudent = new CreateStudent<T1, T2>();
         string builderInstanceVariableName = reservedVariableNames.GetNewLocalVariableName(info.BuilderInstanceName);
@@ -23,11 +26,11 @@ internal class SingleStepBuilderMethod : BuilderStepMethod
             $"{info.BuilderClassNameWithTypeParameters} {builderInstanceVariableName} = " +
             $"new {info.BuilderClassNameWithTypeParameters}();");
 
-        // createStudent.student.Semester = semester;
+        // createStudent.student.Name = name;
         CreateBody(method, $"{builderInstanceVariableName}.", reservedVariableNames);
 
-        // return createStudent.student;
-        CreateReturnStatement(method, $"return {builderInstanceVariableName}.{info.ClassInstanceName};");
+        // return createStudent;
+        CreateReturnStatement(method, $"return {builderInstanceVariableName};");
 
         return method;
     }
