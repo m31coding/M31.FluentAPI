@@ -7,7 +7,8 @@ internal class BuilderGenerator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
-        BuilderMethods builderMethods = BuilderStepMethodCreator.CreateBuilderMethods(codeBoard.Forks);
+        BuilderMethods builderMethods =
+            BuilderMethodsCreator.CreateBuilderMethods(codeBoard.Forks, codeBoard.CancellationToken);
 
         foreach (BuilderStepMethod staticMethod in builderMethods.StaticMethods)
         {

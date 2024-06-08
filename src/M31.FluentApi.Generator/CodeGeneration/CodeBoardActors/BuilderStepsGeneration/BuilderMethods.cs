@@ -15,14 +15,14 @@ internal class BuilderMethods
     internal IReadOnlyCollection<BuilderInterface> Interfaces { get; }
     internal IReadOnlyCollection<BuilderStepMethod> StaticMethods { get; }
 
-    internal static BuilderMethods Create(
-        IReadOnlyCollection<BuilderStepMethod> staticMethods,
+    internal static IReadOnlyCollection<BuilderInterface> CreateInterfaces(
         IReadOnlyCollection<InterfaceBuilderMethod> interfaceMethods,
         CancellationToken cancellationToken)
     {
         List<BuilderInterface> interfaces = new List<BuilderInterface>();
 
-        IGrouping<string, InterfaceBuilderMethod>[] methodsGroupedByInterface = interfaceMethods.GroupBy(m => m!.InterfaceName).ToArray();
+        IGrouping<string, InterfaceBuilderMethod>[] methodsGroupedByInterface =
+            interfaceMethods.GroupBy(m => m.InterfaceName).ToArray();
 
         foreach (IGrouping<string, InterfaceBuilderMethod> group in methodsGroupedByInterface)
         {
@@ -51,6 +51,6 @@ internal class BuilderMethods
             interfaces.Add(new BuilderInterface(interfaceName, baseInterfaceNames, group.ToArray()));
         }
 
-        return new BuilderMethods(staticMethods, interfaces);
+        return interfaces;
     }
 }

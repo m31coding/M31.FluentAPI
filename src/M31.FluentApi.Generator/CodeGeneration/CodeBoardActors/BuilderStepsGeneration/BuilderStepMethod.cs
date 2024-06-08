@@ -20,14 +20,13 @@ internal abstract class BuilderStepMethod : BuilderMethod
         return new Method(methodSignature);
     }
 
-    protected InterfaceMethod CreateInterfaceMethod(
+    protected Method CreateInterfaceMethod(
         string interfaceName,
-        BaseInterface? baseInterface,
         string defaultReturnType,
         params string[] modifiers)
     {
         MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, interfaceName, modifiers);
-        return new InterfaceMethod(methodSignature, interfaceName, baseInterface);
+        return new Method(methodSignature);
     }
 
     private MethodSignature CreateMethodSignature(

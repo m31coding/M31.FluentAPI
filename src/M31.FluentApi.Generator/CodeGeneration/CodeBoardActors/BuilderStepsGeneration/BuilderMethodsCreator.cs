@@ -1,43 +1,90 @@
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration.LoopHandling;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
 using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 
-internal class BuilderStepMethodCreator
+internal class BuilderMethodsCreator
 {
-    internal static IReadOnlyCollection<BuilderStepMethod> CreateBuilderStepMethods(IReadOnlyList<Fork> forks)
+    internal static BuilderMethods CreateBuilderMethods(IReadOnlyList<Fork> forks, CancellationToken cancellationToken)
     {
-        return forks.Count == 0 ? Array.Empty<BuilderStepMethod>() : new BuilderStepMethodCreator(forks).Create();
+        return forks.Count == 0 ? EmptyBuilderMethods()
+            : new BuilderMethodsCreator(forks, cancellationToken).Create();
     }
 
     private readonly IReadOnlyList<Fork> forks;
+    private readonly CancellationToken cancellationToken;
     private readonly ListDictionary<string, BuilderStepMethod> interfaceNameToBuilderMethods;
     private readonly Dictionary<int, Fork> builderStepToFork;
 
-    private BuilderStepMethodCreator(IReadOnlyList<Fork> forks)
+    private BuilderMethodsCreator(IReadOnlyList<Fork> forks, CancellationToken cancellationToken)
     {
         this.forks = forks;
+        this.cancellationToken = cancellationToken;
         interfaceNameToBuilderMethods = new ListDictionary<string, BuilderStepMethod>();
         builderStepToFork = forks.ToDictionary(f => f.BuilderStep);
     }
 
-    private IReadOnlyCollection<BuilderStepMethod> Create()
+    private static BuilderMethods EmptyBuilderMethods()
     {
-        BuilderStepMethod[] builderStepMethods = forks.SelectMany(CreateBuilderStepMethods).ToArray();
-        return CreateStaticBuilderStepMethods().Concat(builderStepMethods).ToArray();
+        return new BuilderMethods(Array.Empty<BuilderStepMethod>(), Array.Empty<BuilderInterface>());
     }
 
-    private IEnumerable<BuilderStepMethod> CreateBuilderStepMethods(Fork fork)
+    private BuilderMethods Create()
+    {
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return EmptyBuilderMethods();
+        }
+
+        InterfaceBuilderMethod[] interfaceMethods = forks.SelectMany(CreateInterfaceBuilderMethods).ToArray();
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return EmptyBuilderMethods();
+        }
+
+        IReadOnlyCollection<BuilderInterface> interfaces =
+            BuilderMethods.CreateInterfaces(interfaceMethods, cancellationToken);
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return EmptyBuilderMethods();
+        }
+
+        interfaces = LoopHandler.HandleLoops(interfaces, cancellationToken);
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return EmptyBuilderMethods();
+        }
+
+        IReadOnlyCollection<BuilderStepMethod> staticMethods = CreateStaticBuilderStepMethods();
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return EmptyBuilderMethods();
+        }
+
+        return new BuilderMethods(staticMethods, interfaces);
+    }
+
+    private IEnumerable<InterfaceBuilderMethod> CreateInterfaceBuilderMethods(Fork fork)
     {
         foreach (ForkBuilderMethod builderMethod in fork.BuilderMethods)
         {
-            BuilderStepMethod builderStepMethod = CreateBuilderStepMethod(fork.InterfaceName, builderMethod);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                yield break;
+            }
+
+            InterfaceBuilderMethod builderStepMethod = CreateInterfaceBuilderMethod(fork.InterfaceName, builderMethod);
             interfaceNameToBuilderMethods.AddItem(fork.InterfaceName, builderStepMethod);
             yield return builderStepMethod;
         }
     }
 
-    private BuilderStepMethod CreateBuilderStepMethod(
+    private InterfaceBuilderMethod CreateInterfaceBuilderMethod(
         string interfaceName,
         ForkBuilderMethod builderMethod)
     {
@@ -47,7 +94,7 @@ internal class BuilderStepMethodCreator
             : CreateInterjacentBuilderMethod(interfaceName, builderMethod, nextFork);
     }
 
-    private BuilderStepMethod CreateInterjacentBuilderMethod(
+    private InterfaceBuilderMethod CreateInterjacentBuilderMethod(
         string interfaceName,
         ForkBuilderMethod builderMethod,
         Fork nextFork)
@@ -59,7 +106,7 @@ internal class BuilderStepMethodCreator
         return new InterjacentBuilderMethod(builderMethod.Value, nextInterfaceName, interfaceName, baseInterface);
     }
 
-    private BuilderStepMethod CreateLastStepBuilderMethod(
+    private InterfaceBuilderMethod CreateLastStepBuilderMethod(
         string interfaceName,
         ForkBuilderMethod builderMethod)
     {
@@ -77,6 +124,11 @@ internal class BuilderStepMethodCreator
 
         while (interfaces.Count != 0)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Array.Empty<BuilderStepMethod>();
+            }
+
             string @interface = interfaces.Dequeue();
 
             if (!interfaceNameToBuilderMethods.TryGetValue(@interface, out List<BuilderStepMethod> methods))

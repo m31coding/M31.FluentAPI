@@ -4,7 +4,7 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 
-internal class EmptyInterfaceBuilderMethod : InterfaceBuilderMethod
+internal class EmptyInterfaceBuilderMethod : InterfaceBuilderMethod // todo: remove if possible
 {
     public EmptyInterfaceBuilderMethod(string interfaceName, BaseInterface? baseInterface)
         : base(
@@ -15,11 +15,6 @@ internal class EmptyInterfaceBuilderMethod : InterfaceBuilderMethod
     }
 
     internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
-    {
-        throw new NotSupportedException();
-    }
-
-    internal override InterfaceBuilderMethod WithInterfaceName(string interfaceName)
     {
         throw new NotSupportedException();
     }

@@ -5,28 +5,24 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 
 // code generation comments are with respect to the unit test ThreeMemberClass.Student
-internal class InterjacentBuilderMethod : BuilderStepMethod
+internal class InterjacentBuilderMethod : InterfaceBuilderMethod
 {
     internal InterjacentBuilderMethod(
         BuilderMethod builderMethod,
         string returnType,
         string interfaceName,
         BaseInterface? baseInterface)
-        : base(builderMethod)
+        : base(builderMethod, interfaceName, baseInterface)
     {
         ReturnType = returnType;
-        InterfaceName = interfaceName;
-        BaseInterface = baseInterface;
     }
 
     internal string ReturnType { get; }
-    internal string InterfaceName { get; }
-    internal BaseInterface? BaseInterface { get; }
 
     internal override Method BuildMethodCode(BuilderAndTargetInfo info, ReservedVariableNames reservedVariableNames)
     {
         // public IInSemester BornOn(System.DateOnly dateOfBirth)
-        InterfaceMethod method = CreateInterfaceMethod(InterfaceName, BaseInterface, ReturnType, "public");
+        Method method = CreateInterfaceMethod(InterfaceName, ReturnType, "public");
 
         // student.DateOfBirth = dateOfBirth;
         CreateBody(method, string.Empty, reservedVariableNames);

@@ -16,5 +16,4 @@ internal abstract class InterfaceBuilderMethod : BuilderStepMethod
 
     internal string InterfaceName { get; }
     internal BaseInterface? BaseInterface { get; }
-    internal abstract InterfaceBuilderMethod WithInterfaceName(string interfaceName);
 }

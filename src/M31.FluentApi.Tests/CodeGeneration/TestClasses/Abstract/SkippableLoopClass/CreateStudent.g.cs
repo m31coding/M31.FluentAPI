@@ -99,8 +99,11 @@ public class CreateStudent :
     public interface IWithMember1WithMember2WithMember3WithMember4
     {
         IWithMember2 WithMember1(string? member1);
+
         IWithMember3WithMember4 WithMember2(string? member2);
+
         IWithMember1 WithMember3(string? member3);
+
         Student WithMember4(string member4);
     }
 }
