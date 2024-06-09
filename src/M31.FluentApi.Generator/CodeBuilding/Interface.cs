@@ -1,3 +1,5 @@
+// ReSharper disable ParameterHidesMember
+
 namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class Interface : ICode
@@ -31,6 +33,11 @@ internal class Interface : ICode
     internal void AddBaseInterface(string baseInterface)
     {
         baseInterfaces.Add(baseInterface);
+    }
+
+    internal void AddBaseInterfaces(IEnumerable<string> baseInterfaces)
+    {
+        this.baseInterfaces.AddRange(baseInterfaces);
     }
 
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)

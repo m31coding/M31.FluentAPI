@@ -43,17 +43,17 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWithProperty1 IMethod1Method1.Method1()
-    {
-        student.Method1();
-        return this;
-    }
-
     public static IWithProperty2 Method1(int p1)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Method1(p1);
         return createStudent;
+    }
+
+    IWithProperty1 IMethod1Method1.Method1()
+    {
+        student.Method1();
+        return this;
     }
 
     IWithProperty2 IMethod1Method1.Method1(int p1)

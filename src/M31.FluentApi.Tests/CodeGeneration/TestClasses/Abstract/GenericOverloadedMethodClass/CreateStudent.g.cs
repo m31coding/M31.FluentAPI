@@ -33,23 +33,11 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1(int p1, string p2)
-    {
-        student.Method1(p1, p2);
-        return student;
-    }
-
     public static Student Method1<T>(int p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Method1<T>(p1, p2);
         return createStudent.student;
-    }
-
-    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(int p1, string p2)
-    {
-        student.Method1<T>(p1, p2);
-        return student;
     }
 
     public static Student Method1<T>(T p1, string p2)
@@ -59,23 +47,11 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(T p1, string p2)
-    {
-        student.Method1<T>(p1, p2);
-        return student;
-    }
-
     public static Student Method1<S, T>(T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Method1<S, T>(p1, p2);
         return createStudent.student;
-    }
-
-    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, string p2)
-    {
-        student.Method1<S, T>(p1, p2);
-        return student;
     }
 
     public static Student Method1<S, T>(T p1, out string p2)
@@ -85,12 +61,6 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, out string p2)
-    {
-        student.Method1<S, T>(p1, out p2);
-        return student;
-    }
-
     public static Student Method1<S, T>(in T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -98,17 +68,47 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(in T p1, string p2)
-    {
-        student.Method1<S, T>(in p1, p2);
-        return student;
-    }
-
     public static Student Method1<S, T>(in T p1, ref string p2)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Method1<S, T>(in p1, ref p2);
         return createStudent.student;
+    }
+
+    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1(int p1, string p2)
+    {
+        student.Method1(p1, p2);
+        return student;
+    }
+
+    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(int p1, string p2)
+    {
+        student.Method1<T>(p1, p2);
+        return student;
+    }
+
+    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(T p1, string p2)
+    {
+        student.Method1<T>(p1, p2);
+        return student;
+    }
+
+    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, string p2)
+    {
+        student.Method1<S, T>(p1, p2);
+        return student;
+    }
+
+    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, out string p2)
+    {
+        student.Method1<S, T>(p1, out p2);
+        return student;
+    }
+
+    Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(in T p1, string p2)
+    {
+        student.Method1<S, T>(in p1, p2);
+        return student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(in T p1, ref string p2)

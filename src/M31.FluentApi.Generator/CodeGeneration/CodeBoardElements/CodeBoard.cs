@@ -1,5 +1,4 @@
 using M31.FluentApi.Generator.CodeBuilding;
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
 using M31.FluentApi.Generator.SourceAnalyzers;
@@ -56,7 +55,6 @@ internal class CodeBoard
     internal CancellationToken CancellationToken { get; }
     internal bool CancellationRequested => CancellationToken.IsCancellationRequested;
     internal bool HasErrors => diagnostics.HaveErrors();
-    internal bool HasInterfaceMethods => BuilderClass.Methods.OfType<InterfaceMethod>().Any();
 
     internal static CodeBoard Create(
         BuilderAndTargetInfo builderAndTargetInfo,

@@ -39,17 +39,17 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IWithName.WithName(string name)
-    {
-        CreateStudent.namePropertyInfo.SetValue(student, name);
-        return student;
-    }
-
     public static Student WhoseNameIsUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
         CreateStudent.namePropertyInfo.SetValue(createStudent.student, null);
         return createStudent.student;
+    }
+
+    Student IWithName.WithName(string name)
+    {
+        CreateStudent.namePropertyInfo.SetValue(student, name);
+        return student;
     }
 
     Student IWithName.WhoseNameIsUnknown()

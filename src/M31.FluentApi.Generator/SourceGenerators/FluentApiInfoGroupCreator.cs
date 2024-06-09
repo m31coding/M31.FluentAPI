@@ -46,10 +46,25 @@ internal class FluentApiInfoGroupCreator
         foreach (var group in grouping)
         {
             int? defaultNextBuilderStep = stepToNextStep[group.builderStep];
-            int? nextBuilderStep = GetNextBuilderStep(group.infoArray, defaultNextBuilderStep);
+            int? nextBuilderStep = GetNextBuilderStep(
+                group.infoArray,
+                defaultNextBuilderStep,
+                out List<AttributeDataExtended> skippableAttributeData);
+
+            bool groupIsSkippable = skippableAttributeData.Count > 0;
+
+            if (nextBuilderStep == null && groupIsSkippable)
+            {
+                foreach (AttributeDataExtended skippableData in skippableAttributeData)
+                {
+                    classInfoReport.ReportDiagnostic(LastBuilderStepCannotBeSkipped.CreateDiagnostic(skippableData));
+                }
+            }
+
             infoGroups.Add(new FluentApiInfoGroup(
                 group.builderStep,
                 nextBuilderStep,
+                groupIsSkippable,
                 group.fluentMethodName,
                 group.type, group.infoArray));
         }
@@ -89,14 +104,24 @@ internal class FluentApiInfoGroupCreator
         }
     }
 
-    private int? GetNextBuilderStep(FluentApiInfo[] fluentApiInfos, int? defaultNextBuilderStep)
+    private int? GetNextBuilderStep(
+        FluentApiInfo[] fluentApiInfos,
+        int? defaultNextBuilderStep,
+        out List<AttributeDataExtended> skippableAttributeData)
     {
         Dictionary<Step, List<AttributeDataExtended>> nextSteps = new Dictionary<Step, List<AttributeDataExtended>>();
+        skippableAttributeData = new List<AttributeDataExtended>();
 
         foreach (FluentApiInfo fluentApiInfo in fluentApiInfos)
         {
             foreach (ControlAttributeInfoBase controlAttributeInfo in fluentApiInfo.ControlAttributeInfos)
             {
+                if (controlAttributeInfo is FluentSkippableAttributeInfo skippableInfo)
+                {
+                    skippableAttributeData.Add(fluentApiInfo.AdditionalInfo.ControlAttributeData[skippableInfo]);
+                    continue;
+                }
+
                 var (nextBuilderStep, attributeDataExtended) = ToNextBuilderStep(controlAttributeInfo, fluentApiInfo);
 
                 if (nextSteps.TryGetValue(nextBuilderStep, out List<AttributeDataExtended> present))

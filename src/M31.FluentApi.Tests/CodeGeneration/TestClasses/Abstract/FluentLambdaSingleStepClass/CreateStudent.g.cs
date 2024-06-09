@@ -33,17 +33,17 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IWithAddress.WithAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass.Address address)
-    {
-        student.Address = address;
-        return student;
-    }
-
     public static Student WithAddress(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass.Address> createAddress)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Address = createAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass.CreateAddress.InitialStep());
         return createStudent.student;
+    }
+
+    Student IWithAddress.WithAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass.Address address)
+    {
+        student.Address = address;
+        return student;
     }
 
     Student IWithAddress.WithAddress(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSingleStepClass.Address> createAddress)

@@ -32,20 +32,10 @@ public class CreateStudent :
         createStudent.student.ReturnVoidMethod();
     }
 
-    void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
-    {
-        student.ReturnVoidMethod();
-    }
-
     public static int ReturnIntMethod()
     {
         CreateStudent createStudent = new CreateStudent();
         return createStudent.student.ReturnIntMethod();
-    }
-
-    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
-    {
-        return student.ReturnIntMethod();
     }
 
     public static System.Collections.Generic.List<int> ReturnListMethod()
@@ -54,15 +44,25 @@ public class CreateStudent :
         return createStudent.student.ReturnListMethod();
     }
 
-    System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
-    {
-        return student.ReturnListMethod();
-    }
-
     public static int ReturnIntMethodWithRefParameter(ref string s)
     {
         CreateStudent createStudent = new CreateStudent();
         return createStudent.student.ReturnIntMethodWithRefParameter(ref s);
+    }
+
+    void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
+    {
+        student.ReturnVoidMethod();
+    }
+
+    int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
+    {
+        return student.ReturnIntMethod();
+    }
+
+    System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
+    {
+        return student.ReturnListMethod();
     }
 
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)

@@ -33,23 +33,11 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IBornOnWithFriends.BornOn(System.DateOnly dateOfBirth)
-    {
-        student.DateOfBirth = dateOfBirth;
-        return student;
-    }
-
     public static Student WithFriends(System.Collections.Generic.List<string> friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = friends;
         return createStudent.student;
-    }
-
-    Student IBornOnWithFriends.WithFriends(System.Collections.Generic.List<string> friends)
-    {
-        student.Friends = friends;
-        return student;
     }
 
     public static Student WithFriends(params string[] friends)
@@ -59,12 +47,6 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IBornOnWithFriends.WithFriends(params string[] friends)
-    {
-        student.Friends = new List<string>(friends);
-        return student;
-    }
-
     public static Student WithFriend(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -72,17 +54,35 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IBornOnWithFriends.WithFriend(string friend)
-    {
-        student.Friends = new List<string>(1){ friend };
-        return student;
-    }
-
     public static Student WithZeroFriends()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new List<string>(0);
         return createStudent.student;
+    }
+
+    Student IBornOnWithFriends.BornOn(System.DateOnly dateOfBirth)
+    {
+        student.DateOfBirth = dateOfBirth;
+        return student;
+    }
+
+    Student IBornOnWithFriends.WithFriends(System.Collections.Generic.List<string> friends)
+    {
+        student.Friends = friends;
+        return student;
+    }
+
+    Student IBornOnWithFriends.WithFriends(params string[] friends)
+    {
+        student.Friends = new List<string>(friends);
+        return student;
+    }
+
+    Student IBornOnWithFriends.WithFriend(string friend)
+    {
+        student.Friends = new List<string>(1){ friend };
+        return student;
     }
 
     Student IBornOnWithFriends.WithZeroFriends()

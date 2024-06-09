@@ -39,17 +39,17 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IWhoIsHappy.WhoIsHappy(bool isHappy)
-    {
-        CreateStudent.isHappyFieldInfo.SetValue(student, isHappy);
-        return student;
-    }
-
     public static Student WhoIsSad()
     {
         CreateStudent createStudent = new CreateStudent();
         CreateStudent.isHappyFieldInfo.SetValue(createStudent.student, false);
         return createStudent.student;
+    }
+
+    Student IWhoIsHappy.WhoIsHappy(bool isHappy)
+    {
+        CreateStudent.isHappyFieldInfo.SetValue(student, isHappy);
+        return student;
     }
 
     Student IWhoIsHappy.WhoIsSad()

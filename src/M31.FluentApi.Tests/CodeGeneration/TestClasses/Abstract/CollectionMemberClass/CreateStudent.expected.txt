@@ -35,23 +35,11 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWithPets IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.List<string> friends)
-    {
-        student.Friends = friends;
-        return this;
-    }
-
     public static IWithPets WhoseFriendsAre(params string[] friends)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new List<string>(friends);
         return createStudent;
-    }
-
-    IWithPets IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
-    {
-        student.Friends = new List<string>(friends);
-        return this;
     }
 
     public static IWithPets WhoseFriendIs(string friend)
@@ -61,17 +49,29 @@ public class CreateStudent :
         return createStudent;
     }
 
-    IWithPets IWhoseFriendsAre.WhoseFriendIs(string friend)
-    {
-        student.Friends = new List<string>(1){ friend };
-        return this;
-    }
-
     public static IWithPets WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Friends = new List<string>(0);
         return createStudent;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.List<string> friends)
+    {
+        student.Friends = friends;
+        return this;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
+    {
+        student.Friends = new List<string>(friends);
+        return this;
+    }
+
+    IWithPets IWhoseFriendsAre.WhoseFriendIs(string friend)
+    {
+        student.Friends = new List<string>(1){ friend };
+        return this;
     }
 
     IWithPets IWhoseFriendsAre.WhoHasNoFriends()

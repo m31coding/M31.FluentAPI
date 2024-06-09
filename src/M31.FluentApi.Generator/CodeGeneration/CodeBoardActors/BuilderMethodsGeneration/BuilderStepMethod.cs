@@ -3,7 +3,7 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 
-namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderStepsGeneration;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration;
 
 internal abstract class BuilderStepMethod : BuilderMethod
 {
@@ -20,10 +20,13 @@ internal abstract class BuilderStepMethod : BuilderMethod
         return new Method(methodSignature);
     }
 
-    protected Method CreateInterfaceMethod(string interfaceName, string defaultReturnType, params string[] modifiers)
+    protected Method CreateInterfaceMethod(
+        string interfaceName,
+        string defaultReturnType,
+        params string[] modifiers)
     {
         MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, interfaceName, modifiers);
-        return new InterfaceMethod(methodSignature, interfaceName);
+        return new Method(methodSignature);
     }
 
     private MethodSignature CreateMethodSignature(

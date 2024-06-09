@@ -32,17 +32,17 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IWithName.WithName(string name)
-    {
-        student.Name = name;
-        return student;
-    }
-
     public static Student WhoseNameIsUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Name = null!;
         return createStudent.student;
+    }
+
+    Student IWithName.WithName(string name)
+    {
+        student.Name = name;
+        return student;
     }
 
     Student IWithName.WhoseNameIsUnknown()

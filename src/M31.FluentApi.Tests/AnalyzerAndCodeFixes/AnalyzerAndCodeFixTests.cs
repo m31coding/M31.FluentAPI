@@ -60,7 +60,7 @@ public class AnalyzerAndCodeFixTests
         SourceWithFix source = ReadSource("FluentLambdaMemberWithoutFluentApiClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(FluentLambdaMemberWithoutFluentApi.Descriptor.Id)
-            .WithLocation(14, 6)
+            .WithLocation(15, 6)
             .WithArguments("Address");
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
@@ -146,7 +146,7 @@ public class AnalyzerAndCodeFixTests
         source = source with { FixedSource = null };
 
         var expectedDiagnostic = Verifier.Diagnostic(InvalidFluentMethodReturnType.Descriptor.Id)
-            .WithLocation(14, 12)
+            .WithLocation(15, 12)
             .WithArguments("int");
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
@@ -170,7 +170,7 @@ public class AnalyzerAndCodeFixTests
         SourceWithFix source = ReadSource("InvalidNullableTypeClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(InvalidFluentNullableType.Descriptor.Id)
-            .WithLocation(10, 12)
+            .WithLocation(12, 12)
             .WithArguments("int");
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
@@ -182,7 +182,7 @@ public class AnalyzerAndCodeFixTests
         SourceWithFix source = ReadSource("MissingBuilderStepClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(MissingBuilderStep.Descriptor.Id)
-            .WithLocation(12, 6)
+            .WithLocation(13, 6)
             .WithArguments(99);
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
@@ -194,7 +194,7 @@ public class AnalyzerAndCodeFixTests
         SourceWithFix source = ReadSource("MissingDefaultConstructorClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(MissingDefaultConstructor.Descriptor.Id)
-            .WithLocation(6, 14)
+            .WithLocation(8, 14)
             .WithArguments("Student");
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
@@ -206,7 +206,7 @@ public class AnalyzerAndCodeFixTests
         SourceWithFix source = ReadSource("NullableTypeNoNullableAnnotationClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(FluentNullableTypeWithoutNullableAnnotation.Descriptor.Id)
-            .WithLocation(13, 12)
+            .WithLocation(14, 12)
             .WithArguments("string");
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
@@ -267,6 +267,28 @@ public class AnalyzerAndCodeFixTests
         var expectedDiagnostic = Verifier.Diagnostic(MissingSetAccessor.Descriptor.Id)
             .WithLocation(11, 16)
             .WithArguments("Semester");
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
+    }
+
+    [Fact]
+    public async Task CanDetectSkippableLastStep1()
+    {
+        SourceWithFix source = ReadSource("SkippableLastStepClass1", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(LastBuilderStepCannotBeSkipped.Descriptor.Id)
+            .WithLocation(16, 6);
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
+    }
+
+    [Fact]
+    public async Task CanDetectSkippableLastStep2()
+    {
+        SourceWithFix source = ReadSource("SkippableLastStepClass2", "Student");
+
+        var expectedDiagnostic = Verifier.Diagnostic(LastBuilderStepCannotBeSkipped.Descriptor.Id)
+            .WithLocation(13, 6);
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
     }

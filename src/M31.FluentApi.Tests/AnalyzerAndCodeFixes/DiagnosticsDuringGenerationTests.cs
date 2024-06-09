@@ -16,7 +16,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic = new ExpectedDiagnostic(
             DuplicateFluentApiMethod.Descriptor,
             "WithName",
-            (11, 6), (14, 6));
+            (12, 6), (15, 6));
 
         RunGeneratorAndCheckDiagnostics("DuplicateMethodClass1", "Student", expectedDiagnostic);
     }
@@ -27,7 +27,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic = new ExpectedDiagnostic(
             DuplicateFluentApiMethod.Descriptor,
             "WithFriend",
-            (12, 6), (15, 6));
+            (13, 6), (16, 6));
 
         RunGeneratorAndCheckDiagnostics("DuplicateMethodClass2", "Student", expectedDiagnostic);
     }
@@ -38,7 +38,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic = new ExpectedDiagnostic(
             DuplicateFluentApiMethod.Descriptor,
             "WithName",
-            (14, 6), (20, 6));
+            (15, 6), (21, 6));
 
         RunGeneratorAndCheckDiagnostics("DuplicateMethodClass3", "Student", expectedDiagnostic);
     }
@@ -71,7 +71,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic = new ExpectedDiagnostic(
             DuplicateFluentApiMethod.Descriptor,
             "WithName",
-            (10, 6), (11, 6));
+            (11, 6), (12, 6));
         RunGeneratorAndCheckDiagnostics("DuplicateMethodPartialClass", "Student1|Student2", expectedDiagnostic);
     }
 
@@ -81,12 +81,12 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic1 = new ExpectedDiagnostic(
             ReservedMethodName.Descriptor,
             "InitialStep",
-            (11, 6));
+            (12, 6));
 
         ExpectedDiagnostic expectedDiagnostic2 = new ExpectedDiagnostic(
             ReservedMethodName.Descriptor,
             "InitialStep",
-            (17, 6));
+            (18, 6));
 
         RunGeneratorAndCheckDiagnostics("ReservedMethodClass1", "Student", expectedDiagnostic1, expectedDiagnostic2);
     }

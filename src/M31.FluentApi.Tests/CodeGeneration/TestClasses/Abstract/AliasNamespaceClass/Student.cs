@@ -1,5 +1,6 @@
 // Non-nullable member is uninitialized
 #pragma warning disable CS8618
+// ReSharper disable All
 
 using M31.FluentApi.Attributes;
 using MyList = System.Collections.Generic.IList<string>;

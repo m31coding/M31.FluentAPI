@@ -54,17 +54,17 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student INamedNamed.Named(string firstName, string lastName)
-    {
-        CreateStudent.namedMethodInfo.Invoke(student, new object?[] { firstName, lastName });
-        return student;
-    }
-
     public static Student Named(string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
         CreateStudent.namedMethodInfo2.Invoke(createStudent.student, new object?[] { lastName });
         return createStudent.student;
+    }
+
+    Student INamedNamed.Named(string firstName, string lastName)
+    {
+        CreateStudent.namedMethodInfo.Invoke(student, new object?[] { firstName, lastName });
+        return student;
     }
 
     Student INamedNamed.Named(string lastName)

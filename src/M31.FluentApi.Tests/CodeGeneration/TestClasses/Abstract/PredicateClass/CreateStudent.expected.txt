@@ -32,17 +32,17 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IWhoIsHappy.WhoIsHappy(bool isHappy)
-    {
-        student.IsHappy = isHappy;
-        return student;
-    }
-
     public static Student WhoIsSad()
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.IsHappy = false;
         return createStudent.student;
+    }
+
+    Student IWhoIsHappy.WhoIsHappy(bool isHappy)
+    {
+        student.IsHappy = isHappy;
+        return student;
     }
 
     Student IWhoIsHappy.WhoIsSad()

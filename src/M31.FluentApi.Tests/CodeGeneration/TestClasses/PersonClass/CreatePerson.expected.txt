@@ -14,7 +14,8 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.PersonClass;
 public class CreatePerson :
     CreatePerson.ICreatePerson,
     CreatePerson.IWithFirstName,
-    CreatePerson.IWithMiddleNameWithLastName,
+    CreatePerson.IWithMiddleName,
+    CreatePerson.IWithLastName,
     CreatePerson.IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad,
     CreatePerson.IWithHouseNumber,
     CreatePerson.IWithStreet,
@@ -99,26 +100,26 @@ public class CreatePerson :
         return new CreatePerson();
     }
 
-    public static IWithMiddleNameWithLastName WithFirstName(string firstName)
+    public static IWithMiddleName WithFirstName(string firstName)
     {
         CreatePerson createPerson = new CreatePerson();
         CreatePerson.firstNamePropertyInfo.SetValue(createPerson.person, firstName);
         return createPerson;
     }
 
-    IWithMiddleNameWithLastName IWithFirstName.WithFirstName(string firstName)
+    IWithMiddleName IWithFirstName.WithFirstName(string firstName)
     {
         CreatePerson.firstNamePropertyInfo.SetValue(person, firstName);
         return this;
     }
 
-    IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
+    IWithLastName IWithMiddleName.WithMiddleName(string? middleName)
     {
         CreatePerson.middleNamePropertyInfo.SetValue(person, middleName);
         return this;
     }
 
-    IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad IWithMiddleNameWithLastName.WithLastName(string lastName)
+    IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad IWithLastName.WithLastName(string lastName)
     {
         CreatePerson.lastNamePropertyInfo.SetValue(person, lastName);
         return this;
@@ -172,13 +173,16 @@ public class CreatePerson :
 
     public interface IWithFirstName
     {
-        IWithMiddleNameWithLastName WithFirstName(string firstName);
+        IWithMiddleName WithFirstName(string firstName);
     }
 
-    public interface IWithMiddleNameWithLastName
+    public interface IWithMiddleName : IWithLastName
     {
-        IWithMiddleNameWithLastName WithMiddleName(string? middleName);
+        IWithLastName WithMiddleName(string? middleName);
+    }
 
+    public interface IWithLastName
+    {
         IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad WithLastName(string lastName);
     }
 

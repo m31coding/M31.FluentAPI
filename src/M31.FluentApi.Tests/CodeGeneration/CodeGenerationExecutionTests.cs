@@ -14,6 +14,35 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 public partial class CodeGenerationTests
 {
     [Fact, Priority(1)]
+    public void CanExecuteContinueWithInForkClass()
+    {
+        var student1 = TestClasses.Abstract.ContinueWithInForkClass
+            .CreateStudent
+            .WithMember1("1")
+            .WithMember2A("2A")
+            .WithMember3("3")
+            .WithMember4("4");
+
+        var student2 = TestClasses.Abstract.ContinueWithInForkClass
+            .CreateStudent
+            .WithMember1("1")
+            .WithMember2B("2B")
+            .WithMember4("4");
+
+        Assert.Equal("1", student1.Member1);
+        Assert.Equal("2A", student1.Member2A);
+        Assert.Null(student1.Member2B);
+        Assert.Equal("3", student1.Member3);
+        Assert.Equal("4", student1.Member4);
+
+        Assert.Equal("1", student2.Member1);
+        Assert.Null(student2.Member2A);
+        Assert.Equal("2B", student2.Member2B);
+        Assert.Null(student2.Member3);
+        Assert.Equal("4", student2.Member4);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaClass()
     {
         var student = TestClasses.Abstract.FluentLambdaClass
@@ -321,6 +350,86 @@ public partial class CodeGenerationTests
             .InSemester(2);
 
         Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteSkippableMemberClass()
+    {
+        var student1 = TestClasses.Abstract.SkippableMemberClass
+            .CreateStudent
+            .WithFirstName("Alice")
+            .WithMiddleName("Sophia")
+            .WithLastName("King");
+
+        Assert.Equal("Alice", student1.FirstName);
+        Assert.Equal("Sophia", student1.MiddleName);
+        Assert.Equal("King", student1.LastName);
+
+        var student2 = TestClasses.Abstract.SkippableMemberClass
+            .CreateStudent
+            .WithFirstName("Alice")
+            .WithLastName("King");
+
+        Assert.Equal("Alice", student2.FirstName);
+        Assert.Null(student2.MiddleName);
+        Assert.Equal("King", student2.LastName);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteSkippableFirstMemberClass()
+    {
+        var student1 = TestClasses.Abstract.SkippableFirstMemberClass
+            .CreateStudent
+            .WithFirstName("Alice")
+            .WithLastName("King");
+
+        Assert.Equal("Alice", student1.FirstName);
+        Assert.Equal("King", student1.LastName);
+
+        var student2 = TestClasses.Abstract.SkippableFirstMemberClass
+            .CreateStudent
+            .WithLastName("King");
+
+        Assert.Null(student2.FirstName);
+        Assert.Equal("King", student2.LastName);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteSkippableLoopClass()
+    {
+        var student = TestClasses.Abstract.SkippableLoopClass
+            .CreateStudent
+            .WithMember3("3")
+            .WithMember1("1")
+            .WithMember4("4");
+
+        Assert.Equal("1", student.Member1);
+        Assert.Null(student.Member2);
+        Assert.Equal("3", student.Member3);
+        Assert.Equal("4", student.Member4);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteSkippableSeveralMembersClass()
+    {
+        var student1 = TestClasses.Abstract.SkippableSeveralMembersClass
+            .CreateStudent
+            .WithMember2("2")
+            .WithMember4("4");
+
+        Assert.Null(student1.Member1);
+        Assert.Equal("2", student1.Member2);
+        Assert.Null(student1.Member3);
+        Assert.Equal("4", student1.Member4);
+
+        var student2 = TestClasses.Abstract.SkippableSeveralMembersClass
+            .CreateStudent
+            .WithMember4("4");
+
+        Assert.Null(student2.Member1);
+        Assert.Null(student2.Member2);
+        Assert.Null(student2.Member3);
+        Assert.Equal("4", student2.Member4);
     }
 
     [Fact, Priority(1)]

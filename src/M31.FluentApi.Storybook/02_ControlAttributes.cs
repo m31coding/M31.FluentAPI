@@ -7,8 +7,9 @@ using M31.FluentApi.Attributes;
 
 namespace PersonExample1
 {
-    /* Control attributes allow you to jump between builder steps and finalize the object at desired stages. This
-       enables the creation of non-linear paths and calling different methods based on previously invoked methods.
+    /* Control attributes allow you to jump between builder steps, skip steps, and finalize the object at desired
+       stages. This enables the creation of non-linear paths and calling different methods based on previously invoked
+       methods.
        Consider the person model below. The address properties are nullable and will only be set if available. We want
        to distinguish three different cases:
 
@@ -187,41 +188,9 @@ namespace PersonExample3
 
 namespace PersonExample4
 {
-    /* This example demonstrates how the FluentContinueWith attribute can be used to create optional builder
-       methods. To make the middle name optional, both the middle name and last name builder methods are specified at
-       the same step, step 1. Additionally, the middle name builder method continues with step 1.
-       With this approach, the generated API offers the desired behaviour: After setting the first name, you can either
-       set the last name to complete the instance or set the middle name followed by the last name. */
-
-    [FluentApi]
-    public class Person
-    {
-        [FluentMember(0)]
-        public string FirstName { get; private set; }
-
-        [FluentMember(1)]
-        [FluentContinueWith(1)]
-        public string? MiddleName { get; private set; }
-
-        [FluentMember(1)]
-        public string LastName { get; private set; }
-    }
-
-    public static class Usage
-    {
-        public static void UseTheGeneratedFluentApi()
-        {
-            Person person2 = CreatePerson.WithFirstName("Bob").WithLastName("Bishop");
-            Person person1 = CreatePerson.WithFirstName("Alice").WithMiddleName("Sophia").WithLastName("King");
-        }
-    }
-}
-
-namespace PersonExample5
-{
-    /* Lastly, the FluentReturn attribute, which can only be used on methods, instructs the builder to return the value
-       produced by the decorated method. Without FluentReturn, FluentMethods must return void and the builder always
-       returns the interface of the next step, or, in the final step, the built instance (e.g. a Person object).
+    /* The FluentReturn attribute, which can only be used on methods, instructs the builder to return the value produced
+       by the decorated method. Without FluentReturn, FluentMethods must return void and the builder always returns the
+       interface of the next step, or, in the final step, the built instance (e.g. a Person object).
        FluentReturn allows the builder to respect the return value of the decorated method, enabling the return of
        arbitrary types and values within the generated API. If a void method is decorated with FluentReturn, the builder
        method will also return void. */
@@ -245,6 +214,36 @@ namespace PersonExample5
         public static void UseTheGeneratedFluentApi()
         {
             string serializedPerson = CreatePerson.WithName("Alice King").ToJson();
+        }
+    }
+}
+
+namespace PersonExample5
+{
+    /* Lastly, this example introduces the FluentSkippable attribute, which allows builder methods to be optional. The
+       generated API offers the following behavior: After setting the first name, you can either set the last name to
+       complete the instance or set the middle name followed by the last name. */
+
+    [FluentApi]
+    public class Person
+    {
+        [FluentMember(0)]
+        public string FirstName { get; private set; }
+
+        [FluentMember(1)]
+        [FluentSkippable]
+        public string? MiddleName { get; private set; }
+
+        [FluentMember(2)]
+        public string LastName { get; private set; }
+    }
+
+    public static class Usage
+    {
+        public static void UseTheGeneratedFluentApi()
+        {
+            Person person2 = CreatePerson.WithFirstName("Bob").WithLastName("Bishop");
+            Person person1 = CreatePerson.WithFirstName("Alice").WithMiddleName("Sophia").WithLastName("King");
         }
     }
 }

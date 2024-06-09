@@ -33,17 +33,17 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    Student IOfAgeBornOn.OfAge(int age)
-    {
-        student.Age = age;
-        return student;
-    }
-
     public static Student BornOn(System.DateOnly dateOfBirth)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.DateOfBirth = dateOfBirth;
         return createStudent.student;
+    }
+
+    Student IOfAgeBornOn.OfAge(int age)
+    {
+        student.Age = age;
+        return student;
     }
 
     Student IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)

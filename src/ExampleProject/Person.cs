@@ -13,10 +13,10 @@ public class Person
     public string FirstName { get; private set; }
 
     [FluentMember(1)]
-    [FluentContinueWith(1)]
+    [FluentSkippable]
     public string? MiddleName { get; private set; }
 
-    [FluentMember(1)]
+    [FluentMember(2)]
     public string LastName { get; private set; }
 
     public string? HouseNumber { get; private set; }
@@ -27,44 +27,44 @@ public class Person
 
     public bool IsDigitalNomad { get; private set; }
 
-    [FluentMethod(2)]
+    [FluentMethod(3)]
     [FluentBreak]
     private void WhoseAddressIsUnknown()
     {
     }
 
-    [FluentMethod(2)]
+    [FluentMethod(3)]
     private void WhoLivesAtAddress()
     {
     }
 
-        [FluentMethod(3)]
+        [FluentMethod(4)]
         private void WithHouseNumber(string houseNumber)
         {
             HouseNumber = houseNumber;
         }
 
-        [FluentMethod(4)]
+        [FluentMethod(5)]
         private void WithStreet(string street)
         {
             Street = street;
         }
 
-        [FluentMethod(5)]
+        [FluentMethod(6)]
         [FluentBreak]
         private void InCity(string city)
         {
             City = city;
         }
 
-    [FluentMethod(2)]
-    [FluentContinueWith(6)]
+    [FluentMethod(3)]
+    [FluentContinueWith(7)]
     private void WhoIsADigitalNomad()
     {
         IsDigitalNomad = true;
     }
 
-        [FluentMethod(6)]
+        [FluentMethod(7)]
         private void LivingInCity(string city)
         {
             City = city;

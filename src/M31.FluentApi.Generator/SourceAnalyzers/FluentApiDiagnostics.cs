@@ -32,6 +32,7 @@ internal static class FluentApiDiagnostics
         MissingBuilderStep.Descriptor,
         ReservedMethodName.Descriptor,
         FluentLambdaMemberWithoutFluentApi.Descriptor,
+        LastBuilderStepCannotBeSkipped.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -388,6 +389,24 @@ internal static class FluentApiDiagnostics
             Location location = attributeData.AttributeData.ApplicationSyntaxReference?
                 .GetSyntax().GetLocation() ?? Location.None;
             return Diagnostic.Create(Descriptor, location, type);
+        }
+    }
+
+    internal static class LastBuilderStepCannotBeSkipped
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA023",
+            title: "Last builder step cannot be skipped",
+            messageFormat: "The last builder step cannot be skipped",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(AttributeDataExtended attributeData)
+        {
+            Location location = attributeData.AttributeData.ApplicationSyntaxReference?
+                .GetSyntax().GetLocation() ?? Location.None;
+            return Diagnostic.Create(Descriptor, location);
         }
     }
 }

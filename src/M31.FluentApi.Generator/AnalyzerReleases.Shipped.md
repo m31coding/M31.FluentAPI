@@ -60,3 +60,12 @@ M31FA022 | M31.Usage | Error | Fluent lambda member without Fluent API
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 M31FA007 | M31.Usage | Error | Partial types are not supported
+              
+
+## Release 1.6.0
+
+### New Rules
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+M31FA023 | M31.Usage | Error | Last builder step cannot be skipped
