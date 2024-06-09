@@ -14,7 +14,7 @@ public class TarjansSccAlgorithmTests
     {
         IReadOnlyCollection<IReadOnlyCollection<Vertex>> components =
             TarjansSccAlgorithm<Vertex>.GetStronglyConnectedComponents(
-                Array.Empty<Vertex>(), v => Array.Empty<Vertex>(), false);
+                Array.Empty<Vertex>(), _ => Array.Empty<Vertex>(), false);
 
         Assert.Equal(0, components.Count);
     }
@@ -25,7 +25,7 @@ public class TarjansSccAlgorithmTests
         Vertex vertex = new Vertex(0);
         IReadOnlyCollection<IReadOnlyCollection<Vertex>> components =
             TarjansSccAlgorithm<Vertex>.GetStronglyConnectedComponents(
-                new Vertex[] { vertex }, v => Array.Empty<Vertex>(), true);
+                new Vertex[] { vertex }, _ => Array.Empty<Vertex>(), true);
 
         IReadOnlyCollection<IReadOnlyCollection<Vertex>> expectedComponents = new List<List<Vertex>>()
         {
@@ -41,7 +41,7 @@ public class TarjansSccAlgorithmTests
         Vertex vertex = new Vertex(0);
         IReadOnlyCollection<IReadOnlyCollection<Vertex>> components =
             TarjansSccAlgorithm<Vertex>.GetStronglyConnectedComponents(
-                new Vertex[] { vertex }, v => Array.Empty<Vertex>(), false);
+                new Vertex[] { vertex }, _ => Array.Empty<Vertex>(), false);
 
         Assert.Equal(0, components.Count);
     }
@@ -91,7 +91,7 @@ public class TarjansSccAlgorithmTests
             [vertexA] = new() { vertexB },
             [vertexB] = new() { vertexC },
             [vertexC] = new() { vertexA },
-            [vertexD] = new() { },
+            [vertexD] = new(),
         };
 
         IReadOnlyCollection<IReadOnlyCollection<Vertex>> components =
