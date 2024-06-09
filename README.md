@@ -25,7 +25,7 @@ PM> Install-Package M31.FluentApi
 A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentApi`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
 
 ```xml
-<PackageReference Include="M31.FluentApi" Version="1.5.0" PrivateAssets="all"/>
+<PackageReference Include="M31.FluentApi" Version="1.6.0" PrivateAssets="all"/>
 ```
 
 If you would like to examine the generated code, you may emit it by adding the following lines to your `csproj` file:
@@ -111,7 +111,7 @@ The attributes `FluentPredicate`, `FluentCollection`, and `FluentLambda` can be 
 
 The `FluentMethod` attribute is used for custom builder method implementations.
 
-The control attribute `FluentContinueWith` indicates a jump to the specified builder step, and `FluentBreak` stops the builder. `FluentReturn` allows returning arbitrary types and values within the generated API.
+The control attribute `FluentSkippable` allows builder methods to be optional, while `FluentContinueWith` indicates a jump to the specified builder step. `FluentBreak` stops the builder, and `FluentReturn` allows returning arbitrary types and values within the generated API.
 
 
 ### FluentApi
@@ -300,29 +300,59 @@ private void BornOn(DateOnly dateOfBirth)
 ```
 
 
-### FluentContinueWith
+### FluentSkippable
 
 ```cs
-FluentContinueWith(int builderStep)
+FluentSkippable()
 ```
 
-Can be used at all steps on fields, properties, and methods to jump to a specific builder step. Useful for skipping steps and branching. May be used to create optional builder methods:
+Can be used at all steps on fields, properties, and methods to create an optional builder method. The generated API will offer the method but it does not have to be called.
 
 ```cs
 [FluentMember(0)]
 public string FirstName { get; private set; }
 
 [FluentMember(1)]
-[FluentContinueWith(1)]
+[FluentSkippable]
 public string? MiddleName { get; private set; }
 
-[FluentMember(1)]
+[FluentMember(2)]
 public string LastName { get; private set; }
 ```
 
 ```cs
 ...WithFirstName("Bob").WithLastName("Bishop")...
 ...WithFirstName("Alice").WithMiddleName("Sophia").WithLastName("King")...
+```
+
+
+### FluentContinueWith
+
+```cs
+FluentContinueWith(int builderStep)
+```
+
+Can be used at all steps on fields, properties, and methods to jump to a specific builder step. Useful for branching.
+
+```cs
+[FluentMethod(3)]
+[FluentContinueWith(7)]
+private void WhoIsADigitalNomad()
+{
+    IsDigitalNomad = true;
+}
+
+// ...
+
+[FluentMethod(7)]
+private void LivingInCity(string city)
+{
+    City = city;
+}
+```
+
+```cs
+...WhoIsADigitalNomad().LivingInCity("Berlin")...
 ```
 
 
@@ -335,7 +365,7 @@ FluentBreak()
 Can be used at all steps on fields, properties, and methods to stop the builder. Only relevant for non-linear APIs that make use of `FluentContinueWith`.
 
 ```cs
-[FluentMethod(1)]
+[FluentMethod(3)]
 [FluentBreak]
 private void WhoseAddressIsUnknown()
 {
