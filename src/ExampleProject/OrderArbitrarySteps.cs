@@ -14,15 +14,15 @@ public class Order2
 {
     [FluentMember(0)]
     [FluentContinueWith(0)]
-    public int Number { get; private set; }
+    public int? Number { get; private set; }
 
     [FluentMember(0, "{Name}")]
     [FluentContinueWith(0)]
-    public DateTime CreatedOn { get; private set; }
+    public DateTime? CreatedOn { get; private set; }
 
     [FluentLambda(0, "ShippedTo")]
     [FluentContinueWith(0)]
-    public Address2 ShippingAddress { get; private set; }
+    public Address2? ShippingAddress { get; private set; }
 
     [FluentMethod(0)]
     private void Build()
@@ -56,6 +56,10 @@ public class Address2
     [FluentMethod(0)]
     private void Build()
     {
+        Street ??= "N/A";
+        City ??= "N/A";
+        Zip ??= "N/A";
         State ??= "N/A";
+        Country ??= "N/A";
     }
 }
