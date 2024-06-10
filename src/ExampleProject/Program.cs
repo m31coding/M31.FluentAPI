@@ -24,6 +24,41 @@ Console.WriteLine(JsonSerializer.Serialize(person1));
 Console.WriteLine(JsonSerializer.Serialize(person2));
 Console.WriteLine(JsonSerializer.Serialize(person3));
 
+// Order (forced steps)
+//
+// Example from https://youtu.be/qCIr30WxJQw?si=FRALafrpA1zWACA8.
+//
+
+Order order = CreateOrder
+    .WithNumber(10)
+    .CreatedOn(DateTime.UtcNow)
+    .ShippedTo(a => a
+        .Street("street")
+        .City("city")
+        .Zip("zip")
+        .DefaultState()
+        .Country("country"));
+
+Console.WriteLine(JsonSerializer.Serialize(order));
+
+// Order (arbitrary steps)
+//
+// Example from https://youtu.be/qCIr30WxJQw?si=FRALafrpA1zWACA8.
+//
+
+Order2 order2 = CreateOrder2
+    .CreatedOn(DateTime.UtcNow)
+    .ShippedTo(a => a
+        .Country("country")
+        .Street("street")
+        .Zip("zip")
+        .City("city")
+        .Build())
+    .WithNumber(10)
+    .Build();
+
+Console.WriteLine(JsonSerializer.Serialize(order2));
+
 // HashCode
 //
 

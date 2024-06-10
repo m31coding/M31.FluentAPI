@@ -50,6 +50,7 @@ Moreover, you may find several Fluent API examples and their [usage](src/Example
 
 - [Student](src/ExampleProject/Student.cs)
 - [Person](src/ExampleProject/Person.cs)
+- [Order](src/ExampleProject/Order.cs)
 - [HashCode](src/ExampleProject/HashCode.cs)
 - [Node](src/ExampleProject/Node.cs)
 - [DockerFile](src/ExampleProject/DockerFile.cs)
