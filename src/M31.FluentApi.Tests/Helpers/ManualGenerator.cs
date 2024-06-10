@@ -45,7 +45,7 @@ internal static class ManualGenerator
     {
         CSharpCompilation compilation = GetCompilation(sourceCode);
         SourceGenerator generator = new SourceGenerator();
-        SourceGenerator.GeneratorConfig.NewLineString = "\n";
+        SourceGenerator.GeneratorConfig.NewLineString = Environment.NewLine;
 
         CSharpGeneratorDriver.Create(generator)
             .RunGeneratorsAndUpdateCompilation(compilation,
