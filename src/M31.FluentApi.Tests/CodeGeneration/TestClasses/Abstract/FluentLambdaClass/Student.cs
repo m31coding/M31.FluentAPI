@@ -12,6 +12,6 @@ public class Student
     [FluentMember(0)]
     public string Name { get; set; }
 
-    [FluentLambda(1)]
+    [FluentMember(1)]
     public Address Address { get; set; }
 }

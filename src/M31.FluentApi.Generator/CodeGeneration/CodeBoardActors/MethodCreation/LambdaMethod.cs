@@ -23,9 +23,23 @@ internal class LambdaMethod : IBuilderMethodCreator
         BuilderMethod memberBuilderMethod =
             methodCreator.CreateMethod(SymbolInfo, LambdaAttributeInfo.FluentMethodName);
 
-        string builderType = LambdaAttributeInfo.BuilderInfo.BuilderTypeForCodeGeneration;
-        string builderInstanceName = LambdaAttributeInfo.BuilderInfo.BuilderInstanceName;
-        string initialStepInterfaceName = LambdaAttributeInfo.BuilderInfo.InitialStepInterfaceName;
+        BuilderMethod lambdaBuilderMethod = CreateLambdaBuilderMethod(
+            methodCreator, LambdaAttributeInfo.Method, SymbolInfo, LambdaAttributeInfo.BuilderInfo);
+
+        return new BuilderMethods(
+            new List<BuilderMethod>() { memberBuilderMethod, lambdaBuilderMethod },
+            new HashSet<string>() { "System" });
+    }
+
+    public static BuilderMethod CreateLambdaBuilderMethod(
+        MethodCreator methodCreator,
+        string method,
+        MemberSymbolInfo symbolInfo,
+        LambdaBuilderInfo lambdaBuilderInfo)
+    {
+        string builderType = lambdaBuilderInfo.BuilderTypeForCodeGeneration;
+        string builderInstanceName = lambdaBuilderInfo.BuilderInstanceName;
+        string initialStepInterfaceName = lambdaBuilderInfo.InitialStepInterfaceName;
 
         // createAddress(Func<CreateAddress.ICreateAddress, Address> address)
         // {
@@ -34,16 +48,13 @@ internal class LambdaMethod : IBuilderMethodCreator
         Parameter parameter =
             new Parameter(
                 $"Func<{builderType}.{initialStepInterfaceName}, " +
-                $"{SymbolInfo.TypeForCodeGeneration}>",
+                $"{symbolInfo.TypeForCodeGeneration}>",
                 builderInstanceName);
-        BuilderMethod lambdaBuilderMethod = methodCreator.CreateMethodWithComputedValue(
-            SymbolInfo,
-            LambdaAttributeInfo.Method,
+
+        return methodCreator.CreateMethodWithComputedValue(
+            symbolInfo,
+            method,
             parameter,
             p => $"{p}({builderType}.InitialStep())");
-
-        return new BuilderMethods(
-            new List<BuilderMethod>() { memberBuilderMethod, lambdaBuilderMethod },
-            new HashSet<string>() { "System" });
     }
 }
