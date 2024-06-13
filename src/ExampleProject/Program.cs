@@ -67,19 +67,6 @@ int hashCode = CreateHashCode
 
 Console.WriteLine(hashCode);
 
-// Node
-//
-
-Node<int> tree = CreateTree<int>.Root(8)
-    .Left(3, n => n
-        .Left(1)
-        .Right(6))
-    .Right(10, n => n
-        .LeftNull()
-        .Right(14));
-
-Console.WriteLine(JsonSerializer.Serialize(tree));
-
 // Docker file
 //
 // Example from https://mitesh1612.github.io/blog/2021/08/11/how-to-design-fluent-api.
@@ -95,3 +82,31 @@ string dockerFile = CreateDockerFile
     .ToString();
 
 Console.WriteLine(dockerFile);
+
+// Employee
+//
+// Example from https://stackoverflow.com/questions/59021513/using-fluent-interface-with-builder-pattern.
+//
+
+Employee employee = CreateEmployee
+    .WithName("My Name")
+    .WithPhone(
+        p => p.WithNumber("222-222-2222").WithUsage("CELL"))
+    .WithJobs(
+        j => j.WithCompanyName("First Company").WithSalary(100),
+        j => j.WithCompanyName("Second Company").WithSalary(200));
+
+Console.WriteLine(JsonSerializer.Serialize(employee));
+
+// Node
+//
+
+Node<int> tree = CreateTree<int>.Root(8)
+    .Left(3, n => n
+        .Left(1)
+        .Right(6))
+    .Right(10, n => n
+        .LeftNull()
+        .Right(14));
+
+Console.WriteLine(JsonSerializer.Serialize(tree));
