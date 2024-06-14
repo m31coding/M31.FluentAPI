@@ -57,6 +57,26 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaCollectionClass()
+    {
+        var student = TestClasses.Abstract.FluentLambdaCollectionClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddresses(
+                a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"),
+                a => a.WithHouseNumber("111").WithStreet("5th Avenue").InCity("New York"));
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(2, student.Addresses.Count);
+        Assert.Equal("23", student.Addresses[0].HouseNumber);
+        Assert.Equal("Market Street", student.Addresses[0].Street);
+        Assert.Equal("San Francisco", student.Addresses[0].City);
+        Assert.Equal("111", student.Addresses[1].HouseNumber);
+        Assert.Equal("5th Avenue", student.Addresses[1].Street);
+        Assert.Equal("New York", student.Addresses[1].City);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaCompoundClass()
     {
         var student = TestClasses.Abstract.FluentLambdaCompoundClass
