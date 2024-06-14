@@ -27,6 +27,4 @@ internal class ArrayCreator : CollectionMethodCreator
     {
         return $"new {genericTypeArgument}[0]";
     }
-
-    internal override IReadOnlyCollection<string> RequiredUsings => Array.Empty<string>();
 }

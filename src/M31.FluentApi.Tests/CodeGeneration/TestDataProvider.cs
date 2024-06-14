@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(new string[] { },
+        Filter(new string[] { "FluentLambdaCollectionClass" },
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -24,6 +24,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "FluentDefaultMemberClass", "Student" },
                 new object[] { "Abstract", "FluentLambdaClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaClassInDifferentNamespace", "Student|Address" },
+                new object[] { "Abstract", "FluentLambdaCollectionClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaCompoundClass", "Student|Address|Phone" },
                 new object[] { "Abstract", "FluentLambdaCompoundOfSameTypeClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaNullablePropertyClass", "Student|Address" },

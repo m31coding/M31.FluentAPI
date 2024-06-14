@@ -11,6 +11,7 @@ internal class ListCreator : CollectionMethodCreator
         MemberSymbolInfo symbolInfo)
         : base(collectionAttributeInfo, genericTypeArgument, symbolInfo)
     {
+        RequiredUsings.Add("System.Collections.Generic");
     }
 
     protected override string CreateCollectionFromArray(string genericTypeArgument, string arrayParameter)
@@ -27,6 +28,4 @@ internal class ListCreator : CollectionMethodCreator
     {
         return $"new List<{genericTypeArgument}>(0)";
     }
-
-    internal override IReadOnlyCollection<string> RequiredUsings => new string[] { "System.Collections.Generic" };
 }

@@ -44,10 +44,12 @@ internal class CollectionMethods : IBuilderMethodCreator
             collectionMethodCreator.CreateWithItemsMethod(methodCreator),
             collectionMethodCreator.CreateWithItemsParamsMethod(methodCreator),
             collectionMethodCreator.CreateWithItemMethod(methodCreator),
+            collectionMethodCreator.CreateWithItemLambdaMethod(methodCreator),
             collectionMethodCreator.CreateWithZeroItemsMethod(methodCreator),
         };
 
-        return new BuilderMethods(builderMethods.OfType<BuilderMethod>().ToList(),
-            new HashSet<string>(collectionMethodCreator.RequiredUsings));
+        return new BuilderMethods(
+            builderMethods.OfType<BuilderMethod>().ToList(),
+            collectionMethodCreator.RequiredUsings);
     }
 }

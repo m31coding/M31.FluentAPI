@@ -55,6 +55,30 @@ internal abstract class CollectionMethodCreator
             p => CreateCollectionFromSingleItem(genericTypeArgument, p));
     }
 
+    internal BuilderMethod? CreateWithItemLambdaMethod(MethodCreator methodCreator)
+    {
+        if (collectionAttributeInfo.LambdaBuilderInfo == null)
+        {
+            return null;
+        }
+
+        ComputeValueCode lambdaCode = LambdaMethod.GetComputeValueCode(
+            symbolInfo.CollectionType!.GenericTypeArgument,
+            collectionAttributeInfo.SingularNameInCamelCase,
+            symbolInfo.Name,
+            collectionAttributeInfo.LambdaBuilderInfo);
+
+        ComputeValueCode computeValueCode = ComputeValueCode.Create(
+            lambdaCode.TargetMember,
+            lambdaCode.Parameter!,
+            _ => CreateCollectionFromSingleItem(genericTypeArgument, lambdaCode.Code));
+
+        RequiredUsings.Add("System");
+
+        return methodCreator.BuilderMethodFactory.CreateBuilderMethod(collectionAttributeInfo.WithItem,
+            computeValueCode);
+    }
+
     internal BuilderMethod CreateWithZeroItemsMethod(MethodCreator methodCreator)
     {
         string collectionWithZeroItemsCode = CreateCollectionWithZeroItems(genericTypeArgument);
@@ -67,5 +91,5 @@ internal abstract class CollectionMethodCreator
     protected abstract string CreateCollectionFromArray(string genericTypeArgument, string arrayParameter);
     protected abstract string CreateCollectionFromSingleItem(string genericTypeArgument, string itemParameter);
     protected abstract string CreateCollectionWithZeroItems(string genericTypeArgument);
-    internal abstract IReadOnlyCollection<string> RequiredUsings { get; }
+    internal HashSet<string> RequiredUsings { get; } = new HashSet<string>();
 }
