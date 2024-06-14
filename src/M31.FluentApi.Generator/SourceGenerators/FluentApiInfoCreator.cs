@@ -141,17 +141,8 @@ internal class FluentApiInfoCreator
 
     private LambdaBuilderInfo? TryGetLambdaBuilderInfoOfCollectionType(FluentApiSymbolInfo symbolInfo)
     {
-        if (symbolInfo is not MemberSymbolInfo memberSymbolInfo)
-        {
-            throw new GenerationException("Expected a member symbol info.");
-        }
-
-        if (memberSymbolInfo.CollectionType == null)
-        {
-            throw new GenerationException("Expected a collection type.");
-        }
-
-        if (memberSymbolInfo.CollectionType.GenericTypeSymbol == null)
+        if (symbolInfo is not MemberSymbolInfo memberSymbolInfo ||
+            memberSymbolInfo.CollectionType?.GenericTypeSymbol == null)
         {
             return null;
         }
