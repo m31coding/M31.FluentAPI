@@ -37,24 +37,32 @@ internal class LambdaMethod : IBuilderMethodCreator
         MemberSymbolInfo symbolInfo,
         LambdaBuilderInfo lambdaBuilderInfo)
     {
+        ComputeValueCode computeValueCode = GetComputeValueCode(symbolInfo, lambdaBuilderInfo);
+        return methodCreator.BuilderMethodFactory.CreateBuilderMethod(method, computeValueCode);
+    }
+
+    private static Parameter GetParameter(MemberSymbolInfo symbolInfo, LambdaBuilderInfo lambdaBuilderInfo)
+    {
         string builderType = lambdaBuilderInfo.BuilderTypeForCodeGeneration;
         string builderInstanceName = lambdaBuilderInfo.BuilderInstanceName;
         string initialStepInterfaceName = lambdaBuilderInfo.InitialStepInterfaceName;
 
+        // Func<CreateAddress.ICreateAddress, Address> address
+        return new Parameter(
+            $"Func<{builderType}.{initialStepInterfaceName}, " +
+            $"{symbolInfo.TypeForCodeGeneration}>",
+            builderInstanceName);
+    }
+
+    public static ComputeValueCode GetComputeValueCode(MemberSymbolInfo symbolInfo, LambdaBuilderInfo lambdaBuilderInfo)
+    {
         // createAddress(Func<CreateAddress.ICreateAddress, Address> address)
         // {
         //     student.Address = address(CreateAddress.InitialStep());
         // }
-        Parameter parameter =
-            new Parameter(
-                $"Func<{builderType}.{initialStepInterfaceName}, " +
-                $"{symbolInfo.TypeForCodeGeneration}>",
-                builderInstanceName);
-
-        return methodCreator.CreateMethodWithComputedValue(
-            symbolInfo,
-            method,
-            parameter,
-            p => $"{p}({builderType}.InitialStep())");
+        string builderType = lambdaBuilderInfo.BuilderTypeForCodeGeneration;
+        Parameter parameter = GetParameter(symbolInfo, lambdaBuilderInfo);
+        string BuildCodeWithParameter(string p) => $"{p}({builderType}.InitialStep())";
+        return ComputeValueCode.Create(symbolInfo.Name, parameter, BuildCodeWithParameter);
     }
 }
