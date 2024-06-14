@@ -11,7 +11,8 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
         string singularName,
         string withItems,
         string withItem,
-        string withZeroItems)
+        string withZeroItems,
+        LambdaBuilderInfo? lambdaBuilderInfo)
         : base(builderStep)
     {
         SingularName = singularName;
@@ -19,6 +20,7 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
         WithItems = withItems;
         WithItem = withItem;
         WithZeroItems = withZeroItems;
+        LambdaBuilderInfo = lambdaBuilderInfo;
     }
 
     internal string SingularName { get; }
@@ -26,9 +28,13 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
     internal string WithItems { get; }
     internal string WithItem { get; }
     internal string WithZeroItems { get; }
+    internal LambdaBuilderInfo? LambdaBuilderInfo { get; }
     internal override string FluentMethodName => WithItems;
 
-    internal static FluentCollectionAttributeInfo Create(AttributeData attributeData, string memberName)
+    internal static FluentCollectionAttributeInfo Create(
+        AttributeData attributeData,
+        string memberName,
+        LambdaBuilderInfo? lambdaBuilderInfo)
     {
         (int builderStep, string singularName, string withItems, string withItem, string withZeroItems) =
             attributeData.GetConstructorArguments<int, string, string, string, string>();
@@ -37,6 +43,7 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
         withItem = NameCreator.CreateName(withItem, memberName, singularName);
         withZeroItems = NameCreator.CreateName(withZeroItems, memberName, singularName);
 
-        return new FluentCollectionAttributeInfo(builderStep, singularName, withItems, withItem, withZeroItems);
+        return new FluentCollectionAttributeInfo(
+            builderStep, singularName, withItems, withItem, withZeroItems, lambdaBuilderInfo);
     }
 }

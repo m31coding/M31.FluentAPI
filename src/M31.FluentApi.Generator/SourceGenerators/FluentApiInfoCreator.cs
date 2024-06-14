@@ -19,8 +19,8 @@ internal class FluentApiInfoCreator
 
     internal FluentApiInfo? Create(ISymbol symbol, FluentApiAttributeData attributeData)
     {
-        AttributeInfoBase? attributeInfo =
-            CreateAttributeInfo(attributeData.MainAttributeData, symbol);
+        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
+        AttributeInfoBase? attributeInfo = CreateAttributeInfo(attributeData.MainAttributeData, symbol, symbolInfo);
 
         if (attributeInfo == null)
         {
@@ -40,7 +40,6 @@ internal class FluentApiInfoCreator
         FluentReturnAttributeInfo? fluentReturnAttributeInfo = controlDataAndInfos.Select(d => d.info)
             .OfType<FluentReturnAttributeInfo>().FirstOrDefault();
 
-        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
         FluentApiAdditionalInfo additionalInfo = new FluentApiAdditionalInfo(
             symbol,
             attributeData.MainAttributeData,
@@ -68,7 +67,10 @@ internal class FluentApiInfoCreator
         return dataAndInfoArray.Select(dataAndInfo => dataAndInfo.info).ToList();
     }
 
-    private AttributeInfoBase? CreateAttributeInfo(AttributeDataExtended attributeData, ISymbol symbol)
+    private AttributeInfoBase? CreateAttributeInfo(
+        AttributeDataExtended attributeData,
+        ISymbol symbol,
+        FluentApiSymbolInfo symbolInfo)
     {
         string memberName = symbol.Name;
 
@@ -79,7 +81,7 @@ internal class FluentApiInfoCreator
             FullNames.FluentPredicateAttribute =>
                 FluentPredicateAttributeInfo.Create(attributeData.AttributeData, memberName),
             FullNames.FluentCollectionAttribute =>
-                FluentCollectionAttributeInfo.Create(attributeData.AttributeData, memberName),
+                CreateFluentCollectionAttributeInfo(attributeData.AttributeData, memberName, symbolInfo),
             FullNames.FluentLambdaAttribute =>
                 CreateFluentLambdaAttributeInfo(attributeData, memberName, symbol),
             FullNames.FluentMethodAttribute =>
@@ -126,6 +128,35 @@ internal class FluentApiInfoCreator
         ITypeSymbol typeSymbol = GetTypeSymbol(symbol);
         LambdaBuilderInfo? lambdaBuilderInfo = TryGetLambdaBuilderInfo(typeSymbol);
         return FluentMemberAttributeInfo.Create(attributeData, memberName, lambdaBuilderInfo);
+    }
+
+    private FluentCollectionAttributeInfo CreateFluentCollectionAttributeInfo(
+        AttributeData attributeData,
+        string memberName,
+        FluentApiSymbolInfo symbolInfo)
+    {
+        LambdaBuilderInfo? lambdaBuilderInfo = TryGetLambdaBuilderInfoOfCollectionType(symbolInfo);
+        return FluentCollectionAttributeInfo.Create(attributeData, memberName, lambdaBuilderInfo);
+    }
+
+    private LambdaBuilderInfo? TryGetLambdaBuilderInfoOfCollectionType(FluentApiSymbolInfo symbolInfo)
+    {
+        if (symbolInfo is not MemberSymbolInfo memberSymbolInfo)
+        {
+            throw new GenerationException("Expected a member symbol info.");
+        }
+
+        if (memberSymbolInfo.CollectionType == null)
+        {
+            throw new GenerationException("Expected a collection type.");
+        }
+
+        if (memberSymbolInfo.CollectionType.GenericTypeSymbol == null)
+        {
+            return null;
+        }
+
+        return TryGetLambdaBuilderInfo(memberSymbolInfo.CollectionType.GenericTypeSymbol);
     }
 
     private FluentLambdaAttributeInfo? CreateFluentLambdaAttributeInfo(
