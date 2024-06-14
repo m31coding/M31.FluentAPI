@@ -25,6 +25,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "FluentLambdaClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaClassInDifferentNamespace", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaCompoundClass", "Student|Address|Phone" },
+                new object[] { "Abstract", "FluentLambdaCompoundOfSameTypeClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaNullablePropertyClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaRecursiveClass", "Student" },
                 new object[] { "Abstract", "FluentLambdaSingleStepClass", "Student|Address" },

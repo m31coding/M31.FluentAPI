@@ -1,6 +1,7 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
@@ -41,17 +42,19 @@ internal class LambdaMethod : IBuilderMethodCreator
         return methodCreator.BuilderMethodFactory.CreateBuilderMethod(method, computeValueCode);
     }
 
-    private static Parameter GetParameter(MemberSymbolInfo symbolInfo, LambdaBuilderInfo lambdaBuilderInfo)
+    private static Parameter GetParameter(
+        MemberSymbolInfo symbolInfo,
+        LambdaBuilderInfo lambdaBuilderInfo)
     {
         string builderType = lambdaBuilderInfo.BuilderTypeForCodeGeneration;
-        string builderInstanceName = lambdaBuilderInfo.BuilderInstanceName;
         string initialStepInterfaceName = lambdaBuilderInfo.InitialStepInterfaceName;
+        string parameterName = $"create{symbolInfo.NameInCamelCase.FirstCharToUpper()}";
 
         // Func<CreateAddress.ICreateAddress, Address> address
         return new Parameter(
             $"Func<{builderType}.{initialStepInterfaceName}, " +
             $"{symbolInfo.TypeForCodeGeneration}>",
-            builderInstanceName);
+            parameterName);
     }
 
     public static ComputeValueCode GetComputeValueCode(MemberSymbolInfo symbolInfo, LambdaBuilderInfo lambdaBuilderInfo)

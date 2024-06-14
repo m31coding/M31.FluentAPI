@@ -46,9 +46,9 @@ public class CreateStudent :
         return student;
     }
 
-    Student IWithFriend.WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent)
+    Student IWithFriend.WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createFriend)
     {
-        student.Friend = createStudent(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.InitialStep());
+        student.Friend = createFriend(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.InitialStep());
         return student;
     }
 
@@ -71,7 +71,7 @@ public class CreateStudent :
     {
         Student WithFriend(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student? friend);
 
-        Student WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createStudent);
+        Student WithFriend(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.CreateStudent.ICreateStudent, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaRecursiveClass.Student?> createFriend);
 
         Student WithoutFriend();
     }
