@@ -7,7 +7,7 @@
 
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass2;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass;
 
 public class CreateAddress :
     CreateAddress.ICreateAddress,

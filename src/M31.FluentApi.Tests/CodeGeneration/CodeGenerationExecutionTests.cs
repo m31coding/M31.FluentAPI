@@ -77,18 +77,6 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
-    public void CanExecuteFluentLambdaCollectionClass2()
-    {
-        var student = TestClasses.Abstract.FluentLambdaCollectionClass2
-            .CreateStudent
-            .WithName("Alice")
-            .WithAddressesD(createAddressesD: null);
-
-        Assert.Equal("Alice", student.Name);
-        Assert.Null(student.AddressesD);
-    }
-
-    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaCompoundClass()
     {
         var student = TestClasses.Abstract.FluentLambdaCompoundClass
@@ -104,6 +92,82 @@ public partial class CodeGenerationTests
         Assert.Equal("San Francisco", student.Address.City);
         Assert.Equal("222-222-2222", student.Phone.Number);
         Assert.Equal("CELL", student.Phone.Usage);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaManyCollectionsClass()
+    {
+        var student1 = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesD(createAddressesD: null);
+
+        Assert.Equal("Alice", student1.Name);
+        Assert.Null(student1.AddressesD);
+
+        var student2 = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesF(createAddressesF: _ => null);
+
+        Assert.Single(student2.AddressesF);
+        Assert.Null(student2.AddressesF[0]);
+
+        var student3 = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesG(createAddressesG: null);
+
+        Assert.Equal("Alice", student3.Name);
+        Assert.Null(student3.AddressesG);
+
+        var student4 = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesG(createAddressesG: _ => null);
+
+        Assert.Equal("Alice", student4.Name);
+        Assert.NotNull(student4.AddressesG);
+        Assert.Single(student4.AddressesG!);
+        Assert.Null(student4.AddressesG![0]);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaManyPrivateCollectionsClass()
+    {
+        var student1 = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesD(createAddressesD: null);
+
+        Assert.Equal("Alice", student1.Name);
+        Assert.Null(student1.AddressesD);
+
+        var student2 = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesF(createAddressesF: _ => null);
+
+        Assert.Single(student2.AddressesF);
+        Assert.Null(student2.AddressesF[0]);
+
+        var student3 = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesG(createAddressesG: null);
+
+        Assert.Equal("Alice", student3.Name);
+        Assert.Null(student3.AddressesG);
+
+        var student4 = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesG(createAddressesG: _ => null);
+
+        Assert.Equal("Alice", student4.Name);
+        Assert.NotNull(student4.AddressesG);
+        Assert.Single(student4.AddressesG!);
+        Assert.Null(student4.AddressesG![0]);
     }
 
     [Fact, Priority(1)]

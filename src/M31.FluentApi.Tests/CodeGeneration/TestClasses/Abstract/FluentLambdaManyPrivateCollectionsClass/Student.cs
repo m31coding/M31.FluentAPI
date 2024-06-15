@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass2;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass;
 
 [FluentApi]
 public class Student
@@ -27,4 +27,10 @@ public class Student
 
     [FluentCollection(1, "AddressE")]
     public HashSet<Address> AddressesE { get; private set; }
+
+    [FluentCollection(1, "AddressF")]
+    public Address?[] AddressesF { get; private set; }
+
+    [FluentCollection(1, "AddressG")]
+    public Address?[]? AddressesG { get; private set; }
 }
