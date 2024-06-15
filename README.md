@@ -14,6 +14,17 @@ The generated code follows the builder design pattern and allows you to construc
 
 Accompanying blog post: [www.m31coding.com>blog>fluent-api](https://www.m31coding.com/blog/fluent-api.html)
 
+## Features
+          
+- Builder code generation controlled by attributes
+- Stepwise object construction
+- Special handling for boolean, collection, and nullable members
+- Custom builder methoods
+- Optional (skippable) builder methods
+- Forking and branching capabilities
+- Support for returning arbitrary types
+- Support for generics and partial classes
+
 ## Installing via NuGet
 
 Install the latest version of the package `M31.FluentApi` via your IDE or use the package manager console:
@@ -457,3 +468,7 @@ In particular, if your IDE visually indicates that there are errors in your code
 This library is free. If you find it valuable and wish to express your support, please leave a star. You are kindly invited to contribute. If you see the possibility for enhancement, please create a GitHub issue and you will receive timely feedback.
 
 Happy coding!
+
+## Acknowledgements
+
+Special thanks to Viktor Prickartz ([vzam](https://github.com/vzam)) for his significant contributions to feature design.
