@@ -21,7 +21,7 @@ internal class ArrayCreator : CollectionMethodCreator
 
     protected override string CreateCollectionFromEnumerable(string genericTypeArgument, string enumerableParameter)
     {
-        return $"{enumerableParameter}.ToArray();";
+        return $"{enumerableParameter}.ToArray()";
     }
 
     protected override string CreateCollectionFromSingleItem(string genericTypeArgument, string itemParameter)
