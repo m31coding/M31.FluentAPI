@@ -11,7 +11,6 @@ internal class ArrayCreator : CollectionMethodCreator
         MemberSymbolInfo symbolInfo)
         : base(collectionAttributeInfo, genericTypeArgument, symbolInfo)
     {
-        RequiredUsings.Add("System.Linq");
     }
 
     protected override string CreateCollectionFromArray(string genericTypeArgument, string arrayParameter)
@@ -21,6 +20,7 @@ internal class ArrayCreator : CollectionMethodCreator
 
     protected override string CreateCollectionFromEnumerable(string genericTypeArgument, string enumerableParameter)
     {
+        RequiredUsings.Add("System.Linq");
         return $"{enumerableParameter}.ToArray()";
     }
 
