@@ -468,7 +468,3 @@ In particular, if your IDE visually indicates that there are errors in your code
 This library is free. If you find it valuable and wish to express your support, please leave a star. You are kindly invited to contribute. If you see the possibility for enhancement, please create a GitHub issue and you will receive timely feedback.
 
 Happy coding!
-
-## Acknowledgements
-
-Special thanks to Viktor Prickartz ([vzam](https://github.com/vzam)) for his significant contributions to feature design.
