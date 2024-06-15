@@ -43,6 +43,7 @@ internal class CollectionMethods : IBuilderMethodCreator
         {
             collectionMethodCreator.CreateWithItemsMethod(methodCreator),
             collectionMethodCreator.CreateWithItemsParamsMethod(methodCreator),
+            collectionMethodCreator.CreateWithItemsLambdaParamsMethod(methodCreator),
             collectionMethodCreator.CreateWithItemMethod(methodCreator),
             collectionMethodCreator.CreateWithItemLambdaMethod(methodCreator),
             collectionMethodCreator.CreateWithZeroItemsMethod(methodCreator),

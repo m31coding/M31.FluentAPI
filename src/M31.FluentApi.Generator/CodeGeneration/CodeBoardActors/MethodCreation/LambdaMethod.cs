@@ -42,23 +42,28 @@ internal class LambdaMethod : IBuilderMethodCreator
         return methodCreator.BuilderMethodFactory.CreateBuilderMethod(methodName, computeValueCode);
     }
 
-    private static Parameter GetParameter(
-        string typeForCodeGeneration,
+    internal static Parameter GetParameter(
+        string parameterType,
         string parameterName,
         LambdaBuilderInfo lambdaBuilderInfo)
     {
         string builderType = lambdaBuilderInfo.BuilderTypeForCodeGeneration;
         string initialStepInterfaceName = lambdaBuilderInfo.InitialStepInterfaceName;
-        string fullParameterName = $"create{parameterName.FirstCharToUpper()}";
+        string fullParameterName = GetFullParameterName(parameterName);
 
         // Func<CreateAddress.ICreateAddress, Address> address
         return new Parameter(
             $"Func<{builderType}.{initialStepInterfaceName}, " +
-            $"{typeForCodeGeneration}>",
+            $"{parameterType}>",
             fullParameterName);
     }
 
-    public static ComputeValueCode GetComputeValueCode(
+    internal static string GetFullParameterName(string parameterName)
+    {
+        return $"create{parameterName.FirstCharToUpper()}";
+    }
+
+    internal static ComputeValueCode GetComputeValueCode(
         MemberSymbolInfo symbolInfo,
         LambdaBuilderInfo lambdaBuilderInfo)
     {
@@ -66,7 +71,7 @@ internal class LambdaMethod : IBuilderMethodCreator
             symbolInfo.TypeForCodeGeneration, symbolInfo.NameInCamelCase, symbolInfo.Name, lambdaBuilderInfo);
     }
 
-    public static ComputeValueCode GetComputeValueCode(
+    internal static ComputeValueCode GetComputeValueCode(
         string parameterType,
         string parameterName,
         string targetMember,

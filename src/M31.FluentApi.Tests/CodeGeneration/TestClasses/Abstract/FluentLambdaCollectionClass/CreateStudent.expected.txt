@@ -93,7 +93,7 @@ public class CreateStudent :
 
         Student WithAddresses(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address[] addresses);
 
-        Student WithAddresses(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.CreateAddress.ICreateAddress,M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address>[] createAddresses);
+        Student WithAddresses(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address>[] createAddresses);
 
         Student WithAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address address);
 

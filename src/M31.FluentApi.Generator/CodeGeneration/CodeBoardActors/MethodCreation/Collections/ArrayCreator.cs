@@ -11,11 +11,17 @@ internal class ArrayCreator : CollectionMethodCreator
         MemberSymbolInfo symbolInfo)
         : base(collectionAttributeInfo, genericTypeArgument, symbolInfo)
     {
+        RequiredUsings.Add("System.Linq");
     }
 
     protected override string CreateCollectionFromArray(string genericTypeArgument, string arrayParameter)
     {
         return arrayParameter;
+    }
+
+    protected override string CreateCollectionFromEnumerable(string genericTypeArgument, string enumerableParameter)
+    {
+        return $"{enumerableParameter}.ToArray();";
     }
 
     protected override string CreateCollectionFromSingleItem(string genericTypeArgument, string itemParameter)

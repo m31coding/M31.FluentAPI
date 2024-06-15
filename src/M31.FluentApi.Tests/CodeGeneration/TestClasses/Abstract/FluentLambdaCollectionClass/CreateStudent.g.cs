@@ -8,6 +8,7 @@
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
 using System;
+using System.Linq;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass;
 
@@ -53,6 +54,12 @@ public class CreateStudent :
         return student;
     }
 
+    Student IWithAddresses.WithAddresses(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address>[] createAddresses)
+    {
+        student.Addresses = new List<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address>(createAddresses.Select(createAddress => createAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.CreateAddress.InitialStep())));
+        return student;
+    }
+
     Student IWithAddresses.WithAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address address)
     {
         student.Addresses = new List<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address>(1){ address };
@@ -85,6 +92,8 @@ public class CreateStudent :
         Student WithAddresses(System.Collections.Generic.List<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address> addresses);
 
         Student WithAddresses(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address[] addresses);
+
+        Student WithAddresses(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address>[] createAddresses);
 
         Student WithAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCollectionClass.Address address);
 

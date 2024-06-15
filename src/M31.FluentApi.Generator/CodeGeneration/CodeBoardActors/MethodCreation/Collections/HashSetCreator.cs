@@ -16,7 +16,12 @@ internal class HashSetCreator : CollectionMethodCreator
 
     protected override string CreateCollectionFromArray(string genericTypeArgument, string arrayParameter)
     {
-        return $"new HashSet<{genericTypeArgument}>({arrayParameter})";
+        return CreateCollectionFromEnumerable(genericTypeArgument, arrayParameter);
+    }
+
+    protected override string CreateCollectionFromEnumerable(string genericTypeArgument, string enumerableParameter)
+    {
+        return $"new HashSet<{genericTypeArgument}>({enumerableParameter})";
     }
 
     protected override string CreateCollectionFromSingleItem(string genericTypeArgument, string itemParameter)
