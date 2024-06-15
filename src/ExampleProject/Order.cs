@@ -18,7 +18,7 @@ public class Order
     [FluentMember(1, "{Name}")]
     public DateTime CreatedOn { get; private set; }
 
-    [FluentLambda(2, "ShippedTo")]
+    [FluentMember(2, "ShippedTo")]
     public Address ShippingAddress { get; private set; }
 }
 
