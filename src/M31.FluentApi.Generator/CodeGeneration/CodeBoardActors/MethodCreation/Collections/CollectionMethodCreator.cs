@@ -62,8 +62,8 @@ internal abstract class CollectionMethodCreator
             symbolInfo.Name,
             collectionAttributeInfo.LambdaBuilderInfo);
 
-        string parameterType = symbolInfo.IsNullable ?
-            $"{lambdaCode.Parameter!.Type}[]?" : $"{lambdaCode.Parameter!.Type}[]";
+        string questionMarkIfNullable = symbolInfo.IsNullable ? "?" : string.Empty;
+        string parameterType = $"{lambdaCode.Parameter!.Type}[]{questionMarkIfNullable}";
         string parameterName = LambdaMethod.GetFullParameterName(symbolInfo.NameInCamelCase);
 
         Parameter parameter = new Parameter(
@@ -78,7 +78,7 @@ internal abstract class CollectionMethodCreator
             parameter,
             p => CreateCollectionFromEnumerable(
                 genericTypeArgument,
-                $"{p}.Select({lambdaCode.Parameter!.Name} => {lambdaCode.Code})"));
+                $"{p}{questionMarkIfNullable}.Select({lambdaCode.Parameter!.Name} => {lambdaCode.Code})"));
 
         RequiredUsings.Add("System");
         RequiredUsings.Add("System.Linq");

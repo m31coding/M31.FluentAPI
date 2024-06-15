@@ -19,7 +19,8 @@ Accompanying blog post: [www.m31coding.com>blog>fluent-api](https://www.m31codin
 - Builder code generation controlled by attributes
 - Stepwise object construction
 - Special handling for boolean, collection, and nullable members
-- Custom builder methoods
+- Nested fluent APIs via lambda methods
+- Custom builder methods
 - Optional (skippable) builder methods
 - Forking and branching capabilities
 - Support for returning arbitrary types

@@ -77,6 +77,18 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaCollectionClass2()
+    {
+        var student = TestClasses.Abstract.FluentLambdaCollectionClass2
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddressesD(createAddressesD: null);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Null(student.AddressesD);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaCompoundClass()
     {
         var student = TestClasses.Abstract.FluentLambdaCompoundClass
