@@ -165,69 +165,69 @@ public class CreateStudent :
         return student;
     }
 
-    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesD(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[]? addressesD)
+    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesD(System.Collections.Generic.HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address> addressesD)
     {
         CreateStudent.addressesDPropertyInfo.SetValue(student, addressesD);
         return student;
     }
 
-    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesD(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[]? createAddressesD)
+    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesD(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[] addressesD)
     {
-        CreateStudent.addressesDPropertyInfo.SetValue(student, createAddressesD?.Select(createAddressD => createAddressD(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep())).ToArray());
+        CreateStudent.addressesDPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(addressesD));
+        return student;
+    }
+
+    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesD(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[] createAddressesD)
+    {
+        CreateStudent.addressesDPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(createAddressesD.Select(createAddressD => createAddressD(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep()))));
         return student;
     }
 
     Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressD(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address addressD)
     {
-        CreateStudent.addressesDPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[1]{ addressD });
+        CreateStudent.addressesDPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(1){ addressD });
         return student;
     }
 
     Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressD(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address> createAddressD)
     {
-        CreateStudent.addressesDPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[1]{ createAddressD(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep()) });
+        CreateStudent.addressesDPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(1){ createAddressD(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep()) });
         return student;
     }
 
     Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithZeroAddressesD()
     {
-        CreateStudent.addressesDPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[0]);
+        CreateStudent.addressesDPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(0));
         return student;
     }
 
-    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesE(System.Collections.Generic.HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address> addressesE)
+    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesE(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[]? addressesE)
     {
         CreateStudent.addressesEPropertyInfo.SetValue(student, addressesE);
         return student;
     }
 
-    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesE(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[] addressesE)
+    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesE(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[]? createAddressesE)
     {
-        CreateStudent.addressesEPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(addressesE));
-        return student;
-    }
-
-    Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressesE(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[] createAddressesE)
-    {
-        CreateStudent.addressesEPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(createAddressesE.Select(createAddressE => createAddressE(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep()))));
+        CreateStudent.addressesEPropertyInfo.SetValue(student, createAddressesE?.Select(createAddressE => createAddressE(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep())).ToArray());
         return student;
     }
 
     Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressE(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address addressE)
     {
-        CreateStudent.addressesEPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(1){ addressE });
+        CreateStudent.addressesEPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[1]{ addressE });
         return student;
     }
 
     Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithAddressE(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address> createAddressE)
     {
-        CreateStudent.addressesEPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(1){ createAddressE(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep()) });
+        CreateStudent.addressesEPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[1]{ createAddressE(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.InitialStep()) });
         return student;
     }
 
     Student IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG.WithZeroAddressesE()
     {
-        CreateStudent.addressesEPropertyInfo.SetValue(student, new HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>(0));
+        CreateStudent.addressesEPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[0]);
         return student;
     }
 
@@ -336,9 +336,11 @@ public class CreateStudent :
 
         Student WithZeroAddressesC();
 
-        Student WithAddressesD(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[]? addressesD);
+        Student WithAddressesD(System.Collections.Generic.HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address> addressesD);
 
-        Student WithAddressesD(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[]? createAddressesD);
+        Student WithAddressesD(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[] addressesD);
+
+        Student WithAddressesD(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[] createAddressesD);
 
         Student WithAddressD(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address addressD);
 
@@ -346,11 +348,9 @@ public class CreateStudent :
 
         Student WithZeroAddressesD();
 
-        Student WithAddressesE(System.Collections.Generic.HashSet<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address> addressesE);
+        Student WithAddressesE(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[]? addressesE);
 
-        Student WithAddressesE(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address[] addressesE);
-
-        Student WithAddressesE(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[] createAddressesE);
+        Student WithAddressesE(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address>[]? createAddressesE);
 
         Student WithAddressE(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass.Address addressE);
 

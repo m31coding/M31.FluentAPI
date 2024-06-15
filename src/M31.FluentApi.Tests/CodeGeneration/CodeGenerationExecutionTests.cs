@@ -1,4 +1,4 @@
-#define TEST_GENERATED_CODE
+// #define TEST_GENERATED_CODE
 #if TEST_GENERATED_CODE
 
 // ReSharper disable NotAccessedVariable

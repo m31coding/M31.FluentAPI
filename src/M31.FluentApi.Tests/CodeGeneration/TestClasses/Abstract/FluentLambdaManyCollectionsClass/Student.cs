@@ -23,10 +23,10 @@ public class Student
     public Address[] AddressesC { get; set; }
 
     [FluentCollection(1, "AddressD")]
-    public Address[]? AddressesD { get; set; }
+    public HashSet<Address> AddressesD { get; set; }
 
     [FluentCollection(1, "AddressE")]
-    public HashSet<Address> AddressesE { get; set; }
+    public Address[]? AddressesE { get; set; }
 
     [FluentCollection(1, "AddressF")]
     public Address?[] AddressesF { get; set; }
