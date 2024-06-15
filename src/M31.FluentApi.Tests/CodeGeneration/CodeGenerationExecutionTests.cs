@@ -1,4 +1,4 @@
-// #define TEST_GENERATED_CODE
+#define TEST_GENERATED_CODE
 #if TEST_GENERATED_CODE
 
 // ReSharper disable NotAccessedVariable
@@ -100,10 +100,10 @@ public partial class CodeGenerationTests
         var student1 = TestClasses.Abstract.FluentLambdaManyCollectionsClass
             .CreateStudent
             .WithName("Alice")
-            .WithAddressesD(createAddressesD: null);
+            .WithAddressesE(createAddressesE: null);
 
         Assert.Equal("Alice", student1.Name);
-        Assert.Null(student1.AddressesD);
+        Assert.Null(student1.AddressesE);
 
         var student2 = TestClasses.Abstract.FluentLambdaManyCollectionsClass
             .CreateStudent
@@ -138,10 +138,10 @@ public partial class CodeGenerationTests
         var student1 = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
             .CreateStudent
             .WithName("Alice")
-            .WithAddressesD(createAddressesD: null);
+            .WithAddressesE(createAddressesE: null);
 
         Assert.Equal("Alice", student1.Name);
-        Assert.Null(student1.AddressesD);
+        Assert.Null(student1.AddressesE);
 
         var student2 = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
             .CreateStudent
