@@ -1,5 +1,6 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 
@@ -43,10 +44,18 @@ internal class CompoundMethods : IBuilderMethodCreator
         return methodCreator.BuilderMethodFactory.CreateBuilderMethod(FluentMethodName, computeValues);
     }
 
-    private static ComputeValueCode GetStandardComputeValueCode(CompoundPart compoundPart)
+    private static ComputeValueCode GetStandardComputeValueCode(
+        CompoundPart compoundPart,
+        ReservedVariableNames? reservedParameterNames = null)
     {
+        string parameterName = compoundPart.SymbolInfo.NameInCamelCase;
+        if (reservedParameterNames != null)
+        {
+            parameterName = reservedParameterNames.GetNewLocalVariableName(parameterName);
+        }
+
         Parameter parameter =
-            new Parameter(compoundPart.SymbolInfo.TypeForCodeGeneration, compoundPart.SymbolInfo.NameInCamelCase);
+            new Parameter(compoundPart.SymbolInfo.TypeForCodeGeneration, parameterName);
         return ComputeValueCode.Create(compoundPart.SymbolInfo.Name, parameter);
     }
 
@@ -57,6 +66,7 @@ internal class CompoundMethods : IBuilderMethodCreator
             return null;
         }
 
+        ReservedVariableNames reservedParameterNames = new ReservedVariableNames();
         List<ComputeValueCode> computeValues = new List<ComputeValueCode>(Parts.Count);
 
         foreach (CompoundPart compoundPart in Parts.OrderBy(p => p.AttributeInfo.ParameterPosition))
@@ -65,11 +75,12 @@ internal class CompoundMethods : IBuilderMethodCreator
             {
                 computeValues.Add(LambdaMethod.GetComputeValueCode(
                     compoundPart.SymbolInfo,
-                    compoundPart.AttributeInfo.LambdaBuilderInfo));
+                    compoundPart.AttributeInfo.LambdaBuilderInfo,
+                    reservedParameterNames));
             }
             else
             {
-                computeValues.Add(GetStandardComputeValueCode(compoundPart));
+                computeValues.Add(GetStandardComputeValueCode(compoundPart, reservedParameterNames));
             }
         }
 

@@ -34,11 +34,11 @@ public class CreateStudent :
         return createStudent.student;
     }
 
-    public static Student WithDetails(string createAddress, Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.Address> createAddress)
+    public static Student WithDetails(string createAddress, Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.Address> createAddress2)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.CreateAddress = createAddress;
-        createStudent.student.Address = createAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.InitialStep());
+        createStudent.student.Address = createAddress2(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.InitialStep());
         return createStudent.student;
     }
 
@@ -49,10 +49,10 @@ public class CreateStudent :
         return student;
     }
 
-    Student IWithDetails.WithDetails(string createAddress, Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.Address> createAddress)
+    Student IWithDetails.WithDetails(string createAddress, Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.Address> createAddress2)
     {
         student.CreateAddress = createAddress;
-        student.Address = createAddress(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.InitialStep());
+        student.Address = createAddress2(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.InitialStep());
         return student;
     }
 
@@ -64,6 +64,6 @@ public class CreateStudent :
     {
         Student WithDetails(string createAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.Address address);
 
-        Student WithDetails(string createAddress, Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.Address> createAddress);
+        Student WithDetails(string createAddress, Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.CreateAddress.ICreateAddress, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass3.Address> createAddress2);
     }
 }
