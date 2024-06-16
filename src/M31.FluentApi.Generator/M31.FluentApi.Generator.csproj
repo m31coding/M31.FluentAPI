@@ -11,7 +11,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <PackageVersion>1.6.0</PackageVersion>
+    <PackageVersion>1.7.0</PackageVersion>
     <Authors>Kevin Schaal</Authors>
     <Description>The generator package for M31.FluentAPI. Don't install this package explicitly, install M31.FluentAPI instead.</Description>
     <PackageTags>fluentapi fluentbuilder fluentinterface fluentdesign fluent codegeneration</PackageTags>
