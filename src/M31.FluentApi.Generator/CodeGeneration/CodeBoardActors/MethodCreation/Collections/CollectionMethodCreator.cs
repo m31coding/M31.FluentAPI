@@ -10,6 +10,7 @@ internal abstract class CollectionMethodCreator
     private readonly FluentCollectionAttributeInfo collectionAttributeInfo;
     private readonly string genericTypeArgument;
     private readonly MemberSymbolInfo symbolInfo;
+    private readonly string questionMarkIfNullable;
 
     internal CollectionMethodCreator(
         FluentCollectionAttributeInfo collectionAttributeInfo,
@@ -19,6 +20,7 @@ internal abstract class CollectionMethodCreator
         this.collectionAttributeInfo = collectionAttributeInfo;
         this.genericTypeArgument = genericTypeArgument;
         this.symbolInfo = symbolInfo;
+        questionMarkIfNullable = symbolInfo.IsNullable ? "?" : string.Empty;
     }
 
     internal BuilderMethod? CreateWithItemsMethod(MethodCreator methodCreator)
@@ -36,7 +38,7 @@ internal abstract class CollectionMethodCreator
     internal BuilderMethod CreateWithItemsParamsMethod(MethodCreator methodCreator)
     {
         Parameter parameter = new Parameter(
-            symbolInfo.IsNullable ? $"{genericTypeArgument}[]?" : $"{genericTypeArgument}[]",
+            $"{genericTypeArgument}[]{questionMarkIfNullable}",
             symbolInfo.NameInCamelCase,
             null,
             null,
@@ -57,12 +59,11 @@ internal abstract class CollectionMethodCreator
         }
 
         ComputeValueCode lambdaCode = LambdaMethod.GetComputeValueCode(
-            symbolInfo.CollectionType!.GenericTypeArgument,
+            genericTypeArgument,
             collectionAttributeInfo.SingularNameInCamelCase,
             symbolInfo.Name,
             collectionAttributeInfo.LambdaBuilderInfo);
 
-        string questionMarkIfNullable = symbolInfo.IsNullable ? "?" : string.Empty;
         string parameterType = $"{lambdaCode.Parameter!.Type}[]{questionMarkIfNullable}";
         string parameterName = LambdaMethod.GetFullParameterName(symbolInfo.NameInCamelCase);
 
@@ -106,7 +107,7 @@ internal abstract class CollectionMethodCreator
         }
 
         ComputeValueCode lambdaCode = LambdaMethod.GetComputeValueCode(
-            symbolInfo.CollectionType!.GenericTypeArgument,
+            genericTypeArgument,
             collectionAttributeInfo.SingularNameInCamelCase,
             symbolInfo.Name,
             collectionAttributeInfo.LambdaBuilderInfo);
