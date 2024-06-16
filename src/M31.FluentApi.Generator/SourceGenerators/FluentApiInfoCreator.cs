@@ -169,8 +169,7 @@ internal class FluentApiInfoCreator
             : FluentLambdaAttributeInfo.Create(attributeDataExtended.AttributeData, memberName, lambdaBuilderInfo);
     }
 
-    private LambdaBuilderInfo? TryGetLambdaBuilderInfo(
-        ITypeSymbol type)
+    private LambdaBuilderInfo? TryGetLambdaBuilderInfo(ITypeSymbol type)
     {
         AttributeDataExtended[] fluentApiAttributes = type.GetAttributes().Select(AttributeDataExtended.Create)
             .OfType<AttributeDataExtended>().Where(a => a.FullName == FullNames.FluentApiAttribute)
