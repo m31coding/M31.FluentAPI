@@ -118,7 +118,7 @@ You may have a look at the generated code for this example: [CreateStudent.g.cs]
 
 The attributes `FluentApi` and `FluentMember` are all you need in order to get started. 
 
-The attributes `FluentPredicate`, `FluentCollection`, and `FluentLambda` can be used instead of the `FluentMember` attribute if the decorated member is a boolean, a collection, or has its own Fluent API, respectively. 
+The attributes `FluentPredicate` and `FluentCollection` can be used instead of the `FluentMember` attribute if the decorated member is a boolean or a collection, respectively.
 
 `FluentDefault` and `FluentNullable` can be used in combination with these attributes to set a default value or null, respectively. 
 
@@ -182,6 +182,17 @@ public string LastName { get; private set; }
 ```cs
 ...Named("Alice", "King")...
 ```
+               
+If the decorated member has its own Fluent API, an additional lambda method is generated, e.g.
+
+```cs
+[FluentMember(1)]
+public Address Address { get; private set; }
+```
+
+```cs
+...WithAddress(a => a.WithHouseNumber("108").WithStreet("5th Avenue").InCity("New York"))...
+```
 
 
 ### FluentPredicate
@@ -229,25 +240,20 @@ public IReadOnlyCollection<string> Friends { get; private set; }
 ...WhoHasNoFriends()...
 ```
 
-
-### FluentLambda
+If the element type of the decorated member has its own Fluent API, additional lambda methods are generated, e.g.
 
 ```cs
-FluentLambda(int builderStep, string method = "With{Name}")
-```
-
-Can be used instead of the `FluentMember` attribute if the decorated member has its own Fluent API. Generates an additional builder method that accepts a lambda expression for creating the target field or property.
-        
-```cs
-[FluentLambda(1)]
-public Address Address { get; private set; }
+[FluentCollection(1, "Address")]
+public IReadOnlyCollection<Address> Addresses { get; private set; }
 ```
 
 ```cs
-...WithAddress(new Address("23", "Market Street", "San Francisco"))...
-...WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"))...
+...WithAddresses(
+    a => a.WithHouseNumber("108").WithStreet("5th Avenue").InCity("New York"),
+    a => a.WithHouseNumber("42").WithStreet("Maple Ave").InCity("Boston"))...
+...WithAddress(a => a.WithHouseNumber("82").WithStreet("Friedrichstraße").InCity("Berlin"))...
 ```
-   
+
 
 ### FluentDefault
 
@@ -450,7 +456,7 @@ public void AddStudent(Func<CreateStudent.ICreateStudent, Student> createStudent
 university.AddStudent(s => s.Named("Alice", "King").OfAge(22)...);
 ```
 
-Note that if you want to set a single field or property on a Fluent API class, you can instead use the `FluentLambda` attribute.
+Note that if you want to set a member of a Fluent API class, you can simply use `FluentMember` or `FluentCollection` instead of the pattern above.
 
 
 ## Problems with the IDE
@@ -463,6 +469,7 @@ In particular, if your IDE visually indicates that there are errors in your code
 - Unload and reload the project
 - Close and reopen the IDE
 - Remove the .vs folder (Visual Studio) or the .idea folder (Rider)
+  
 
 ## Support and Contribution
 

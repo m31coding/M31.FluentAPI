@@ -379,7 +379,7 @@ namespace NestedFluentApis
         public static void UseTheGeneratedFluentApi()
         {
             Student student1 = CreateStudent.Named("Alice", "King")
-                .WithAddress(new Address("111", "5th Avenue", "New York"));
+                .WithAddress(new Address("108", "5th Avenue", "New York"));
 
             Student student2 = CreateStudent.Named("Bob", "Bishop")
                 .WithAddress(CreateAddress.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
@@ -389,8 +389,8 @@ namespace NestedFluentApis
 
             Employee employee1 = CreateEmployee.Named("Alice", "King")
                 .WithAddresses(
-                    a => a.WithHouseNumber("111").WithStreet("5th Avenue").InCity("New York"),
-                    a => a.WithHouseNumber("135").WithStreet("Appleton St").InCity("Boston"));
+                    a => a.WithHouseNumber("108").WithStreet("5th Avenue").InCity("New York"),
+                    a => a.WithHouseNumber("42").WithStreet("Maple Ave").InCity("Boston"));
 
             Employee employee2 = CreateEmployee.Named("Eve", "Knight")
                 .WithAddress(a => a.WithHouseNumber("82").WithStreet("Friedrichstraße").InCity("Berlin"));
