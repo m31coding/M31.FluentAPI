@@ -33,7 +33,10 @@ internal class CollectionInference
     {
         if (typeSymbol is IArrayTypeSymbol arrayTypeSymbol)
         {
-            return new CollectionType(GeneratedCollection.Array, GetTypeForCodeGeneration(arrayTypeSymbol.ElementType));
+            return new CollectionType(
+                GeneratedCollection.Array,
+                GetTypeForCodeGeneration(arrayTypeSymbol.ElementType),
+                arrayTypeSymbol.ElementType);
         }
 
         if (typeSymbol is INamedTypeSymbol { IsGenericType: true, TypeArguments.Length: 1 } genericNamedTypeSymbol)
@@ -47,7 +50,7 @@ internal class CollectionInference
                 return null;
             }
 
-            return new CollectionType(collection, genericTypeArgument);
+            return new CollectionType(collection, genericTypeArgument, genericArgument);
         }
 
         if (typeSymbol is INamedTypeSymbol { IsGenericType: false } nonGenericNamedTypeSymbol)
@@ -59,7 +62,7 @@ internal class CollectionInference
                 return null;
             }
 
-            return new CollectionType(collection, "object");
+            return new CollectionType(collection, "object", null);
         }
 
         return null;

@@ -10,6 +10,7 @@ internal abstract class CollectionMethodCreator
     private readonly FluentCollectionAttributeInfo collectionAttributeInfo;
     private readonly string genericTypeArgument;
     private readonly MemberSymbolInfo symbolInfo;
+    private readonly string questionMarkIfNullable;
 
     internal CollectionMethodCreator(
         FluentCollectionAttributeInfo collectionAttributeInfo,
@@ -19,20 +20,25 @@ internal abstract class CollectionMethodCreator
         this.collectionAttributeInfo = collectionAttributeInfo;
         this.genericTypeArgument = genericTypeArgument;
         this.symbolInfo = symbolInfo;
+        questionMarkIfNullable = symbolInfo.IsNullable ? "?" : string.Empty;
     }
 
     internal BuilderMethod? CreateWithItemsMethod(MethodCreator methodCreator)
     {
-        return symbolInfo.TypeForCodeGeneration == $"{genericTypeArgument}[]" ||
-               symbolInfo.TypeForCodeGeneration == $"{genericTypeArgument}[]?"
-            ? null
-            : methodCreator.CreateMethod(symbolInfo, collectionAttributeInfo.WithItems);
+        return !ShouldCreateWithItemsMethod() ? null :
+            methodCreator.CreateMethod(symbolInfo, collectionAttributeInfo.WithItems);
+    }
+
+    private bool ShouldCreateWithItemsMethod()
+    {
+        return symbolInfo.TypeForCodeGeneration != $"{genericTypeArgument}[]" &&
+               symbolInfo.TypeForCodeGeneration != $"{genericTypeArgument}[]?";
     }
 
     internal BuilderMethod CreateWithItemsParamsMethod(MethodCreator methodCreator)
     {
         Parameter parameter = new Parameter(
-            symbolInfo.IsNullable ? $"{genericTypeArgument}[]?" : $"{genericTypeArgument}[]",
+            $"{genericTypeArgument}[]{questionMarkIfNullable}",
             symbolInfo.NameInCamelCase,
             null,
             null,
@@ -45,6 +51,44 @@ internal abstract class CollectionMethodCreator
             p => CreateCollectionFromArray(genericTypeArgument, p));
     }
 
+    internal BuilderMethod? CreateWithItemsLambdaParamsMethod(MethodCreator methodCreator)
+    {
+        if (collectionAttributeInfo.LambdaBuilderInfo == null)
+        {
+            return null;
+        }
+
+        ComputeValueCode lambdaCode = LambdaMethod.GetComputeValueCode(
+            genericTypeArgument,
+            collectionAttributeInfo.SingularNameInCamelCase,
+            symbolInfo.Name,
+            collectionAttributeInfo.LambdaBuilderInfo);
+
+        string parameterType = $"{lambdaCode.Parameter!.Type}[]{questionMarkIfNullable}";
+        string parameterName = LambdaMethod.GetFullParameterName(symbolInfo.NameInCamelCase);
+
+        Parameter parameter = new Parameter(
+            parameterType,
+            parameterName,
+            null,
+            null,
+            new ParameterAnnotations(ParameterKinds.Params));
+
+        ComputeValueCode computeValueCode = ComputeValueCode.Create(
+            lambdaCode.TargetMember,
+            parameter,
+            p => CreateCollectionFromEnumerable(
+                genericTypeArgument,
+                $"{p}{questionMarkIfNullable}.Select({lambdaCode.Parameter!.Name} => {lambdaCode.Code})"));
+
+        RequiredUsings.Add("System");
+        RequiredUsings.Add("System.Linq");
+
+        return methodCreator.BuilderMethodFactory.CreateBuilderMethod(
+            collectionAttributeInfo.WithItems,
+            computeValueCode);
+    }
+
     internal BuilderMethod CreateWithItemMethod(MethodCreator methodCreator)
     {
         Parameter parameter = new Parameter(genericTypeArgument, collectionAttributeInfo.SingularNameInCamelCase);
@@ -53,6 +97,30 @@ internal abstract class CollectionMethodCreator
             collectionAttributeInfo.WithItem,
             parameter,
             p => CreateCollectionFromSingleItem(genericTypeArgument, p));
+    }
+
+    internal BuilderMethod? CreateWithItemLambdaMethod(MethodCreator methodCreator)
+    {
+        if (collectionAttributeInfo.LambdaBuilderInfo == null)
+        {
+            return null;
+        }
+
+        ComputeValueCode lambdaCode = LambdaMethod.GetComputeValueCode(
+            genericTypeArgument,
+            collectionAttributeInfo.SingularNameInCamelCase,
+            symbolInfo.Name,
+            collectionAttributeInfo.LambdaBuilderInfo);
+
+        ComputeValueCode computeValueCode = ComputeValueCode.Create(
+            lambdaCode.TargetMember,
+            lambdaCode.Parameter!,
+            _ => CreateCollectionFromSingleItem(genericTypeArgument, lambdaCode.Code));
+
+        RequiredUsings.Add("System");
+
+        return methodCreator.BuilderMethodFactory.CreateBuilderMethod(collectionAttributeInfo.WithItem,
+            computeValueCode);
     }
 
     internal BuilderMethod CreateWithZeroItemsMethod(MethodCreator methodCreator)
@@ -65,7 +133,8 @@ internal abstract class CollectionMethodCreator
     }
 
     protected abstract string CreateCollectionFromArray(string genericTypeArgument, string arrayParameter);
+    protected abstract string CreateCollectionFromEnumerable(string genericTypeArgument, string enumerableParameter);
     protected abstract string CreateCollectionFromSingleItem(string genericTypeArgument, string itemParameter);
     protected abstract string CreateCollectionWithZeroItems(string genericTypeArgument);
-    internal abstract IReadOnlyCollection<string> RequiredUsings { get; }
+    internal HashSet<string> RequiredUsings { get; } = new HashSet<string>();
 }

@@ -20,7 +20,7 @@ public class Order2
     [FluentContinueWith(0)]
     public DateTime? CreatedOn { get; private set; }
 
-    [FluentLambda(0, "ShippedTo")]
+    [FluentMember(0, "ShippedTo")]
     [FluentContinueWith(0)]
     public Address2? ShippingAddress { get; private set; }
 

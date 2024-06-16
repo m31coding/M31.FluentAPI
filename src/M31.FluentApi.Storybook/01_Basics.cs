@@ -308,14 +308,16 @@ namespace FullExample
     }
 }
 
-namespace FluentLambdaExample
+namespace NestedFluentApis
 {
-    /* Last but not least, I would like to introduce the FluentLambda attribute. It can be applied to fields and
-       properties whose types have their own Fluent API. The FluentLambda attribute results in an additional builder
-       method that accepts a lambda expression to create the decorated member.
+    /* Lastly, I would like to demonstrate the effect of applying the FluentMember attribute to a member whose type has
+       its own Fluent API. In this scenario, an additional builder method that accepts a lambda expression is generated.
        In the example below, the Student class has an Address property, and the Address class has its own Fluent API.
        The advantage of the lambda method is that the user does not have to figure out the builder name of the Address
-       class when creating a student, as shown in the usage examples below.
+       class when creating a student.
+       Similarly, additional lambda methods are generated if the FluentCollection attribute is applied to a collection
+       whose element type has its own Fluent API. The employee class below is modeled with several addresses that can be
+       conveniently set using lambda methods.
 
        In the next chapter, you will learn how to create non-linear paths with control attributes.
 
@@ -331,8 +333,21 @@ namespace FluentLambdaExample
         [FluentMember(0, "Named", 1)]
         public string LastName { get; private set; }
 
-        [FluentLambda(1)]
+        [FluentMember(1)]
         public Address Address { get; private set; }
+    }
+
+    [FluentApi]
+    public class Employee
+    {
+        [FluentMember(0, "Named", 0)]
+        public string FirstName { get; private set; }
+
+        [FluentMember(0, "Named", 1)]
+        public string LastName { get; private set; }
+
+        [FluentCollection(1, "Address")]
+        public IReadOnlyCollection<Address> Addresses { get; private set; }
     }
 
     [FluentApi]
@@ -364,12 +379,20 @@ namespace FluentLambdaExample
         public static void UseTheGeneratedFluentApi()
         {
             Student student1 = CreateStudent.Named("Alice", "King")
-                .WithAddress(new Address("111", "5th Avenue", "New York"));
+                .WithAddress(new Address("108", "5th Avenue", "New York"));
 
             Student student2 = CreateStudent.Named("Bob", "Bishop")
                 .WithAddress(CreateAddress.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
 
             Student student3 = CreateStudent.Named("Eve", "Knight")
+                .WithAddress(a => a.WithHouseNumber("82").WithStreet("Friedrichstraße").InCity("Berlin"));
+
+            Employee employee1 = CreateEmployee.Named("Alice", "King")
+                .WithAddresses(
+                    a => a.WithHouseNumber("108").WithStreet("5th Avenue").InCity("New York"),
+                    a => a.WithHouseNumber("42").WithStreet("Maple Ave").InCity("Boston"));
+
+            Employee employee2 = CreateEmployee.Named("Eve", "Knight")
                 .WithAddress(a => a.WithHouseNumber("82").WithStreet("Friedrichstraße").InCity("Berlin"));
         }
     }

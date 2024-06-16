@@ -98,7 +98,7 @@ public class CollectionInferenceTests
     {
         ITypeSymbol typeSymbol = typeSymbolProvider.GetTypeSymbol(propertyName);
         CollectionType? actual = CollectionInference.InferCollectionType(typeSymbol);
-        CollectionType expected = new CollectionType(expectedCollection, genericTypeArgument);
+        CollectionType expected = new CollectionType(expectedCollection, genericTypeArgument, null);
         Assert.Equal(expected, actual);
     }
 }

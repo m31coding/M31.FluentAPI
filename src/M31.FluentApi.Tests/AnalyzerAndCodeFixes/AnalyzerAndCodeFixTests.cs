@@ -60,7 +60,7 @@ public class AnalyzerAndCodeFixTests
         SourceWithFix source = ReadSource("FluentLambdaMemberWithoutFluentApiClass", "Student");
 
         var expectedDiagnostic = Verifier.Diagnostic(FluentLambdaMemberWithoutFluentApi.Descriptor.Id)
-            .WithLocation(15, 6)
+            .WithLocation(17, 6)
             .WithArguments("Address");
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);

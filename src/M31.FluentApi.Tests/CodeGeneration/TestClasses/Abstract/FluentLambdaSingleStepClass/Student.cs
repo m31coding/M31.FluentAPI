@@ -9,6 +9,6 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSi
 [FluentApi]
 public class Student
 {
-    [FluentLambda(0)]
+    [FluentMember(0)]
     public Address Address { get; set; }
 }

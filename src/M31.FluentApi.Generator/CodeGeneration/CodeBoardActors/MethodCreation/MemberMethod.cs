@@ -17,7 +17,20 @@ internal class MemberMethod : IBuilderMethodCreator
 
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
     {
+        List<BuilderMethod> builderMethods = new List<BuilderMethod>();
+        HashSet<string> requiredUsings = new HashSet<string>();
+
         BuilderMethod builderMethod = methodCreator.CreateMethod(SymbolInfo, MemberAttributeInfo.FluentMethodName);
-        return new BuilderMethods(builderMethod);
+        builderMethods.Add(builderMethod);
+
+        if (MemberAttributeInfo.LambdaBuilderInfo != null)
+        {
+            BuilderMethod lambdaBuilderMethod = LambdaMethod.CreateLambdaBuilderMethod(
+                methodCreator, MemberAttributeInfo.Method, SymbolInfo, MemberAttributeInfo.LambdaBuilderInfo);
+            builderMethods.Add(lambdaBuilderMethod);
+            requiredUsings.Add("System");
+        }
+
+        return new BuilderMethods(builderMethods, requiredUsings);
     }
 }

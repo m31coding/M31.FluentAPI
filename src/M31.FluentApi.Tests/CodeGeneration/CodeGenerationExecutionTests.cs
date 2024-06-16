@@ -16,30 +16,33 @@ public partial class CodeGenerationTests
     [Fact, Priority(1)]
     public void CanExecuteContinueWithInForkClass()
     {
-        var student1 = TestClasses.Abstract.ContinueWithInForkClass
-            .CreateStudent
-            .WithMember1("1")
-            .WithMember2A("2A")
-            .WithMember3("3")
-            .WithMember4("4");
+        {
+            var student = TestClasses.Abstract.ContinueWithInForkClass
+                .CreateStudent
+                .WithMember1("1")
+                .WithMember2A("2A")
+                .WithMember3("3")
+                .WithMember4("4");
 
-        var student2 = TestClasses.Abstract.ContinueWithInForkClass
-            .CreateStudent
-            .WithMember1("1")
-            .WithMember2B("2B")
-            .WithMember4("4");
+            Assert.Equal("1", student.Member1);
+            Assert.Equal("2A", student.Member2A);
+            Assert.Null(student.Member2B);
+            Assert.Equal("3", student.Member3);
+            Assert.Equal("4", student.Member4);
+        }
+        {
+            var student = TestClasses.Abstract.ContinueWithInForkClass
+                .CreateStudent
+                .WithMember1("1")
+                .WithMember2B("2B")
+                .WithMember4("4");
 
-        Assert.Equal("1", student1.Member1);
-        Assert.Equal("2A", student1.Member2A);
-        Assert.Null(student1.Member2B);
-        Assert.Equal("3", student1.Member3);
-        Assert.Equal("4", student1.Member4);
-
-        Assert.Equal("1", student2.Member1);
-        Assert.Null(student2.Member2A);
-        Assert.Equal("2B", student2.Member2B);
-        Assert.Null(student2.Member3);
-        Assert.Equal("4", student2.Member4);
+            Assert.Equal("1", student.Member1);
+            Assert.Null(student.Member2A);
+            Assert.Equal("2B", student.Member2B);
+            Assert.Null(student.Member3);
+            Assert.Equal("4", student.Member4);
+        }
     }
 
     [Fact, Priority(1)]
@@ -57,33 +60,161 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaCollectionClass()
+    {
+        var student = TestClasses.Abstract.FluentLambdaCollectionClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithAddresses(
+                a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"),
+                a => a.WithHouseNumber("108").WithStreet("5th Avenue").InCity("New York"));
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(2, student.Addresses.Count);
+        Assert.Equal("23", student.Addresses[0].HouseNumber);
+        Assert.Equal("Market Street", student.Addresses[0].Street);
+        Assert.Equal("San Francisco", student.Addresses[0].City);
+        Assert.Equal("108", student.Addresses[1].HouseNumber);
+        Assert.Equal("5th Avenue", student.Addresses[1].Street);
+        Assert.Equal("New York", student.Addresses[1].City);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaCompoundClass()
+    {
+        var student = TestClasses.Abstract.FluentLambdaCompoundClass
+            .CreateStudent
+            .WithName("Alice")
+            .WithDetails(
+                a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"),
+                p => p.WithNumber("222-222-2222").WithUsage("CELL"));
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal("23", student.Address.HouseNumber);
+        Assert.Equal("Market Street", student.Address.Street);
+        Assert.Equal("San Francisco", student.Address.City);
+        Assert.Equal("222-222-2222", student.Phone.Number);
+        Assert.Equal("CELL", student.Phone.Usage);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaManyCollectionsClass()
+    {
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesE(createAddressesE: null);
+
+            Assert.Equal("Alice", student.Name);
+            Assert.Null(student.AddressesE);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesF(createAddressesF: _ => null);
+
+            Assert.Single(student.AddressesF);
+            Assert.Null(student.AddressesF[0]);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesG(createAddressesG: null);
+
+            Assert.Equal("Alice", student.Name);
+            Assert.Null(student.AddressesG);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesG(createAddressesG: _ => null);
+
+            Assert.Equal("Alice", student.Name);
+            Assert.NotNull(student.AddressesG);
+            Assert.Single(student.AddressesG!);
+            Assert.Null(student.AddressesG![0]);
+        }
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteFluentLambdaManyPrivateCollectionsClass()
+    {
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesE(createAddressesE: null);
+
+            Assert.Equal("Alice", student.Name);
+            Assert.Null(student.AddressesE);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesF(createAddressesF: _ => null);
+
+            Assert.Single(student.AddressesF);
+            Assert.Null(student.AddressesF[0]);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesG(createAddressesG: null);
+
+            Assert.Equal("Alice", student.Name);
+            Assert.Null(student.AddressesG);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaManyPrivateCollectionsClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddressesG(createAddressesG: _ => null);
+
+            Assert.Equal("Alice", student.Name);
+            Assert.NotNull(student.AddressesG);
+            Assert.Single(student.AddressesG!);
+            Assert.Null(student.AddressesG![0]);
+        }
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteFluentLambdaNullablePropertyClass()
     {
-        var student1 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
-            .CreateStudent
-            .WithName("Alice")
-            .WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
+        {
+            var student = TestClasses.Abstract.FluentLambdaNullablePropertyClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddress(a => a.WithHouseNumber("23").WithStreet("Market Street").InCity("San Francisco"));
 
-        Assert.Equal("Alice", student1.Name);
-        Assert.Equal("23", student1.Address!.HouseNumber);
-        Assert.Equal("Market Street", student1.Address!.Street);
-        Assert.Equal("San Francisco", student1.Address!.City);
+            Assert.Equal("Alice", student.Name);
+            Assert.Equal("23", student.Address!.HouseNumber);
+            Assert.Equal("Market Street", student.Address!.Street);
+            Assert.Equal("San Francisco", student.Address!.City);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaNullablePropertyClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithoutAddress();
 
-        var student2 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
-            .CreateStudent
-            .WithName("Alice")
-            .WithoutAddress();
+            Assert.Equal("Alice", student.Name);
+            Assert.Null(student.Address);
+        }
+        {
+            var student = TestClasses.Abstract.FluentLambdaNullablePropertyClass
+                .CreateStudent
+                .WithName("Alice")
+                .WithAddress(_ => null);
 
-        Assert.Equal("Alice", student2.Name);
-        Assert.Null(student2.Address);
-
-        var student3 = TestClasses.Abstract.FluentLambdaNullablePropertyClass
-            .CreateStudent
-            .WithName("Alice")
-            .WithAddress(_ => null);
-
-        Assert.Equal("Alice", student3.Name);
-        Assert.Null(student3.Address);
+            Assert.Equal("Alice", student.Name);
+            Assert.Null(student.Address);
+        }
     }
 
     [Fact, Priority(1)]
@@ -133,43 +264,51 @@ public partial class CodeGenerationTests
     [Fact, Priority(1)]
     public void CanExecuteFluentReturnMultiStepPrivateMethodsClass()
     {
-        string string1 = "string1";
-
-        TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
-            .CreateStudent.WithName("Alice").ReturnVoidMethod();
-
-        int result1 = TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
-            .CreateStudent.WithName("Alice").ReturnIntMethod();
-        Assert.Equal(24, result1);
-
-        int result2 = TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
-            .CreateStudent.WithName("Alice").ReturnIntMethodWithRefParameter(ref string1);
-        Assert.Equal(28, result2);
-
-        List<int> result3 = TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
-            .CreateStudent.WithName("Alice").ReturnListMethod();
-        Assert.Equal(new List<int>() { 1, 2, 3 }, result3);
+        {
+            TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
+                .CreateStudent.WithName("Alice").ReturnVoidMethod();
+        }
+        {
+            int result = TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
+                .CreateStudent.WithName("Alice").ReturnIntMethod();
+            Assert.Equal(24, result);
+        }
+        {
+            string string1 = "string1";
+            int result = TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
+                .CreateStudent.WithName("Alice").ReturnIntMethodWithRefParameter(ref string1);
+            Assert.Equal(28, result);
+        }
+        {
+            List<int> result = TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass
+                .CreateStudent.WithName("Alice").ReturnListMethod();
+            Assert.Equal(new List<int>() { 1, 2, 3 }, result);
+        }
     }
 
     [Fact, Priority(1)]
     public void CanExecuteFluentReturnSingleStepPrivateMethodsClass()
     {
-        string string1 = "string1";
-
-        TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
-            .CreateStudent.ReturnVoidMethod();
-
-        int result1 = TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
-            .CreateStudent.ReturnIntMethod();
-        Assert.Equal(24, result1);
-
-        int result2 = TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
-            .CreateStudent.ReturnIntMethodWithRefParameter(ref string1);
-        Assert.Equal(28, result2);
-
-        List<int> result3 = TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
-            .CreateStudent.ReturnListMethod();
-        Assert.Equal(new List<int>() { 1, 2, 3 }, result3);
+        {
+            TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
+                .CreateStudent.ReturnVoidMethod();
+        }
+        {
+            int result = TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
+                .CreateStudent.ReturnIntMethod();
+            Assert.Equal(24, result);
+        }
+        {
+            string string1 = "string1";
+            int result = TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
+                .CreateStudent.ReturnIntMethodWithRefParameter(ref string1);
+            Assert.Equal(28, result);
+        }
+        {
+            List<int> result = TestClasses.Abstract.FluentReturnSingleStepPrivateMethodsClass
+                .CreateStudent.ReturnListMethod();
+            Assert.Equal(new List<int>() { 1, 2, 3 }, result);
+        }
     }
 
     [Fact, Priority(1)]
@@ -213,73 +352,89 @@ public partial class CodeGenerationTests
     [Fact, Priority(1)]
     public void CanExecuteGenericOverloadedMethodClass()
     {
-        string string1 = "string1";
-        string string2 = "string2";
-        int int0 = 0;
-
-        var student1 = TestClasses.Abstract.GenericOverloadedMethodClass
-            .CreateStudent.Method1(0, "string1");
-        Assert.Equal(new string[] { "Called Method1(int, string)" }, student1.Logs);
-
-        var student2 = TestClasses.Abstract.GenericOverloadedMethodClass
-            .CreateStudent.Method1<int>(0, "string1");
-        Assert.Equal(new string[] { "Called Method1<T>(int, string)" }, student2.Logs);
-
-        var student3 = TestClasses.Abstract.GenericOverloadedMethodClass
-            .CreateStudent.Method1<string>("string1", "string2");
-        Assert.Equal(new string[] { "Called Method1<T>(T, string)" }, student3.Logs);
-
-        var student4 = TestClasses.Abstract.GenericOverloadedMethodClass
-            .CreateStudent.Method1<int, int>(0, "string1");
-        Assert.Equal(new string[] { "Called Method1<S, T>(T, string)" }, student4.Logs);
-
-        var student5 = TestClasses.Abstract.GenericOverloadedMethodClass
-            .CreateStudent.Method1<int, int>(0, out string1);
-        Assert.Equal(new string[] { "Called Method1<S, T>(T, out string)" }, student5.Logs);
-
-        var student6 = TestClasses.Abstract.GenericOverloadedMethodClass
-            .CreateStudent.Method1<int, int>(in int0, "string1");
-        Assert.Equal(new string[] { "Called Method1<S, T>(in T, string)" }, student6.Logs);
-
-        var student7 = TestClasses.Abstract.GenericOverloadedMethodClass
-            .CreateStudent.Method1<int, int>(in int0, ref string2);
-        Assert.Equal(new string[] { "Called Method1<S, T>(in T, ref string)" }, student7.Logs);
+        {
+            var student = TestClasses.Abstract.GenericOverloadedMethodClass
+                .CreateStudent.Method1(0, "string1");
+            Assert.Equal(new string[] { "Called Method1(int, string)" }, student.Logs);
+        }
+        {
+            var student = TestClasses.Abstract.GenericOverloadedMethodClass
+                .CreateStudent.Method1<int>(0, "string1");
+            Assert.Equal(new string[] { "Called Method1<T>(int, string)" }, student.Logs);
+        }
+        {
+            var student = TestClasses.Abstract.GenericOverloadedMethodClass
+                .CreateStudent.Method1<string>("string1", "string2");
+            Assert.Equal(new string[] { "Called Method1<T>(T, string)" }, student.Logs);
+        }
+        {
+            var student = TestClasses.Abstract.GenericOverloadedMethodClass
+                .CreateStudent.Method1<int, int>(0, "string1");
+            Assert.Equal(new string[] { "Called Method1<S, T>(T, string)" }, student.Logs);
+        }
+        {
+            string string1 = "string1";
+            var student = TestClasses.Abstract.GenericOverloadedMethodClass
+                .CreateStudent.Method1<int, int>(0, out string1);
+            Assert.Equal(new string[] { "Called Method1<S, T>(T, out string)" }, student.Logs);
+        }
+        {
+            int i = 0;
+            var student = TestClasses.Abstract.GenericOverloadedMethodClass
+                .CreateStudent.Method1<int, int>(in i, "string1");
+            Assert.Equal(new string[] { "Called Method1<S, T>(in T, string)" }, student.Logs);
+        }
+        {
+            int i = 0;
+            string string1 = "string1";
+            var student = TestClasses.Abstract.GenericOverloadedMethodClass
+                .CreateStudent.Method1<int, int>(in i, ref string1);
+            Assert.Equal(new string[] { "Called Method1<S, T>(in T, ref string)" }, student.Logs);
+        }
     }
 
     [Fact, Priority(1)]
     public void CanExecuteGenericOverloadedPrivateMethodClass()
     {
-        string string1 = "string1";
-        string string2 = "string2";
-        int int0 = 0;
-
-        var student1 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
-            .CreateStudent.Method1(0, "string1");
-        Assert.Equal(new string[] { "Called Method1(int, string)" }, student1.Logs);
-
-        var student2 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
-            .CreateStudent.Method1<int>(0, "string1");
-        Assert.Equal(new string[] { "Called Method1<T>(int, string)" }, student2.Logs);
-
-        var student3 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
-            .CreateStudent.Method1<string>("string1", "string2");
-        Assert.Equal(new string[] { "Called Method1<T>(T, string)" }, student3.Logs);
-
-        var student4 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
-            .CreateStudent.Method1<int, int>(0, "string1");
-        Assert.Equal(new string[] { "Called Method1<S, T>(T, string)" }, student4.Logs);
-
-        var student5 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
-            .CreateStudent.Method1<int, int>(0, out string1);
-        Assert.Equal(new string[] { "Called Method1<S, T>(T, out string)" }, student5.Logs);
-
-        var student6 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
-            .CreateStudent.Method1<int, int>(in int0, "string1");
-        Assert.Equal(new string[] { "Called Method1<S, T>(in T, string)" }, student6.Logs);
-
-        var student7 = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
-            .CreateStudent.Method1<int, int>(in int0, ref string2);
-        Assert.Equal(new string[] { "Called Method1<S, T>(in T, ref string)" }, student7.Logs);
+        {
+            var student = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
+                .CreateStudent.Method1(0, "string1");
+            Assert.Equal(new string[] { "Called Method1(int, string)" }, student.Logs);
+        }
+        {
+            var student = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
+                .CreateStudent.Method1<int>(0, "string1");
+            Assert.Equal(new string[] { "Called Method1<T>(int, string)" }, student.Logs);
+        }
+        {
+            var student = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
+                .CreateStudent.Method1<string>("string1", "string2");
+            Assert.Equal(new string[] { "Called Method1<T>(T, string)" }, student.Logs);
+        }
+        {
+            var student = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
+                .CreateStudent.Method1<int, int>(0, "string1");
+            Assert.Equal(new string[] { "Called Method1<S, T>(T, string)" }, student.Logs);
+        }
+        {
+            string string1 = "string1";
+            var student = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
+                .CreateStudent.Method1<int, int>(0, out string1);
+            Assert.Equal(new string[] { "Called Method1<S, T>(T, out string)" }, student.Logs);
+        }
+        {
+            int i = 0;
+            var student = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
+                .CreateStudent.Method1<int, int>(in i, "string1");
+            Assert.Equal(new string[] { "Called Method1<S, T>(in T, string)" }, student.Logs);
+        }
+        {
+            int i = 0;
+            string string1 = "string";
+            var student = TestClasses.Abstract.GenericOverloadedPrivateMethodClass
+                .CreateStudent.Method1<int, int>(in i, ref string1);
+            Assert.Equal(new string[] { "Called Method1<S, T>(in T, ref string)" }, student.Logs);
+        }
     }
 
     [Fact, Priority(1)]
@@ -355,43 +510,49 @@ public partial class CodeGenerationTests
     [Fact, Priority(1)]
     public void CanExecuteSkippableMemberClass()
     {
-        var student1 = TestClasses.Abstract.SkippableMemberClass
-            .CreateStudent
-            .WithFirstName("Alice")
-            .WithMiddleName("Sophia")
-            .WithLastName("King");
+        {
+            var student = TestClasses.Abstract.SkippableMemberClass
+                .CreateStudent
+                .WithFirstName("Alice")
+                .WithMiddleName("Sophia")
+                .WithLastName("King");
 
-        Assert.Equal("Alice", student1.FirstName);
-        Assert.Equal("Sophia", student1.MiddleName);
-        Assert.Equal("King", student1.LastName);
+            Assert.Equal("Alice", student.FirstName);
+            Assert.Equal("Sophia", student.MiddleName);
+            Assert.Equal("King", student.LastName);
+        }
+        {
+            var student = TestClasses.Abstract.SkippableMemberClass
+                .CreateStudent
+                .WithFirstName("Alice")
+                .WithLastName("King");
 
-        var student2 = TestClasses.Abstract.SkippableMemberClass
-            .CreateStudent
-            .WithFirstName("Alice")
-            .WithLastName("King");
-
-        Assert.Equal("Alice", student2.FirstName);
-        Assert.Null(student2.MiddleName);
-        Assert.Equal("King", student2.LastName);
+            Assert.Equal("Alice", student.FirstName);
+            Assert.Null(student.MiddleName);
+            Assert.Equal("King", student.LastName);
+        }
     }
 
     [Fact, Priority(1)]
     public void CanExecuteSkippableFirstMemberClass()
     {
-        var student1 = TestClasses.Abstract.SkippableFirstMemberClass
-            .CreateStudent
-            .WithFirstName("Alice")
-            .WithLastName("King");
+        {
+            var student = TestClasses.Abstract.SkippableFirstMemberClass
+                .CreateStudent
+                .WithFirstName("Alice")
+                .WithLastName("King");
 
-        Assert.Equal("Alice", student1.FirstName);
-        Assert.Equal("King", student1.LastName);
+            Assert.Equal("Alice", student.FirstName);
+            Assert.Equal("King", student.LastName);
+        }
+        {
+            var student = TestClasses.Abstract.SkippableFirstMemberClass
+                .CreateStudent
+                .WithLastName("King");
 
-        var student2 = TestClasses.Abstract.SkippableFirstMemberClass
-            .CreateStudent
-            .WithLastName("King");
-
-        Assert.Null(student2.FirstName);
-        Assert.Equal("King", student2.LastName);
+            Assert.Null(student.FirstName);
+            Assert.Equal("King", student.LastName);
+        }
     }
 
     [Fact, Priority(1)]
@@ -412,24 +573,27 @@ public partial class CodeGenerationTests
     [Fact, Priority(1)]
     public void CanExecuteSkippableSeveralMembersClass()
     {
-        var student1 = TestClasses.Abstract.SkippableSeveralMembersClass
-            .CreateStudent
-            .WithMember2("2")
-            .WithMember4("4");
+        {
+            var student = TestClasses.Abstract.SkippableSeveralMembersClass
+                .CreateStudent
+                .WithMember2("2")
+                .WithMember4("4");
 
-        Assert.Null(student1.Member1);
-        Assert.Equal("2", student1.Member2);
-        Assert.Null(student1.Member3);
-        Assert.Equal("4", student1.Member4);
+            Assert.Null(student.Member1);
+            Assert.Equal("2", student.Member2);
+            Assert.Null(student.Member3);
+            Assert.Equal("4", student.Member4);
+        }
+        {
+            var student = TestClasses.Abstract.SkippableSeveralMembersClass
+                .CreateStudent
+                .WithMember4("4");
 
-        var student2 = TestClasses.Abstract.SkippableSeveralMembersClass
-            .CreateStudent
-            .WithMember4("4");
-
-        Assert.Null(student2.Member1);
-        Assert.Null(student2.Member2);
-        Assert.Null(student2.Member3);
-        Assert.Equal("4", student2.Member4);
+            Assert.Null(student.Member1);
+            Assert.Null(student.Member2);
+            Assert.Null(student.Member3);
+            Assert.Equal("4", student.Member4);
+        }
     }
 
     [Fact, Priority(1)]

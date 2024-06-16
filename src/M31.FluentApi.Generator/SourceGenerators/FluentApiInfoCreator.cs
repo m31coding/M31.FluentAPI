@@ -19,8 +19,8 @@ internal class FluentApiInfoCreator
 
     internal FluentApiInfo? Create(ISymbol symbol, FluentApiAttributeData attributeData)
     {
-        AttributeInfoBase? attributeInfo =
-            CreateAttributeInfo(attributeData.MainAttributeData, symbol);
+        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
+        AttributeInfoBase? attributeInfo = CreateAttributeInfo(attributeData.MainAttributeData, symbol, symbolInfo);
 
         if (attributeInfo == null)
         {
@@ -40,7 +40,6 @@ internal class FluentApiInfoCreator
         FluentReturnAttributeInfo? fluentReturnAttributeInfo = controlDataAndInfos.Select(d => d.info)
             .OfType<FluentReturnAttributeInfo>().FirstOrDefault();
 
-        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
         FluentApiAdditionalInfo additionalInfo = new FluentApiAdditionalInfo(
             symbol,
             attributeData.MainAttributeData,
@@ -68,18 +67,21 @@ internal class FluentApiInfoCreator
         return dataAndInfoArray.Select(dataAndInfo => dataAndInfo.info).ToList();
     }
 
-    private AttributeInfoBase? CreateAttributeInfo(AttributeDataExtended attributeData, ISymbol symbol)
+    private AttributeInfoBase? CreateAttributeInfo(
+        AttributeDataExtended attributeData,
+        ISymbol symbol,
+        FluentApiSymbolInfo symbolInfo)
     {
         string memberName = symbol.Name;
 
         return attributeData.FullName switch
         {
             FullNames.FluentMemberAttribute =>
-                FluentMemberAttributeInfo.Create(attributeData.AttributeData, memberName),
+                CreateFluentMemberAttributeInfo(attributeData.AttributeData, memberName, symbol),
             FullNames.FluentPredicateAttribute =>
                 FluentPredicateAttributeInfo.Create(attributeData.AttributeData, memberName),
             FullNames.FluentCollectionAttribute =>
-                FluentCollectionAttributeInfo.Create(attributeData.AttributeData, memberName),
+                CreateFluentCollectionAttributeInfo(attributeData.AttributeData, memberName, symbolInfo),
             FullNames.FluentLambdaAttribute =>
                 CreateFluentLambdaAttributeInfo(attributeData, memberName, symbol),
             FullNames.FluentMethodAttribute =>
@@ -118,34 +120,63 @@ internal class FluentApiInfoCreator
         };
     }
 
+    private FluentMemberAttributeInfo CreateFluentMemberAttributeInfo(
+        AttributeData attributeData,
+        string memberName,
+        ISymbol symbol)
+    {
+        ITypeSymbol typeSymbol = GetTypeSymbol(symbol);
+        LambdaBuilderInfo? lambdaBuilderInfo = TryGetLambdaBuilderInfo(typeSymbol);
+        return FluentMemberAttributeInfo.Create(attributeData, memberName, lambdaBuilderInfo);
+    }
+
+    private FluentCollectionAttributeInfo CreateFluentCollectionAttributeInfo(
+        AttributeData attributeData,
+        string memberName,
+        FluentApiSymbolInfo symbolInfo)
+    {
+        LambdaBuilderInfo? lambdaBuilderInfo = TryGetLambdaBuilderInfoOfCollectionType(symbolInfo);
+        return FluentCollectionAttributeInfo.Create(attributeData, memberName, lambdaBuilderInfo);
+    }
+
+    private LambdaBuilderInfo? TryGetLambdaBuilderInfoOfCollectionType(FluentApiSymbolInfo symbolInfo)
+    {
+        if (symbolInfo is not MemberSymbolInfo memberSymbolInfo ||
+            memberSymbolInfo.CollectionType?.GenericTypeSymbol == null)
+        {
+            return null;
+        }
+
+        return TryGetLambdaBuilderInfo(memberSymbolInfo.CollectionType.GenericTypeSymbol);
+    }
+
     private FluentLambdaAttributeInfo? CreateFluentLambdaAttributeInfo(
         AttributeDataExtended attributeDataExtended,
         string memberName,
         ISymbol symbol)
     {
-        LambdaBuilderInfo? lambdaBuilderInfo = GetLambdaBuilderInfo(attributeDataExtended, symbol);
+        ITypeSymbol typeSymbol = GetTypeSymbol(symbol);
+        LambdaBuilderInfo? lambdaBuilderInfo = TryGetLambdaBuilderInfo(typeSymbol);
+
+        if (lambdaBuilderInfo == null)
+        {
+            classInfoReport.ReportDiagnostic(
+                FluentLambdaMemberWithoutFluentApi.CreateDiagnostic(attributeDataExtended, typeSymbol.Name));
+        }
+
         return lambdaBuilderInfo == null
             ? null
             : FluentLambdaAttributeInfo.Create(attributeDataExtended.AttributeData, memberName, lambdaBuilderInfo);
     }
 
-    private LambdaBuilderInfo? GetLambdaBuilderInfo(AttributeDataExtended attributeDataExtended, ISymbol symbol)
+    private LambdaBuilderInfo? TryGetLambdaBuilderInfo(ITypeSymbol type)
     {
-        ITypeSymbol type = symbol switch
-        {
-            IPropertySymbol propertySymbol => propertySymbol.Type,
-            IFieldSymbol fieldSymbol => fieldSymbol.Type,
-            _ => throw new GenerationException($"Unexpected symbol type: {symbol.GetType().Name}")
-        };
-
         AttributeDataExtended[] fluentApiAttributes = type.GetAttributes().Select(AttributeDataExtended.Create)
             .OfType<AttributeDataExtended>().Where(a => a.FullName == FullNames.FluentApiAttribute)
             .ToArray();
 
         if (fluentApiAttributes.Length == 0)
         {
-            classInfoReport.ReportDiagnostic(
-                FluentLambdaMemberWithoutFluentApi.CreateDiagnostic(attributeDataExtended, type.Name));
             return null;
         }
 
@@ -168,5 +199,15 @@ internal class FluentApiInfoCreator
     {
         string[] split = fluentApiTypeForCodeGeneration.Split('.');
         return string.Join(".", split.Take(split.Length - 1).Concat(new string[] { builderClassName }));
+    }
+
+    private static ITypeSymbol GetTypeSymbol(ISymbol symbol)
+    {
+        return symbol switch
+        {
+            IPropertySymbol propertySymbol => propertySymbol.Type,
+            IFieldSymbol fieldSymbol => fieldSymbol.Type,
+            _ => throw new GenerationException($"Unexpected symbol type: {symbol.GetType().Name}")
+        };
     }
 }

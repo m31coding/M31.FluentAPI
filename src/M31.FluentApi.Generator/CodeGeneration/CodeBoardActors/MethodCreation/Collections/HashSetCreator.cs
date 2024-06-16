@@ -11,11 +11,17 @@ internal class HashSetCreator : CollectionMethodCreator
         MemberSymbolInfo symbolInfo)
         : base(collectionAttributeInfo, genericTypeArgument, symbolInfo)
     {
+        RequiredUsings.Add("System.Collections.Generic");
     }
 
     protected override string CreateCollectionFromArray(string genericTypeArgument, string arrayParameter)
     {
-        return $"new HashSet<{genericTypeArgument}>({arrayParameter})";
+        return CreateCollectionFromEnumerable(genericTypeArgument, arrayParameter);
+    }
+
+    protected override string CreateCollectionFromEnumerable(string genericTypeArgument, string enumerableParameter)
+    {
+        return $"new HashSet<{genericTypeArgument}>({enumerableParameter})";
     }
 
     protected override string CreateCollectionFromSingleItem(string genericTypeArgument, string itemParameter)
@@ -27,6 +33,4 @@ internal class HashSetCreator : CollectionMethodCreator
     {
         return $"new HashSet<{genericTypeArgument}>(0)";
     }
-
-    internal override IReadOnlyCollection<string> RequiredUsings => new string[] { "System.Collections.Generic" };
 }

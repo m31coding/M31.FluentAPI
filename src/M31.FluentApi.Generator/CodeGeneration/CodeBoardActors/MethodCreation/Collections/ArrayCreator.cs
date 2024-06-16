@@ -18,6 +18,12 @@ internal class ArrayCreator : CollectionMethodCreator
         return arrayParameter;
     }
 
+    protected override string CreateCollectionFromEnumerable(string genericTypeArgument, string enumerableParameter)
+    {
+        RequiredUsings.Add("System.Linq");
+        return $"{enumerableParameter}.ToArray()";
+    }
+
     protected override string CreateCollectionFromSingleItem(string genericTypeArgument, string itemParameter)
     {
         return $"new {genericTypeArgument}[1]{{ {itemParameter} }}";
@@ -27,6 +33,4 @@ internal class ArrayCreator : CollectionMethodCreator
     {
         return $"new {genericTypeArgument}[0]";
     }
-
-    internal override IReadOnlyCollection<string> RequiredUsings => Array.Empty<string>();
 }

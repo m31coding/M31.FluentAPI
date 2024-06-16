@@ -1,6 +1,7 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
@@ -23,27 +24,79 @@ internal class LambdaMethod : IBuilderMethodCreator
         BuilderMethod memberBuilderMethod =
             methodCreator.CreateMethod(SymbolInfo, LambdaAttributeInfo.FluentMethodName);
 
-        string builderType = LambdaAttributeInfo.BuilderInfo.BuilderTypeForCodeGeneration;
-        string builderInstanceName = LambdaAttributeInfo.BuilderInfo.BuilderInstanceName;
-        string initialStepInterfaceName = LambdaAttributeInfo.BuilderInfo.InitialStepInterfaceName;
-
-        // createAddress(Func<CreateAddress.ICreateAddress, Address> address)
-        // {
-        //     student.Address = address(CreateAddress.InitialStep());
-        // }
-        Parameter parameter =
-            new Parameter(
-                $"Func<{builderType}.{initialStepInterfaceName}, " +
-                $"{SymbolInfo.TypeForCodeGeneration}>",
-                builderInstanceName);
-        BuilderMethod lambdaBuilderMethod = methodCreator.CreateMethodWithComputedValue(
-            SymbolInfo,
-            LambdaAttributeInfo.Method,
-            parameter,
-            p => $"{p}({builderType}.InitialStep())");
+        BuilderMethod lambdaBuilderMethod = CreateLambdaBuilderMethod(
+            methodCreator, LambdaAttributeInfo.Method, SymbolInfo, LambdaAttributeInfo.BuilderInfo);
 
         return new BuilderMethods(
             new List<BuilderMethod>() { memberBuilderMethod, lambdaBuilderMethod },
             new HashSet<string>() { "System" });
+    }
+
+    internal static BuilderMethod CreateLambdaBuilderMethod(
+        MethodCreator methodCreator,
+        string methodName,
+        MemberSymbolInfo symbolInfo,
+        LambdaBuilderInfo lambdaBuilderInfo)
+    {
+        ComputeValueCode computeValueCode = GetComputeValueCode(symbolInfo, lambdaBuilderInfo);
+        return methodCreator.BuilderMethodFactory.CreateBuilderMethod(methodName, computeValueCode);
+    }
+
+    internal static Parameter GetParameter(
+        string parameterType,
+        string parameterName,
+        LambdaBuilderInfo lambdaBuilderInfo,
+        ReservedVariableNames? reservedParameterNames = null)
+    {
+        string builderType = lambdaBuilderInfo.BuilderTypeForCodeGeneration;
+        string initialStepInterfaceName = lambdaBuilderInfo.InitialStepInterfaceName;
+        string fullParameterName = GetFullParameterName(parameterName);
+
+        if (reservedParameterNames != null)
+        {
+            fullParameterName = reservedParameterNames.GetNewLocalVariableName(fullParameterName);
+        }
+
+        // Func<CreateAddress.ICreateAddress, Address> address
+        return new Parameter(
+            $"Func<{builderType}.{initialStepInterfaceName}, " +
+            $"{parameterType}>",
+            fullParameterName);
+    }
+
+    internal static string GetFullParameterName(string parameterName)
+    {
+        return $"create{parameterName.FirstCharToUpper()}";
+    }
+
+    internal static ComputeValueCode GetComputeValueCode(
+        MemberSymbolInfo symbolInfo,
+        LambdaBuilderInfo lambdaBuilderInfo,
+        ReservedVariableNames? reservedParameterNames = null)
+    {
+        return GetComputeValueCode(
+            symbolInfo.TypeForCodeGeneration,
+            symbolInfo.NameInCamelCase,
+            symbolInfo.Name,
+            lambdaBuilderInfo,
+            reservedParameterNames);
+    }
+
+    internal static ComputeValueCode GetComputeValueCode(
+        string parameterType,
+        string parameterName,
+        string targetMember,
+        LambdaBuilderInfo lambdaBuilderInfo,
+        ReservedVariableNames? reservedParameterNames = null)
+    {
+        // createAddress(Func<CreateAddress.ICreateAddress, Address> address)
+        // {
+        //     student.Address = address(CreateAddress.InitialStep());
+        // }
+        string builderType = lambdaBuilderInfo.BuilderTypeForCodeGeneration;
+        Parameter parameter = GetParameter(
+            parameterType, parameterName, lambdaBuilderInfo, reservedParameterNames);
+        string BuildCodeWithParameter(string p) => $"{p}({builderType}.InitialStep())";
+        return ComputeValueCode.Create(targetMember, parameter, BuildCodeWithParameter);
     }
 }
