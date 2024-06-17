@@ -98,6 +98,22 @@ Employee employee = CreateEmployee
 
 Console.WriteLine(JsonSerializer.Serialize(employee));
 
+// HttpRequest
+//
+// Example from https://github.com/dotnet/csharplang/discussions/7325.
+//
+
+HttpRequestMessage message = CreateHttpRequest
+    .WithMethod(HttpMethod.Post)
+    .WithUrl("https://example.com")
+    .WithHeaders(("Accept", "application/json"), ("Authorization", "Bearer x"))
+    .WithJsonContent(
+        new { Name = "X", Quantity = 10 },
+        opt => opt.PropertyNameCaseInsensitive = true)
+    .GetMessage();
+
+Console.WriteLine(JsonSerializer.Serialize(message));
+
 // Node
 //
 
