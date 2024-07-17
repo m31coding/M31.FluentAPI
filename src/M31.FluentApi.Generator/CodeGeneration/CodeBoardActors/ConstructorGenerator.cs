@@ -33,6 +33,8 @@ internal class ConstructorGenerator : ICodeBoardActor
             }
             else
             {
+                // student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), BindingFlags.Instance |
+                // BindingFlags.NonPublic, null, new object?[] { null, null }, null)!;
                 string parameters =
                     $"new object?[] {{ {string.Join(", ", Enumerable.Repeat("null", nofParameters))} }}";
 
@@ -47,7 +49,7 @@ internal class ConstructorGenerator : ICodeBoardActor
         }
         else
         {
-            // student = new Student<T1, T2>(default!, default!, default!);
+            // student = new Student<T1, T2>(default!, default!);
             string parameters = string.Join(", ",
                 Enumerable.Repeat("default!", nofParameters));
             constructor.AppendBodyLine($"{instanceName} = new {classNameWithTypeParameters}({parameters});");
