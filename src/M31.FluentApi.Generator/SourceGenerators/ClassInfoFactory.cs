@@ -85,7 +85,7 @@ internal class ClassInfoFactory
         string className = type.Name;
         string? @namespace = type.ContainingNamespace.IsGlobalNamespace ? null : type.ContainingNamespace.ToString();
         bool isInternal = type.DeclaredAccessibility == Accessibility.Internal;
-        ConstructorInfo constructorInfo = GetConstructorInfo(type);
+        ConstructorInfo? constructorInfo = TryGetConstructorInfo(type);
         FluentApiAttributeInfo fluentApiAttributeInfo =
             FluentApiAttributeInfo.Create(attributeDataExtended.AttributeData, className);
 
@@ -114,7 +114,7 @@ internal class ClassInfoFactory
             genericInfo,
             isStruct,
             isInternal,
-            constructorInfo,
+            constructorInfo!,
             fluentApiAttributeInfo.BuilderClassName,
             newLineString,
             infos,
@@ -122,7 +122,7 @@ internal class ClassInfoFactory
             new FluentApiClassAdditionalInfo(groups));
     }
 
-    private ConstructorInfo GetConstructorInfo(INamedTypeSymbol type)
+    private ConstructorInfo? TryGetConstructorInfo(INamedTypeSymbol type)
     {
         /* Look for the default constructor. If it is not present, take the constructor
            with the least parameters that is explicitly declared. */
@@ -141,16 +141,22 @@ internal class ClassInfoFactory
 
         if (constructorsWithLeastAmountOfParameters == null)
         {
-            // todo
-            throw new ArgumentException();
+            report.ReportDiagnostic(MissingConstructor.CreateDiagnostic(type));
+            return null;
         }
 
         IMethodSymbol[] constructors = constructorsWithLeastAmountOfParameters.ToArray();
 
         if (constructors.Length != 1)
         {
-            // todo
-            throw new ArgumentException();
+            int nofParameters = constructorsWithLeastAmountOfParameters.Key;
+
+            foreach (IMethodSymbol constructor in constructors)
+            {
+                report.ReportDiagnostic(AmbiguousConstructor.CreateDiagnostic(constructor, nofParameters));
+            }
+
+            return null;
         }
 
         return new ConstructorInfo(

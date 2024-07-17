@@ -21,7 +21,6 @@ internal static class FluentApiDiagnostics
         InvalidFluentPredicateType.Descriptor,
         InvalidFluentNullableType.Descriptor,
         FluentNullableTypeWithoutNullableAnnotation.Descriptor,
-        MissingDefaultConstructor.Descriptor,
         CodeGenerationException.Descriptor,
         GenericException.Descriptor,
         OrthogonalAttributeMisusedWithCompound.Descriptor,
@@ -33,6 +32,8 @@ internal static class FluentApiDiagnostics
         ReservedMethodName.Descriptor,
         FluentLambdaMemberWithoutFluentApi.Descriptor,
         LastBuilderStepCannotBeSkipped.Descriptor,
+        MissingConstructor.Descriptor,
+        AmbiguousConstructor.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -192,23 +193,6 @@ internal static class FluentApiDiagnostics
         internal static Diagnostic CreateDiagnostic(TypeSyntax actualType)
         {
             return Diagnostic.Create(Descriptor, actualType.GetLocation(), actualType.ToString());
-        }
-    }
-
-    internal static class MissingDefaultConstructor
-    {
-        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            id: "M31FA011",
-            title: "Default constructor is missing",
-            messageFormat: "The fluent API requires a default constructor. " +
-                           "Add a default constructor to type '{0}'.",
-            category: "M31.Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        internal static Diagnostic CreateDiagnostic(INamedTypeSymbol symbol)
-        {
-            return Diagnostic.Create(Descriptor, symbol.Locations[0], symbol.Name);
         }
     }
 
@@ -407,6 +391,40 @@ internal static class FluentApiDiagnostics
             Location location = attributeData.AttributeData.ApplicationSyntaxReference?
                 .GetSyntax().GetLocation() ?? Location.None;
             return Diagnostic.Create(Descriptor, location);
+        }
+    }
+
+    internal static class MissingConstructor
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA024",
+            title: "Constructor is missing",
+            messageFormat: "The fluent API requires a constructor. " +
+                           "Add a default constructor to type '{0}'.",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(INamedTypeSymbol symbol)
+        {
+            return Diagnostic.Create(Descriptor, symbol.Locations[0], symbol.Name);
+        }
+    }
+
+    internal static class AmbiguousConstructor
+    {
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+            id: "M31FA025",
+            title: "Constructors are ambiguous",
+            messageFormat: "The fluent API creates instances by invoking the constructor with the fewest parameters " +
+                           "with default values. Found more than one constructor with {0} parameter(s).",
+            category: "M31.Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        internal static Diagnostic CreateDiagnostic(IMethodSymbol constructorSymbol, int numberOfParameters)
+        {
+            return Diagnostic.Create(Descriptor, constructorSymbol.Locations[0], numberOfParameters);
         }
     }
 }
