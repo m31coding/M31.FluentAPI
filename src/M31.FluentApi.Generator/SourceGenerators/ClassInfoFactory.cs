@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
@@ -141,8 +142,8 @@ internal class ClassInfoFactory
 
         if (constructorsWithLeastAmountOfParameters == null)
         {
-            report.ReportDiagnostic(MissingConstructor.CreateDiagnostic(type));
-            return null;
+            throw new GenerationException(
+                $"The type {type.Name} has neither a default constructor nor explicitly declared constructors.");
         }
 
         IMethodSymbol[] constructors = constructorsWithLeastAmountOfParameters.ToArray();
@@ -153,7 +154,7 @@ internal class ClassInfoFactory
 
             foreach (IMethodSymbol constructor in constructors)
             {
-                report.ReportDiagnostic(AmbiguousConstructor.CreateDiagnostic(constructor, nofParameters));
+                report.ReportDiagnostic(AmbiguousConstructors.CreateDiagnostic(constructor, nofParameters));
             }
 
             return null;

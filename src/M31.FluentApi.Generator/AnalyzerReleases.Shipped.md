@@ -83,5 +83,4 @@ M31FA011 | M31.Usage | Error | Default constructor is missing
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-M31FA024 | M31.Usage | Error | Constructor is missing
-M31FA025 | M31.Usage | Error | Constructors are ambiguous
+M31FA024 | M31.Usage | Error | Constructors are ambiguous

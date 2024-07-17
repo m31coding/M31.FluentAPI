@@ -32,8 +32,7 @@ internal static class FluentApiDiagnostics
         ReservedMethodName.Descriptor,
         FluentLambdaMemberWithoutFluentApi.Descriptor,
         LastBuilderStepCannotBeSkipped.Descriptor,
-        MissingConstructor.Descriptor,
-        AmbiguousConstructor.Descriptor,
+        AmbiguousConstructors.Descriptor,
     };
 
     internal static class MissingSetAccessor
@@ -394,27 +393,10 @@ internal static class FluentApiDiagnostics
         }
     }
 
-    internal static class MissingConstructor
+    internal static class AmbiguousConstructors
     {
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: "M31FA024",
-            title: "Constructor is missing",
-            messageFormat: "The fluent API requires a constructor. " +
-                           "Add a default constructor to type '{0}'.",
-            category: "M31.Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        internal static Diagnostic CreateDiagnostic(INamedTypeSymbol symbol)
-        {
-            return Diagnostic.Create(Descriptor, symbol.Locations[0], symbol.Name);
-        }
-    }
-
-    internal static class AmbiguousConstructor
-    {
-        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            id: "M31FA025",
             title: "Constructors are ambiguous",
             messageFormat: "The fluent API creates instances by invoking the constructor with the fewest parameters " +
                            "with default values. Found more than one constructor with {0} parameter(s).",
