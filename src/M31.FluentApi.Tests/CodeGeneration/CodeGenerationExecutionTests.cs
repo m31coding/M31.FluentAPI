@@ -312,6 +312,17 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteGenericClassPrivateConstructor()
+    {
+        var student = TestClasses.Abstract.GenericClassPrivateConstructor
+            .CreateStudent<int, string>
+            .WithProperty1(10);
+
+        Assert.Equal(10, student.Property1);
+        Assert.Null(student.Property2);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteGenericClassWithGenericMethods()
     {
         var student = TestClasses.Abstract.GenericClassWithGenericMethods
