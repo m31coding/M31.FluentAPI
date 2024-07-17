@@ -13,6 +13,22 @@ namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes;
 public class AnalyzerAndCodeFixTests
 {
     [Fact]
+    public async Task CanDetectAmbiguousConstructors()
+    {
+        SourceWithFix source = ReadSource("AmbiguousConstructorsClass", "Student");
+
+        var expectedDiagnostic1 = Verifier.Diagnostic(AmbiguousConstructors.Descriptor.Id)
+            .WithLocation(10, 12)
+            .WithArguments(1);
+
+        var expectedDiagnostic2 = Verifier.Diagnostic(AmbiguousConstructors.Descriptor.Id)
+            .WithLocation(15, 12)
+            .WithArguments(1);
+
+        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic1, expectedDiagnostic2);
+    }
+
+    [Fact]
     public async Task CanDetectConflictingControlAttributes1()
     {
         SourceWithFix source = ReadSource("ConflictingControlAttributesClass1", "Student");
@@ -184,18 +200,6 @@ public class AnalyzerAndCodeFixTests
         var expectedDiagnostic = Verifier.Diagnostic(MissingBuilderStep.Descriptor.Id)
             .WithLocation(13, 6)
             .WithArguments(99);
-
-        await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
-    }
-
-    [Fact]
-    public async Task CanDetectMissingDefaultConstructor()
-    {
-        SourceWithFix source = ReadSource("MissingDefaultConstructorClass", "Student");
-
-        var expectedDiagnostic = Verifier.Diagnostic(MissingDefaultConstructor.Descriptor.Id)
-            .WithLocation(8, 14)
-            .WithArguments("Student");
 
         await Verifier.VerifyCodeFixAsync(source, expectedDiagnostic);
     }
