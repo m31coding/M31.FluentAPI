@@ -45,7 +45,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "ForkClass", "Student" },
                 new object[] { "Abstract", "FullyQualifiedTypeClass", "Student" },
                 new object[] { "Abstract", "GenericClass", "Student" },
-                new object[] { "Abstract", "GenericClassPrivateConstructor", "Student" },
+                new object[] { "Abstract", "GenericClassPrivateDefaultConstructor", "Student" },
                 new object[] { "Abstract", "GenericClassWithConstraints", "Student" },
                 new object[] { "Abstract", "GenericClassWithGenericMethods", "Student" },
                 new object[] { "Abstract", "GenericClassWithPrivateGenericMethods", "Student" },

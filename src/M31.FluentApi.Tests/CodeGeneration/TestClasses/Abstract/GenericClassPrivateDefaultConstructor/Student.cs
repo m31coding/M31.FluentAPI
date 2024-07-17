@@ -4,7 +4,7 @@
 
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateConstructor;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateDefaultConstructor;
 
 [FluentApi]
 public class Student<T1, T2>

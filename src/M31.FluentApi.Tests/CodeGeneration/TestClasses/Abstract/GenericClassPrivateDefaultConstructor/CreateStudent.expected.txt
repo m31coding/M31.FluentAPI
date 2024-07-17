@@ -8,7 +8,7 @@
 using M31.FluentApi.Attributes;
 using System;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateConstructor;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateDefaultConstructor;
 
 public class CreateStudent<T1, T2> :
     CreateStudent<T1, T2>.ICreateStudent,
