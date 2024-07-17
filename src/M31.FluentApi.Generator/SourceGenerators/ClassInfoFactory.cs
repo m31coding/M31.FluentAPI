@@ -85,7 +85,7 @@ internal class ClassInfoFactory
         string className = type.Name;
         string? @namespace = type.ContainingNamespace.IsGlobalNamespace ? null : type.ContainingNamespace.ToString();
         bool isInternal = type.DeclaredAccessibility == Accessibility.Internal;
-        bool hasPrivateConstructor = HasPrivateConstructor(type);
+        ConstructorInfo constructorInfo = GetConstructorInfo(type);
         FluentApiAttributeInfo fluentApiAttributeInfo =
             FluentApiAttributeInfo.Create(attributeDataExtended.AttributeData, className);
 
@@ -114,7 +114,7 @@ internal class ClassInfoFactory
             genericInfo,
             isStruct,
             isInternal,
-            hasPrivateConstructor,
+            constructorInfo,
             fluentApiAttributeInfo.BuilderClassName,
             newLineString,
             infos,
@@ -122,17 +122,40 @@ internal class ClassInfoFactory
             new FluentApiClassAdditionalInfo(groups));
     }
 
-    private bool HasPrivateConstructor(INamedTypeSymbol type)
+    private ConstructorInfo GetConstructorInfo(INamedTypeSymbol type)
     {
-        IMethodSymbol[] defaultInstanceConstructors =
-            type.InstanceConstructors.Where(c => c.Parameters.Length == 0).ToArray();
+        /* Look for the default constructor. If it is not present, take the constructor
+           with the least parameters that is explicitly declared. */
 
-        if (defaultInstanceConstructors.Length == 0)
+#pragma warning disable RS1024
+        IGrouping<int, IMethodSymbol>[] constructorsGroupedByNumberOfParameters =
+            type.InstanceConstructors
+                .Where(c => c.Parameters.Length == 0 || !c.IsImplicitlyDeclared)
+                .GroupBy(c => c.Parameters.Length)
+                .OrderBy(g => g.Key)
+                .ToArray();
+#pragma warning restore RS1024
+
+        IGrouping<int, IMethodSymbol>? constructorsWithLeastAmountOfParameters =
+            constructorsGroupedByNumberOfParameters.FirstOrDefault();
+
+        if (constructorsWithLeastAmountOfParameters == null)
         {
-            return false;
+            // todo
+            throw new ArgumentException();
         }
 
-        return !defaultInstanceConstructors.Any(c => c.DeclaredAccessibility == Accessibility.Public);
+        IMethodSymbol[] constructors = constructorsWithLeastAmountOfParameters.ToArray();
+
+        if (constructors.Length != 1)
+        {
+            // todo
+            throw new ArgumentException();
+        }
+
+        return new ConstructorInfo(
+            constructors[0].Parameters.Length,
+            constructors[0].DeclaredAccessibility != Accessibility.Public);
     }
 
     private FluentApiInfo? TryCreateFluentApiInfo(ISymbol symbol)

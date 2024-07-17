@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.Commons;
+using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
@@ -11,7 +12,7 @@ internal class BuilderAndTargetInfo
         GenericInfo? genericInfo,
         bool fluentApiTypeIsStruct,
         bool fluentApiTypeIsInternal,
-        bool fluentApiTypeHasPrivateConstructor,
+        ConstructorInfo fluentApiTypeConstructorInfo,
         string builderClassName)
     {
         Namespace = @namespace;
@@ -21,7 +22,7 @@ internal class BuilderAndTargetInfo
         FluentApiTypeIsStruct = fluentApiTypeIsStruct;
         FluentApiTypeIsInternal = fluentApiTypeIsInternal;
         DefaultAccessModifier = fluentApiTypeIsInternal ? "internal" : "public";
-        FluentApiTypeHasPrivateConstructor = fluentApiTypeHasPrivateConstructor;
+        FluentApiTypeConstructorInfo = fluentApiTypeConstructorInfo;
         BuilderClassName = builderClassName;
         BuilderClassNameWithTypeParameters = WithTypeParameters(builderClassName, genericInfo);
         BuilderInstanceName = builderClassName.FirstCharToLower();
@@ -36,7 +37,7 @@ internal class BuilderAndTargetInfo
     internal bool FluentApiTypeIsStruct { get; }
     internal bool FluentApiTypeIsInternal { get; }
     internal string DefaultAccessModifier { get; }
-    internal bool FluentApiTypeHasPrivateConstructor { get; }
+    internal ConstructorInfo FluentApiTypeConstructorInfo { get; }
     internal string BuilderClassName { get; }
     internal string BuilderClassNameWithTypeParameters { get; }
     internal string BuilderInstanceName { get; }

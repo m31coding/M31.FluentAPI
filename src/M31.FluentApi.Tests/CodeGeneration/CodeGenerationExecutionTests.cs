@@ -611,6 +611,20 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteThreeMemberRecordPrimaryConstructor()
+    {
+        var student = TestClasses.Abstract.ThreeMemberRecordPrimaryConstructor
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.dateOfBirth);
+        Assert.Equal(2, student.semester);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteThreePrivateMembersClass()
     {
         var student = TestClasses.Abstract.ThreePrivateMembersClass

@@ -18,20 +18,39 @@ internal class ConstructorGenerator : ICodeBoardActor
         }
 
         Method constructor = CreateConstructor(codeBoard.Info.BuilderClassName);
+        int nofParameters = codeBoard.Info.FluentApiTypeConstructorInfo.NumberOfParameters;
 
-        if (codeBoard.Info.FluentApiTypeHasPrivateConstructor)
+        if (codeBoard.Info.FluentApiTypeConstructorInfo.ConstructorIsNonPublic)
         {
-            // student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), true)!;
-            constructor.AppendBodyLine(
-                $"{instanceName} = ({classNameWithTypeParameters}) " +
-                $"Activator.CreateInstance(typeof({classNameWithTypeParameters}), true)!;");
+            if (nofParameters == 0)
+            {
+                // student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), true)!;
+                constructor.AppendBodyLine(
+                    $"{instanceName} = ({classNameWithTypeParameters}) " +
+                    $"Activator.CreateInstance(typeof({classNameWithTypeParameters}), true)!;");
 
-            codeBoard.CodeFile.AddUsing("System");
+                codeBoard.CodeFile.AddUsing("System");
+            }
+            else
+            {
+                string parameters =
+                    $"new object?[] {{ {string.Join(", ", Enumerable.Repeat("null", nofParameters))} }}";
+
+                constructor.AppendBodyLine(
+                    $"{instanceName} = ({classNameWithTypeParameters}) " +
+                    $"Activator.CreateInstance(" +
+                    $"typeof({classNameWithTypeParameters}), BindingFlags.Instance, null, {parameters}, null)!;");
+
+                codeBoard.CodeFile.AddUsing("System.Reflection");
+                codeBoard.CodeFile.AddUsing("System");
+            }
         }
         else
         {
-            // student = new Student<T1, T2>();
-            constructor.AppendBodyLine($"{instanceName} = new {classNameWithTypeParameters}();");
+            // student = new Student<T1, T2>(default!, default!, default!);
+            string parameters = string.Join(", ",
+                Enumerable.Repeat("default!", nofParameters));
+            constructor.AppendBodyLine($"{instanceName} = new {classNameWithTypeParameters}({parameters});");
         }
 
         codeBoard.Constructor = constructor;

@@ -19,7 +19,7 @@ internal static class CodeGenerator
                 classInfo.GenericInfo,
                 classInfo.IsStruct,
                 classInfo.IsInternal,
-                classInfo.HasPrivateConstructor,
+                classInfo.ConstructorInfo,
                 classInfo.BuilderClassName);
 
         CodeBoard codeBoard = CodeBoard.Create(

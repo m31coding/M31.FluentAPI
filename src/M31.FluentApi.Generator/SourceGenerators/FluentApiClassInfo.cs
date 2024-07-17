@@ -16,7 +16,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         GenericInfo? genericInfo,
         bool isStruct,
         bool isInternal,
-        bool hasPrivateConstructor,
+        ConstructorInfo constructorInfo,
         string builderClassName,
         string newLineString,
         IReadOnlyCollection<FluentApiInfo> fluentApiInfos,
@@ -28,7 +28,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
         GenericInfo = genericInfo;
         IsStruct = isStruct;
         IsInternal = isInternal;
-        HasPrivateConstructor = hasPrivateConstructor;
+        ConstructorInfo = constructorInfo;
         BuilderClassName = builderClassName;
         NewLineString = newLineString;
         FluentApiInfos = fluentApiInfos;
@@ -41,7 +41,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     internal GenericInfo? GenericInfo { get; }
     internal bool IsStruct { get; }
     internal bool IsInternal { get; }
-    internal bool HasPrivateConstructor { get; }
+    internal ConstructorInfo ConstructorInfo { get; }
     internal string BuilderClassName { get; }
     internal string NewLineString { get; }
     internal IReadOnlyCollection<FluentApiInfo> FluentApiInfos { get; }
@@ -57,7 +57,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
                Equals(GenericInfo, other.GenericInfo) &&
                IsStruct == other.IsStruct &&
                IsInternal == other.IsInternal &&
-               HasPrivateConstructor == other.HasPrivateConstructor &&
+               ConstructorInfo.Equals(other.ConstructorInfo) &&
                BuilderClassName == other.BuilderClassName &&
                NewLineString == other.NewLineString &&
                FluentApiInfos.SequenceEqual(other.FluentApiInfos) &&
@@ -76,7 +76,7 @@ internal class FluentApiClassInfo : IEquatable<FluentApiClassInfo>
     {
         return new HashCode()
             .Add(Name, Namespace, GenericInfo)
-            .Add(IsStruct, IsInternal, HasPrivateConstructor)
+            .Add(IsStruct, IsInternal, ConstructorInfo)
             .Add(BuilderClassName)
             .Add(NewLineString)
             .AddSequence(FluentApiInfos)
