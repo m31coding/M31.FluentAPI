@@ -39,7 +39,7 @@ internal class ConstructorGenerator : ICodeBoardActor
                 constructor.AppendBodyLine(
                     $"{instanceName} = ({classNameWithTypeParameters}) " +
                     $"Activator.CreateInstance(" +
-                    $"typeof({classNameWithTypeParameters}), BindingFlags.Instance, null, {parameters}, null)!;");
+                    $"typeof({classNameWithTypeParameters}), BindingFlags.Instance | BindingFlags.NonPublic, null, {parameters}, null)!;");
 
                 codeBoard.CodeFile.AddUsing("System.Reflection");
                 codeBoard.CodeFile.AddUsing("System");
