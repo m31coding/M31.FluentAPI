@@ -137,20 +137,20 @@ internal class ClassInfoFactory
                 .ToArray();
 #pragma warning restore RS1024
 
-        IGrouping<int, IMethodSymbol>? constructorsWithLeastAmountOfParameters =
+        IGrouping<int, IMethodSymbol>? constructorsWithFewestParameters =
             constructorsGroupedByNumberOfParameters.FirstOrDefault();
 
-        if (constructorsWithLeastAmountOfParameters == null)
+        if (constructorsWithFewestParameters == null)
         {
             throw new GenerationException(
                 $"The type {type.Name} has neither a default constructor nor explicitly declared constructors.");
         }
 
-        IMethodSymbol[] constructors = constructorsWithLeastAmountOfParameters.ToArray();
+        IMethodSymbol[] constructors = constructorsWithFewestParameters.ToArray();
 
         if (constructors.Length != 1)
         {
-            int nofParameters = constructorsWithLeastAmountOfParameters.Key;
+            int nofParameters = constructorsWithFewestParameters.Key;
 
             foreach (IMethodSymbol constructor in constructors)
             {
