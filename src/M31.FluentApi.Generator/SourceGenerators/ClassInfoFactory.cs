@@ -126,7 +126,7 @@ internal class ClassInfoFactory
     private ConstructorInfo? TryGetConstructorInfo(INamedTypeSymbol type)
     {
         /* Look for the default constructor. If it is not present, take the constructor
-           with the least parameters that is explicitly declared. */
+           with the fewest parameters that is explicitly declared. */
 
 #pragma warning disable RS1024
         IGrouping<int, IMethodSymbol>[] constructorsGroupedByNumberOfParameters =
