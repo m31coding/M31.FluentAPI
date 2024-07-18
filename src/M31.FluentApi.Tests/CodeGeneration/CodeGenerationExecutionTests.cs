@@ -312,6 +312,17 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteGenericClassPrivateConstructor()
+    {
+        var student = TestClasses.Abstract.GenericClassPrivateConstructor
+            .CreateStudent<int, string>
+            .WithProperty1(10);
+
+        Assert.Equal(10, student.Property1);
+        Assert.Null(student.Property2);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteGenericClassWithGenericMethods()
     {
         var student = TestClasses.Abstract.GenericClassWithGenericMethods
@@ -608,6 +619,20 @@ public partial class CodeGenerationTests
         Assert.Equal("Alice", student.Name);
         Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
         Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteThreeMemberRecordPrimaryConstructor()
+    {
+        var student = TestClasses.Abstract.ThreeMemberRecordPrimaryConstructor
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.dateOfBirth);
+        Assert.Equal(2, student.semester);
     }
 
     [Fact, Priority(1)]

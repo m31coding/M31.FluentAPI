@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
@@ -85,7 +86,7 @@ internal class ClassInfoFactory
         string className = type.Name;
         string? @namespace = type.ContainingNamespace.IsGlobalNamespace ? null : type.ContainingNamespace.ToString();
         bool isInternal = type.DeclaredAccessibility == Accessibility.Internal;
-        bool hasPrivateConstructor = HasPrivateConstructor(type);
+        ConstructorInfo? constructorInfo = TryGetConstructorInfo(type);
         FluentApiAttributeInfo fluentApiAttributeInfo =
             FluentApiAttributeInfo.Create(attributeDataExtended.AttributeData, className);
 
@@ -114,7 +115,7 @@ internal class ClassInfoFactory
             genericInfo,
             isStruct,
             isInternal,
-            hasPrivateConstructor,
+            constructorInfo!,
             fluentApiAttributeInfo.BuilderClassName,
             newLineString,
             infos,
@@ -122,17 +123,46 @@ internal class ClassInfoFactory
             new FluentApiClassAdditionalInfo(groups));
     }
 
-    private bool HasPrivateConstructor(INamedTypeSymbol type)
+    private ConstructorInfo? TryGetConstructorInfo(INamedTypeSymbol type)
     {
-        IMethodSymbol[] defaultInstanceConstructors =
-            type.InstanceConstructors.Where(c => c.Parameters.Length == 0).ToArray();
+        /* Look for the default constructor. If it is not present, take the constructor
+           with the fewest parameters that is explicitly declared. */
 
-        if (defaultInstanceConstructors.Length == 0)
+#pragma warning disable RS1024
+        IGrouping<int, IMethodSymbol>[] constructorsGroupedByNumberOfParameters =
+            type.InstanceConstructors
+                .Where(c => c.Parameters.Length == 0 || !c.IsImplicitlyDeclared)
+                .GroupBy(c => c.Parameters.Length)
+                .OrderBy(g => g.Key)
+                .ToArray();
+#pragma warning restore RS1024
+
+        IGrouping<int, IMethodSymbol>? constructorsWithFewestParameters =
+            constructorsGroupedByNumberOfParameters.FirstOrDefault();
+
+        if (constructorsWithFewestParameters == null)
         {
-            return false;
+            throw new GenerationException(
+                $"The type {type.Name} has neither a default constructor nor explicitly declared constructors.");
         }
 
-        return !defaultInstanceConstructors.Any(c => c.DeclaredAccessibility == Accessibility.Public);
+        IMethodSymbol[] constructors = constructorsWithFewestParameters.ToArray();
+
+        if (constructors.Length != 1)
+        {
+            int nofParameters = constructorsWithFewestParameters.Key;
+
+            foreach (IMethodSymbol constructor in constructors)
+            {
+                report.ReportDiagnostic(AmbiguousConstructors.CreateDiagnostic(constructor, nofParameters));
+            }
+
+            return null;
+        }
+
+        return new ConstructorInfo(
+            constructors[0].Parameters.Length,
+            constructors[0].DeclaredAccessibility != Accessibility.Public);
     }
 
     private FluentApiInfo? TryCreateFluentApiInfo(ISymbol symbol)

@@ -66,11 +66,6 @@ internal class FluentApiAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        if (!symbol.InstanceConstructors.Any(m => m.Parameters.Length == 0))
-        {
-            context.ReportDiagnostic(MissingDefaultConstructor.CreateDiagnostic(symbol));
-        }
-
         ClassInfoResult classInfoResult =
             ClassInfoFactory.CreateFluentApiClassInfo(
                 context.SemanticModel,

@@ -6,10 +6,9 @@
 #nullable enable
 
 using M31.FluentApi.Attributes;
-using System.Reflection;
 using System;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateConstructor;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateDefaultConstructor;
 
 public class CreateStudent<T1, T2> :
     CreateStudent<T1, T2>.ICreateStudent,
@@ -19,7 +18,7 @@ public class CreateStudent<T1, T2> :
 
     private CreateStudent()
     {
-        student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), BindingFlags.Instance | BindingFlags.NonPublic, null, new object?[] { null, null }, null)!;
+        student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), true)!;
     }
 
     public static ICreateStudent InitialStep()

@@ -4,15 +4,14 @@
 
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateConstructor;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateDefaultConstructor;
 
 [FluentApi]
 public class Student<T1, T2>
 {
-    private Student(T1 property1, T2 property2)
+    private Student()
     {
-        Property1 = property1;
-        Property2 = property2;
+
     }
 
     [FluentMember(0)]

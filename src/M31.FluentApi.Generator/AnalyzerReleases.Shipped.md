@@ -69,3 +69,18 @@ M31FA007 | M31.Usage | Error | Partial types are not supported
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 M31FA023 | M31.Usage | Error | Last builder step cannot be skipped
+
+
+## Release 1.8.0
+
+### Removed Rules
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+M31FA011 | M31.Usage | Error | Default constructor is missing
+
+### New Rules
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+M31FA024 | M31.Usage | Error | Constructors are ambiguous
