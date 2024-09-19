@@ -90,9 +90,9 @@ internal class ClassInfoFactory
         FluentApiAttributeInfo fluentApiAttributeInfo =
             FluentApiAttributeInfo.Create(attributeDataExtended.AttributeData, className);
 
-        List<FluentApiInfo> infos = new List<FluentApiInfo>();
+        HashSet<FluentApiInfo> infos = new HashSet<FluentApiInfo>();
 
-        foreach (var member in type.GetMembers().Where(m => m.CanBeReferencedByName && m.Name != string.Empty))
+        foreach (var member in GetMembers(type))
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -121,6 +121,22 @@ internal class ClassInfoFactory
             infos,
             usingStatements,
             new FluentApiClassAdditionalInfo(groups));
+
+        static IEnumerable<ISymbol> GetMembers(ITypeSymbol? typeSymbol)
+        {
+            if (typeSymbol != null && typeSymbol.Name != nameof(Object))
+            {
+                foreach (var member in typeSymbol.GetMembers().Where(m => m.CanBeReferencedByName && m.Name != string.Empty))
+                {
+                    yield return member;
+                }
+
+                foreach (var member in GetMembers(typeSymbol.BaseType))
+                {
+                    yield return member;
+                }
+            }
+        }
     }
 
     private ConstructorInfo? TryGetConstructorInfo(INamedTypeSymbol type)

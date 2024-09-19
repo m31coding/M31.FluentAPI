@@ -59,6 +59,22 @@ Order2 order2 = CreateOrder2
 
 Console.WriteLine(JsonSerializer.Serialize(order2));
 
+// Order (with inheritance)
+//
+
+Order3 order3 = CreateOrder3
+    .CreatedOn(DateTime.UtcNow)
+    .ShippedTo(a => a
+        .Country("country")
+        .Street("street")
+        .Zip("zip")
+        .City("city")
+        .Build())
+    .WithNumber(10)
+    .Build();
+
+Console.WriteLine(JsonSerializer.Serialize(order3));
+
 // HashCode
 //
 
