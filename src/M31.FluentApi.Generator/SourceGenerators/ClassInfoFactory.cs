@@ -132,7 +132,7 @@ internal class ClassInfoFactory
             yield return member;
         }
 
-        if (typeSymbol.BaseType == null || typeSymbol.BaseType.Name == nameof(Object))
+        if (typeSymbol.BaseType == null || typeSymbol.BaseType.SpecialType == SpecialType.System_Object)
         {
             yield break;
         }
