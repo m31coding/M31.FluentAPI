@@ -91,8 +91,9 @@ internal class ClassInfoFactory
             FluentApiAttributeInfo.Create(attributeDataExtended.AttributeData, className);
 
         HashSet<FluentApiInfo> infos = new HashSet<FluentApiInfo>();
+        ISymbol[] members = GetMembers(type).ToArray();
 
-        foreach (var member in GetMembers(type))
+        foreach (ISymbol member in members)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -121,21 +122,24 @@ internal class ClassInfoFactory
             infos,
             usingStatements,
             new FluentApiClassAdditionalInfo(groups));
+    }
 
-        static IEnumerable<ISymbol> GetMembers(ITypeSymbol? typeSymbol)
+    private static IEnumerable<ISymbol> GetMembers(ITypeSymbol typeSymbol)
+    {
+        foreach (ISymbol member in typeSymbol.GetMembers()
+                     .Where(m => m.CanBeReferencedByName && m.Name != string.Empty))
         {
-            if (typeSymbol != null && typeSymbol.Name != nameof(Object))
-            {
-                foreach (var member in typeSymbol.GetMembers().Where(m => m.CanBeReferencedByName && m.Name != string.Empty))
-                {
-                    yield return member;
-                }
+            yield return member;
+        }
 
-                foreach (var member in GetMembers(typeSymbol.BaseType))
-                {
-                    yield return member;
-                }
-            }
+        if (typeSymbol.BaseType == null || typeSymbol.BaseType.Name == nameof(Object))
+        {
+            yield break;
+        }
+
+        foreach (ISymbol member in GetMembers(typeSymbol.BaseType))
+        {
+            yield return member;
         }
     }
 
