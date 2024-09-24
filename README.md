@@ -24,7 +24,7 @@ Accompanying blog post: [www.m31coding.com>blog>fluent-api](https://www.m31codin
 - Optional (skippable) builder methods
 - Forking and branching capabilities
 - Support for returning arbitrary types
-- Support for generics and partial classes
+- Support for inheritance, generics, and partial classes
 
 ## Installing via NuGet
 
