@@ -499,6 +499,20 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteInheritedRecord()
+    {
+        var student = TestClasses.Abstract.InheritedRecord
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecutePartialClass()
     {
         var student = TestClasses.Abstract.PartialClass
