@@ -12,6 +12,14 @@ Student student2 = CreateStudent.Named("Bob", "Bishop").BornOn(new DateOnly(2002
 Console.WriteLine(JsonSerializer.Serialize(student1));
 Console.WriteLine(JsonSerializer.Serialize(student2));
 
+// ExchangeStudent (inherited from Student)
+//
+
+ExchangeStudent exchangeStudent = CreateExchangeStudent.Named("Bob", "Bishop").BornOn(new DateOnly(2002, 8, 3))
+    .InSemester(2).LivingInBoston().WithUnknownMood().WhoseFriendIs("Alice").WithHomeCountry("United States");
+
+Console.WriteLine(JsonSerializer.Serialize(exchangeStudent));
+
 // Person
 //
 
@@ -58,22 +66,6 @@ Order2 order2 = CreateOrder2
     .Build();
 
 Console.WriteLine(JsonSerializer.Serialize(order2));
-
-// Order (with inheritance)
-//
-
-Order3 order3 = CreateOrder3
-    .CreatedOn(DateTime.UtcNow)
-    .ShippedTo(a => a
-        .Country("country")
-        .Street("street")
-        .Zip("zip")
-        .City("city")
-        .Build())
-    .WithNumber(10)
-    .Build();
-
-Console.WriteLine(JsonSerializer.Serialize(order3));
 
 // HashCode
 //
