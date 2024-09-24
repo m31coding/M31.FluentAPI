@@ -464,6 +464,20 @@ public partial class CodeGenerationTests
     }
 
     [Fact, Priority(1)]
+    public void CanExecuteInheritedClassPrivateSetters()
+    {
+        var student = TestClasses.Abstract.InheritedClassPrivateSetters
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
     public void CanExecuteInheritedClassProtectedMembers()
     {
         var student = TestClasses.Abstract.InheritedClassProtectedMembers

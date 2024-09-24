@@ -58,6 +58,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "GetPrivateSetPropertyClass", "Student" },
                 new object[] { "Abstract", "InternalPropertyClass", "Student" },
                 new object[] { "Abstract", "InheritedClass", "Student|Person" },
+                new object[] { "Abstract", "InheritedClassPrivateSetters", "Student|Person" },
                 new object[] { "Abstract", "InheritedClassProtectedMembers", "Student|Person" },
                 new object[] { "Abstract", "InheritedClassProtectedSetters", "Student|Person" },
                 new object[] { "Abstract", "InheritedRecord", "Student|Person" },
