@@ -12,7 +12,8 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 
 public class CreatePerson :
     CreatePerson.ICreatePerson,
-    CreatePerson.IInSemester
+    CreatePerson.IWithName,
+    CreatePerson.IBornOn
 {
     private readonly Person person;
 
@@ -26,25 +27,36 @@ public class CreatePerson :
         return new CreatePerson();
     }
 
-    public static Person InSemester(int semester)
+    public static IBornOn WithName(string name)
     {
         CreatePerson createPerson = new CreatePerson();
-        createPerson.person.Semester = semester;
-        return createPerson.person;
+        createPerson.person.Name = name;
+        return createPerson;
     }
 
-    Person IInSemester.InSemester(int semester)
+    IBornOn IWithName.WithName(string name)
     {
-        person.Semester = semester;
+        person.Name = name;
+        return this;
+    }
+
+    Person IBornOn.BornOn(System.DateOnly dateOfBirth)
+    {
+        person.DateOfBirth = dateOfBirth;
         return person;
     }
 
-    public interface ICreatePerson : IInSemester
+    public interface ICreatePerson : IWithName
     {
     }
 
-    public interface IInSemester
+    public interface IWithName
     {
-        Person InSemester(int semester);
+        IBornOn WithName(string name);
+    }
+
+    public interface IBornOn
+    {
+        Person BornOn(System.DateOnly dateOfBirth);
     }
 }

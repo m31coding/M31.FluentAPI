@@ -13,14 +13,17 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 
 public class CreatePerson :
     CreatePerson.ICreatePerson,
-    CreatePerson.IInSemester
+    CreatePerson.IWithName,
+    CreatePerson.IBornOn
 {
     private readonly Person person;
-    private static readonly PropertyInfo semesterPropertyInfo;
+    private static readonly PropertyInfo namePropertyInfo;
+    private static readonly PropertyInfo dateOfBirthPropertyInfo;
 
     static CreatePerson()
     {
-        semesterPropertyInfo = typeof(Person).GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        namePropertyInfo = typeof(Person).GetProperty("Name", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        dateOfBirthPropertyInfo = typeof(Person).GetProperty("DateOfBirth", BindingFlags.Instance | BindingFlags.NonPublic)!;
     }
 
     private CreatePerson()
@@ -33,25 +36,36 @@ public class CreatePerson :
         return new CreatePerson();
     }
 
-    public static Person InSemester(int semester)
+    public static IBornOn WithName(string name)
     {
         CreatePerson createPerson = new CreatePerson();
-        CreatePerson.semesterPropertyInfo.SetValue(createPerson.person, semester);
-        return createPerson.person;
+        CreatePerson.namePropertyInfo.SetValue(createPerson.person, name);
+        return createPerson;
     }
 
-    Person IInSemester.InSemester(int semester)
+    IBornOn IWithName.WithName(string name)
     {
-        CreatePerson.semesterPropertyInfo.SetValue(person, semester);
+        CreatePerson.namePropertyInfo.SetValue(person, name);
+        return this;
+    }
+
+    Person IBornOn.BornOn(System.DateOnly dateOfBirth)
+    {
+        CreatePerson.dateOfBirthPropertyInfo.SetValue(person, dateOfBirth);
         return person;
     }
 
-    public interface ICreatePerson : IInSemester
+    public interface ICreatePerson : IWithName
     {
     }
 
-    public interface IInSemester
+    public interface IWithName
     {
-        Person InSemester(int semester);
+        IBornOn WithName(string name);
+    }
+
+    public interface IBornOn
+    {
+        Person BornOn(System.DateOnly dateOfBirth);
     }
 }

@@ -10,6 +10,9 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 [FluentApi]
 public class Person
 {
-    [FluentMember(2, "InSemester")]
-    protected int Semester { get; set; }
+    [FluentMember(0, "WithName")]
+    protected string Name { get; set; }
+
+    [FluentMember(1, "BornOn")]
+    protected DateOnly DateOfBirth{ get; set; }
 }

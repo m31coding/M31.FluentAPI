@@ -18,15 +18,15 @@ public class CreateStudent :
     CreateStudent.IInSemester
 {
     private readonly Student student;
+    private static readonly PropertyInfo semesterPropertyInfo;
     private static readonly PropertyInfo namePropertyInfo;
     private static readonly PropertyInfo dateOfBirthPropertyInfo;
-    private static readonly PropertyInfo semesterPropertyInfo;
 
     static CreateStudent()
     {
+        semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic)!;
         namePropertyInfo = typeof(Student).GetProperty("Name", BindingFlags.Instance | BindingFlags.NonPublic)!;
         dateOfBirthPropertyInfo = typeof(Student).GetProperty("DateOfBirth", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic)!;
     }
 
     private CreateStudent()
