@@ -86,7 +86,7 @@ internal class ClassInfoFactory
         FluentApiAttributeInfo fluentApiAttributeInfo =
             FluentApiAttributeInfo.Create(typeData.AttributeDataExtended.AttributeData, className);
 
-        HashSet<FluentApiInfo> infos = new HashSet<FluentApiInfo>();
+        List<FluentApiInfo> infos = new List<FluentApiInfo>();
         (ITypeSymbol declaringType, ISymbol[] members)[] allMembers =
             GetMembersOfTypeAndBaseTypes(typeData.Type).ToArray();
 
