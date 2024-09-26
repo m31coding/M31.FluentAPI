@@ -13,6 +13,15 @@ public class Person
     [FluentMember(0, "WithName")]
     public string Name { get; private set; }
 
-    [FluentMember(1, "BornOn")]
-    public DateOnly DateOfBirth{ get; private set; }
+    [FluentMember(1, "OfAge")]
+    public int Age { get; private set; }
+
+    [FluentMethod(1)]
+    private void BornOn(DateOnly dateOfBirth)
+    {
+        DateOnly today = new DateOnly(2024, 9, 26);
+        int age = today.Year - dateOfBirth.Year;
+        if (dateOfBirth > today.AddYears(-age)) age--;
+        Age = age;
+    }
 }

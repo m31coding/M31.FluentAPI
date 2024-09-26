@@ -194,7 +194,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         // Generic types are created via Type.MakeGenericMethodParameter(int position). In addition, a ref type is
         // specified via MakeByRefType().
         staticConstructor.AppendBodyLine($"{fieldName} = " +
-                                         $"typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters}).GetMethod(");
+                                         $"typeof({symbolInfo.DeclaringClassNameWithTypeParameters}).GetMethod(");
         staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
         staticConstructor.AppendBodyLine($"{indentation}{GetGenericParameterCount(symbolInfo.GenericInfo)},");
         staticConstructor.AppendBodyLine($"{indentation}{InfoFieldBindingFlagsArgument(symbolInfo)},");

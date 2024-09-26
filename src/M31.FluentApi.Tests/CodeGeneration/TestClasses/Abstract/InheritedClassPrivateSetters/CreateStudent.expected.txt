@@ -14,19 +14,27 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 public class CreateStudent :
     CreateStudent.ICreateStudent,
     CreateStudent.IWithName,
-    CreateStudent.IBornOn,
+    CreateStudent.IOfAgeBornOn,
     CreateStudent.IInSemester
 {
     private readonly Student student;
     private static readonly PropertyInfo semesterPropertyInfo;
     private static readonly PropertyInfo namePropertyInfo;
-    private static readonly PropertyInfo dateOfBirthPropertyInfo;
+    private static readonly PropertyInfo agePropertyInfo;
+    private static readonly MethodInfo bornOnMethodInfo;
 
     static CreateStudent()
     {
         semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
         namePropertyInfo = typeof(Person).GetProperty("Name", BindingFlags.Instance | BindingFlags.Public)!;
-        dateOfBirthPropertyInfo = typeof(Person).GetProperty("DateOfBirth", BindingFlags.Instance | BindingFlags.Public)!;
+        agePropertyInfo = typeof(Person).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
+        bornOnMethodInfo = typeof(Person).GetMethod(
+            "BornOn",
+            0,
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            null,
+            new Type[] { typeof(System.DateOnly) },
+            null)!;
     }
 
     private CreateStudent()
@@ -39,22 +47,28 @@ public class CreateStudent :
         return new CreateStudent();
     }
 
-    public static IBornOn WithName(string name)
+    public static IOfAgeBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
         CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
         return createStudent;
     }
 
-    IBornOn IWithName.WithName(string name)
+    IOfAgeBornOn IWithName.WithName(string name)
     {
         CreateStudent.namePropertyInfo.SetValue(student, name);
         return this;
     }
 
-    IInSemester IBornOn.BornOn(System.DateOnly dateOfBirth)
+    IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        CreateStudent.dateOfBirthPropertyInfo.SetValue(student, dateOfBirth);
+        CreateStudent.agePropertyInfo.SetValue(student, age);
+        return this;
+    }
+
+    IInSemester IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
+    {
+        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
         return this;
     }
 
@@ -70,11 +84,13 @@ public class CreateStudent :
 
     public interface IWithName
     {
-        IBornOn WithName(string name);
+        IOfAgeBornOn WithName(string name);
     }
 
-    public interface IBornOn
+    public interface IOfAgeBornOn
     {
+        IInSemester OfAge(int age);
+
         IInSemester BornOn(System.DateOnly dateOfBirth);
     }
 

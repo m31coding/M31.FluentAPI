@@ -473,7 +473,7 @@ public partial class CodeGenerationTests
             .InSemester(2);
 
         Assert.Equal("Alice", student.Name);
-        Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Equal(22, student.Age);
         Assert.Equal(2, student.Semester);
     }
 
