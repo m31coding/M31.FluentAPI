@@ -8,12 +8,13 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
 {
     internal MethodSymbolInfo(
         string name,
+        string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
         bool requiresReflection,
         GenericInfo? genericInfo,
         IReadOnlyCollection<ParameterSymbolInfo> parameterInfos,
         string returnType)
-        : base(name, accessibility, requiresReflection)
+        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection)
     {
         GenericInfo = genericInfo;
         ParameterInfos = parameterInfos;

@@ -10,6 +10,11 @@ internal class GenericInfo
         Parameters = parameters;
     }
 
+    internal static GenericInfo? TryCreate(INamedTypeSymbol type)
+    {
+        return type.IsGenericType ? Create(type.TypeParameters) : null;
+    }
+
     internal static GenericInfo Create(IEnumerable<ITypeParameterSymbol> typeParameters)
     {
         GenericTypeParameter[] parameters =

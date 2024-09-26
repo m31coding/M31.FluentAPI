@@ -25,8 +25,8 @@ public class CreateStudent :
     static CreateStudent()
     {
         semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        namePropertyInfo = typeof(Student).GetProperty("Name", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        dateOfBirthPropertyInfo = typeof(Student).GetProperty("DateOfBirth", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        namePropertyInfo = typeof(Person).GetProperty("Name", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        dateOfBirthPropertyInfo = typeof(Person).GetProperty("DateOfBirth", BindingFlags.Instance | BindingFlags.NonPublic)!;
     }
 
     private CreateStudent()
