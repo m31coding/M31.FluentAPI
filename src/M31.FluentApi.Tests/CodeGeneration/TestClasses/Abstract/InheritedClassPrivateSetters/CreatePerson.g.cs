@@ -14,16 +14,24 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 public class CreatePerson :
     CreatePerson.ICreatePerson,
     CreatePerson.IWithName,
-    CreatePerson.IBornOn
+    CreatePerson.IOfAgeBornOn
 {
     private readonly Person person;
     private static readonly PropertyInfo namePropertyInfo;
-    private static readonly PropertyInfo dateOfBirthPropertyInfo;
+    private static readonly PropertyInfo agePropertyInfo;
+    private static readonly MethodInfo bornOnMethodInfo;
 
     static CreatePerson()
     {
         namePropertyInfo = typeof(Person).GetProperty("Name", BindingFlags.Instance | BindingFlags.Public)!;
-        dateOfBirthPropertyInfo = typeof(Person).GetProperty("DateOfBirth", BindingFlags.Instance | BindingFlags.Public)!;
+        agePropertyInfo = typeof(Person).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
+        bornOnMethodInfo = typeof(Person).GetMethod(
+            "BornOn",
+            0,
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            null,
+            new Type[] { typeof(System.DateOnly) },
+            null)!;
     }
 
     private CreatePerson()
@@ -36,22 +44,28 @@ public class CreatePerson :
         return new CreatePerson();
     }
 
-    public static IBornOn WithName(string name)
+    public static IOfAgeBornOn WithName(string name)
     {
         CreatePerson createPerson = new CreatePerson();
         CreatePerson.namePropertyInfo.SetValue(createPerson.person, name);
         return createPerson;
     }
 
-    IBornOn IWithName.WithName(string name)
+    IOfAgeBornOn IWithName.WithName(string name)
     {
         CreatePerson.namePropertyInfo.SetValue(person, name);
         return this;
     }
 
-    Person IBornOn.BornOn(System.DateOnly dateOfBirth)
+    Person IOfAgeBornOn.OfAge(int age)
     {
-        CreatePerson.dateOfBirthPropertyInfo.SetValue(person, dateOfBirth);
+        CreatePerson.agePropertyInfo.SetValue(person, age);
+        return person;
+    }
+
+    Person IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
+    {
+        CreatePerson.bornOnMethodInfo.Invoke(person, new object?[] { dateOfBirth });
         return person;
     }
 
@@ -61,11 +75,13 @@ public class CreatePerson :
 
     public interface IWithName
     {
-        IBornOn WithName(string name);
+        IOfAgeBornOn WithName(string name);
     }
 
-    public interface IBornOn
+    public interface IOfAgeBornOn
     {
+        Person OfAge(int age);
+
         Person BornOn(System.DateOnly dateOfBirth);
     }
 }
