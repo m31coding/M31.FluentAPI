@@ -43,7 +43,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         // semesterPropertyInfo = typeof(Student<T1, T2>)
         //     .GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic););
         string code = $"{fieldName} =" +
-                      $" typeof({CodeBoard.Info.FluentApiClassNameWithTypeParameters})" +
+                      $" typeof({symbolInfo.DeclaringClassNameWithTypeParameters})" +
                       $".Get{SymbolType(symbolInfo)}(\"{symbolInfo.Name}\", " +
                       $"{InfoFieldBindingFlagsArgument(symbolInfo)})!;";
 

@@ -24,7 +24,7 @@ Accompanying blog post: [www.m31coding.com>blog>fluent-api](https://www.m31codin
 - Optional (skippable) builder methods
 - Forking and branching capabilities
 - Support for returning arbitrary types
-- Support for generics and partial classes
+- Support for inheritance, generics, and partial classes
 
 ## Installing via NuGet
 
@@ -37,7 +37,7 @@ PM> Install-Package M31.FluentApi
 A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentApi`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
 
 ```xml
-<PackageReference Include="M31.FluentApi" Version="1.8.0" PrivateAssets="all"/>
+<PackageReference Include="M31.FluentApi" Version="1.9.0" PrivateAssets="all"/>
 ```
 
 If you would like to examine the generated code, you may emit it by adding the following lines to your `csproj` file:

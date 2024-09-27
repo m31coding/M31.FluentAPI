@@ -9,22 +9,31 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal static class SymbolInfoCreator
 {
-    internal static FluentApiSymbolInfo Create(ISymbol symbol)
+    internal static FluentApiSymbolInfo Create(ISymbol symbol, string declaringClassNameWithTypeParameters)
     {
         return symbol switch
         {
-            IPropertySymbol propertySymbol => CreateMemberSymbolInfo(propertySymbol),
-            IFieldSymbol fieldSymbol => CreateMemberSymbolInfo(fieldSymbol),
-            IMethodSymbol methodSymbol => CreateMethodSymbolInfo(methodSymbol),
+            IPropertySymbol propertySymbol => CreateMemberSymbolInfo(
+                propertySymbol,
+                declaringClassNameWithTypeParameters),
+            IFieldSymbol fieldSymbol => CreateMemberSymbolInfo(
+                fieldSymbol,
+                declaringClassNameWithTypeParameters),
+            IMethodSymbol methodSymbol => CreateMethodSymbolInfo(
+                methodSymbol,
+                declaringClassNameWithTypeParameters),
             _ => throw new ArgumentException($"Unexpected symbol type: {symbol.GetType()}."),
         };
     }
 
-    private static MemberSymbolInfo CreateMemberSymbolInfo(IFieldSymbol fieldSymbol)
+    private static MemberSymbolInfo CreateMemberSymbolInfo(
+        IFieldSymbol fieldSymbol,
+        string declaringClassNameWithTypeParameters)
     {
         return new MemberSymbolInfo(
             fieldSymbol.Name,
             fieldSymbol.Type.ToString(),
+            declaringClassNameWithTypeParameters,
             fieldSymbol.DeclaredAccessibility,
             RequiresReflection(fieldSymbol),
             CodeTypeExtractor.GetTypeForCodeGeneration(fieldSymbol.Type),
@@ -33,11 +42,14 @@ internal static class SymbolInfoCreator
             CollectionInference.InferCollectionType(fieldSymbol.Type));
     }
 
-    private static MemberSymbolInfo CreateMemberSymbolInfo(IPropertySymbol propertySymbol)
+    private static MemberSymbolInfo CreateMemberSymbolInfo(
+        IPropertySymbol propertySymbol,
+        string declaringClassNameWithTypeParameters)
     {
         return new MemberSymbolInfo(
             propertySymbol.Name,
             propertySymbol.Type.ToString(),
+            declaringClassNameWithTypeParameters,
             propertySymbol.DeclaredAccessibility,
             RequiresReflection(propertySymbol),
             CodeTypeExtractor.GetTypeForCodeGeneration(propertySymbol.Type),
@@ -46,7 +58,9 @@ internal static class SymbolInfoCreator
             CollectionInference.InferCollectionType(propertySymbol.Type));
     }
 
-    private static MethodSymbolInfo CreateMethodSymbolInfo(IMethodSymbol methodSymbol)
+    private static MethodSymbolInfo CreateMethodSymbolInfo(
+        IMethodSymbol methodSymbol,
+        string declaringClassNameWithTypeParameters)
     {
         GenericInfo? genericInfo = GetGenericInfo(methodSymbol);
         Dictionary<string, int> typeParameterNameToTypeParameterPosition = genericInfo == null
@@ -59,6 +73,7 @@ internal static class SymbolInfoCreator
 
         return new MethodSymbolInfo(
             methodSymbol.Name,
+            declaringClassNameWithTypeParameters,
             methodSymbol.DeclaredAccessibility,
             RequiresReflection(methodSymbol),
             genericInfo,

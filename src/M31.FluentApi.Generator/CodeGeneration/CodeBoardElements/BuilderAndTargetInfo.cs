@@ -17,14 +17,16 @@ internal class BuilderAndTargetInfo
     {
         Namespace = @namespace;
         FluentApiClassName = fluentApiClassName;
-        FluentApiClassNameWithTypeParameters = WithTypeParameters(fluentApiClassName, genericInfo);
+        FluentApiClassNameWithTypeParameters =
+            ClassInfoFactory.AugmentTypeNameWithGenericParameters(fluentApiClassName, genericInfo);
         GenericInfo = genericInfo;
         FluentApiTypeIsStruct = fluentApiTypeIsStruct;
         FluentApiTypeIsInternal = fluentApiTypeIsInternal;
         DefaultAccessModifier = fluentApiTypeIsInternal ? "internal" : "public";
         FluentApiTypeConstructorInfo = fluentApiTypeConstructorInfo;
         BuilderClassName = builderClassName;
-        BuilderClassNameWithTypeParameters = WithTypeParameters(builderClassName, genericInfo);
+        BuilderClassNameWithTypeParameters =
+            ClassInfoFactory.AugmentTypeNameWithGenericParameters(builderClassName, genericInfo);
         BuilderInstanceName = builderClassName.FirstCharToLower();
         ClassInstanceName = fluentApiClassName.FirstCharToLower();
         InitialStepInterfaceName = $"I{builderClassName}";
@@ -43,10 +45,4 @@ internal class BuilderAndTargetInfo
     internal string BuilderInstanceName { get; }
     internal string ClassInstanceName { get; }
     internal string InitialStepInterfaceName { get; }
-
-    private static string WithTypeParameters(string typeName, GenericInfo? genericInfo)
-    {
-        string parameterListInAngleBrackets = genericInfo?.ParameterListInAngleBrackets ?? string.Empty;
-        return $"{typeName}{parameterListInAngleBrackets}";
-    }
 }

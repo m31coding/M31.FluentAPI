@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using M31.FluentApi.Tests.CodeGeneration.Helpers;
 using Xunit;
 using Xunit.Priority;
@@ -446,6 +447,83 @@ public partial class CodeGenerationTests
                 .CreateStudent.Method1<int, int>(in i, ref string1);
             Assert.Equal(new string[] { "Called Method1<S, T>(in T, ref string)" }, student.Logs);
         }
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteInheritedClass()
+    {
+        var student = TestClasses.Abstract.InheritedClass
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteInheritedClassPrivateSetters()
+    {
+        var student = TestClasses.Abstract.InheritedClassPrivateSetters
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(22, student.Age);
+        Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteInheritedClassProtectedMembers()
+    {
+        var student = TestClasses.Abstract.InheritedClassProtectedMembers
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", GetProperty("Name"));
+        Assert.Equal(new DateOnly(2002, 8, 3), GetProperty("DateOfBirth"));
+        Assert.Equal(2, GetProperty("Semester"));
+
+        object GetProperty(string propertyName)
+        {
+            return typeof(TestClasses.Abstract.InheritedClassProtectedMembers.Student)
+                .GetProperty(propertyName, BindingFlags.Instance | BindingFlags.NonPublic)?
+                .GetValue(student)!;
+        }
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteInheritedClassProtectedSetters()
+    {
+        var student = TestClasses.Abstract.InheritedClassProtectedSetters
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Equal(2, student.Semester);
+    }
+
+    [Fact, Priority(1)]
+    public void CanExecuteInheritedRecord()
+    {
+        var student = TestClasses.Abstract.InheritedRecord
+            .CreateStudent
+            .WithName("Alice")
+            .BornOn(new DateOnly(2002, 8, 3))
+            .InSemester(2);
+
+        Assert.Equal("Alice", student.Name);
+        Assert.Equal(new DateOnly(2002, 8, 3), student.DateOfBirth);
+        Assert.Equal(2, student.Semester);
     }
 
     [Fact, Priority(1)]

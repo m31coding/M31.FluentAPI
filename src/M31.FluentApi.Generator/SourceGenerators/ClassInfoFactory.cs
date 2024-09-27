@@ -57,10 +57,7 @@ internal class ClassInfoFactory
         bool isStruct = syntaxKind is SyntaxKind.StructDeclaration or SyntaxKind.RecordStructDeclaration;
 
         FluentApiClassInfo? classInfo = CreateFluentApiClassInfo(
-            typeData.Type,
-            typeData.GenericInfo,
-            typeData.AttributeData,
-            typeData.UsingStatements,
+            typeData,
             isStruct,
             generatorConfig.NewLineString,
             cancellationToken);
@@ -75,35 +72,48 @@ internal class ClassInfoFactory
     }
 
     private FluentApiClassInfo? CreateFluentApiClassInfo(
-        INamedTypeSymbol type,
-        GenericInfo? genericInfo,
-        AttributeDataExtended attributeDataExtended,
-        IReadOnlyCollection<string> usingStatements,
+        TypeData typeData,
         bool isStruct,
         string newLineString,
         CancellationToken cancellationToken)
     {
-        string className = type.Name;
-        string? @namespace = type.ContainingNamespace.IsGlobalNamespace ? null : type.ContainingNamespace.ToString();
-        bool isInternal = type.DeclaredAccessibility == Accessibility.Internal;
-        ConstructorInfo? constructorInfo = TryGetConstructorInfo(type);
+        string className = typeData.Type.Name;
+        string? @namespace = typeData.Type.ContainingNamespace.IsGlobalNamespace
+            ? null
+            : typeData.Type.ContainingNamespace.ToString();
+        bool isInternal = typeData.Type.DeclaredAccessibility == Accessibility.Internal;
+        ConstructorInfo? constructorInfo = TryGetConstructorInfo(typeData.Type);
         FluentApiAttributeInfo fluentApiAttributeInfo =
-            FluentApiAttributeInfo.Create(attributeDataExtended.AttributeData, className);
+            FluentApiAttributeInfo.Create(typeData.AttributeDataExtended.AttributeData, className);
 
         List<FluentApiInfo> infos = new List<FluentApiInfo>();
+        (ITypeSymbol declaringType, ISymbol[] members)[] allMembers =
+            GetMembersOfTypeAndBaseTypes(typeData.Type).ToArray();
 
-        foreach (var member in type.GetMembers().Where(m => m.CanBeReferencedByName && m.Name != string.Empty))
+        foreach ((ITypeSymbol declaringType, ISymbol[] members) in allMembers)
         {
-            if (cancellationToken.IsCancellationRequested)
+            if (declaringType is not INamedTypeSymbol namedTypeSymbol)
             {
-                return null;
+                throw new GenerationException($"The type {declaringType.Name} is not a named type symbol.");
             }
 
-            FluentApiInfo? fluentApiInfo = TryCreateFluentApiInfo(member);
+            GenericInfo? genericInfo = GenericInfo.TryCreate(namedTypeSymbol);
+            string declaringClassNameWithGenericParameters =
+                AugmentTypeNameWithGenericParameters(namedTypeSymbol.Name, genericInfo);
 
-            if (fluentApiInfo != null)
+            foreach (ISymbol member in members)
             {
-                infos.Add(fluentApiInfo);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return null;
+                }
+
+                FluentApiInfo? fluentApiInfo = TryCreateFluentApiInfo(member, declaringClassNameWithGenericParameters);
+
+                if (fluentApiInfo != null)
+                {
+                    infos.Add(fluentApiInfo);
+                }
             }
         }
 
@@ -112,15 +122,41 @@ internal class ClassInfoFactory
         return new FluentApiClassInfo(
             className,
             @namespace,
-            genericInfo,
+            typeData.GenericInfo,
             isStruct,
             isInternal,
             constructorInfo!,
             fluentApiAttributeInfo.BuilderClassName,
             newLineString,
             infos,
-            usingStatements,
+            typeData.UsingStatements,
             new FluentApiClassAdditionalInfo(groups));
+    }
+
+    private static List<(ITypeSymbol declaringType, ISymbol[] members)> GetMembersOfTypeAndBaseTypes(
+        ITypeSymbol typeSymbol)
+    {
+        List<(ITypeSymbol declaringType, ISymbol[] members)> result =
+            new List<(ITypeSymbol declaringType, ISymbol[] members)>();
+
+        GetMembers(typeSymbol);
+        return result;
+
+        void GetMembers(ITypeSymbol currentTypeSymbol)
+        {
+            ISymbol[] members = currentTypeSymbol.GetMembers()
+                .Where(m => m.CanBeReferencedByName && m.Name != string.Empty).ToArray();
+
+            result.Add((currentTypeSymbol, members));
+
+            if (currentTypeSymbol.BaseType == null ||
+                currentTypeSymbol.BaseType.SpecialType == SpecialType.System_Object)
+            {
+                return;
+            }
+
+            GetMembers(currentTypeSymbol.BaseType);
+        }
     }
 
     private ConstructorInfo? TryGetConstructorInfo(INamedTypeSymbol type)
@@ -165,7 +201,7 @@ internal class ClassInfoFactory
             constructors[0].DeclaredAccessibility != Accessibility.Public);
     }
 
-    private FluentApiInfo? TryCreateFluentApiInfo(ISymbol symbol)
+    private FluentApiInfo? TryCreateFluentApiInfo(ISymbol symbol, string declaringClassNameWithTypeParameters)
     {
         AttributeDataExtractor extractor = new AttributeDataExtractor(report);
         FluentApiAttributeData? attributeData = extractor.GetAttributeData(symbol);
@@ -182,6 +218,12 @@ internal class ClassInfoFactory
         }
 
         FluentApiInfoCreator fluentApiInfoCreator = new FluentApiInfoCreator(report);
-        return fluentApiInfoCreator.Create(symbol, attributeData);
+        return fluentApiInfoCreator.Create(symbol, attributeData, declaringClassNameWithTypeParameters);
+    }
+
+    public static string AugmentTypeNameWithGenericParameters(string typeName, GenericInfo? genericInfo)
+    {
+        string parameterListInAngleBrackets = genericInfo?.ParameterListInAngleBrackets ?? string.Empty;
+        return $"{typeName}{parameterListInAngleBrackets}";
     }
 }

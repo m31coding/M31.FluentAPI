@@ -17,9 +17,12 @@ internal class FluentApiInfoCreator
         this.classInfoReport = classInfoReport;
     }
 
-    internal FluentApiInfo? Create(ISymbol symbol, FluentApiAttributeData attributeData)
+    internal FluentApiInfo? Create(
+        ISymbol symbol,
+        FluentApiAttributeData attributeData,
+        string declaringClassNameWithTypeParameters)
     {
-        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol);
+        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol, declaringClassNameWithTypeParameters);
         AttributeInfoBase? attributeInfo = CreateAttributeInfo(attributeData.MainAttributeData, symbol, symbolInfo);
 
         if (attributeInfo == null)

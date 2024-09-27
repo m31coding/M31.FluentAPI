@@ -27,7 +27,7 @@ internal class TypeDataCreator
             return null;
         }
 
-        GenericInfo? genericInfo = GetGenericInfo(type);
+        GenericInfo? genericInfo = GenericInfo.TryCreate(type);
 
         AttributeDataExtended[] attributeData = type.GetAttributes().Select(AttributeDataExtended.Create)
             .OfType<AttributeDataExtended>().Where(a => a.FullName == Attributes.FullNames.FluentApiAttribute)
@@ -71,10 +71,5 @@ internal class TypeDataCreator
         }
 
         return GetUsingStatements(syntaxNode.Parent);
-    }
-
-    private GenericInfo? GetGenericInfo(INamedTypeSymbol type)
-    {
-        return type.IsGenericType ? GenericInfo.Create(type.TypeParameters) : null;
     }
 }
