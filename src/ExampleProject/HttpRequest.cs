@@ -33,6 +33,11 @@ public class HttpRequest
         Content = new StringContent(JsonSerializer.Serialize(body));
     }
 
+    [FluentMethod(3)]
+    public void WithoutContent()
+    {
+    }
+
     [FluentMethod(4)]
     [FluentReturn]
     public HttpRequestMessage GetMessage()
@@ -41,5 +46,13 @@ public class HttpRequest
         request.Content = Content;
         Headers.ForEach(h => request.Headers.Add(h.Item1, h.Item2));
         return request;
+    }
+
+    [FluentMethod(4)]
+    [FluentReturn]
+    public async Task<HttpResponseMessage> SendAsync(HttpClient client)
+    {
+        HttpRequestMessage request = GetMessage();
+        return await client.SendAsync(request);
     }
 }

@@ -122,6 +122,20 @@ HttpRequestMessage message = CreateHttpRequest
 
 Console.WriteLine(JsonSerializer.Serialize(message));
 
+// await RunAsyncExample();
+static async Task RunAsyncExample()
+{
+    HttpClient client = new HttpClient();
+    HttpResponseMessage response = await CreateHttpRequest
+        .WithMethod(HttpMethod.Get)
+        .WithUrl("https://www.m31coding.com")
+        .WithZeroHeaders()
+        .WithoutContent()
+        .SendAsync(client);
+
+    Console.WriteLine(response.StatusCode);
+}
+
 // Node
 //
 
