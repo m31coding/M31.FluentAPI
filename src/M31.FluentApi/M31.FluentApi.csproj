@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>1.9.0</PackageVersion>
+    <PackageVersion>1.9.1</PackageVersion>
     <Authors>Kevin Schaal</Authors>
     <Description>Generate fluent builders in C#.</Description>
     <PackageTags>fluentapi fluentbuilder fluentinterface fluentdesign fluent codegeneration</PackageTags>
