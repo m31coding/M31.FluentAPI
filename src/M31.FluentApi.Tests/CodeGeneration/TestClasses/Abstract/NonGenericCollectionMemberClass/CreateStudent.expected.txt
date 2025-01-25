@@ -6,7 +6,6 @@
 #nullable enable
 
 using System.Collections;
-using M31.FluentApi.Attributes;
 using System.Collections.Generic;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NonGenericCollectionMemberClass;

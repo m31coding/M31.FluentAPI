@@ -6,7 +6,6 @@
 #nullable enable
 
 using System;
-using M31.FluentApi.Attributes;
 using System.Reflection;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClassProtectedMembers;
