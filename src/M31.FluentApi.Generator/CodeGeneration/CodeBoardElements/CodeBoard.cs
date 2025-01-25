@@ -95,6 +95,11 @@ internal class CodeBoard
 
         foreach (string usingStatement in usingStatements)
         {
+            if (usingStatement == "using M31.FluentApi.Attributes;")
+            {
+                continue;
+            }
+
             codeFile.AddUsingStatement(usingStatement);
         }
 
