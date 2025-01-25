@@ -5,8 +5,6 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using M31.FluentApi.Attributes;
-
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentNullableNoNullableAnnotationClass;
 
 public class CreateStudent :

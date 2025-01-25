@@ -6,7 +6,6 @@
 #nullable enable
 
 using System.Collections.Generic;
-using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CustomFluentMethodNameClass;
 
