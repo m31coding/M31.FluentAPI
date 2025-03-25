@@ -37,7 +37,7 @@ PM> Install-Package M31.FluentApi
 A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentApi`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
 
 ```xml
-<PackageReference Include="M31.FluentApi" Version="1.9.1" PrivateAssets="all"/>
+<PackageReference Include="M31.FluentApi" Version="1.10.0" PrivateAssets="all"/>
 ```
 
 If you would like to examine the generated code, you may emit it by adding the following lines to your `csproj` file:
@@ -222,11 +222,11 @@ FluentCollection(
     int builderStep,
     string singularName,
     string withItems = "With{Name}",
-    string withItem = "With{SingularName}",
-    string withZeroItems = "WithZero{Name}")
+    string? withItem = "With{SingularName}",
+    string? withZeroItems = "WithZero{Name}")
 ```
 
-Can be used instead of the `FluentMember` attribute if the decorated member is a collection. This attribute generates methods for setting multiple items, one item and zero items. The supported collection types can be seen in the source file [CollectionInference.cs](src/M31.FluentApi.Generator/SourceGenerators/Collections/CollectionInference.cs). 
+Can be used instead of the `FluentMember` attribute if the decorated member is a collection. This attribute generates methods for setting multiple items, one item and zero items. The supported collection types can be seen in the source file [CollectionInference.cs](src/M31.FluentApi.Generator/SourceGenerators/Collections/CollectionInference.cs). If `withItem` or `withZeroItems` is set to `null`, the corresponding methods will not be generated.
 
 ```cs
 [FluentCollection(5, "Friend", "WhoseFriendsAre", "WhoseFriendIs", "WhoHasNoFriends")]
