@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using ExampleProject;
 
+#pragma warning disable CS8321 // Local function is declared but never used
+
 // Student
 //
 
