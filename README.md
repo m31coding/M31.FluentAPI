@@ -226,7 +226,7 @@ FluentCollection(
     string? withZeroItems = "WithZero{Name}")
 ```
 
-Can be used instead of the `FluentMember` attribute if the decorated member is a collection. This attribute generates methods for setting multiple items, one item and zero items. The supported collection types can be seen in the source file [CollectionInference.cs](src/M31.FluentApi.Generator/SourceGenerators/Collections/CollectionInference.cs). If `withItem` or `withZeroItems` is set to `null`, the corresponding methods will not be generated.
+Can be used instead of the `FluentMember` attribute if the decorated member is a collection. This attribute generates methods for setting multiple items, one item and zero items. The supported collection types can be seen in the source file [CollectionInference.cs](src/M31.FluentApi.Generator/SourceGenerators/Collections/CollectionInference.cs). If `withItem` or `withZeroItems` is set to `null`, the corresponding method will not be generated.
 
 ```cs
 [FluentCollection(5, "Friend", "WhoseFriendsAre", "WhoseFriendIs", "WhoHasNoFriends")]
