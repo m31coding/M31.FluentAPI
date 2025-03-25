@@ -10,8 +10,8 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
         int builderStep,
         string singularName,
         string withItems,
-        string withItem,
-        string withZeroItems,
+        string? withItem,
+        string? withZeroItems,
         LambdaBuilderInfo? lambdaBuilderInfo)
         : base(builderStep)
     {
@@ -26,8 +26,8 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
     internal string SingularName { get; }
     internal string SingularNameInCamelCase { get; }
     internal string WithItems { get; }
-    internal string WithItem { get; }
-    internal string WithZeroItems { get; }
+    internal string? WithItem { get; }
+    internal string? WithZeroItems { get; }
     internal LambdaBuilderInfo? LambdaBuilderInfo { get; }
     internal override string FluentMethodName => WithItems;
 
@@ -36,12 +36,20 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
         string memberName,
         LambdaBuilderInfo? lambdaBuilderInfo)
     {
-        (int builderStep, string singularName, string withItems, string withItem, string withZeroItems) =
-            attributeData.GetConstructorArguments<int, string, string, string, string>();
+        (int builderStep, string singularName, string withItems, string? withItem, string? withZeroItems) =
+            attributeData.GetConstructorArguments<int, string, string, string?, string?>();
 
         withItems = NameCreator.CreateName(withItems, memberName, singularName);
-        withItem = NameCreator.CreateName(withItem, memberName, singularName);
-        withZeroItems = NameCreator.CreateName(withZeroItems, memberName, singularName);
+
+        if (withItem != null)
+        {
+            withItem = NameCreator.CreateName(withItem, memberName, singularName);
+        }
+
+        if (withZeroItems != null)
+        {
+            withZeroItems = NameCreator.CreateName(withZeroItems, memberName, singularName);
+        }
 
         return new FluentCollectionAttributeInfo(
             builderStep, singularName, withItems, withItem, withZeroItems, lambdaBuilderInfo);
