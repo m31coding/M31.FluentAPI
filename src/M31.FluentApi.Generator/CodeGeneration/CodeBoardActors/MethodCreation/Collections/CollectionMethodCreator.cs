@@ -89,8 +89,13 @@ internal abstract class CollectionMethodCreator
             computeValueCode);
     }
 
-    internal BuilderMethod CreateWithItemMethod(MethodCreator methodCreator)
+    internal BuilderMethod? CreateWithItemMethod(MethodCreator methodCreator)
     {
+        if (collectionAttributeInfo.WithItem == null)
+        {
+            return null;
+        }
+
         Parameter parameter = new Parameter(genericTypeArgument, collectionAttributeInfo.SingularNameInCamelCase);
         return methodCreator.CreateMethodWithComputedValue(
             symbolInfo,
@@ -101,7 +106,7 @@ internal abstract class CollectionMethodCreator
 
     internal BuilderMethod? CreateWithItemLambdaMethod(MethodCreator methodCreator)
     {
-        if (collectionAttributeInfo.LambdaBuilderInfo == null)
+        if (collectionAttributeInfo.WithItem == null || collectionAttributeInfo.LambdaBuilderInfo == null)
         {
             return null;
         }
@@ -123,8 +128,13 @@ internal abstract class CollectionMethodCreator
             computeValueCode);
     }
 
-    internal BuilderMethod CreateWithZeroItemsMethod(MethodCreator methodCreator)
+    internal BuilderMethod? CreateWithZeroItemsMethod(MethodCreator methodCreator)
     {
+        if (collectionAttributeInfo.WithZeroItems == null)
+        {
+            return null;
+        }
+
         string collectionWithZeroItemsCode = CreateCollectionWithZeroItems(genericTypeArgument);
         return methodCreator.CreateMethodWithFixedValue(
             symbolInfo,
