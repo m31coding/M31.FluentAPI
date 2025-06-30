@@ -15,8 +15,9 @@ internal class MemberSymbolInfo : FluentApiSymbolInfo
         string typeForCodeGeneration,
         bool isNullable,
         bool isProperty,
-        CollectionType? collectionType)
-        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection)
+        CollectionType? collectionType,
+        IReadOnlyCollection<string> comments)
+        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection, comments)
     {
         Type = type;
         TypeForCodeGeneration = typeForCodeGeneration;

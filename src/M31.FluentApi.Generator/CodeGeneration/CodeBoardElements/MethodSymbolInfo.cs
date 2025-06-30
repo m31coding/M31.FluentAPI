@@ -13,8 +13,9 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
         bool requiresReflection,
         GenericInfo? genericInfo,
         IReadOnlyCollection<ParameterSymbolInfo> parameterInfos,
-        string returnType)
-        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection)
+        string returnType,
+        IReadOnlyCollection<string> comments)
+        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection, comments)
     {
         GenericInfo = genericInfo;
         ParameterInfos = parameterInfos;
