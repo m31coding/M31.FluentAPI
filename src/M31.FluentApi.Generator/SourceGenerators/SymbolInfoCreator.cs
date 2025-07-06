@@ -1,10 +1,10 @@
+using System.Text.RegularExpressions;
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
@@ -200,29 +200,9 @@ internal static class SymbolInfoCreator
 
     private static IReadOnlyCollection<string> GetFluentSymbolComments(ISymbol symbol)
     {
-        SyntaxReference? syntaxRef = symbol.DeclaringSyntaxReferences.FirstOrDefault();
-        if (syntaxRef == null)
-        {
-            return Array.Empty<string>();
-        }
-
-        SyntaxNode syntaxNode = syntaxRef.GetSyntax();
-        SyntaxTriviaList leadingTrivia = syntaxNode.GetLeadingTrivia();
-        List<string> comments = new List<string>(leadingTrivia.Count);
-
-
-        foreach (SyntaxTrivia trivia in leadingTrivia)
-        {
-            if (trivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
-            {
-                string text = trivia.ToFullString();
-                if (text.StartsWith("////") && !text.StartsWith("/////"))
-                {
-                    comments.Add(text);
-                }
-            }
-        }
-
-        return comments;
+        // todo: pass cancellation token.
+        string? commentXml = symbol.GetDocumentationCommentXml();
+        Console.WriteLine(commentXml);
+        return Array.Empty<string>();
     }
 }

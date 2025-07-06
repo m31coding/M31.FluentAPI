@@ -10,28 +10,42 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CommentedClass
 [FluentApi]
 public class Student
 {
-    //// <summary>
-    //// Sets the first and last name of the student.
-    //// </summary>
-    //// <param name="firstName">The student's first name.</param>
+    /// <fluentSummary>
+    /// Sets the first and last name of the student.
+    /// And other stuff.
+    /// </fluentSummary>
+    /// <summary>
+    /// Some irrelevant summary.
+    /// </summary>
+    /**
+     *  <fluentSummary>Hello
+     *  World
+     *  </fluentSummary>
+     */
     [FluentMember(0, "WithName")]
     public string FirstName { get; set; }
 
-    //// <param name="lastName">The student's last name.</param>
     [FluentMember(0, "WithName")]
     public string LastName{ get; set; }
 
-    //// <summary>
-    //// Sets the student's date of birth.
-    //// </summary>
-    //// <param name="bornOn">The student's date of birth.</param>
-    [FluentMember(1, "BornOn")]
-    public DateOnly DateOfBirth{ get; set; }
+    [FluentMember(1, "OfAge")]
+    public int Age { get; private set; }
 
-    //// <summary>
-    //// Sets the current semester the student is enrolled in.
-    //// </summary>
-    //// <param name="inSemester">The current semester number.</param>
+    /// <fluentSummary>
+    /// Calculates and sets the student's age based on the provided date of birth.
+    /// </fluentSummary>
+    [FluentMethod(1)]
+    private void BornOn(DateOnly dateOfBirth)
+    {
+        DateOnly today = new DateOnly(2024, 9, 26);
+        int age = today.Year - dateOfBirth.Year;
+        if (dateOfBirth > today.AddYears(-age)) age--;
+        Age = age;
+    }
+
+    /// <fluentSummary>
+    /// Sets the current semester the student is enrolled in.
+    /// </fluentSummary>
     [FluentMember(2, "InSemester")]
     public int Semester { get; set; }
 }

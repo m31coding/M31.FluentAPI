@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(new string[] { },
+        Filter(new string[] { "CommentedClass" },
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
