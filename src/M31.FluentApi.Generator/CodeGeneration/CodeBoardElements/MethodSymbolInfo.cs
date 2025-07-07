@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.Commons;
+using M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 
@@ -14,7 +15,7 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
         GenericInfo? genericInfo,
         IReadOnlyCollection<ParameterSymbolInfo> parameterInfos,
         string returnType,
-        IReadOnlyCollection<string> comments)
+        Comments comments)
         : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection, comments)
     {
         GenericInfo = genericInfo;

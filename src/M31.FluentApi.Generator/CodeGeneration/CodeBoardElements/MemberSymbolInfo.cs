@@ -1,5 +1,6 @@
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
+using M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
 using Microsoft.CodeAnalysis;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
@@ -16,7 +17,7 @@ internal class MemberSymbolInfo : FluentApiSymbolInfo
         bool isNullable,
         bool isProperty,
         CollectionType? collectionType,
-        IReadOnlyCollection<string> comments)
+        Comments comments)
         : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection, comments)
     {
         Type = type;

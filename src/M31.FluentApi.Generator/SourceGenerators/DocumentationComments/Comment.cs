@@ -1,18 +1,39 @@
-﻿using System.Text.RegularExpressions;
+﻿using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
-
 internal class Comment
 {
-    private static readonly Regex attributeRegex = new Regex(@"(?<key>\w+)\s*=\s*""(?<value>[^""]*)""", RegexOptions.Compiled | RegexOptions.Singleline);
-
     internal string Tag { get; }
     internal IReadOnlyCollection<CommentAttribute> Attributes { get; }
     internal string Content { get; }
 
-    internal static IReadOnlyCollection<CommentAttribute> ParseCommentAttributes(string commentAttributes)
+    internal Comment(string tag, IReadOnlyCollection<CommentAttribute> attributes, string content)
     {
-        MatchCollection matches = attributeRegex.Matches(commentAttributes);
-        return matches.Cast<Match>().Select(m => new CommentAttribute(m.Groups["key"].Value, m.Groups["value"].Value)).ToArray();
+        Tag = tag;
+        Attributes = attributes;
+        Content = content;
+    }
+
+    protected bool Equals(Comment other)
+    {
+        return Tag == other.Tag &&
+            Attributes.SequenceEqual(other.Attributes) &&
+            Content == other.Content;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((Comment)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return new HashCode()
+            .Add(Tag)
+            .AddSequence(Attributes)
+            .Add(Content);
     }
 }

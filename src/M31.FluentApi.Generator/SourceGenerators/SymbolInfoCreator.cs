@@ -2,6 +2,7 @@ using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
+using M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 
@@ -197,11 +198,10 @@ internal static class SymbolInfoCreator
         return parameterKinds;
     }
 
-    private static IReadOnlyCollection<string> GetFluentSymbolComments(ISymbol symbol)
+    private static Comments GetFluentSymbolComments(ISymbol symbol)
     {
         // todo: pass cancellation token.
         string? commentXml = symbol.GetDocumentationCommentXml();
-        Console.WriteLine(commentXml);
-        return Array.Empty<string>();
+        return Comments.Parse(commentXml);
     }
 }
