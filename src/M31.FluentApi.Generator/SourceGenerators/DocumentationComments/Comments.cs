@@ -5,25 +5,25 @@ namespace M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
 
 internal class Comments
 {
-    private static readonly Regex commentRegex = new Regex(@"<(?<tag>fluent\w+)\s+(?<attrs>[^>]+)>\s*(?<content>.*?)\s*</\k<tag>>", RegexOptions.Compiled | RegexOptions.Singleline);
+    private static readonly Regex commentRegex = new Regex(@"<(?<tag>fluent\w+)(\s+(?<attrs>[^>]+))?>\s*(?<content>.*?)\s*</\k<tag>>", RegexOptions.Compiled | RegexOptions.Singleline);
     private static readonly Regex attributeRegex = new Regex(@"(?<key>\w+)\s*=\s*""(?<value>[^""]*)""", RegexOptions.Compiled | RegexOptions.Singleline);
 
-    private Comments(IReadOnlyCollection<Comment> comments)
+    private Comments(IReadOnlyList<Comment> comments)
     {
         List = comments;
     }
 
-    public IReadOnlyCollection<Comment> List { get; }
+    public IReadOnlyList<Comment> List { get; }
 
-    internal static Comments Parse(string? comments)
+    internal static Comments Parse(string? commentXml)
     {
-        if (comments == null)
+        if (commentXml == null)
         {
             return new Comments(Array.Empty<Comment>());
         }
 
-        List<Comment> commentList = new List<Comment>();
-        MatchCollection matches = commentRegex.Matches(comments);
+        List<Comment> comments = new List<Comment>();
+        MatchCollection matches = commentRegex.Matches(commentXml);
 
         foreach (Match match in matches)
         {
@@ -31,13 +31,13 @@ internal class Comments
             string attributes = match.Groups["attrs"].Value;
             string content = match.Groups["content"].Value;
             Comment comment = new Comment(tag, ParseCommentAttributes(attributes), content);
-            commentList.Add(comment);
+            comments.Add(comment);
         }
 
-        return new Comments(commentList);
+        return new Comments(comments);
     }
 
-    private static IReadOnlyCollection<CommentAttribute> ParseCommentAttributes(string commentAttributes)
+    private static IReadOnlyList<CommentAttribute> ParseCommentAttributes(string commentAttributes)
     {
         MatchCollection matches = attributeRegex.Matches(commentAttributes);
         return matches.Cast<Match>().Select(m => new CommentAttribute(m.Groups["key"].Value, m.Groups["value"].Value)).ToArray();

@@ -4,10 +4,10 @@ namespace M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
 internal class Comment
 {
     internal string Tag { get; }
-    internal IReadOnlyCollection<CommentAttribute> Attributes { get; }
+    internal IReadOnlyList<CommentAttribute> Attributes { get; }
     internal string Content { get; }
 
-    internal Comment(string tag, IReadOnlyCollection<CommentAttribute> attributes, string content)
+    internal Comment(string tag, IReadOnlyList<CommentAttribute> attributes, string content)
     {
         Tag = tag;
         Attributes = attributes;
