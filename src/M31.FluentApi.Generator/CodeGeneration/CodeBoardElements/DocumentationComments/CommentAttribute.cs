@@ -1,6 +1,6 @@
 ﻿using M31.FluentApi.Generator.Commons;
 
-namespace M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 internal class CommentAttribute
 {
     internal CommentAttribute(string key, string value)
@@ -29,5 +29,10 @@ internal class CommentAttribute
     public override int GetHashCode()
     {
         return new HashCode().Add(Key, Value);
+    }
+
+    public override string ToString()
+    {
+        return @$"{Key}=""{Value}""";
     }
 }

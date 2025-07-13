@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using M31.FluentApi.Generator.Commons;
 
-namespace M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
+namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 
 internal class Comments
 {
@@ -41,6 +41,11 @@ internal class Comments
     {
         MatchCollection matches = attributeRegex.Matches(commentAttributes);
         return matches.Cast<Match>().Select(m => new CommentAttribute(m.Groups["key"].Value, m.Groups["value"].Value)).ToArray();
+    }
+
+    internal IReadOnlyCollection<string> GetLines()
+    {
+        return Array.Empty<string>(); // todo
     }
 
     protected bool Equals(Comments other)

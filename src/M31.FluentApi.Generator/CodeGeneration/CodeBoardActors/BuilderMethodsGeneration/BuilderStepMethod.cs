@@ -18,7 +18,7 @@ internal abstract class BuilderStepMethod : BuilderMethod
     {
         MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, null, modifiers);
         Method method = new Method(methodSignature);
-        foreach (string comment in Comments)
+        foreach (string comment in Comments.GetLines())
         {
             method.AddCommentLine(comment);
         }
@@ -33,7 +33,7 @@ internal abstract class BuilderStepMethod : BuilderMethod
     {
         MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, interfaceName, modifiers);
         Method method = new Method(methodSignature);
-        foreach (string comment in Comments)
+        foreach (string comment in Comments.GetLines())
         {
             method.AddCommentLine(comment);
         }

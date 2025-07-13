@@ -1,23 +1,14 @@
-﻿using M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
+﻿using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using Xunit;
 
-namespace M31.FluentApi.Tests.Components;
+namespace M31.FluentApi.Tests.Components.DocumentationComments;
 
-public class DocumentationCommentsTests
+public class CommentsParseTests
 {
-
-    /// <fluentSummary>
-    /// Sets Property1.
-    /// </fluentSummary>
-    /// <fluentParam name="property1">
-    /// The new value of Property1.
-    /// </fluentParam>
-    public string Property1 { get; private set; }
-
     [Fact]
     public void CanParseSingleTag()
     {
@@ -84,7 +75,7 @@ public class DocumentationCommentsTests
     }
 
     [Fact]
-    public void CanIgnoreNonFluentTags()
+    public void CanIgnoreNonFluentTagsInParsing()
     {
         string sourceCode = @"
             namespace M31.FluentApi.Tests.Components
@@ -92,7 +83,7 @@ public class DocumentationCommentsTests
                 public class DocumentationCommentsTests
                 {
                     /// <Summary>
-                    /// Gets or sets Property1. // todo check
+                    /// Gets or sets Property1.
                     /// </Summary>
                     /// <fluentSummary>
                     /// Sets Property1.

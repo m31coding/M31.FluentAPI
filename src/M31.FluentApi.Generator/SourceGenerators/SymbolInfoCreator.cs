@@ -1,8 +1,8 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
-using M31.FluentApi.Generator.SourceGenerators.DocumentationComments;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
 

@@ -1,20 +1,24 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 
 internal class BuilderMethodFactory
 {
     private readonly InnerBodyCreationDelegates innerBodyCreationDelegates;
+    private readonly FluentComments fluentComments;
 
-    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates)
+    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates, FluentComments fluentComments)
     {
         this.innerBodyCreationDelegates = innerBodyCreationDelegates;
+        this.fluentComments = fluentComments;
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
     {
-        return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>());
+        Comments comments = Comments.Parse(null); // todo
+        return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>(), comments);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, ComputeValueCode computeValue)
@@ -35,7 +39,8 @@ internal class BuilderMethodFactory
             };
         }
 
-        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode);
+        Comments comments = Comments.Parse(null); // todo
+        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, List<ComputeValueCode> computeValues)
@@ -53,7 +58,8 @@ internal class BuilderMethodFactory
                 .ToList();
         }
 
-        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode);
+        Comments comments = Comments.Parse(null); // todo
+        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
     internal BuilderMethod CreateBuilderMethod(
@@ -81,11 +87,14 @@ internal class BuilderMethodFactory
                 .BuildCode(instancePrefix, parameters, reservedVariableNames, returnType);
         }
 
+        Comments comments = fluentComments.GetMethodComments(methodSymbolInfo);
+
         return new BuilderMethod(
             methodName,
             methodSymbolInfo.GenericInfo,
             parameters,
             returnTypeToRespect,
-            BuildBodyCode);
+            BuildBodyCode,
+            comments);
     }
 }

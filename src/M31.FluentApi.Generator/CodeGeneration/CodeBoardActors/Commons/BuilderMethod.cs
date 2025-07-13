@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.CodeBuilding;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
@@ -10,7 +11,7 @@ internal class BuilderMethod
     internal IReadOnlyCollection<Parameter> Parameters { get; }
     internal string? ReturnTypeToRespect { get; }
     internal BuildBodyCode BuildBodyCode { get; }
-    internal IReadOnlyCollection<string> Comments { get; }
+    internal Comments Comments { get; }
 
     internal BuilderMethod(
         string methodName,
@@ -18,14 +19,14 @@ internal class BuilderMethod
         IReadOnlyCollection<Parameter> parameters,
         string? returnTypeToRespect,
         BuildBodyCode buildBodyCode,
-        IReadOnlyCollection<string> comments = null) // todo remove default
+        Comments comments)
     {
         MethodName = methodName;
         GenericInfo = genericInfo;
         Parameters = parameters;
         ReturnTypeToRespect = returnTypeToRespect;
         BuildBodyCode = buildBodyCode;
-        Comments = new List<string>(); // todo set comments
+        Comments = comments;
     }
 
     internal BuilderMethod(BuilderMethod builderMethod)
