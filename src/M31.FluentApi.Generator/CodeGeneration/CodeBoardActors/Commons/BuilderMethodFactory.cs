@@ -7,12 +7,12 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 internal class BuilderMethodFactory
 {
     private readonly InnerBodyCreationDelegates innerBodyCreationDelegates;
-    private readonly FluentComments fluentComments;
+    private readonly TransformedComments transformedComments;
 
-    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates, FluentComments fluentComments)
+    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates, TransformedComments transformedComments)
     {
         this.innerBodyCreationDelegates = innerBodyCreationDelegates;
-        this.fluentComments = fluentComments;
+        this.transformedComments = transformedComments;
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
@@ -87,7 +87,7 @@ internal class BuilderMethodFactory
                 .BuildCode(instancePrefix, parameters, reservedVariableNames, returnType);
         }
 
-        Comments comments = fluentComments.GetMethodComments(methodSymbolInfo);
+        Comments comments = transformedComments.GetMethodComments(methodSymbolInfo);
 
         return new BuilderMethod(
             methodName,

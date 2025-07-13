@@ -19,12 +19,12 @@ public class CommentGetLineTests
     {
         CommentAttribute[] attributes = new CommentAttribute[]
         {
-            new CommentAttribute("methodName", "method1"),
+            new CommentAttribute("method", "method1"),
             new CommentAttribute("name", "parameter1")
         };
         Comment comment = new Comment("fluentParam", attributes, "The parameter1.");
         string line = comment.GetLine();
-        Assert.Equal(@"/// <fluentParam methodName=""method1"" name=""parameter1"">The parameter1.</fluentParam>", line);
+        Assert.Equal(@"/// <fluentParam method=""method1"" name=""parameter1"">The parameter1.</fluentParam>", line);
     }
 
 

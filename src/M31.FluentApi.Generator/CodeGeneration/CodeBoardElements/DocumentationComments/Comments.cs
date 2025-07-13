@@ -8,7 +8,7 @@ internal class Comments
     private static readonly Regex commentRegex = new Regex(@"<(?<tag>fluent\w+)(\s+(?<attrs>[^>]+))?>\s*(?<content>.*?)\s*</\k<tag>>", RegexOptions.Compiled | RegexOptions.Singleline);
     private static readonly Regex attributeRegex = new Regex(@"(?<key>\w+)\s*=\s*""(?<value>[^""]*)""", RegexOptions.Compiled | RegexOptions.Singleline);
 
-    private Comments(IReadOnlyList<Comment> comments)
+    internal Comments(IReadOnlyList<Comment> comments)
     {
         List = comments;
     }
@@ -45,7 +45,7 @@ internal class Comments
 
     internal IReadOnlyCollection<string> GetLines()
     {
-        return Array.Empty<string>(); // todo
+        return List.Select(c => c.ToString()).ToArray();
     }
 
     protected bool Equals(Comments other)

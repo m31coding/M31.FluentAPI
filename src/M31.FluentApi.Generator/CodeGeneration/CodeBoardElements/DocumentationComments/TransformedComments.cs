@@ -1,11 +1,11 @@
 ﻿namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 
-internal class FluentComments
+internal class TransformedComments
 {
     private readonly Dictionary<string, Comments> memberComments;
     private readonly Dictionary<MethodSymbolInfo, Comments> methodComments;
 
-    internal FluentComments()
+    internal TransformedComments()
     {
         memberComments = new Dictionary<string, Comments>();
         methodComments = new Dictionary<MethodSymbolInfo, Comments>();

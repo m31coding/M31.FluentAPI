@@ -33,7 +33,7 @@ internal class CodeBoard
         StaticConstructor = null;
         InnerBodyCreationDelegates = new InnerBodyCreationDelegates();
         BuilderMethodToAttributeData = new Dictionary<BuilderMethod, AttributeDataExtended>();
-        FluentComments = new FluentComments();
+        TransformedComments = new TransformedComments();
         Forks = new List<Fork>();
         ReservedVariableNames = new ReservedVariableNames();
         diagnostics = new List<Diagnostic>();
@@ -49,7 +49,7 @@ internal class CodeBoard
     internal Method? Constructor { get; set; }
     internal Method? StaticConstructor { get; set; }
     internal InnerBodyCreationDelegates InnerBodyCreationDelegates { get; }
-    internal FluentComments FluentComments { get; }
+    internal TransformedComments TransformedComments { get; }
     internal Dictionary<BuilderMethod, AttributeDataExtended> BuilderMethodToAttributeData { get; }
     internal IReadOnlyList<Fork> Forks { get; set; }
     internal ReservedVariableNames ReservedVariableNames { get; }

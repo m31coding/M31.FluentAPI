@@ -42,10 +42,10 @@ public class CommentsParseTests
             {
                 public class DocumentationCommentsTests
                 {
-                    /// <fluentSummary methodName=""WithProperty1"">
+                    /// <fluentSummary method=""WithProperty1"">
                     /// Sets Property1.
                     /// </fluentSummary>
-                    /// <fluentParam methodName=""WithProperty1"" name=""property1"">
+                    /// <fluentParam method=""WithProperty1"" name=""property1"">
                     /// The new value of Property1.
                     /// </fluentParam>
                     public string Property1 { get; private set; }
@@ -60,14 +60,14 @@ public class CommentsParseTests
         Comment comment1 = comments.List[0];
         Assert.Equal("fluentSummary", comment1.Tag);
         Assert.Equal(1, comment1.Attributes.Count);
-        Assert.Equal("methodName", comment1.Attributes[0].Key);
+        Assert.Equal("method", comment1.Attributes[0].Key);
         Assert.Equal("WithProperty1", comment1.Attributes[0].Value);
         Assert.Equal("Sets Property1.", comment1.Content);
 
         Comment comment2 = comments.List[1];
         Assert.Equal("fluentParam", comment2.Tag);
         Assert.Equal(2, comment2.Attributes.Count);
-        Assert.Equal("methodName", comment2.Attributes[0].Key);
+        Assert.Equal("method", comment2.Attributes[0].Key);
         Assert.Equal("WithProperty1", comment2.Attributes[0].Value);
         Assert.Equal("name", comment2.Attributes[1].Key);
         Assert.Equal("property1", comment2.Attributes[1].Value);
