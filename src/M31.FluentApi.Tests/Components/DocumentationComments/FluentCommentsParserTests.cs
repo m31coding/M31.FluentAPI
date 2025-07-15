@@ -7,7 +7,7 @@ using Xunit;
 
 namespace M31.FluentApi.Tests.Components.DocumentationComments;
 
-public class CommentsParseTests
+public class FluentCommentsParserTests
 {
     [Fact]
     public void CanParseSingleTag()
@@ -26,7 +26,7 @@ public class CommentsParseTests
 
         IPropertySymbol propertySymbol = GetPropertySymbol(sourceCode, "Property1");
         string commentXml = propertySymbol.GetDocumentationCommentXml()!;
-        Comments comments = Comments.Parse(commentXml);
+        Comments comments = FluentCommentsParser.Parse(commentXml);
         Assert.Equal(1, comments.List.Count);
         Comment comment = comments.List[0];
         Assert.Equal("fluentSummary", comment.Tag);
@@ -54,7 +54,7 @@ public class CommentsParseTests
 
         IPropertySymbol propertySymbol = GetPropertySymbol(sourceCode, "Property1");
         string commentXml = propertySymbol.GetDocumentationCommentXml()!;
-        Comments comments = Comments.Parse(commentXml);
+        Comments comments = FluentCommentsParser.Parse(commentXml);
         Assert.Equal(2, comments.List.Count);
 
         Comment comment1 = comments.List[0];
@@ -94,7 +94,7 @@ public class CommentsParseTests
 
         IPropertySymbol propertySymbol = GetPropertySymbol(sourceCode, "Property1");
         string commentXml = propertySymbol.GetDocumentationCommentXml()!;
-        Comments comments = Comments.Parse(commentXml);
+        Comments comments = FluentCommentsParser.Parse(commentXml);
         Assert.Equal(1, comments.List.Count);
         Comment comment = comments.List[0];
         Assert.Equal("fluentSummary", comment.Tag);

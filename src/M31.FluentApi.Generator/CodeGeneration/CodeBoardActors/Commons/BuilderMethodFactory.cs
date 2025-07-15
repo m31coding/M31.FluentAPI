@@ -17,7 +17,7 @@ internal class BuilderMethodFactory
 
     internal BuilderMethod CreateBuilderMethod(string methodName)
     {
-        Comments comments = Comments.Parse(null); // todo
+        Comments comments = FluentCommentsParser.Parse(null); // todo
         return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>(), comments);
     }
 
@@ -39,7 +39,7 @@ internal class BuilderMethodFactory
             };
         }
 
-        Comments comments = Comments.Parse(null); // todo
+        Comments comments = FluentCommentsParser.Parse(null); // todo
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
@@ -58,7 +58,7 @@ internal class BuilderMethodFactory
                 .ToList();
         }
 
-        Comments comments = Comments.Parse(null); // todo
+        Comments comments = FluentCommentsParser.Parse(null); // todo
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
