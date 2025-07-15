@@ -1,4 +1,5 @@
 ﻿using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
+using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.DocumentationGeneration;
 
@@ -6,24 +7,33 @@ internal static class CommentsTransformer
 {
     internal static Comments TransformComments(Comments comments)
     {
-        return new Comments(comments.List.Select(TransformComment).ToArray());
+        return new Comments(comments.List.Select(TransformComment).OfType<Comment>().ToArray());
     }
 
-    internal static Comment TransformComment(Comment comment)
+    internal static Comment? TransformComment(Comment comment)
     {
-        string transformedTag = TransformTag(comment.Tag);
+        string? transformedTag = TransformTag(comment.Tag);
+        if (transformedTag == null)
+        {
+            return null;
+        }
+
         IReadOnlyList<CommentAttribute> transformedAttributes = TransformAttributes(comment.Attributes);
         return new Comment(transformedTag, transformedAttributes, comment.Content);
     }
 
-    internal static string TransformTag(string tag)
+    private static string? TransformTag(string tag)
     {
-        return tag; // todo
+        if (!tag.StartsWith("fluent"))
+        {
+            return null;
+        }
+
+        return tag.Substring("fluent".Length).FirstCharToLower();
     }
 
-    internal static IReadOnlyList<CommentAttribute> TransformAttributes(IReadOnlyList<CommentAttribute> attributes)
+    private static IReadOnlyList<CommentAttribute> TransformAttributes(IReadOnlyList<CommentAttribute> attributes)
     {
-        // todo: write unit test
         CommentAttribute? firstMethodAttribute = attributes.FirstOrDefault(a => a.Key == "method");
         return firstMethodAttribute == null ? attributes : attributes.Where(a => a != firstMethodAttribute).ToArray();
     }
