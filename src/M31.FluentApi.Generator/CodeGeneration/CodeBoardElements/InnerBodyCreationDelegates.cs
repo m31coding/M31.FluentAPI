@@ -17,7 +17,7 @@ internal class InnerBodyCreationDelegates
     {
         if (memberToSetMemberCode.ContainsKey(memberName))
         {
-            throw new GenerationException(
+            throw new InvalidOperationException(
                 $"{nameof(SetMemberCode)} for member {memberName} has already been assigned.");
         }
 
@@ -33,7 +33,7 @@ internal class InnerBodyCreationDelegates
     {
         if (methodToCallMethodCode.ContainsKey(methodSymbolInfo))
         {
-            throw new GenerationException(
+            throw new InvalidOperationException(
                 $"{nameof(CallMethodCode)} for method {methodSymbolInfo.Name} has already been assigned.");
         }
 
