@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(new string[] { "CommentedClass" },
+        Filter(new string[] { "CommentedMethodClass" },
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -15,13 +15,13 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "CollectionMemberClass", "Student" },
                 new object[] { "Abstract", "CollectionMemberClassWithSuppression", "Student" },
                 new object[] { "Abstract", "CollectionNullableArrayClass", "Student" },
-                new object[] { "Abstract", "CommentedClass", "Student" },
                 new object[] { "Abstract", "ContinueWithAfterCompoundClass", "Student" },
                 new object[] { "Abstract", "ContinueWithInForkClass", "Student" },
                 new object[] { "Abstract", "ContinueWithOfOverloadedMethodClass", "Student" },
                 new object[] { "Abstract", "ContinueWithSelfClass", "Student" },
                 new object[] { "Abstract", "CustomFluentMethodNameClass", "Student" },
                 new object[] { "Abstract", "DefaultFluentMethodNameClass", "Student" },
+                new object[] { "Abstract", "DocumentationComments", "CommentedMethodClass", "Student" },
                 new object[] { "Abstract", "EmptyClass", "Student" },
                 new object[] { "Abstract", "FluentDefaultMemberClass", "Student" },
                 new object[] { "Abstract", "FluentLambdaClass", "Student|Address" },
@@ -111,6 +111,6 @@ internal class TestDataProvider : IEnumerable<object[]>
 
     private static List<object[]> Filter(string[] testsToFilter, List<object[]> tests)
     {
-        return testsToFilter.Length == 0 ? tests : tests.Where(t => testsToFilter.Contains((string)t[1])).ToList();
+        return testsToFilter.Length == 0 ? tests : tests.Where(t => testsToFilter.Contains((string)t[^2])).ToList();
     }
 }

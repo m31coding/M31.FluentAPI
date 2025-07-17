@@ -19,7 +19,6 @@ internal class MethodComments : ICode
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
         return codeBuilder
-            .StartLine()
             .AppendLines(comments);
     }
 }

@@ -26,6 +26,7 @@ internal class Method : ICode
     public CodeBuilder AppendCode(CodeBuilder codeBuilder)
     {
         return codeBuilder
+            .Append(MethodComments)
             .Append(MethodSignature)
             .Append(MethodBody);
     }

@@ -5,23 +5,11 @@
 using System;
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CommentedClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedMethodClass;
 
 [FluentApi]
 public class Student
 {
-    /// <fluentSummary>
-    /// Sets the first and last name of the student.
-    /// And other stuff.
-    /// </fluentSummary>
-    /// <summary>
-    /// Some irrelevant summary.
-    /// </summary>
-    /**
-     *  <fluentSummary>Hello
-     *  World
-     *  </fluentSummary>
-     */
     [FluentMember(0, "WithName")]
     public string FirstName { get; set; }
 
@@ -31,9 +19,14 @@ public class Student
     [FluentMember(1, "OfAge")]
     public int Age { get; private set; }
 
+    /// <summary>
+    /// This summary will not be taken into account.
+    /// </summary>
+    /// <param name="dateOfBirth">This parameter documentation will not be taken into account.</param>
     /// <fluentSummary>
     /// Calculates and sets the student's age based on the provided date of birth.
     /// </fluentSummary>
+    /// <fluentParam name="dateOfBirth">The student's date of birth.</fluentParam>
     [FluentMethod(1)]
     private void BornOn(DateOnly dateOfBirth)
     {
@@ -43,9 +36,6 @@ public class Student
         Age = age;
     }
 
-    /// <fluentSummary>
-    /// Sets the current semester the student is enrolled in.
-    /// </fluentSummary>
     [FluentMember(2, "InSemester")]
     public int Semester { get; set; }
 }

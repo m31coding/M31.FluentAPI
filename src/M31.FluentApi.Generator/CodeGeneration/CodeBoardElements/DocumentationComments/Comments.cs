@@ -13,7 +13,7 @@ internal class Comments
 
     internal IReadOnlyCollection<string> GetLines()
     {
-        return List.Select(c => c.ToString()).ToArray();
+        return List.Select(c => c.GetLine()).ToArray();
     }
 
     protected bool Equals(Comments other)
