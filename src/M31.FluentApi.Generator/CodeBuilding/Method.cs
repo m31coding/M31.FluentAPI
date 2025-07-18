@@ -15,7 +15,7 @@ internal class Method : ICode
 
     internal void AddCommentLine(string commentLine)
     {
-        MethodComments.AddCommentLine(commentLine);
+        MethodComments.AddLine(commentLine);
     }
 
     internal void AppendBodyLine(string line)

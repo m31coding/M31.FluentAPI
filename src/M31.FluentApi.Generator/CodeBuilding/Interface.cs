@@ -4,25 +4,25 @@ namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class Interface : ICode
 {
-    private readonly List<MethodSignature> methodSignatures;
+    private readonly List<CommentedMethodSignature> methodSignatures;
     private readonly List<string> baseInterfaces;
 
     internal Interface(string accessModifier, string name)
     {
         AccessModifier = accessModifier;
         Name = name;
-        methodSignatures = new List<MethodSignature>();
+        methodSignatures = new List<CommentedMethodSignature>();
         baseInterfaces = new List<string>();
     }
 
     internal string AccessModifier { get; }
     internal string Name { get; }
-    internal IReadOnlyCollection<MethodSignature> MethodSignatures => methodSignatures;
+    internal IReadOnlyCollection<CommentedMethodSignature> MethodSignatures => methodSignatures;
     internal IReadOnlyCollection<string> BaseInterfaces => baseInterfaces;
 
-    internal void AddMethodSignature(MethodSignature methodSignature)
+    internal void AddMethodSignature(CommentedMethodSignature methodSignature)
     {
-        if (!methodSignature.IsSignatureForInterface)
+        if (!methodSignature.MethodSignature.IsSignatureForInterface)
         {
             throw new ArgumentException("Expected a stand-alone method signature.");
         }

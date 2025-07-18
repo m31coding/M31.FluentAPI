@@ -9,9 +9,14 @@ internal class MethodComments : ICode
         comments = new List<string>();
     }
 
+    internal MethodComments(List<string> comments)
+    {
+        this.comments = comments;
+    }
+
     internal IReadOnlyCollection<string> Comments => comments;
 
-    internal void AddCommentLine(string commentLine)
+    internal void AddLine(string commentLine)
     {
         comments.Add(commentLine);
     }

@@ -11,9 +11,9 @@ internal class Comments
 
     public IReadOnlyList<Comment> List { get; }
 
-    internal IReadOnlyCollection<string> GetLines()
+    internal List<string> GetLines()
     {
-        return List.Select(c => c.GetLine()).ToArray();
+        return List.Select(c => c.GetLine()).ToList();
     }
 
     protected bool Equals(Comments other)

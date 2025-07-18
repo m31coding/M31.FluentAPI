@@ -38,7 +38,10 @@ internal class BuilderGenerator : ICodeBoardActor
             {
                 Method method = CreateMethod(interfaceMethod, codeBoard);
                 codeBoard.BuilderClass.AddMethod(method);
-                @interface.AddMethodSignature(method.MethodSignature.ToSignatureForInterface());
+                CommentedMethodSignature methodSignature = new CommentedMethodSignature(
+                    method.MethodSignature.ToSignatureForInterface(),
+                    method.MethodComments);
+                @interface.AddMethodSignature(methodSignature);
             }
 
             @interface.AddBaseInterfaces(builderInterface.BaseInterfaces);
