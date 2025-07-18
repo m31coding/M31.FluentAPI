@@ -34,7 +34,7 @@ public class CodeBuildingTests
             MethodSignature moveSignature = MethodSignature.Create("void", "Move", null, true);
             moveSignature.AddParameter("double", "deltaX");
             moveSignature.AddParameter("double", "deltaY");
-            @interface.AddMethodSignature(moveSignature);
+            @interface.AddMethodSignature(new CommentedMethodSignature(moveSignature, new MethodComments()));
             return @interface;
         }
 
@@ -45,7 +45,7 @@ public class CodeBuildingTests
             robot.AddInterface(moveInterface.Name);
             Method constructor = CreateConstructor();
             robot.AddMethod(constructor);
-            Method moveMethod = CreateMoveMethod(moveInterface.MethodSignatures.First());
+            Method moveMethod = CreateMoveMethod(moveInterface.MethodSignatures.First().MethodSignature);
             robot.AddMethod(moveMethod);
             Method assignTaskMethod = CreateAssignTaskMethod();
             robot.AddMethod(assignTaskMethod);

@@ -37,7 +37,7 @@ internal class BuilderGenerator : ICodeBoardActor
             foreach (InterfaceBuilderMethod interfaceMethod in builderInterface.Methods)
             {
                 Method method = CreateMethod(interfaceMethod, codeBoard);
-                codeBoard.BuilderClass.AddMethod(method);
+                codeBoard.BuilderClass.AddMethod(CreateMethodWithInheritedDocs(method));
                 CommentedMethodSignature methodSignature = new CommentedMethodSignature(
                     method.MethodSignature.ToSignatureForInterface(),
                     method.MethodComments);
@@ -53,6 +53,14 @@ internal class BuilderGenerator : ICodeBoardActor
             codeBoard.BuilderClass,
             codeBoard.Info.BuilderClassNameWithTypeParameters);
         AddInterfaceDefinitionsToBuilderClass(interfaces, codeBoard.BuilderClass);
+    }
+
+    private Method CreateMethodWithInheritedDocs(Method method)
+    {
+        return new Method(
+                    new MethodComments(method.MethodComments.Any ? new List<string>() { "/// <inheritdoc/>" } : new List<string>()),
+                    method.MethodSignature,
+                    method.MethodBody);
     }
 
     private Method CreateMethod(BuilderStepMethod builderStepMethod, CodeBoard codeBoard)

@@ -15,6 +15,7 @@ internal class MethodComments : ICode
     }
 
     internal IReadOnlyCollection<string> Comments => comments;
+    internal bool Any => Comments.Count > 0;
 
     internal void AddLine(string commentLine)
     {

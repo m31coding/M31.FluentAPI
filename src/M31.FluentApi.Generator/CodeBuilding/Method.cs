@@ -9,6 +9,13 @@ internal class Method : ICode
         MethodBody = new MethodBody();
     }
 
+    internal Method(MethodComments methodComments, MethodSignature methodSignature, MethodBody methodBody)
+    {
+        MethodComments = methodComments;
+        MethodSignature = methodSignature;
+        MethodBody = methodBody;
+    }
+
     internal MethodComments MethodComments { get; }
     internal MethodSignature MethodSignature { get; }
     internal MethodBody MethodBody { get; }

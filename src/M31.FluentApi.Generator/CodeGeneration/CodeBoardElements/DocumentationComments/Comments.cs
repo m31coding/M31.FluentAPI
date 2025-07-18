@@ -10,6 +10,7 @@ internal class Comments
     }
 
     public IReadOnlyList<Comment> List { get; }
+    internal bool Any => List.Count > 0;
 
     internal List<string> GetLines()
     {
