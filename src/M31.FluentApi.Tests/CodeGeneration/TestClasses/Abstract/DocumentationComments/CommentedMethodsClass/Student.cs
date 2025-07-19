@@ -5,7 +5,7 @@
 using System;
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedMethodClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedMethodsClass;
 
 [FluentApi]
 public class Student

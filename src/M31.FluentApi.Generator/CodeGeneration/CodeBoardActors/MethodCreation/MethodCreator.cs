@@ -45,10 +45,10 @@ internal class MethodCreator
             .CreateBuilderMethod(methodName, ComputeValueCode.Create(symbolInfo.Name, parameter, buildCodeWithParameter));
     }
 
-    internal BuilderMethod CreateMethodThatDoesNothing(string methodName)
+    internal BuilderMethod CreateMethodThatDoesNothing(MemberSymbolInfo memberSymbolInfo, string methodName)
     {
         return BuilderMethodFactory
-            .CreateBuilderMethod(methodName);
+            .CreateEmptyBuilderMethod(memberSymbolInfo, methodName);
     }
 
     private Parameter GetStandardParameter(MemberSymbolInfo symbolInfo, string? defaultValue = null)

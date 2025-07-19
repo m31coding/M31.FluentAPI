@@ -8,7 +8,7 @@
 using System;
 using System.Reflection;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedMethodClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedMethodsClass;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,

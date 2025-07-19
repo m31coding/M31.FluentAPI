@@ -15,9 +15,9 @@ internal class BuilderMethodFactory
         this.transformedComments = transformedComments;
     }
 
-    internal BuilderMethod CreateBuilderMethod(string methodName)
+    internal BuilderMethod CreateEmptyBuilderMethod(MemberSymbolInfo memberInfo, string methodName)
     {
-        Comments comments = FluentCommentsParser.Parse(null); // todo
+        Comments comments = transformedComments.GetMemberComments(memberInfo.Name);
         return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>(), comments);
     }
 
@@ -39,7 +39,7 @@ internal class BuilderMethodFactory
             };
         }
 
-        Comments comments = FluentCommentsParser.Parse(null); // todo
+        Comments comments = transformedComments.GetMemberComments(computeValue.TargetMember);
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
@@ -59,6 +59,7 @@ internal class BuilderMethodFactory
         }
 
         Comments comments = FluentCommentsParser.Parse(null); // todo
+        // Comments comments = transformedComments.GetMemberComments(computeValue.TargetMember);
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 

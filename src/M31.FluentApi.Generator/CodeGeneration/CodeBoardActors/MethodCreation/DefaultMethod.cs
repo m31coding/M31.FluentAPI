@@ -16,6 +16,8 @@ internal class DefaultMethod : IBuilderMethodCreator
 
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
     {
-        return new BuilderMethods(methodCreator.CreateMethodThatDoesNothing(DefaultAttributeInfo.Method));
+        return new BuilderMethods(methodCreator.CreateMethodThatDoesNothing(
+            SymbolInfo,
+            DefaultAttributeInfo.Method));
     }
 }

@@ -6,11 +6,15 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.DocumentationGe
 
 internal class CommentsGenerator : ICodeBoardActor
 {
-    // todo: cancellation
     public void Modify(CodeBoard codeBoard)
     {
         foreach (FluentApiInfo fluentApiInfo in codeBoard.FluentApiInfos)
         {
+            if (codeBoard.CancellationRequested)
+            {
+                return;
+            }
+
             switch (fluentApiInfo.SymbolInfo)
             {
                 case MemberSymbolInfo memberInfo:
@@ -29,7 +33,8 @@ internal class CommentsGenerator : ICodeBoardActor
 
     private void HandleMemberSymbolInfo(MemberSymbolInfo memberInfo, CodeBoard codeBoard)
     {
-        return; // todo
+        Comments transformedComments = CommentsTransformer.TransformComments(memberInfo.Comments);
+        codeBoard.TransformedComments.AssignMemberComments(memberInfo.Name, transformedComments);
     }
 
     private void HandleMethodSymbolInfo(MethodSymbolInfo methodInfo, CodeBoard codeBoard)
