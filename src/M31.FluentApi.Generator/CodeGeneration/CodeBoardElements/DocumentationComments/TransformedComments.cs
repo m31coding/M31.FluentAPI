@@ -4,29 +4,34 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.Documentation
 
 internal class TransformedComments
 {
-    private readonly Dictionary<string, Comments> memberComments;
+    private readonly Dictionary<MemberCommentKey, Comments> memberComments;
     private readonly Dictionary<MethodSymbolInfo, Comments> methodComments;
 
     internal TransformedComments()
     {
-        memberComments = new Dictionary<string, Comments>();
+        memberComments = new Dictionary<MemberCommentKey, Comments>();
         methodComments = new Dictionary<MethodSymbolInfo, Comments>();
     }
 
-    internal void AssignMemberComments(string memberName, Comments comments)
+    internal void AssignMemberComments(MemberCommentKey memberCommentKey, Comments comments)
     {
-        if (memberComments.ContainsKey(memberName))
+        if (memberComments.ContainsKey(memberCommentKey))
         {
             throw new InvalidOperationException(
-                $"{nameof(Comments)} for member {memberName} has already been assigned.");
+                $"{nameof(Comments)} for key {memberCommentKey} has already been assigned.");
         }
 
-        memberComments[memberName] = comments;
+        memberComments[memberCommentKey] = comments;
     }
 
-    internal Comments GetMemberComments(string memberName)
+    internal Comments GetMemberComments(MemberCommentKey memberCommentKey)
     {
-        return memberComments[memberName];
+        if (memberComments.TryGetValue(memberCommentKey, out Comments comments))
+        {
+            return comments;
+        }
+
+        return new Comments(Array.Empty<Comment>());
     }
 
     internal void AssignMethodComments(MethodSymbolInfo methodSymbolInfo, Comments comments)

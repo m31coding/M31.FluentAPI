@@ -17,7 +17,8 @@ internal class BuilderMethodFactory
 
     internal BuilderMethod CreateEmptyBuilderMethod(MemberSymbolInfo memberInfo, string methodName)
     {
-        Comments comments = transformedComments.GetMemberComments(memberInfo.Name);
+        MemberCommentKey key = new MemberCommentKey(memberInfo.Name, methodName);
+        Comments comments = transformedComments.GetMemberComments(key);
         return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>(), comments);
     }
 
@@ -39,7 +40,8 @@ internal class BuilderMethodFactory
             };
         }
 
-        Comments comments = transformedComments.GetMemberComments(computeValue.TargetMember);
+        MemberCommentKey key = new MemberCommentKey(computeValue.TargetMember, methodName);
+        Comments comments = transformedComments.GetMemberComments(key);
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 

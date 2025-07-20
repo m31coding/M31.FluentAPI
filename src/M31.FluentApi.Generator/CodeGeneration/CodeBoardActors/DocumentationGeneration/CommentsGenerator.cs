@@ -33,8 +33,26 @@ internal class CommentsGenerator : ICodeBoardActor
 
     private void HandleMemberSymbolInfo(MemberSymbolInfo memberInfo, CodeBoard codeBoard)
     {
-        Comments transformedComments = CommentsTransformer.TransformComments(memberInfo.Comments);
-        codeBoard.TransformedComments.AssignMemberComments(memberInfo.Name, transformedComments);
+        IGrouping<string, Comment>[] groups = GroupByMethodName(memberInfo.Comments);
+
+        foreach (var group in groups)
+        {
+            MemberCommentKey key = new MemberCommentKey(memberInfo.Name, group.Key);
+            Comments comments = new Comments(group.ToArray());
+            Comments transformedComments = CommentsTransformer.TransformComments(comments);
+            codeBoard.TransformedComments.AssignMemberComments(key, transformedComments);
+        }
+    }
+
+    private IGrouping<string, Comment>[] GroupByMethodName(Comments transformedComments)
+    {
+        List<(string, Comments)> methodComments = new List<(string, Comments)>();
+        return transformedComments.List.GroupBy(GetMethodName).ToArray();
+
+        static string GetMethodName(Comment comment)
+        {
+            return comment.Attributes.FirstOrDefault(a => a.Key == "method")?.Value ?? string.Empty;
+        }
     }
 
     private void HandleMethodSymbolInfo(MethodSymbolInfo methodInfo, CodeBoard codeBoard)
