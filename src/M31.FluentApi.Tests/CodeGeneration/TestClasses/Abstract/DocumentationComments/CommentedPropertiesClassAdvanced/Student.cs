@@ -4,13 +4,20 @@
 
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedDefaultNullablePropertyClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedPropertiesClassAdvanced;
 
 [FluentApi]
 public class Student
 {
     [FluentMember(0)]
     public string Name { get; set; }
+
+    /// <fluentSummary>
+    /// Sets the students's age.
+    /// </fluentSummary>
+    /// <fluentParam name="age">The student's age.</fluentParam>
+    [FluentMember(1)]
+    public int Age { get; set; }
 
     /// <fluentSummary method="LivingIn">
     /// Sets the student's city.
@@ -22,12 +29,12 @@ public class Student
     /// <fluentSummary method="InUnknownCity">
     /// Set's the student's city to null.
     /// </fluentSummary>
-    [FluentMember(0, "LivingIn")]
+    [FluentMember(2, "LivingIn")]
     [FluentDefault("LivingInBoston")]
     [FluentNullable("InUnknownCity")]
     public string? City { get; set; } = "Boston";
 
-    [FluentPredicate(1, "WhoIsHappy", "WhoIsSad")]
+    [FluentPredicate(3, "WhoIsHappy", "WhoIsSad")]
     [FluentNullable("WithUnknownMood")]
     public bool? IsHappy { get; private set; }
 }

@@ -7,11 +7,13 @@
 
 using System.Reflection;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedDefaultNullablePropertyClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedPropertiesClassAdvanced;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.IWithNameLivingIn,
+    CreateStudent.IWithName,
+    CreateStudent.IWithAge,
+    CreateStudent.ILivingIn,
     CreateStudent.IWhoIsHappy
 {
     private readonly Student student;
@@ -32,58 +34,40 @@ public class CreateStudent :
         return new CreateStudent();
     }
 
-    public static IWhoIsHappy WithName(string name)
+    public static IWithAge WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Name = name;
         return createStudent;
     }
 
-    /// <summary>Sets the student's city.</summary>
-    /// <param name="city">The student's city.</param>
-    public static IWhoIsHappy LivingIn(string? city)
-    {
-        CreateStudent createStudent = new CreateStudent();
-        createStudent.student.City = city;
-        return createStudent;
-    }
-
-    /// <summary>Set's the student's city to Boston.</summary>
-    public static IWhoIsHappy LivingInBoston()
-    {
-        CreateStudent createStudent = new CreateStudent();
-        return createStudent;
-    }
-
-    /// <summary>Set's the student's city to null.</summary>
-    public static IWhoIsHappy InUnknownCity()
-    {
-        CreateStudent createStudent = new CreateStudent();
-        createStudent.student.City = null;
-        return createStudent;
-    }
-
-    IWhoIsHappy IWithNameLivingIn.WithName(string name)
+    IWithAge IWithName.WithName(string name)
     {
         student.Name = name;
         return this;
     }
 
+    ILivingIn IWithAge.WithAge(int age)
+    {
+        student.Age = age;
+        return this;
+    }
+
     /// <inheritdoc/>
-    IWhoIsHappy IWithNameLivingIn.LivingIn(string? city)
+    IWhoIsHappy ILivingIn.LivingIn(string? city)
     {
         student.City = city;
         return this;
     }
 
     /// <inheritdoc/>
-    IWhoIsHappy IWithNameLivingIn.LivingInBoston()
+    IWhoIsHappy ILivingIn.LivingInBoston()
     {
         return this;
     }
 
     /// <inheritdoc/>
-    IWhoIsHappy IWithNameLivingIn.InUnknownCity()
+    IWhoIsHappy ILivingIn.InUnknownCity()
     {
         student.City = null;
         return this;
@@ -107,14 +91,22 @@ public class CreateStudent :
         return student;
     }
 
-    public interface ICreateStudent : IWithNameLivingIn
+    public interface ICreateStudent : IWithName
     {
     }
 
-    public interface IWithNameLivingIn
+    public interface IWithName
     {
-        IWhoIsHappy WithName(string name);
+        IWithAge WithName(string name);
+    }
 
+    public interface IWithAge
+    {
+        ILivingIn WithAge(int age);
+    }
+
+    public interface ILivingIn
+    {
         /// <summary>Sets the student's city.</summary>
         /// <param name="city">The student's city.</param>
         IWhoIsHappy LivingIn(string? city);
