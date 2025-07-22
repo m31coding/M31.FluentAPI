@@ -18,7 +18,7 @@ internal class CommentsGenerator : ICodeBoardActor
             switch (fluentApiInfo.SymbolInfo)
             {
                 case MemberSymbolInfo memberInfo:
-                    HandleMemberSymbolInfo(memberInfo, codeBoard);
+                    HandleMemberSymbolInfo(memberInfo, fluentApiInfo, codeBoard);
                     break;
 
                 case MethodSymbolInfo methodSymbolInfo:
@@ -31,9 +31,10 @@ internal class CommentsGenerator : ICodeBoardActor
         }
     }
 
-    private void HandleMemberSymbolInfo(MemberSymbolInfo memberInfo, CodeBoard codeBoard)
+    private void HandleMemberSymbolInfo(MemberSymbolInfo memberInfo, FluentApiInfo fluentApiInfo, CodeBoard codeBoard)
     {
-        IGrouping<string, Comment>[] groups = GroupByMethodName(memberInfo.Comments);
+        string? singleMethodName = TryGetSingleMethodName(fluentApiInfo);
+        IGrouping<string, Comment>[] groups = GroupByMethodName(memberInfo.Comments, singleMethodName);
 
         foreach (var group in groups)
         {
@@ -44,14 +45,21 @@ internal class CommentsGenerator : ICodeBoardActor
         }
     }
 
-    private IGrouping<string, Comment>[] GroupByMethodName(Comments transformedComments)
+    private string? TryGetSingleMethodName(FluentApiInfo fluentApiInfo)
+    {
+        string[] fluentMethodNames = fluentApiInfo.AttributeInfo.FluentMethodNames
+            .Concat(fluentApiInfo.OrthogonalAttributeInfos.SelectMany(o => o.FluentMethodNames)).ToArray();
+        return fluentMethodNames.Length != 1 ? null : fluentMethodNames[0];
+    }
+
+    private IGrouping<string, Comment>[] GroupByMethodName(Comments transformedComments, string? fallbackMethodName)
     {
         List<(string, Comments)> methodComments = new List<(string, Comments)>();
-        return transformedComments.List.GroupBy(GetMethodName).ToArray();
+        return transformedComments.List.GroupBy(GetMethodName).Where(g => g.Key != string.Empty).ToArray();
 
-        static string GetMethodName(Comment comment)
+        string GetMethodName(Comment comment)
         {
-            return comment.Attributes.FirstOrDefault(a => a.Key == "method")?.Value ?? string.Empty;
+            return comment.Attributes.FirstOrDefault(a => a.Key == "method")?.Value ?? fallbackMethodName ?? string.Empty;
         }
     }
 

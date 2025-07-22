@@ -11,11 +11,7 @@ internal record FluentNullableAttributeInfo : OrthogonalAttributeInfoBase
     }
 
     internal string Method { get; }
-
-    internal override IReadOnlyCollection<string> MethodNames()
-    {
-        return new string[] { Method };
-    }
+    internal override IReadOnlyCollection<string> FluentMethodNames => new string[] { Method };
 
     internal static FluentNullableAttributeInfo Create(AttributeData attributeData, string memberName)
     {

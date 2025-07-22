@@ -30,6 +30,8 @@ internal record FluentCollectionAttributeInfo : AttributeInfoBase
     internal string? WithZeroItems { get; }
     internal LambdaBuilderInfo? LambdaBuilderInfo { get; }
     internal override string FluentMethodName => WithItems;
+    internal override IReadOnlyCollection<string> FluentMethodNames =>
+        new string?[] { WithItems, WithItem, WithZeroItems }.OfType<string>().ToArray();
 
     internal static FluentCollectionAttributeInfo Create(
         AttributeData attributeData,

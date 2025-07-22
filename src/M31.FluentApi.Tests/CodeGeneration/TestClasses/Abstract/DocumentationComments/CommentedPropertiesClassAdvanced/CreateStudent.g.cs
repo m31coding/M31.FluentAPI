@@ -12,7 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationC
 public class CreateStudent :
     CreateStudent.ICreateStudent,
     CreateStudent.IWithName,
-    CreateStudent.IWithAge,
+    CreateStudent.IOfAge,
     CreateStudent.ILivingIn,
     CreateStudent.IWhoIsHappy
 {
@@ -34,20 +34,21 @@ public class CreateStudent :
         return new CreateStudent();
     }
 
-    public static IWithAge WithName(string name)
+    public static IOfAge WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.Name = name;
         return createStudent;
     }
 
-    IWithAge IWithName.WithName(string name)
+    IOfAge IWithName.WithName(string name)
     {
         student.Name = name;
         return this;
     }
 
-    ILivingIn IWithAge.WithAge(int age)
+    /// <inheritdoc/>
+    ILivingIn IOfAge.OfAge(int age)
     {
         student.Age = age;
         return this;
@@ -97,12 +98,14 @@ public class CreateStudent :
 
     public interface IWithName
     {
-        IWithAge WithName(string name);
+        IOfAge WithName(string name);
     }
 
-    public interface IWithAge
+    public interface IOfAge
     {
-        ILivingIn WithAge(int age);
+        /// <summary>Sets the students's age.</summary>
+        /// <param name="age">The student's age.</param>
+        ILivingIn OfAge(int age);
     }
 
     public interface ILivingIn

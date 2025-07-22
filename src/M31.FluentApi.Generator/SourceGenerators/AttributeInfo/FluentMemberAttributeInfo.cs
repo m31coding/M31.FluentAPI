@@ -20,6 +20,7 @@ internal record FluentMemberAttributeInfo : AttributeInfoBase
     internal string Method { get; }
     internal int ParameterPosition { get; }
     internal override string FluentMethodName => Method;
+    internal override IReadOnlyCollection<string> FluentMethodNames => new string[] { Method };
     internal LambdaBuilderInfo? LambdaBuilderInfo { get; }
 
     internal static FluentMemberAttributeInfo Create(
