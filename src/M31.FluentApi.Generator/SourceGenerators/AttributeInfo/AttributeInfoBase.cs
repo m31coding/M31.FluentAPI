@@ -8,6 +8,5 @@ internal abstract record AttributeInfoBase
     }
 
     internal int BuilderStep { get; }
-    internal abstract string FluentMethodName { get; } // todo: rename or remove
-    internal abstract IReadOnlyCollection<string> FluentMethodNames { get; }
+    internal abstract IReadOnlyList<string> FluentMethodNames { get; }
 }

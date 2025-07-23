@@ -14,8 +14,7 @@ internal record FluentPredicateAttributeInfo : AttributeInfoBase
 
     internal string Method { get; }
     internal string NegatedMethod { get; }
-    internal override string FluentMethodName => Method;
-    internal override IReadOnlyCollection<string> FluentMethodNames => new string[] { Method, NegatedMethod };
+    internal override IReadOnlyList<string> FluentMethodNames => new string[] { Method, NegatedMethod };
 
     internal static FluentPredicateAttributeInfo Create(AttributeData attributeData, string memberName)
     {

@@ -22,7 +22,7 @@ internal class LambdaMethod : IBuilderMethodCreator
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
     {
         BuilderMethod memberBuilderMethod =
-            methodCreator.CreateMethod(SymbolInfo, LambdaAttributeInfo.FluentMethodName);
+            methodCreator.CreateMethod(SymbolInfo, LambdaAttributeInfo.Method);
 
         BuilderMethod lambdaBuilderMethod = CreateLambdaBuilderMethod(
             methodCreator, LambdaAttributeInfo.Method, SymbolInfo, LambdaAttributeInfo.BuilderInfo);

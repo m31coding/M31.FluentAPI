@@ -16,7 +16,7 @@ public class Student
     /// Sets the students's age.
     /// </fluentSummary>
     /// <fluentParam name="age">The student's age.</fluentParam>
-    [FluentMember(1)]
+    [FluentMember(1, "OfAge")]
     public int Age { get; set; }
 
     /// <fluentSummary method="LivingIn">
