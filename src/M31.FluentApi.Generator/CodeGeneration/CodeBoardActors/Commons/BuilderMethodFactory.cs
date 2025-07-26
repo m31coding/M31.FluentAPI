@@ -60,9 +60,15 @@ internal class BuilderMethodFactory
                 .ToList();
         }
 
-        Comments comments = FluentCommentsParser.Parse(null); // todo
-        // Comments comments = transformedComments.GetMemberComments(computeValue.TargetMember);
+        Comments comments = GetCompoundComments(methodName, computeValues.Select(v => v.TargetMember).ToArray());
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
+    }
+
+    private Comments GetCompoundComments(string methodName, IReadOnlyCollection<string> memberNames)
+    {
+        return new Comments(memberNames
+            .SelectMany(n => transformedComments.GetMemberComments(new MemberCommentKey(n, methodName)).List)
+            .ToArray());
     }
 
     internal BuilderMethod CreateBuilderMethod(
