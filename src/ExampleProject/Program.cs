@@ -3,6 +3,12 @@ using ExampleProject;
 
 #pragma warning disable CS8321 // Local function is declared but never used
 
+// MyPerson
+//
+
+MyPerson mp = CreateMyPerson.WithFirstName("Kevin").WithLastName("Schaal")
+    .OfAge(22).InSemester(4).LivingIn("Tübingen");
+
 // Student
 //
 
