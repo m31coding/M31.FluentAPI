@@ -48,18 +48,18 @@ internal class CommentsGenerator : ICodeBoardActor
     private string? TryGetSingleMethodName(FluentApiInfo fluentApiInfo)
     {
         string[] fluentMethodNames = fluentApiInfo.AttributeInfo.FluentMethodNames
-            .Concat(fluentApiInfo.OrthogonalAttributeInfos.SelectMany(o => o.FluentMethodNames)).ToArray();
+            .Concat(fluentApiInfo.OrthogonalAttributeInfos.SelectMany(o => o.FluentMethodNames)).Distinct().ToArray();
         return fluentMethodNames.Length != 1 ? null : fluentMethodNames[0];
     }
 
     private IGrouping<string, Comment>[] GroupByMethodName(Comments transformedComments, string? fallbackMethodName)
     {
-        List<(string, Comments)> methodComments = new List<(string, Comments)>();
         return transformedComments.List.GroupBy(GetMethodName).Where(g => g.Key != string.Empty).ToArray();
 
         string GetMethodName(Comment comment)
         {
-            return comment.Attributes.FirstOrDefault(a => a.Key == "method")?.Value ?? fallbackMethodName ?? string.Empty;
+            return comment.Attributes.FirstOrDefault(a => a.Key == "method")?.Value ??
+                   fallbackMethodName ?? string.Empty;
         }
     }
 
