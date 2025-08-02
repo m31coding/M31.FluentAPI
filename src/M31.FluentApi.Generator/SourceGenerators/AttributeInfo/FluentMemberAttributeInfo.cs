@@ -20,7 +20,7 @@ internal record FluentMemberAttributeInfo : AttributeInfoBase
     internal string Method { get; }
     internal int ParameterPosition { get; }
     internal override IReadOnlyList<string> FluentMethodNames => new string[] { Method };
-    internal LambdaBuilderInfo? LambdaBuilderInfo { get; } // Todo: add to fluent method names, also for the FluentCollection.
+    internal LambdaBuilderInfo? LambdaBuilderInfo { get; }
 
     internal static FluentMemberAttributeInfo Create(
         AttributeData attributeData,
