@@ -1,6 +1,7 @@
 // Non-nullable member is uninitialized
 #pragma warning disable CS8618
 // ReSharper disable All
+// ReSharper disable InvalidXmlDocComment
 
 using M31.FluentApi.Attributes;
 
@@ -49,5 +50,5 @@ public class Student
     /// </summary>
     /// <param name="city">This parameter will not be taken into account.</param>
     [FluentMember(4, "LivingIn")]
-    public string City { get; set; } 
+    public string City { get; set; }
 }
