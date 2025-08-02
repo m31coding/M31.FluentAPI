@@ -63,7 +63,7 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
                 Path.Combine("ref", "net6.0"));
 #else
             ReferenceAssemblies = ReferenceAssemblies.Net.Net50;
-#endif
+#endif      // todo: remove
 
             TestState.AdditionalReferences.Add(typeof(FluentApiAttribute).Assembly);
         }
