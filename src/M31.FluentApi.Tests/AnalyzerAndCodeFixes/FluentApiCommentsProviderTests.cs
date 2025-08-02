@@ -10,7 +10,7 @@ using static M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers.TestSourceCodeRead
 
 namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes;
 
-public class MyRefactoringProviderTests
+public class FluentApiCommentsProviderTests
 {
     [Theory]
     [InlineData("UncommentedPropertyClass", "FirstName")]
