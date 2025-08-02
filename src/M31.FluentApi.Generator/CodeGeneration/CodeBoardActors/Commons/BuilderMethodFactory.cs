@@ -9,7 +9,8 @@ internal class BuilderMethodFactory
     private readonly InnerBodyCreationDelegates innerBodyCreationDelegates;
     private readonly TransformedComments transformedComments;
 
-    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates, TransformedComments transformedComments)
+    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates,
+        TransformedComments transformedComments)
     {
         this.innerBodyCreationDelegates = innerBodyCreationDelegates;
         this.transformedComments = transformedComments;
@@ -18,8 +19,9 @@ internal class BuilderMethodFactory
     internal BuilderMethod CreateEmptyBuilderMethod(MemberSymbolInfo memberInfo, string methodName)
     {
         MemberCommentKey key = new MemberCommentKey(memberInfo.Name, methodName);
-        Comments comments = transformedComments.GetMemberComments(key);
-        return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>(), comments);
+        Comments comments = transformedComments.GetMemberComments(key, Array.Empty<string>());
+        return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>(),
+            comments);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, ComputeValueCode computeValue)
@@ -41,7 +43,7 @@ internal class BuilderMethodFactory
         }
 
         MemberCommentKey key = new MemberCommentKey(computeValue.TargetMember, methodName);
-        Comments comments = transformedComments.GetMemberComments(key);
+        Comments comments = transformedComments.GetMemberComments(key, parameters.Select(p => p.Name).ToArray());
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
@@ -60,14 +62,21 @@ internal class BuilderMethodFactory
                 .ToList();
         }
 
-        Comments comments = GetCompoundComments(methodName, computeValues.Select(v => v.TargetMember).ToArray());
+        Comments comments =
+            GetCompoundComments(methodName, parameters, computeValues.Select(v => v.TargetMember).ToArray());
         return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
-    private Comments GetCompoundComments(string methodName, IReadOnlyCollection<string> memberNames)
+    private Comments GetCompoundComments(
+        string methodName,
+        List<Parameter> parameters,
+        IReadOnlyCollection<string> memberNames)
     {
+        string[] parameterNames = parameters.Select(p => p.Name).ToArray();
+
         return new Comments(memberNames
-            .SelectMany(n => transformedComments.GetMemberComments(new MemberCommentKey(n, methodName)).List)
+            .SelectMany(n =>
+                transformedComments.GetMemberComments(new MemberCommentKey(n, methodName), parameterNames).List)
             .ToArray());
     }
 

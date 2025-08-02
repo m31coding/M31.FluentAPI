@@ -1,6 +1,4 @@
-﻿using M31.FluentApi.Generator.Commons;
-
-namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
+﻿namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 
 internal class TransformedComments
 {
@@ -24,14 +22,25 @@ internal class TransformedComments
         memberComments[memberCommentKey] = comments;
     }
 
-    internal Comments GetMemberComments(MemberCommentKey memberCommentKey)
+    internal Comments GetMemberComments(MemberCommentKey memberCommentKey, string[] parameterNames)
     {
         if (memberComments.TryGetValue(memberCommentKey, out Comments comments))
         {
-            return comments;
+            return new Comments(comments.List.Where(IsRelevant).ToArray());
         }
 
         return new Comments(Array.Empty<Comment>());
+
+        bool IsRelevant(Comment comment)
+        {
+            if (comment.Tag != "param")
+            {
+                return true;
+            }
+
+            string? parameterName = comment.Attributes.FirstOrDefault(a => a.Key == "name")?.Value;
+            return parameterName != null && parameterNames.Contains(parameterName, StringComparer.InvariantCulture);
+        }
     }
 
     internal void AssignMethodComments(MethodSymbolInfo methodSymbolInfo, Comments comments)

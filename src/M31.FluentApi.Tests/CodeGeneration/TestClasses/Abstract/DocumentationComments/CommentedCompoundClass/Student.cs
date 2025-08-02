@@ -5,7 +5,7 @@
 using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedCompoundClass;
-
+// todo: rename folder to FluentApiComments, remove other occurrences of "DocumentationComments". Hm maybe not.
 [FluentApi]
 public class Student
 {

@@ -4,7 +4,8 @@
 
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedPropertiesClassAdvanced;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.
+    CommentedPropertiesClassAdvanced;
 
 [FluentApi]
 public class Student
@@ -23,9 +24,11 @@ public class Student
     /// Sets the student's city.
     /// </fluentSummary>
     /// <fluentParam method="LivingIn" name="city">The student's city.</fluentParam>
+    ///
     /// <fluentSummary method="LivingInBoston">
     /// Set's the student's city to Boston.
     /// </fluentSummary>
+    ///
     /// <fluentSummary method="InUnknownCity">
     /// Set's the student's city to null.
     /// </fluentSummary>
