@@ -9,7 +9,8 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationC
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.IWithName
+    CreateStudent.IWithName,
+    CreateStudent.IStudies
 {
     private readonly Student student;
 
@@ -26,19 +27,27 @@ public class CreateStudent :
     /// <summary>Sets the student's name.</summary>
     /// <param name="firstName">The student's first name.</param>
     /// <param name="lastName">The student's last name.</param>
-    public static Student WithName(string firstName, string lastName)
+    public static IStudies WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
         createStudent.student.FirstName = firstName;
         createStudent.student.LastName = lastName;
-        return createStudent.student;
+        return createStudent;
     }
 
     /// <inheritdoc/>
-    Student IWithName.WithName(string firstName, string lastName)
+    IStudies IWithName.WithName(string firstName, string lastName)
     {
         student.FirstName = firstName;
         student.LastName = lastName;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    Student IStudies.Studies(string courseOfStudy, int semester)
+    {
+        student.CourseOfStudy = courseOfStudy;
+        student.Semester = semester;
         return student;
     }
 
@@ -51,6 +60,14 @@ public class CreateStudent :
         /// <summary>Sets the student's name.</summary>
         /// <param name="firstName">The student's first name.</param>
         /// <param name="lastName">The student's last name.</param>
-        Student WithName(string firstName, string lastName);
+        IStudies WithName(string firstName, string lastName);
+    }
+
+    public interface IStudies
+    {
+        /// <summary>Sets the student's course of study and current semester.</summary>
+        /// <param name="courseOfStudy">The student's course of study.</param>
+        /// <param name="semester">The student's current semester.</param>
+        Student Studies(string courseOfStudy, int semester);
     }
 }

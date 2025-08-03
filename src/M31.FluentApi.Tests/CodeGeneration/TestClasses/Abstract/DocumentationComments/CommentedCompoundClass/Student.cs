@@ -19,4 +19,15 @@ public class Student
     /// <fluentParam name="lastName">The student's last name.</fluentParam>
     [FluentMember(0, "WithName")]
     public string LastName { get; set; }
+
+    /// <fluentSummary method="Studies">
+    /// Sets the student's course of study and current semester.
+    /// </fluentSummary>
+    /// <fluentParam method="Studies" name="courseOfStudy">The student's course of study.</fluentParam>
+    [FluentMember(1, "Studies")]
+    public string CourseOfStudy { get; set; }
+
+    /// <fluentParam method="Studies" name="semester">The student's current semester.</fluentParam>
+    [FluentMember(1, "Studies")]
+    public int Semester { get; set; }
 }
