@@ -1,11 +1,12 @@
 ﻿using System.Composition;
 using M31.FluentApi.Generator.Commons;
+using M31.FluentApi.Generator.SourceGenerators;
+using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace M31.FluentApi.Generator.SourceAnalyzers;
 
@@ -23,21 +24,19 @@ internal class FluentApiCommentsProvider : CodeRefactoringProvider
             return;
         }
 
-        // SemanticModel? semanticModel = await document.GetSemanticModelAsync(context.CancellationToken);
-        // if (semanticModel == null)
-        // {
-        //     return;
-        // }
-
         SyntaxNode node = root.FindNode(context.Span);
 
-        // Check for property, field, or method declaration
         if (node is not MemberDeclarationSyntax memberSyntax)
         {
             return;
         }
 
         if (!memberSyntax.Parent.IsClassStructOrRecordSyntax(out TypeDeclarationSyntax typeSyntax))
+        {
+            return;
+        }
+
+        if (context.CancellationToken.IsCancellationRequested)
         {
             return;
         }
@@ -49,47 +48,96 @@ internal class FluentApiCommentsProvider : CodeRefactoringProvider
             return;
         }
 
-        // // Only offer refactoring if member has [FluentMember] or no comment yet
-        // var memberSymbol = semanticModel.GetDeclaredSymbol(memberSyntax, context.CancellationToken);
-        // if (memberSymbol == null)
-        //     return;
-        //
-        // bool hasFluentMember = memberSymbol.GetAttributes().Any(attr =>
-        //     attr.AttributeClass?.Name == "FluentMemberAttribute" ||
-        //     attr.AttributeClass?.ToDisplayString() == "FluentMemberAttribute");
-        //
-        // if (!hasFluentMember)
-        //     return;
+        SemanticModel? semanticModel = await document.GetSemanticModelAsync(context.CancellationToken);
+        if (semanticModel == null)
+        {
+            return;
+        }
 
-        CodeAction action = CodeAction.Create("Add <fluentSummary> doc comment b",
-            c => AddFluentSummaryAsync(context.Document, null!, c),
+        ISymbol? memberSymbol = semanticModel.GetDeclaredSymbol(memberSyntax, context.CancellationToken);
+        if (memberSymbol == null)
+        {
+            return;
+        }
+
+        if (context.CancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
+        AttributeDataExtended[] attributeDataExtended =
+            memberSymbol.GetAttributes()
+                .Select(AttributeDataExtended.Create)
+                .OfType<AttributeDataExtended>()
+                .ToArray();
+
+        if (!attributeDataExtended.Any(a => Attributes.IsMainAttribute(a.FullName)))
+        {
+            return;
+        }
+
+        CodeAction action = CodeAction.Create("Create fluent API documentation comments",
+            c => AddFluentSummaryAsync(
+                memberSyntax, memberSymbol, context.Document, root, semanticModel, typeSyntax, c),
             nameof(FluentApiCommentsProvider));
 
         context.RegisterRefactoring(action);
     }
 
-    private async Task<Document> AddFluentSummaryAsync(Document document, MethodDeclarationSyntax methodDecl,
+    private async Task<Document> AddFluentSummaryAsync(
+        MemberDeclarationSyntax memberSyntax,
+        ISymbol memberSymbol,
+        Document document,
+        SyntaxNode root,
+        SemanticModel semanticModel,
+        TypeDeclarationSyntax typeSyntax,
         CancellationToken cancellationToken)
     {
-        return document;
-        var leadingTrivia = methodDecl.GetLeadingTrivia();
+        ClassInfoResult classInfoResult =
+            ClassInfoFactory.CreateFluentApiClassInfo(
+                semanticModel,
+                typeSyntax,
+                SourceGenerator.GeneratorConfig,
+                cancellationToken);
+
+        if (classInfoResult.ClassInfo == null)
+        {
+            return document;
+        }
+
+        // todo: handle groups.
+        FluentApiInfo? info =
+            classInfoResult.ClassInfo.FluentApiInfos.FirstOrDefault(i => i.SymbolInfo.Name == memberSymbol.Name);
+
+        if (info == null)
+        {
+            return document;
+        }
+
+        SyntaxTriviaList leadingTrivia = memberSyntax.GetLeadingTrivia();
+        string padding = GetPadding(leadingTrivia);
+        string nl = classInfoResult.ClassInfo.NewLineString;
 
         var xmlComment = SyntaxFactory.TriviaList(
-            SyntaxFactory.Comment("/// <fluentSummary>"),
-            SyntaxFactory.CarriageReturnLineFeed,
-            SyntaxFactory.Comment("/// ..."),
-            SyntaxFactory.CarriageReturnLineFeed,
-            SyntaxFactory.Comment("/// </fluentSummary>"),
-            SyntaxFactory.CarriageReturnLineFeed
-        );
+            SyntaxFactory.Comment($"/// <fluentSummary>{nl}"),
+            SyntaxFactory.Comment($"{padding}/// ...{nl}"),
+            SyntaxFactory.Comment($"{padding}/// </fluentSummary>{nl}{padding}"));
 
-        var newMethod = methodDecl.WithLeadingTrivia(xmlComment.AddRange(leadingTrivia));
+        MemberDeclarationSyntax newMemberSyntax = memberSyntax.WithLeadingTrivia(leadingTrivia.AddRange(xmlComment));
 
-        var root = await document.GetSyntaxRootAsync(cancellationToken);
-        if (root == null)
-            return document;
-
-        var newRoot = root.ReplaceNode(methodDecl, newMethod);
+        SyntaxNode newRoot = root.ReplaceNode(memberSyntax, newMemberSyntax);
         return document.WithSyntaxRoot(newRoot);
+    }
+
+    private static string GetPadding(SyntaxTriviaList leadingTrivia)
+    {
+        const string fallback = "    ";
+        SyntaxTrivia? first = leadingTrivia.FirstOrDefault();
+        if (first == null || first.Value.Kind() != SyntaxKind.WhitespaceTrivia)
+        {
+            return fallback;
+        }
+
+        return first.Value.ToString();
     }
 }

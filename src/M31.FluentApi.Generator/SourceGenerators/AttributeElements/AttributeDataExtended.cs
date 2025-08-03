@@ -4,7 +4,7 @@ namespace M31.FluentApi.Generator.SourceGenerators.AttributeElements;
 
 internal class AttributeDataExtended
 {
-    internal AttributeDataExtended(AttributeData attributeData, string fullName, string shortName)
+    private AttributeDataExtended(AttributeData attributeData, string fullName, string shortName)
     {
         AttributeData = attributeData;
         FullName = fullName;

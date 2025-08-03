@@ -360,9 +360,9 @@ internal static class FluentApiDiagnostics
     {
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: "M31FA022",
-            title: "Fluent lambda member without Fluent API",
+            title: "Fluent lambda member without fluent API",
             messageFormat: "FluentLambda can not be used on a member of type '{0}'. " +
-                           "Type '{0}' does not have a Fluent API.",
+                           "Type '{0}' does not have a fluent API.",
             category: "M31.Usage",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true);
