@@ -45,7 +45,7 @@ internal class CommentsGenerator : ICodeBoardActor
         }
     }
 
-    private string? TryGetSingleMethodName(FluentApiInfo fluentApiInfo)
+    private static string? TryGetSingleMethodName(FluentApiInfo fluentApiInfo)
     {
         string[] fluentMethodNames = fluentApiInfo.AttributeInfo.FluentMethodNames
             .Concat(fluentApiInfo.OrthogonalAttributeInfos.SelectMany(o => o.FluentMethodNames)).Distinct().ToArray();

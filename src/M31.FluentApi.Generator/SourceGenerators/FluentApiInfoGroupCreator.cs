@@ -66,7 +66,8 @@ internal class FluentApiInfoGroupCreator
                 nextBuilderStep,
                 groupIsSkippable,
                 group.fluentMethodName,
-                group.type, group.infoArray));
+                group.type,
+                group.infoArray));
         }
 
         return infoGroups;

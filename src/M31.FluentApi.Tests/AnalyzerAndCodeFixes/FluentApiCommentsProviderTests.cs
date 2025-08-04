@@ -1,7 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using M31.FluentApi.Attributes;
-using M31.FluentApi.Generator.SourceAnalyzers;
+using M31.FluentApi.Generator.SourceAnalyzers.DocumentationComments;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
