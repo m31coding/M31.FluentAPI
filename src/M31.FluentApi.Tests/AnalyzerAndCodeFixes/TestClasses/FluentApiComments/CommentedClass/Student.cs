@@ -6,16 +6,11 @@ using System;
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.FluentApiComments;
+namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.FluentApiComments.CommentedClass;
 
 [FluentApi]
 public class Student
 {
-    /// <fluentSummary>
-    /// ...
-    /// </fluentSummary>
-    /// <fluentParam name="firstName">...</fluentParam>
-    /// <fluentParam name="lastName">...</fluentParam>
     [FluentMember(0, "Named", 0)]
     public string FirstName { get; private set; }
 

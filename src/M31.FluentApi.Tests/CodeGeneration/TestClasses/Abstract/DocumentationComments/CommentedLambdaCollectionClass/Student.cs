@@ -1,5 +1,4 @@
 // Non-nullable member is uninitialized
-
 #pragma warning disable CS8618
 // ReSharper disable All
 
@@ -12,7 +11,8 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationC
 [FluentApi]
 public class Student
 {
-    [FluentMember(0)] public string Name { get; set; }
+    [FluentMember(0)]
+    public string Name { get; set; }
 
     /// <fluentSummary method="WithPhoneNumbers">
     /// Sets the student's phone numbers.
@@ -30,5 +30,5 @@ public class Student
     /// Specifies that the student has no phone numbers.
     /// </fluentSummary>
     [FluentCollection(1, "PhoneNumber")]
-    public IReadOnlyCollection<Phone> PhoneNumbers { get; private set; }
+    public IReadOnlyCollection<Phone> PhoneNumbers { get; set; }
 }

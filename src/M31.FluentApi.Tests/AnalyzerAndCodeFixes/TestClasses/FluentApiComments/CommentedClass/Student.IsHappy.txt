@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.FluentApiComments;
+namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.FluentApiComments.CommentedClass;
 
 [FluentApi]
 public class Student
@@ -14,11 +14,6 @@ public class Student
     [FluentMember(0, "Named", 0)]
     public string FirstName { get; private set; }
 
-    /// <fluentSummary>
-    /// ...
-    /// </fluentSummary>
-    /// <fluentParam name="firstName">...</fluentParam>
-    /// <fluentParam name="lastName">...</fluentParam>
     [FluentMember(0, "Named", 1)]
     public string LastName { get; private set; }
 
@@ -43,6 +38,18 @@ public class Student
     [FluentNullable("InUnknownCity")]
     public string? City { get; private set; } = "Boston";
 
+    /// <fluentSummary method="WhoIsHappy">
+    /// ...
+    /// </fluentSummary>
+    /// <fluentParam method="WhoIsHappy" name="isHappy">...</fluentParam>
+    ///
+    /// <fluentSummary method="WhoIsSad">
+    /// ...
+    /// </fluentSummary>
+    ///
+    /// <fluentSummary method="WithUnknownMood">
+    /// ...
+    /// </fluentSummary>
     [FluentPredicate(4, "WhoIsHappy", "WhoIsSad")]
     [FluentNullable("WithUnknownMood")]
     public bool? IsHappy { get; private set; }

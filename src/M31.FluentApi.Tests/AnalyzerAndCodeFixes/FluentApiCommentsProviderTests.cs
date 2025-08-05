@@ -14,17 +14,20 @@ namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes;
 public class FluentApiCommentsProviderTests
 {
     [Theory]
-    [InlineData("FluentApiComments", "FirstName", "FirstName")]
-    [InlineData("FluentApiComments", "LastNa", "LastName")]
-    [InlineData("FluentApiComments", "int Age ", "Age")]
-    [InlineData("FluentApiComments", " BornOn", "BornOn")]
-    [InlineData("FluentApiComments", "int Sem", "Semester")]
-    [InlineData("FluentApiComments", " City ", "City")]
-    [InlineData("FluentApiComments", "IsHappy ", "IsHappy")]
-    [InlineData("FluentApiComments", " Friends", "Friends")]
-    public async Task CanProvideFluentApiComments(string commentTestClass, string selectedSpan, string member)
+    [InlineData("CommentedClass", "Student", "FirstName", "FirstName")]
+    [InlineData("CommentedClass", "Student", "LastNa", "LastName")]
+    [InlineData("CommentedClass", "Student", "int Age ", "Age")]
+    [InlineData("CommentedClass", "Student", " BornOn", "BornOn")]
+    [InlineData("CommentedClass", "Student", "int Sem", "Semester")]
+    [InlineData("CommentedClass", "Student", " City ", "City")]
+    [InlineData("CommentedClass", "Student", "IsHappy ", "IsHappy")]
+    [InlineData("CommentedClass", "Student", " Friends", "Friends")]
+    [InlineData("LambdaCollectionClass", "Student", "PhoneNumbers", "PhoneNumbers")]
+    public async Task CanProvideFluentApiComments(
+        string commentTestClass, string @class, string selectedSpan, string member)
     {
-        SourceWithFix source = ReadSource(commentTestClass, "Student", $"Student.{member}.txt");
+        SourceWithFix source = ReadSource(Path.Combine("FluentApiComments", commentTestClass), @class,
+            $"Student.{member}.txt");
         var test = new CSharpCodeRefactoringTest<FluentApiCommentsProvider, XUnitVerifier>
         {
             TestCode = source.Source.SelectSpan(selectedSpan),

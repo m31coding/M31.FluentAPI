@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using M31.FluentApi.Attributes;
 
-namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.FluentApiComments;
+namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.FluentApiComments.CommentedClass;
 
 [FluentApi]
 public class Student
@@ -29,6 +29,14 @@ public class Student
         Age = age;
     }
 
+    /// <fluentSummary method="InSemester">
+    /// ...
+    /// </fluentSummary>
+    /// <fluentParam method="InSemester" name="semester">...</fluentParam>
+    ///
+    /// <fluentSummary method="WhoStartsUniversity">
+    /// ...
+    /// </fluentSummary>
     [FluentMember(2, "InSemester")]
     [FluentDefault("WhoStartsUniversity")]
     public int Semester { get; private set; } = 0;
