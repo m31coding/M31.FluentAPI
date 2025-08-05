@@ -56,6 +56,11 @@ internal class TransformedComments
 
     internal Comments GetMethodComments(MethodSymbolInfo methodSymbolInfo)
     {
-        return methodComments[methodSymbolInfo];
+        if (methodComments.TryGetValue(methodSymbolInfo, out Comments comments))
+        {
+            return comments;
+        }
+
+        return new Comments(Array.Empty<Comment>());
     }
 }

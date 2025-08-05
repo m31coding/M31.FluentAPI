@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using M31.FluentApi.Generator.CodeGeneration;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
@@ -8,7 +10,7 @@ using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace M31.FluentApi.Generator.SourceAnalyzers;
+namespace M31.FluentApi.Generator.SourceAnalyzers.DocumentationComments;
 
 [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(FluentApiCommentsProvider))]
 [Shared]
@@ -84,7 +86,7 @@ internal class FluentApiCommentsProvider : CodeRefactoringProvider
         context.RegisterRefactoring(action);
     }
 
-    private async Task<Document> AddFluentSummaryAsync(
+    private Task<Document> AddFluentSummaryAsync(
         MemberDeclarationSyntax memberSyntax,
         ISymbol memberSymbol,
         Document document,
@@ -102,31 +104,47 @@ internal class FluentApiCommentsProvider : CodeRefactoringProvider
 
         if (classInfoResult.ClassInfo == null)
         {
-            return document;
+            return Task.FromResult(document);
         }
 
-        // todo: handle groups.
-        FluentApiInfo? info =
-            classInfoResult.ClassInfo.FluentApiInfos.FirstOrDefault(i => i.SymbolInfo.Name == memberSymbol.Name);
+        FluentApiInfoGroup? group = classInfoResult.ClassInfo.AdditionalInfo.FluentApiInfoGroups.FirstOrDefault(
+            g => g.FluentApiInfos.Any(i => i.SymbolInfo.Name == memberSymbol.Name));
 
-        if (info == null)
+        if (group == null)
         {
-            return document;
+            return Task.FromResult(document);
+        }
+
+        Dictionary<FluentApiInfoGroup, BuilderMethods> groupToMethods =
+            CodeGenerator.GenerateBuilderMethods(classInfoResult.ClassInfo, cancellationToken);
+        BuilderMethods builderMethods = groupToMethods[group];
+        List<string> commentsTemplate = MethodsToCommentsTemplate.CreateCommentsTemplate(builderMethods);
+
+        if (commentsTemplate.Count <= 2)
+        {
+            return Task.FromResult(document);
         }
 
         SyntaxTriviaList leadingTrivia = memberSyntax.GetLeadingTrivia();
         string padding = GetPadding(leadingTrivia);
         string nl = classInfoResult.ClassInfo.NewLineString;
 
-        var xmlComment = SyntaxFactory.TriviaList(
-            SyntaxFactory.Comment($"/// <fluentSummary>{nl}"),
-            SyntaxFactory.Comment($"{padding}/// ...{nl}"),
-            SyntaxFactory.Comment($"{padding}/// </fluentSummary>{nl}{padding}"));
+        commentsTemplate[0] = $"{commentsTemplate[0]}{nl}";
+        for (int i = 1; i < commentsTemplate.Count - 1; i++)
+        {
+            commentsTemplate[i] = $"{padding}{commentsTemplate[i]}{nl}";
+        }
+
+        commentsTemplate[commentsTemplate.Count - 1] =
+            $"{padding}{commentsTemplate[commentsTemplate.Count - 1]}{nl}{padding}";
+
+        SyntaxTriviaList xmlComment =
+            SyntaxFactory.TriviaList(commentsTemplate.Select(SyntaxFactory.Comment).ToArray());
 
         MemberDeclarationSyntax newMemberSyntax = memberSyntax.WithLeadingTrivia(leadingTrivia.AddRange(xmlComment));
 
         SyntaxNode newRoot = root.ReplaceNode(memberSyntax, newMemberSyntax);
-        return document.WithSyntaxRoot(newRoot);
+        return Task.FromResult(document.WithSyntaxRoot(newRoot));
     }
 
     private static string GetPadding(SyntaxTriviaList leadingTrivia)

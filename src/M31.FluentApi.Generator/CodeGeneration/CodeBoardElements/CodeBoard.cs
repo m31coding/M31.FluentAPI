@@ -1,5 +1,6 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
 using M31.FluentApi.Generator.SourceAnalyzers;
@@ -32,8 +33,9 @@ internal class CodeBoard
         Constructor = null;
         StaticConstructor = null;
         InnerBodyCreationDelegates = new InnerBodyCreationDelegates();
-        BuilderMethodToAttributeData = new Dictionary<BuilderMethod, AttributeDataExtended>();
         TransformedComments = new TransformedComments();
+        GroupsToMethods = new Dictionary<FluentApiInfoGroup, BuilderMethods>();
+        BuilderMethodToAttributeData = new Dictionary<BuilderMethod, AttributeDataExtended>();
         Forks = new List<Fork>();
         ReservedVariableNames = new ReservedVariableNames();
         diagnostics = new List<Diagnostic>();
@@ -50,6 +52,7 @@ internal class CodeBoard
     internal Method? StaticConstructor { get; set; }
     internal InnerBodyCreationDelegates InnerBodyCreationDelegates { get; }
     internal TransformedComments TransformedComments { get; }
+    internal Dictionary<FluentApiInfoGroup, BuilderMethods> GroupsToMethods { get; }
     internal Dictionary<BuilderMethod, AttributeDataExtended> BuilderMethodToAttributeData { get; }
     internal IReadOnlyList<Fork> Forks { get; set; }
     internal ReservedVariableNames ReservedVariableNames { get; }

@@ -23,6 +23,13 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
 
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
     {
+        BuilderMethods builderMethods = CreateBuilderMethodsInternal(methodCreator);
+        codeBoard.GroupsToMethods[group] = builderMethods;
+        return builderMethods;
+    }
+
+    private BuilderMethods CreateBuilderMethodsInternal(MethodCreator methodCreator)
+    {
         if (FluentApiInfos.Count == 0)
         {
             return new BuilderMethods();

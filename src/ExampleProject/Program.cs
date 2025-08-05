@@ -6,8 +6,8 @@ using ExampleProject;
 // MyPerson
 //
 
-MyPerson mp = CreateMyPerson.WithFirstName("Kevin").WithLastName("Schaal")
-    .OfAge(22).InSemester(4).LivingIn("Tübingen");
+// MyPerson mp = CreateMyPerson.WithFirstName("Kevin").WithLastName("Schaal")
+//     .OfAge(22).InSemester(4).LivingIn("Tübingen");
 
 // Student
 //

@@ -12,11 +12,11 @@ internal class MethodsToCommentsTemplate
         comments = new List<string>();
     }
 
-    internal static IReadOnlyCollection<string> CreateCommentsTemplate(BuilderMethods builderMethods)
+    internal static List<string> CreateCommentsTemplate(BuilderMethods builderMethods)
     {
         if (builderMethods.Methods.Count == 0)
         {
-            return Array.Empty<string>();
+            return new List<string>();
         }
 
         MethodsToCommentsTemplate instance = new MethodsToCommentsTemplate();
@@ -40,6 +40,11 @@ internal class MethodsToCommentsTemplate
 
     private void CreateCommentsTemplateWithoutMethodNames(BuilderMethod[] sameNameBuilderMethods)
     {
+        if (comments.Count != 0)
+        {
+            comments.Add("///");
+        }
+
         comments.Add("/// <fluentSummary>");
         comments.Add("/// ...");
         comments.Add("/// </fluentSummary>");
@@ -53,6 +58,11 @@ internal class MethodsToCommentsTemplate
     private void CreateCommentsTemplateWithMethodNames(BuilderMethod[] sameNameBuilderMethods)
     {
         string method = sameNameBuilderMethods[0].MethodName;
+
+        if (comments.Count != 0)
+        {
+            comments.Add("///");
+        }
 
         comments.Add($"/// <fluentSummary method=\"{method}\">");
         comments.Add("/// ...");

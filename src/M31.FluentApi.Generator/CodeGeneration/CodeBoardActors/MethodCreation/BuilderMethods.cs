@@ -2,7 +2,7 @@ using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 
-internal class BuilderMethods
+internal class BuilderMethods // todo: rename this or the other class with the same name.
 {
     private readonly List<BuilderMethod> methods;
     private readonly HashSet<string> requiredUsings;
