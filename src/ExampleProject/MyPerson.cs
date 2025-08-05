@@ -5,10 +5,21 @@ namespace ExampleProject;
 [FluentApi]
 class MyPerson
 {
-    [FluentMember(0)]
+    /// <fluentSummary>
+    /// ...
+    /// </fluentSummary>
+    /// <fluentParam name="firstName">...</fluentParam>
+    /// <fluentParam name="lastName">...</fluentParam>
+    [FluentMember(0, "Name")]
     public string FirstName { get; set; }
 
-    [FluentMember(0)]
+    // todo: check generated code for this duplicate. Also test lambda!
+    /// <fluentSummary>
+    /// ...
+    /// </fluentSummary>
+    /// <fluentParam name="firstName">...</fluentParam>
+    /// <fluentParam name="lastName">...</fluentParam>
+    [FluentMember(0, "Name")]
     public string LastName { get; set; }
 
     /// <fluentSummary>
