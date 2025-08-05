@@ -115,6 +115,19 @@ internal class FluentApiCommentsProvider : CodeRefactoringProvider
             return Task.FromResult(document);
         }
 
+        if (group.IsCompoundGroup && group.FluentApiInfos.First().SymbolInfo.Name != memberSymbol.Name)
+        {
+            memberSymbol = group.FluentApiInfos.First().AdditionalInfo.Symbol;
+            MemberDeclarationSyntax? firstMemberSyntax =
+                memberSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MemberDeclarationSyntax;
+            if (firstMemberSyntax == null)
+            {
+                return Task.FromResult(document);
+            }
+
+            memberSyntax = firstMemberSyntax;
+        }
+
         Dictionary<FluentApiInfoGroup, BuilderMethods> groupToMethods =
             CodeGenerator.GenerateBuilderMethods(classInfoResult.ClassInfo, cancellationToken);
         BuilderMethods builderMethods = groupToMethods[group];
