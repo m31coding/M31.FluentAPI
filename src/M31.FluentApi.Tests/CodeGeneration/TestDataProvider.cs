@@ -26,6 +26,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "DocumentationComments", "CommentedMethodsClass", "Student" },
                 new object[] { "Abstract", "DocumentationComments", "CommentedPropertiesClass", "Student" },
                 new object[] { "Abstract", "DocumentationComments", "CommentedPropertiesClassAdvanced", "Student" },
+                new object[] { "Abstract", "DocumentationComments", "RedundantCommentCompoundClass", "Student" },
                 new object[] { "Abstract", "EmptyClass", "Student" },
                 new object[] { "Abstract", "FluentDefaultMemberClass", "Student" },
                 new object[] { "Abstract", "FluentLambdaClass", "Student|Address" },
