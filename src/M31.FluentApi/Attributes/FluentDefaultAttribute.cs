@@ -16,6 +16,5 @@ public class FluentDefaultAttribute : Attribute
     /// </param>
     public FluentDefaultAttribute(string method = "WithDefault{Name}")
     {
-
     }
 }

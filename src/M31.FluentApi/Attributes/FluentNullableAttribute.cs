@@ -15,6 +15,5 @@ public class FluentNullableAttribute : Attribute
     /// 'null'.</param>
     public FluentNullableAttribute(string method = "Without{Name}")
     {
-
     }
 }

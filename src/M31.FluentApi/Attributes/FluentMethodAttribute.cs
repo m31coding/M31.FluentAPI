@@ -16,6 +16,5 @@ public class FluentMethodAttribute : Attribute
     /// </param>
     public FluentMethodAttribute(int builderStep, string method = "{Name}")
     {
-
     }
 }

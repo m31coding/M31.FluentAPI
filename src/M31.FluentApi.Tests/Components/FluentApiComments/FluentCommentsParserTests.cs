@@ -12,7 +12,7 @@ public class FluentCommentsParserTests
     [Fact]
     public void CanParseSingleTag()
     {
-       string sourceCode = @"
+        string sourceCode = @"
             namespace M31.FluentApi.Tests.Components
             {
                 public class DocumentationCommentsTests

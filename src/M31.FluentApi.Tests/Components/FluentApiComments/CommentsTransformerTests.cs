@@ -63,6 +63,7 @@ public class CommentsTransformerTests
         Comment comment = new Comment("fluentParam", attributes, "The new value of Property1.");
         Comment? transformed = CommentsTransformer.TransformComment(comment);
         Assert.NotNull(transformed);
-        Assert.Equal(@"/// <param method=""static"" name=""property1"">The new value of Property1.</param>", transformed!.GetLine());
+        Assert.Equal(@"/// <param method=""static"" name=""property1"">The new value of Property1.</param>",
+            transformed!.GetLine());
     }
 }

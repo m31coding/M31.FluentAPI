@@ -11,6 +11,5 @@ public class FluentReturnAttribute : Attribute
     /// </summary>
     public FluentReturnAttribute()
     {
-
     }
 }

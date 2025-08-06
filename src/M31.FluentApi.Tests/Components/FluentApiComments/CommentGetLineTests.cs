@@ -26,6 +26,4 @@ public class CommentGetLineTests
         string line = comment.GetLine();
         Assert.Equal(@"/// <fluentParam method=""method1"" name=""parameter1"">The parameter1.</fluentParam>", line);
     }
-
-
 }

@@ -14,6 +14,5 @@ public class FluentContinueWithAttribute : Attribute
     /// <param name="builderStep">The builder step to continue with.</param>
     public FluentContinueWithAttribute(int builderStep)
     {
-
     }
 }

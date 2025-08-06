@@ -14,6 +14,5 @@ public class FluentApiAttribute : Attribute
     /// <param name="builderClassName">The name of the generated builder class.</param>
     public FluentApiAttribute(string builderClassName = "Create{Name}")
     {
-
     }
 }

@@ -6,9 +6,11 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsG
 
 internal class BuilderStepMethodsCreator
 {
-    internal static BuilderStepMethods CreateBuilderMethods(IReadOnlyList<Fork> forks, CancellationToken cancellationToken)
+    internal static BuilderStepMethods CreateBuilderMethods(IReadOnlyList<Fork> forks,
+        CancellationToken cancellationToken)
     {
-        return forks.Count == 0 ? EmptyBuilderMethods()
+        return forks.Count == 0
+            ? EmptyBuilderMethods()
             : new BuilderStepMethodsCreator(forks, cancellationToken).Create();
     }
 

@@ -58,9 +58,11 @@ internal class BuilderGenerator : ICodeBoardActor
     private Method CreateMethodWithInheritedDocs(Method method)
     {
         return new Method(
-                    new MethodComments(method.MethodComments.Any ? new List<string>() { "/// <inheritdoc/>" } : new List<string>()),
-                    method.MethodSignature,
-                    method.MethodBody);
+            new MethodComments(method.MethodComments.Any
+                ? new List<string>() { "/// <inheritdoc/>" }
+                : new List<string>()),
+            method.MethodSignature,
+            method.MethodBody);
     }
 
     private Method CreateMethod(BuilderStepMethod builderStepMethod, CodeBoard codeBoard)

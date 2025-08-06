@@ -46,7 +46,7 @@ internal static class CodeGenerator
 
         if (codeBoard.HasErrors)
         {
-             return CodeGeneratorResult.WithErrors(codeBoard.Diagnostics);
+            return CodeGeneratorResult.WithErrors(codeBoard.Diagnostics);
         }
 
         return new CodeGeneratorResult(codeBoard.CodeFile.ToString(), codeBoard.Diagnostics);

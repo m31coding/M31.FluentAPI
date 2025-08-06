@@ -191,8 +191,7 @@ internal class CodeBuilder
         {
             separationAction();
             append(en.Current);
-        }
-        while (en.MoveNext());
+        } while (en.MoveNext());
 
         return this;
     }
