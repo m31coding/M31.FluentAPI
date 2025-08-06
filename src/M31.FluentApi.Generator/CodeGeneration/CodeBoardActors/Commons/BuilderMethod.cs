@@ -1,5 +1,5 @@
 using M31.FluentApi.Generator.CodeBuilding;
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;

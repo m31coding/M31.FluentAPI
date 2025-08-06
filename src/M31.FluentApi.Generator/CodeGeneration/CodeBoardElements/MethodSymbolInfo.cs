@@ -1,4 +1,4 @@
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;

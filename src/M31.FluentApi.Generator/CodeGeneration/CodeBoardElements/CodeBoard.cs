@@ -2,7 +2,7 @@ using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.DocumentationComments;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 using M31.FluentApi.Generator.SourceAnalyzers;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;

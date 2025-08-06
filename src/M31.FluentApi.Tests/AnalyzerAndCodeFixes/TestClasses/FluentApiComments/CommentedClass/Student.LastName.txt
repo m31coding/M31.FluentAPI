@@ -11,14 +11,14 @@ namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.TestClasses.FluentApiComments
 [FluentApi]
 public class Student
 {
-    [FluentMember(0, "Named", 0)]
-    public string FirstName { get; private set; }
-
     /// <fluentSummary>
     /// ...
     /// </fluentSummary>
     /// <fluentParam name="firstName">...</fluentParam>
     /// <fluentParam name="lastName">...</fluentParam>
+    [FluentMember(0, "Named", 0)]
+    public string FirstName { get; private set; }
+
     [FluentMember(0, "Named", 1)]
     public string LastName { get; private set; }
 

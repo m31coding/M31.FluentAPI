@@ -1,7 +1,7 @@
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration;
-using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.DocumentationGeneration;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.DuplicateMethodsChecking;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.FluentApiComments;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
