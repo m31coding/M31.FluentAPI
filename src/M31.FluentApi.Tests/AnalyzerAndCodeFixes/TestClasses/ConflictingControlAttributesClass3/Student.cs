@@ -17,6 +17,5 @@ public class Student
     [FluentReturn]
     public void Method1()
     {
-
     }
 }

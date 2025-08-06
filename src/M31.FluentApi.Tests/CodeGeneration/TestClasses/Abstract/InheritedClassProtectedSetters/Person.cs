@@ -14,5 +14,5 @@ public class Person
     public string Name { get; protected set; }
 
     [FluentMember(1, "BornOn")]
-    public DateOnly DateOfBirth{ get; protected set; }
+    public DateOnly DateOfBirth { get; protected set; }
 }

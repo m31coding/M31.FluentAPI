@@ -12,7 +12,7 @@ public class Student
 {
     public string FirstName { get; set; }
     public string? LastName { get; set; }
-    public DateOnly DateOfBirth{ get; set; }
+    public DateOnly DateOfBirth { get; set; }
     public DateOnly EnrollmentDate { get; set; }
     public int Semester { get; set; }
     public int? NumberOfPassedExams { get; set; }
