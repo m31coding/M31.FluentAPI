@@ -7,10 +7,10 @@ internal class BuilderGenerator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
-        BuilderMethods builderMethods =
-            BuilderMethodsCreator.CreateBuilderMethods(codeBoard.Forks, codeBoard.CancellationToken);
+        BuilderStepMethods builderStepMethods =
+            BuilderStepMethodsCreator.CreateBuilderMethods(codeBoard.Forks, codeBoard.CancellationToken);
 
-        foreach (BuilderStepMethod staticMethod in builderMethods.StaticMethods)
+        foreach (BuilderStepMethod staticMethod in builderStepMethods.StaticMethods)
         {
             if (codeBoard.CancellationToken.IsCancellationRequested)
             {
@@ -21,10 +21,10 @@ internal class BuilderGenerator : ICodeBoardActor
             codeBoard.BuilderClass.AddMethod(method);
         }
 
-        List<Interface> interfaces = new List<Interface>(builderMethods.Interfaces.Count);
-        interfaces.Add(CreateInitialStepInterface(builderMethods, codeBoard));
+        List<Interface> interfaces = new List<Interface>(builderStepMethods.Interfaces.Count);
+        interfaces.Add(CreateInitialStepInterface(builderStepMethods, codeBoard));
 
-        foreach (BuilderInterface builderInterface in builderMethods.Interfaces)
+        foreach (BuilderInterface builderInterface in builderStepMethods.Interfaces)
         {
             if (codeBoard.CancellationToken.IsCancellationRequested)
             {
@@ -75,9 +75,9 @@ internal class BuilderGenerator : ICodeBoardActor
         return method;
     }
 
-    private Interface CreateInitialStepInterface(BuilderMethods builderMethods, CodeBoard codeBoard)
+    private Interface CreateInitialStepInterface(BuilderStepMethods builderStepMethods, CodeBoard codeBoard)
     {
-        string? firstInterfaceName = builderMethods.Interfaces.FirstOrDefault()?.InterfaceName;
+        string? firstInterfaceName = builderStepMethods.Interfaces.FirstOrDefault()?.InterfaceName;
 
         Interface initialStepInterface =
             new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.InitialStepInterfaceName);

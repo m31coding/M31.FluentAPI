@@ -2,9 +2,9 @@ using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsGeneration;
 
-internal class BuilderMethods
+internal class BuilderStepMethods
 {
-    public BuilderMethods(
+    public BuilderStepMethods(
         IReadOnlyCollection<BuilderStepMethod> staticMethods,
         IReadOnlyCollection<BuilderInterface> interfaces)
     {

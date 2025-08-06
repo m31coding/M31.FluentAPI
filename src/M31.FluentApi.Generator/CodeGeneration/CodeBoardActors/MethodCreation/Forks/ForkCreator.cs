@@ -32,8 +32,8 @@ internal class ForkCreator : ICodeBoardActor
                 return;
             }
 
-            BuilderMethodCreator builderMethodCreator = new BuilderMethodCreator(group, codeBoard);
-            BuilderMethods builderMethods = builderMethodCreator.CreateBuilderMethods(methodCreator);
+            BuilderMethodsCreator builderMethodsCreator = new BuilderMethodsCreator(group, codeBoard);
+            BuilderMethods builderMethods = builderMethodsCreator.CreateBuilderMethods(methodCreator);
 
             foreach (string @using in builderMethods.RequiredUsings)
             {
