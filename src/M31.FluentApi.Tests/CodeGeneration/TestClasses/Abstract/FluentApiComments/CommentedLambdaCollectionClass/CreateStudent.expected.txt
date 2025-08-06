@@ -6,7 +6,6 @@
 #nullable enable
 
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
 using System;
 
@@ -18,12 +17,6 @@ public class CreateStudent :
     CreateStudent.IWithPhoneNumbers
 {
     private readonly Student student;
-    private static readonly PropertyInfo phoneNumbersPropertyInfo;
-
-    static CreateStudent()
-    {
-        phoneNumbersPropertyInfo = typeof(Student).GetProperty("PhoneNumbers", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -49,44 +42,44 @@ public class CreateStudent :
     }
 
     /// <inheritdoc/>
-    Student IWithPhoneNumbers.WithPhoneNumbers(System.Collections.Generic.IReadOnlyCollection<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone> phoneNumbers)
+    Student IWithPhoneNumbers.WithPhoneNumbers(System.Collections.Generic.IReadOnlyCollection<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone> phoneNumbers)
     {
-        CreateStudent.phoneNumbersPropertyInfo.SetValue(student, phoneNumbers);
+        student.PhoneNumbers = phoneNumbers;
         return student;
     }
 
     /// <inheritdoc/>
-    Student IWithPhoneNumbers.WithPhoneNumbers(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone[] phoneNumbers)
+    Student IWithPhoneNumbers.WithPhoneNumbers(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone[] phoneNumbers)
     {
-        CreateStudent.phoneNumbersPropertyInfo.SetValue(student, phoneNumbers);
+        student.PhoneNumbers = phoneNumbers;
         return student;
     }
 
     /// <inheritdoc/>
-    Student IWithPhoneNumbers.WithPhoneNumbers(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone>[] createPhoneNumbers)
+    Student IWithPhoneNumbers.WithPhoneNumbers(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone>[] createPhoneNumbers)
     {
-        CreateStudent.phoneNumbersPropertyInfo.SetValue(student, createPhoneNumbers.Select(createPhoneNumber => createPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.CreatePhone.InitialStep())).ToArray());
+        student.PhoneNumbers = createPhoneNumbers.Select(createPhoneNumber => createPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.CreatePhone.InitialStep())).ToArray();
         return student;
     }
 
     /// <inheritdoc/>
-    Student IWithPhoneNumbers.WithPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone phoneNumber)
+    Student IWithPhoneNumbers.WithPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone phoneNumber)
     {
-        CreateStudent.phoneNumbersPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone[1]{ phoneNumber });
+        student.PhoneNumbers = new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone[1]{ phoneNumber };
         return student;
     }
 
     /// <inheritdoc/>
-    Student IWithPhoneNumbers.WithPhoneNumber(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone> createPhoneNumber)
+    Student IWithPhoneNumbers.WithPhoneNumber(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone> createPhoneNumber)
     {
-        CreateStudent.phoneNumbersPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone[1]{ createPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.CreatePhone.InitialStep()) });
+        student.PhoneNumbers = new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone[1]{ createPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.CreatePhone.InitialStep()) };
         return student;
     }
 
     /// <inheritdoc/>
     Student IWithPhoneNumbers.WithZeroPhoneNumbers()
     {
-        CreateStudent.phoneNumbersPropertyInfo.SetValue(student, new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone[0]);
+        student.PhoneNumbers = new M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone[0];
         return student;
     }
 
@@ -103,23 +96,23 @@ public class CreateStudent :
     {
         /// <summary>Sets the student's phone numbers.</summary>
         /// <param name="phoneNumbers">The student's phone numbers.</param>
-        Student WithPhoneNumbers(System.Collections.Generic.IReadOnlyCollection<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone> phoneNumbers);
+        Student WithPhoneNumbers(System.Collections.Generic.IReadOnlyCollection<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone> phoneNumbers);
 
         /// <summary>Sets the student's phone numbers.</summary>
         /// <param name="phoneNumbers">The student's phone numbers.</param>
-        Student WithPhoneNumbers(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone[] phoneNumbers);
+        Student WithPhoneNumbers(params M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone[] phoneNumbers);
 
         /// <summary>Sets the student's phone numbers.</summary>
         /// <param name="createPhoneNumbers">Functions for creating the student's phone numbers.</param>
-        Student WithPhoneNumbers(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone>[] createPhoneNumbers);
+        Student WithPhoneNumbers(params Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone>[] createPhoneNumbers);
 
         /// <summary>Sets the student's phone number.</summary>
         /// <param name="phoneNumber">The student's phone number.</param>
-        Student WithPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone phoneNumber);
+        Student WithPhoneNumber(M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone phoneNumber);
 
         /// <summary>Sets the student's phone number.</summary>
         /// <param name="createPhoneNumber">A function for creating the student's phone number.</param>
-        Student WithPhoneNumber(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.DocumentationComments.CommentedLambdaCollectionClass.Phone> createPhoneNumber);
+        Student WithPhoneNumber(Func<M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.CreatePhone.ICreatePhone, M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedLambdaCollectionClass.Phone> createPhoneNumber);
 
         /// <summary>Specifies that the student has no phone numbers.</summary>
         Student WithZeroPhoneNumbers();
