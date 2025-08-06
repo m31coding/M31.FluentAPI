@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -62,7 +63,7 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
                 new PackageIdentity("Microsoft.NETCore.App.Ref", "6.0.0"),
                 Path.Combine("ref", "net6.0"));
 #else
-            throw new NotImplementedException();
+            throw new NotSupportedException();
 #endif
 
             TestState.AdditionalReferences.Add(typeof(FluentApiAttribute).Assembly);

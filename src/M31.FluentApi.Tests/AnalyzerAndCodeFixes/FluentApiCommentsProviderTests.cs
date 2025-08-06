@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using M31.FluentApi.Attributes;
@@ -38,13 +39,15 @@ public class FluentApiCommentsProviderTests
                 new PackageIdentity("Microsoft.NETCore.App.Ref", "6.0.0"),
                 Path.Combine("ref", "net6.0")),
 #else
-            throw new NotImplementedException();
+            throw new NotSupportedException();
 #endif
+
             TestState =
             {
                 AdditionalReferences = { typeof(FluentApiAttribute).Assembly }
             }
         };
+
         await test.RunAsync();
     }
 }
