@@ -20,12 +20,18 @@ internal class FluentApiInfoCreator
     internal FluentApiInfo? Create(
         ISymbol symbol,
         FluentApiAttributeData attributeData,
-        string declaringClassNameWithTypeParameters)
+        string declaringClassNameWithTypeParameters,
+        CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return null;
+        }
+
         FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol, declaringClassNameWithTypeParameters);
         AttributeInfoBase? attributeInfo = CreateAttributeInfo(attributeData.MainAttributeData, symbol, symbolInfo);
 
-        if (attributeInfo == null)
+        if (attributeInfo == null || cancellationToken.IsCancellationRequested)
         {
             return null;
         }
@@ -35,10 +41,20 @@ internal class FluentApiInfoCreator
                 .Select(data => (data, CreateOrthogonalAttributeInfo(data, symbol.Name)))
                 .ToArray();
 
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return null;
+        }
+
         (AttributeDataExtended data, ControlAttributeInfoBase info)[] controlDataAndInfos =
             attributeData.ControlAttributeData
                 .Select(data => (data, CreateControlAttributeInfo(data)))
                 .ToArray();
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return null;
+        }
 
         FluentReturnAttributeInfo? fluentReturnAttributeInfo = controlDataAndInfos.Select(d => d.info)
             .OfType<FluentReturnAttributeInfo>().FirstOrDefault();

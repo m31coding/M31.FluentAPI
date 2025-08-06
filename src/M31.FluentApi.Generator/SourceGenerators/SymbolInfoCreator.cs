@@ -200,7 +200,6 @@ internal static class SymbolInfoCreator
 
     private static Comments GetFluentSymbolComments(ISymbol symbol)
     {
-        // todo: pass cancellation token.
         string? commentXml = symbol.GetDocumentationCommentXml();
         return FluentCommentsParser.Parse(commentXml);
     }

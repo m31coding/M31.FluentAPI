@@ -108,7 +108,8 @@ internal class ClassInfoFactory
                     return null;
                 }
 
-                FluentApiInfo? fluentApiInfo = TryCreateFluentApiInfo(member, declaringClassNameWithGenericParameters);
+                FluentApiInfo? fluentApiInfo = TryCreateFluentApiInfo(
+                    member, declaringClassNameWithGenericParameters, cancellationToken);
 
                 if (fluentApiInfo != null)
                 {
@@ -201,7 +202,8 @@ internal class ClassInfoFactory
             constructors[0].DeclaredAccessibility != Accessibility.Public);
     }
 
-    private FluentApiInfo? TryCreateFluentApiInfo(ISymbol symbol, string declaringClassNameWithTypeParameters)
+    private FluentApiInfo? TryCreateFluentApiInfo(
+        ISymbol symbol, string declaringClassNameWithTypeParameters, CancellationToken cancellationToken)
     {
         AttributeDataExtractor extractor = new AttributeDataExtractor(report);
         FluentApiAttributeData? attributeData = extractor.GetAttributeData(symbol);
@@ -218,7 +220,8 @@ internal class ClassInfoFactory
         }
 
         FluentApiInfoCreator fluentApiInfoCreator = new FluentApiInfoCreator(report);
-        return fluentApiInfoCreator.Create(symbol, attributeData, declaringClassNameWithTypeParameters);
+        return fluentApiInfoCreator.Create(
+            symbol, attributeData, declaringClassNameWithTypeParameters, cancellationToken);
     }
 
     public static string AugmentTypeNameWithGenericParameters(string typeName, GenericInfo? genericInfo)
