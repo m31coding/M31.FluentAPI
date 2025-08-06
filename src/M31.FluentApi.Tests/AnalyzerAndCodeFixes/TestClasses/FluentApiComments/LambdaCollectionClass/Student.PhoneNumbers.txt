@@ -17,16 +17,19 @@ public class Student
     /// </fluentSummary>
     /// <fluentParam method="WithPhoneNumbers" name="phoneNumbers">...</fluentParam>
     /// <fluentParam method="WithPhoneNumbers" name="createPhoneNumbers">...</fluentParam>
+    /// <fluentReturns method="WithPhoneNumbers">...</fluentReturns>
     ///
     /// <fluentSummary method="WithPhoneNumber">
     /// ...
     /// </fluentSummary>
     /// <fluentParam method="WithPhoneNumber" name="phoneNumber">...</fluentParam>
     /// <fluentParam method="WithPhoneNumber" name="createPhoneNumber">...</fluentParam>
+    /// <fluentReturns method="WithPhoneNumber">...</fluentReturns>
     ///
     /// <fluentSummary method="WithZeroPhoneNumbers">
     /// ...
     /// </fluentSummary>
+    /// <fluentReturns method="WithZeroPhoneNumbers">...</fluentReturns>
     [FluentCollection(1, "PhoneNumber")]
     public IReadOnlyCollection<Phone> PhoneNumbers { get; set; }
 }

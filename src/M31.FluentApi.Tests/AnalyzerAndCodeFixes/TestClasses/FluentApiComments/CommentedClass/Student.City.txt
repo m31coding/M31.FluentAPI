@@ -37,14 +37,17 @@ public class Student
     /// ...
     /// </fluentSummary>
     /// <fluentParam method="LivingIn" name="city">...</fluentParam>
+    /// <fluentReturns method="LivingIn">...</fluentReturns>
     ///
     /// <fluentSummary method="LivingInBoston">
     /// ...
     /// </fluentSummary>
+    /// <fluentReturns method="LivingInBoston">...</fluentReturns>
     ///
     /// <fluentSummary method="InUnknownCity">
     /// ...
     /// </fluentSummary>
+    /// <fluentReturns method="InUnknownCity">...</fluentReturns>
     [FluentMember(3, "LivingIn")]
     [FluentDefault("LivingInBoston")]
     [FluentNullable("InUnknownCity")]

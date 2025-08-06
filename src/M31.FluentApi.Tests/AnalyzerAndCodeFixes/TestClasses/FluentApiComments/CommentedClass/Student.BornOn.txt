@@ -24,6 +24,7 @@ public class Student
     /// ...
     /// </fluentSummary>
     /// <fluentParam name="dateOfBirth">...</fluentParam>
+    /// <fluentReturns>...</fluentReturns>
     [FluentMethod(1)]
     private void BornOn(DateOnly dateOfBirth)
     {

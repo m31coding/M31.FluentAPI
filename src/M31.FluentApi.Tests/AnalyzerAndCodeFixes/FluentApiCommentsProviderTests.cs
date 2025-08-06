@@ -24,6 +24,8 @@ public class FluentApiCommentsProviderTests
     [InlineData("CommentedClass", "Student", "IsHappy ", "IsHappy")]
     [InlineData("CommentedClass", "Student", " Friends", "Friends")]
     [InlineData("LambdaCollectionClass", "Student", "PhoneNumbers", "PhoneNumbers")]
+    [InlineData("VoidMethodClass", "Student", "Study", "Study")]
+    [InlineData("VoidMethodClass", "Student", "Sleep", "Sleep")]
     public async Task CanProvideFluentApiComments(
         string commentTestClass, string @class, string selectedSpan, string member)
     {

@@ -16,6 +16,7 @@ public class Student
     /// </fluentSummary>
     /// <fluentParam name="firstName">...</fluentParam>
     /// <fluentParam name="lastName">...</fluentParam>
+    /// <fluentReturns>...</fluentReturns>
     [FluentMember(0, "Named", 0)]
     public string FirstName { get; private set; }
 

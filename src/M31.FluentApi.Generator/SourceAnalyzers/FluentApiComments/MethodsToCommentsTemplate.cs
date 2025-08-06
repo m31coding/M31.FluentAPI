@@ -53,6 +53,11 @@ internal class MethodsToCommentsTemplate
         {
             comments.Add($"/// <fluentParam name=\"{parameterName}\">...</fluentParam>");
         }
+
+        if (sameNameBuilderMethods.Any(b => b.ReturnTypeToRespect != "void"))
+        {
+            comments.Add("/// <fluentReturns>...</fluentReturns>");
+        }
     }
 
     private void CreateCommentsTemplateWithMethodNames(BuilderMethod[] sameNameBuilderMethods)
@@ -71,6 +76,11 @@ internal class MethodsToCommentsTemplate
         foreach (string parameterName in GetDistinctParameterNames(sameNameBuilderMethods))
         {
             comments.Add($"/// <fluentParam method=\"{method}\" name=\"{parameterName}\">...</fluentParam>");
+        }
+
+        if (sameNameBuilderMethods.Any(b => b.ReturnTypeToRespect != "void"))
+        {
+            comments.Add($"/// <fluentReturns method=\"{method}\">...</fluentReturns>");
         }
     }
 

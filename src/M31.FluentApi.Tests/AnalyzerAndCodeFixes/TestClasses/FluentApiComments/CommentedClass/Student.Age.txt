@@ -21,6 +21,7 @@ public class Student
     /// ...
     /// </fluentSummary>
     /// <fluentParam name="age">...</fluentParam>
+    /// <fluentReturns>...</fluentReturns>
     [FluentMember(1, "OfAge")]
     public int Age { get; private set; }
 

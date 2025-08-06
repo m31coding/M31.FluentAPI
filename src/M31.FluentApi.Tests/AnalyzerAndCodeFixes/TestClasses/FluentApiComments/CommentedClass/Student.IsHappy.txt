@@ -42,14 +42,17 @@ public class Student
     /// ...
     /// </fluentSummary>
     /// <fluentParam method="WhoIsHappy" name="isHappy">...</fluentParam>
+    /// <fluentReturns method="WhoIsHappy">...</fluentReturns>
     ///
     /// <fluentSummary method="WhoIsSad">
     /// ...
     /// </fluentSummary>
+    /// <fluentReturns method="WhoIsSad">...</fluentReturns>
     ///
     /// <fluentSummary method="WithUnknownMood">
     /// ...
     /// </fluentSummary>
+    /// <fluentReturns method="WithUnknownMood">...</fluentReturns>
     [FluentPredicate(4, "WhoIsHappy", "WhoIsSad")]
     [FluentNullable("WithUnknownMood")]
     public bool? IsHappy { get; private set; }
