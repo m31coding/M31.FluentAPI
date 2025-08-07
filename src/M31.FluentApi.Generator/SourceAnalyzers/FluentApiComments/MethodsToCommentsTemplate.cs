@@ -42,21 +42,21 @@ internal class MethodsToCommentsTemplate
     {
         if (comments.Count != 0)
         {
-            comments.Add("///");
+            comments.Add("////");
         }
 
-        comments.Add("/// <fluentSummary>");
-        comments.Add("/// ...");
-        comments.Add("/// </fluentSummary>");
+        comments.Add("//// <fluentSummary>");
+        comments.Add("//// ...");
+        comments.Add("//// </fluentSummary>");
 
         foreach (string parameterName in GetDistinctParameterNames(sameNameBuilderMethods))
         {
-            comments.Add($"/// <fluentParam name=\"{parameterName}\">...</fluentParam>");
+            comments.Add($"//// <fluentParam name=\"{parameterName}\">...</fluentParam>");
         }
 
         if (sameNameBuilderMethods.Any(b => b.ReturnTypeToRespect != "void"))
         {
-            comments.Add("/// <fluentReturns>...</fluentReturns>");
+            comments.Add("//// <fluentReturns>...</fluentReturns>");
         }
     }
 
@@ -66,21 +66,21 @@ internal class MethodsToCommentsTemplate
 
         if (comments.Count != 0)
         {
-            comments.Add("///");
+            comments.Add("////");
         }
 
-        comments.Add($"/// <fluentSummary method=\"{method}\">");
-        comments.Add("/// ...");
-        comments.Add("/// </fluentSummary>");
+        comments.Add($"//// <fluentSummary method=\"{method}\">");
+        comments.Add("//// ...");
+        comments.Add("//// </fluentSummary>");
 
         foreach (string parameterName in GetDistinctParameterNames(sameNameBuilderMethods))
         {
-            comments.Add($"/// <fluentParam method=\"{method}\" name=\"{parameterName}\">...</fluentParam>");
+            comments.Add($"//// <fluentParam method=\"{method}\" name=\"{parameterName}\">...</fluentParam>");
         }
 
         if (sameNameBuilderMethods.Any(b => b.ReturnTypeToRespect != "void"))
         {
-            comments.Add($"/// <fluentReturns method=\"{method}\">...</fluentReturns>");
+            comments.Add($"//// <fluentReturns method=\"{method}\">...</fluentReturns>");
         }
     }
 

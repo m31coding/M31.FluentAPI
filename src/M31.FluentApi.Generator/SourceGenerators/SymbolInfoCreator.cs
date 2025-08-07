@@ -5,6 +5,7 @@ using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
@@ -200,7 +201,22 @@ internal static class SymbolInfoCreator
 
     private static Comments GetFluentSymbolComments(ISymbol symbol)
     {
-        string? commentXml = symbol.GetDocumentationCommentXml();
-        return FluentCommentsParser.Parse(commentXml);
+        SyntaxReference? syntaxRef = symbol.DeclaringSyntaxReferences.FirstOrDefault();
+        if (syntaxRef == null)
+        {
+            return new Comments(Array.Empty<Comment>());
+        }
+
+        SyntaxNode syntaxNode = syntaxRef.GetSyntax();
+        SyntaxTriviaList leadingTrivia = syntaxNode.GetLeadingTrivia();
+
+        string[] commentLines = leadingTrivia
+            .Where(t => t.IsKind(SyntaxKind.SingleLineCommentTrivia) ||
+                        t.IsKind(SyntaxKind.MultiLineCommentTrivia))
+            .Select(t => t.ToString().TrimStart('/', ' '))
+            .ToArray();
+
+        string comments = string.Join(Environment.NewLine, commentLines);
+        return FluentCommentsParser.Parse(comments);
     }
 }

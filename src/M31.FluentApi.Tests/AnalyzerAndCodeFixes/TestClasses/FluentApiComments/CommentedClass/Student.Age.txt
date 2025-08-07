@@ -17,11 +17,11 @@ public class Student
     [FluentMember(0, "Named", 1)]
     public string LastName { get; private set; }
 
-    /// <fluentSummary>
-    /// ...
-    /// </fluentSummary>
-    /// <fluentParam name="age">...</fluentParam>
-    /// <fluentReturns>...</fluentReturns>
+    //// <fluentSummary>
+    //// ...
+    //// </fluentSummary>
+    //// <fluentParam name="age">...</fluentParam>
+    //// <fluentReturns>...</fluentReturns>
     [FluentMember(1, "OfAge")]
     public int Age { get; private set; }
 

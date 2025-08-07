@@ -14,10 +14,10 @@ public class Student
     [FluentMember(0)]
     public string Name { get; private set; }
 
-    /// <fluentSummary>
-    /// ...
-    /// </fluentSummary>
-    /// <fluentReturns>...</fluentReturns>
+    //// <fluentSummary>
+    //// ...
+    //// </fluentSummary>
+    //// <fluentReturns>...</fluentReturns>
     [FluentMethod(1)]
     public void Study()
     {

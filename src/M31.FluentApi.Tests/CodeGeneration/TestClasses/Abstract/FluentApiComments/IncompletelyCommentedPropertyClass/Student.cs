@@ -10,18 +10,18 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 [FluentApi]
 public class Student
 {
-    /// <fluentSummary>
-    /// Sets the student's city.
-    /// </fluentSummary>
-    /// <fluentParam name="city">The student's city.</fluentParam>
-    ///
-    /// <fluentSummary>
-    /// Set's the student's city to Boston.
-    /// </fluentSummary>
-    ///
-    /// <fluentSummary>
-    /// Set's the student's city to null.
-    /// </fluentSummary>
+    //// <fluentSummary>
+    //// Sets the student's city.
+    //// </fluentSummary>
+    //// <fluentParam name="city">The student's city.</fluentParam>
+    ////
+    //// <fluentSummary>
+    //// Set's the student's city to Boston.
+    //// </fluentSummary>
+    ////
+    //// <fluentSummary>
+    //// Set's the student's city to null.
+    //// </fluentSummary>
     [FluentMember(0, "LivingIn")]
     [FluentDefault("LivingInBoston")]
     [FluentNullable("InUnknownCity")]

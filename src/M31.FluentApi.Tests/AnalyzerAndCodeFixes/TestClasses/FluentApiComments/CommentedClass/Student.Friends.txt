@@ -42,22 +42,22 @@ public class Student
     [FluentNullable("WithUnknownMood")]
     public bool? IsHappy { get; private set; }
 
-    /// <fluentSummary method="WhoseFriendsAre">
-    /// ...
-    /// </fluentSummary>
-    /// <fluentParam method="WhoseFriendsAre" name="friends">...</fluentParam>
-    /// <fluentReturns method="WhoseFriendsAre">...</fluentReturns>
-    ///
-    /// <fluentSummary method="WhoseFriendIs">
-    /// ...
-    /// </fluentSummary>
-    /// <fluentParam method="WhoseFriendIs" name="friend">...</fluentParam>
-    /// <fluentReturns method="WhoseFriendIs">...</fluentReturns>
-    ///
-    /// <fluentSummary method="WhoHasNoFriends">
-    /// ...
-    /// </fluentSummary>
-    /// <fluentReturns method="WhoHasNoFriends">...</fluentReturns>
+    //// <fluentSummary method="WhoseFriendsAre">
+    //// ...
+    //// </fluentSummary>
+    //// <fluentParam method="WhoseFriendsAre" name="friends">...</fluentParam>
+    //// <fluentReturns method="WhoseFriendsAre">...</fluentReturns>
+    ////
+    //// <fluentSummary method="WhoseFriendIs">
+    //// ...
+    //// </fluentSummary>
+    //// <fluentParam method="WhoseFriendIs" name="friend">...</fluentParam>
+    //// <fluentReturns method="WhoseFriendIs">...</fluentReturns>
+    ////
+    //// <fluentSummary method="WhoHasNoFriends">
+    //// ...
+    //// </fluentSummary>
+    //// <fluentReturns method="WhoHasNoFriends">...</fluentReturns>
     [FluentCollection(5, "Friend", "WhoseFriendsAre", "WhoseFriendIs", "WhoHasNoFriends")]
     public IReadOnlyCollection<string> Friends { get; private set; }
 }

@@ -13,25 +13,25 @@ public class Student
     [FluentMember(0)]
     public string Name { get; set; }
 
-    /// <fluentSummary>
-    /// Sets the students's age.
-    /// </fluentSummary>
-    /// <fluentParam name="age">The student's age.</fluentParam>
+    //// <fluentSummary>
+    //// Sets the students's age.
+    //// </fluentSummary>
+    //// <fluentParam name="age">The student's age.</fluentParam>
     [FluentMember(1, "OfAge")]
     public int Age { get; set; }
 
-    /// <fluentSummary method="LivingIn">
-    /// Sets the student's city.
-    /// </fluentSummary>
-    /// <fluentParam method="LivingIn" name="city">The student's city.</fluentParam>
-    ///
-    /// <fluentSummary method="LivingInBoston">
-    /// Set's the student's city to Boston.
-    /// </fluentSummary>
-    ///
-    /// <fluentSummary method="InUnknownCity">
-    /// Set's the student's city to null.
-    /// </fluentSummary>
+    //// <fluentSummary method="LivingIn">
+    //// Sets the student's city.
+    //// </fluentSummary>
+    //// <fluentParam method="LivingIn" name="city">The student's city.</fluentParam>
+    ////
+    //// <fluentSummary method="LivingInBoston">
+    //// Set's the student's city to Boston.
+    //// </fluentSummary>
+    ////
+    //// <fluentSummary method="InUnknownCity">
+    //// Set's the student's city to null.
+    //// </fluentSummary>
     [FluentMember(2, "LivingIn")]
     [FluentDefault("LivingInBoston")]
     [FluentNullable("InUnknownCity")]

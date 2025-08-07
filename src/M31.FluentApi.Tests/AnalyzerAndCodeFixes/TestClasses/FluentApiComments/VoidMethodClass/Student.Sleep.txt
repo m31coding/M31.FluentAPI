@@ -19,9 +19,9 @@ public class Student
     {
     }
 
-    /// <fluentSummary>
-    /// ...
-    /// </fluentSummary>
+    //// <fluentSummary>
+    //// ...
+    //// </fluentSummary>
     [FluentMethod(2)]
     [FluentReturn]
     public void Sleep()

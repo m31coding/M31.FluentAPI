@@ -9,19 +9,19 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 [FluentApi]
 public class Student
 {
-    /// <fluentSummary>
-    /// Sets the student's name.
-    /// </fluentSummary>
-    /// <fluentParam name="firstName">The student's first name.</fluentParam>
-    /// <fluentParam name="lastName">The student's last name.</fluentParam>
+    //// <fluentSummary>
+    //// Sets the student's name.
+    //// </fluentSummary>
+    //// <fluentParam name="firstName">The student's first name.</fluentParam>
+    //// <fluentParam name="lastName">The student's last name.</fluentParam>
     [FluentMember(0, "WithName")]
     public string FirstName { get; set; }
 
-    /// <fluentSummary>
-    /// Sets the student's name.
-    /// </fluentSummary>
-    /// <fluentParam name="firstName">The student's first name.</fluentParam>
-    /// <fluentParam name="lastName">The student's last name.</fluentParam>
+    //// <fluentSummary>
+    //// Sets the student's name.
+    //// </fluentSummary>
+    //// <fluentParam name="firstName">The student's first name.</fluentParam>
+    //// <fluentParam name="lastName">The student's last name.</fluentParam>
     [FluentMember(0, "WithName")]
     public string LastName { get; set; }
 }

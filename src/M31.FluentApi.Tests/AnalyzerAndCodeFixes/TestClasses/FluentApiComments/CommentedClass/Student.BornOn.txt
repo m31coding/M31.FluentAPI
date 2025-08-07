@@ -20,11 +20,11 @@ public class Student
     [FluentMember(1, "OfAge")]
     public int Age { get; private set; }
 
-    /// <fluentSummary>
-    /// ...
-    /// </fluentSummary>
-    /// <fluentParam name="dateOfBirth">...</fluentParam>
-    /// <fluentReturns>...</fluentReturns>
+    //// <fluentSummary>
+    //// ...
+    //// </fluentSummary>
+    //// <fluentParam name="dateOfBirth">...</fluentParam>
+    //// <fluentReturns>...</fluentReturns>
     [FluentMethod(1)]
     private void BornOn(DateOnly dateOfBirth)
     {

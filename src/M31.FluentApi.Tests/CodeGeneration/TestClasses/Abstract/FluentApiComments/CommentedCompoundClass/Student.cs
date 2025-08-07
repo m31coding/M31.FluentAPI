@@ -9,25 +9,25 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 [FluentApi]
 public class Student
 {
-    /// <fluentSummary>
-    /// Sets the student's name.
-    /// </fluentSummary>
-    /// <fluentParam name="firstName">The student's first name.</fluentParam>
+    //// <fluentSummary>
+    //// Sets the student's name.
+    //// </fluentSummary>
+    //// <fluentParam name="firstName">The student's first name.</fluentParam>
     [FluentMember(0, "WithName")]
     public string FirstName { get; set; }
 
-    /// <fluentParam name="lastName">The student's last name.</fluentParam>
+    //// <fluentParam name="lastName">The student's last name.</fluentParam>
     [FluentMember(0, "WithName")]
     public string LastName { get; set; }
 
-    /// <fluentSummary method="Studies">
-    /// Sets the student's course of study and current semester.
-    /// </fluentSummary>
-    /// <fluentParam method="Studies" name="courseOfStudy">The student's course of study.</fluentParam>
+    //// <fluentSummary method="Studies">
+    //// Sets the student's course of study and current semester.
+    //// </fluentSummary>
+    //// <fluentParam method="Studies" name="courseOfStudy">The student's course of study.</fluentParam>
     [FluentMember(1, "Studies")]
     public string CourseOfStudy { get; set; }
 
-    /// <fluentParam method="Studies" name="semester">The student's current semester.</fluentParam>
+    //// <fluentParam method="Studies" name="semester">The student's current semester.</fluentParam>
     [FluentMember(1, "Studies")]
     public int Semester { get; set; }
 }

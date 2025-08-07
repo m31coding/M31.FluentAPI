@@ -460,29 +460,30 @@ Note that if you want to set a member of a Fluent API class, you can simply use 
 
 ### Documentation comments
 
-Documentation comments can be added to the members of the Fluent API class by using the desired XML tags prefixed with `fluent`, e.g.
+Documentation comments can be added to the members of the Fluent API class by using four slashes and the desired XML tags prefixed with `fluent`, e.g.
 
 ```cs
-/// <fluentSummary>
-/// Sets the student's name.
-/// </fluentSummary>
-/// <fluentParam name="name">The student's name.</fluentParam>
-/// <fluentReturns>A builder for setting the student's age.</fluentReturns>
+//// <fluentSummary>
+//// Sets the student's name.
+//// </fluentSummary>
+//// <fluentParam name="name">The student's name.</fluentParam>
+//// <fluentReturns>A builder for setting the student's age.</fluentReturns>
 [FluentMember(0)]
 public string Name { get; private set; }
 ```
 
-All XML tags with the prefix `fluent` will be copied to the generated builder method with the prefix removed and the first letter lowercased (e.g. `fluentSummary` becomes `summary`).
+Four slashes instead of three are necessary to prevent the IDE from interpreting the comments as XML documentation comments for the member itself.
+All XML tags with the prefix `fluent` will be copied to the generated builder method and transformed, e.g. `//// <fluentSummary>` becomes `/// <summary>`.
 
 For a compound, add the documentation comments to the first member, in order to avoid duplication:
 
 ```cs
-/// <fluentSummary>
-/// Sets the student's name.
-/// </fluentSummary>
-/// <fluentParam name="firstName">The student's first name.</fluentParam>
-/// <fluentParam name="lastName">The student's last name.</fluentParam>
-/// <fluentReturns>A builder for setting the student's age.</fluentReturns>
+//// <fluentSummary>
+//// Sets the student's name.
+//// </fluentSummary>
+//// <fluentParam name="firstName">The student's first name.</fluentParam>
+//// <fluentParam name="lastName">The student's last name.</fluentParam>
+//// <fluentReturns>A builder for setting the student's age.</fluentReturns>
 [FluentMember(0, "Named", 0)]
 public string FirstName { get; private set; }
 
@@ -493,16 +494,16 @@ public string LastName { get; private set; }
 If more than one method is generated for a member, the target method of the documentation comment can be specified by using the `method` XML attribute:
 
 ```cs
-/// <fluentSummary method="InSemester">
-/// Sets the student's current semester.
-/// </fluentSummary>
-/// <fluentParam method="InSemester" name="semester">The student's current semester.<fluentParam>
-/// <fluentReturns method="InSemester">A builder for setting the student's city.<fluentReturns>
-///
-/// <fluentSummary method="WhoStartsUniversity">
-/// Sets the student's semester to 0.
-/// </fluentSummary>
-/// <fluentReturns method="WhoStartsUniversity">A builder for setting the student's city.</fluentReturns>
+//// <fluentSummary method="InSemester">
+//// Sets the student's current semester.
+//// </fluentSummary>
+//// <fluentParam method="InSemester" name="semester">The student's current semester.<fluentParam>
+//// <fluentReturns method="InSemester">A builder for setting the student's city.<fluentReturns>
+////
+//// <fluentSummary method="WhoStartsUniversity">
+//// Sets the student's semester to 0.
+//// </fluentSummary>
+//// <fluentReturns method="WhoStartsUniversity">A builder for setting the student's city.</fluentReturns>
 [FluentMember(2, "InSemester")]
 [FluentDefault("WhoStartsUniversity")]
 public int Semester { get; private set; } = 0;
