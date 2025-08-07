@@ -210,11 +210,23 @@ internal static class SymbolInfoCreator
         SyntaxNode syntaxNode = syntaxRef.GetSyntax();
         SyntaxTriviaList leadingTrivia = syntaxNode.GetLeadingTrivia();
 
-        string[] commentLines = leadingTrivia
-            .Where(t => t.IsKind(SyntaxKind.SingleLineCommentTrivia) ||
-                        t.IsKind(SyntaxKind.MultiLineCommentTrivia))
-            .Select(t => t.ToString().TrimStart('/', ' '))
-            .ToArray();
+        List<string> commentLines = new List<string>();
+
+        foreach (SyntaxTrivia syntaxTrivia in leadingTrivia)
+        {
+            if (!syntaxTrivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
+            {
+                continue;
+            }
+
+            string str = syntaxTrivia.ToString();
+            if (!str.Trim().StartsWith("////")) // todo: regex
+            {
+                continue;
+            }
+
+            commentLines.Add(str.TrimStart('/', ' '));
+        }
 
         string comments = string.Join(Environment.NewLine, commentLines);
         return FluentCommentsParser.Parse(comments);

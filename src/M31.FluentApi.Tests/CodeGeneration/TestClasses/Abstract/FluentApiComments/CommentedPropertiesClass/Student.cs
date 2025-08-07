@@ -24,10 +24,10 @@ public class Student
     [FluentMember(0)]
     public string FirstName { get; set; }
 
-    // <fluentSummary method="WithLastName">
-    // Sets the student's last name.
-    // </fluentSummary>
-    // <fluentParam method="WithLastName" name="lastName">The student's last name.</fluentParam>
+    //// <fluentSummary method="WithLastName">
+    //// Sets the student's last name.
+    //// </fluentSummary>
+    //// <fluentParam method="WithLastName" name="lastName">The student's last name.</fluentParam>
     [FluentMember(1)]
     public string LastName { get; set; }
 
