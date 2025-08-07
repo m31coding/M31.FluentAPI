@@ -107,6 +107,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "TwoMemberClass", "Student" },
                 new object[] { "Abstract", "TwoParameterCompoundClass", "Student" },
                 new object[] { "Abstract", "TwoParameterCompoundClassReversedParameters", "Student" },
+                new object[] { "DocumentedStudentClass", "DocumentedStudent" },
                 new object[] { "PersonClass", "Person" },
                 new object[] { "StudentClass", "Student" }
             }).Select(l => new string[] { "..", "..", "..", "CodeGeneration", "TestClasses" }
