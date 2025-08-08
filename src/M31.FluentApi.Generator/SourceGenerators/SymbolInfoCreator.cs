@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
@@ -199,6 +200,7 @@ internal static class SymbolInfoCreator
         return parameterKinds;
     }
 
+    private static readonly Regex fluentApiCommentStart = new Regex(@"^\s*////(?!/)", RegexOptions.Compiled);
     private static Comments GetFluentSymbolComments(ISymbol symbol)
     {
         SyntaxReference? syntaxRef = symbol.DeclaringSyntaxReferences.FirstOrDefault();
@@ -220,12 +222,10 @@ internal static class SymbolInfoCreator
             }
 
             string str = syntaxTrivia.ToString();
-            if (!str.Trim().StartsWith("////")) // todo: regex
+            if (fluentApiCommentStart.IsMatch(str))
             {
-                continue;
+                commentLines.Add(str.TrimStart('/', ' '));
             }
-
-            commentLines.Add(str.TrimStart('/', ' '));
         }
 
         string comments = string.Join(Environment.NewLine, commentLines);
