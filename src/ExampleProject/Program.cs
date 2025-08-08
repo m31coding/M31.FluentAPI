@@ -14,6 +14,17 @@ Student student2 = CreateStudent.Named("Bob", "Bishop").BornOn(new DateOnly(2002
 Console.WriteLine(JsonSerializer.Serialize(student1));
 Console.WriteLine(JsonSerializer.Serialize(student2));
 
+// DocumentedStudent (generated code includes `summary`, `param` and `returns` XML comments)
+//
+
+DocumentedStudent documentedStudent1 = CreateDocumentedStudent.Named("Alice", "King").OfAge(22).WhoStartsUniversity()
+    .LivingIn("New York").WhoIsHappy().WhoseFriendsAre("Bob", "Carol", "Eve");
+DocumentedStudent documentedStudent2 = CreateDocumentedStudent.Named("Bob", "Bishop").BornOn(new DateOnly(2002, 8, 3)).InSemester(2)
+    .LivingInBoston().WithUnknownMood().WhoseFriendIs("Alice");
+
+Console.WriteLine(JsonSerializer.Serialize(documentedStudent1));
+Console.WriteLine(JsonSerializer.Serialize(documentedStudent2));
+
 // ExchangeStudent (inherited from Student)
 //
 
