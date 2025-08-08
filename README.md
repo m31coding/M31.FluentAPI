@@ -480,8 +480,8 @@ If multiple methods are generated for a member, you can target a specific method
 //// <fluentSummary method="InSemester">
 //// Sets the student's current semester.
 //// </fluentSummary>
-//// <fluentParam method="InSemester" name="semester">The student's current semester.<fluentParam>
-//// <fluentReturns method="InSemester">A builder for setting the student's city.<fluentReturns>
+//// <fluentParam method="InSemester" name="semester">The student's current semester.</fluentParam>
+//// <fluentReturns method="InSemester">A builder for setting the student's city.</fluentReturns>
 ////
 //// <fluentSummary method="WhoStartsUniversity">
 //// Sets the student's semester to 0.
@@ -496,7 +496,7 @@ To simplify adding documentation comments, a code action is available to generat
 
 ![doc-comments-action](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/create-doc-comments-action.png)
 
-The documented version of the Student class can be found in [DocumentedStudent.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/DocumentedStudent.cs). The corresponding generated code is located in [DocumentedStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/CreateDocumentedStudent.g.cs)
+For reference, you can view the documented version of the `Student` class in [DocumentedStudent.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/DocumentedStudent.cs). The corresponding generated code is located in [DocumentedStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/CreateDocumentedStudent.g.cs)
 
 
 ### Lambda pattern
