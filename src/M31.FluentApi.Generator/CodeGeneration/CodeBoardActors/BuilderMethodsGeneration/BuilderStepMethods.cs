@@ -4,7 +4,7 @@ namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.BuilderMethodsG
 
 internal class BuilderStepMethods
 {
-    public BuilderStepMethods(
+    internal BuilderStepMethods(
         IReadOnlyCollection<BuilderStepMethod> staticMethods,
         IReadOnlyCollection<BuilderInterface> interfaces)
     {
