@@ -8,5 +8,5 @@ internal abstract record AttributeInfoBase
     }
 
     internal int BuilderStep { get; }
-    internal abstract string FluentMethodName { get; }
+    internal abstract IReadOnlyList<string> FluentMethodNames { get; }
 }

@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
 using Microsoft.CodeAnalysis;
@@ -15,8 +16,9 @@ internal class MemberSymbolInfo : FluentApiSymbolInfo
         string typeForCodeGeneration,
         bool isNullable,
         bool isProperty,
-        CollectionType? collectionType)
-        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection)
+        CollectionType? collectionType,
+        Comments comments)
+        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection, comments)
     {
         Type = type;
         TypeForCodeGeneration = typeForCodeGeneration;

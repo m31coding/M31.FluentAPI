@@ -17,7 +17,13 @@ internal abstract class BuilderStepMethod : BuilderMethod
     protected Method CreateMethod(string defaultReturnType, params string[] modifiers)
     {
         MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, null, modifiers);
-        return new Method(methodSignature);
+        Method method = new Method(methodSignature);
+        foreach (string comment in Comments.GetLines())
+        {
+            method.AddCommentLine(comment);
+        }
+
+        return method;
     }
 
     protected Method CreateInterfaceMethod(
@@ -26,7 +32,13 @@ internal abstract class BuilderStepMethod : BuilderMethod
         params string[] modifiers)
     {
         MethodSignature methodSignature = CreateMethodSignature(defaultReturnType, interfaceName, modifiers);
-        return new Method(methodSignature);
+        Method method = new Method(methodSignature);
+        foreach (string comment in Comments.GetLines())
+        {
+            method.AddCommentLine(comment);
+        }
+
+        return method;
     }
 
     private MethodSignature CreateMethodSignature(

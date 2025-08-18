@@ -1,6 +1,8 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation.Forks;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 using M31.FluentApi.Generator.SourceAnalyzers;
 using M31.FluentApi.Generator.SourceGenerators;
 using M31.FluentApi.Generator.SourceGenerators.AttributeElements;
@@ -31,6 +33,8 @@ internal class CodeBoard
         Constructor = null;
         StaticConstructor = null;
         InnerBodyCreationDelegates = new InnerBodyCreationDelegates();
+        TransformedComments = new TransformedComments();
+        GroupsToMethods = new Dictionary<FluentApiInfoGroup, BuilderMethods>();
         BuilderMethodToAttributeData = new Dictionary<BuilderMethod, AttributeDataExtended>();
         Forks = new List<Fork>();
         ReservedVariableNames = new ReservedVariableNames();
@@ -47,6 +51,8 @@ internal class CodeBoard
     internal Method? Constructor { get; set; }
     internal Method? StaticConstructor { get; set; }
     internal InnerBodyCreationDelegates InnerBodyCreationDelegates { get; }
+    internal TransformedComments TransformedComments { get; }
+    internal Dictionary<FluentApiInfoGroup, BuilderMethods> GroupsToMethods { get; }
     internal Dictionary<BuilderMethod, AttributeDataExtended> BuilderMethodToAttributeData { get; }
     internal IReadOnlyList<Fork> Forks { get; set; }
     internal ReservedVariableNames ReservedVariableNames { get; }

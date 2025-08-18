@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodCl
 public class Student
 {
     public string Name { get; set; }
-    public DateOnly DateOfBirth{ get; set; }
+    public DateOnly DateOfBirth { get; set; }
     public int Semester { get; set; }
 
     [FluentMethod(0)]

@@ -14,11 +14,12 @@ internal record FluentPredicateAttributeInfo : AttributeInfoBase
 
     internal string Method { get; }
     internal string NegatedMethod { get; }
-    internal override string FluentMethodName => Method;
+    internal override IReadOnlyList<string> FluentMethodNames => new string[] { Method, NegatedMethod };
 
     internal static FluentPredicateAttributeInfo Create(AttributeData attributeData, string memberName)
     {
-        (int builderStep, string method, string negatedMethod) = attributeData.GetConstructorArguments<int, string, string>();
+        (int builderStep, string method, string negatedMethod) =
+            attributeData.GetConstructorArguments<int, string, string>();
         method = NameCreator.CreateName(method, memberName);
         negatedMethod = NameCreator.CreateName(negatedMethod, memberName);
         return new FluentPredicateAttributeInfo(builderStep, method, negatedMethod);

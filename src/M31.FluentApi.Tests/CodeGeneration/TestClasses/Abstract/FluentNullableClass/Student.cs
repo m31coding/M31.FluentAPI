@@ -14,5 +14,5 @@ public class Student
 
     [FluentMember(1, "BornOn")]
     [FluentNullable()]
-    public DateOnly? DateOfBirth{ get; set; }
+    public DateOnly? DateOfBirth { get; set; }
 }

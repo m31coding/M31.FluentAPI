@@ -7,12 +7,12 @@ using M31.FluentApi.Generator.SourceGenerators.AttributeInfo;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.MethodCreation;
 
-internal class BuilderMethodCreator : IBuilderMethodCreator
+internal class BuilderMethodsCreator : IBuilderMethodCreator
 {
     private readonly FluentApiInfoGroup group;
     private readonly CodeBoard codeBoard;
 
-    internal BuilderMethodCreator(FluentApiInfoGroup group, CodeBoard codeBoard)
+    internal BuilderMethodsCreator(FluentApiInfoGroup group, CodeBoard codeBoard)
     {
         this.group = group;
         this.codeBoard = codeBoard;
@@ -22,6 +22,13 @@ internal class BuilderMethodCreator : IBuilderMethodCreator
     internal IReadOnlyCollection<FluentApiInfo> FluentApiInfos => group.FluentApiInfos;
 
     public BuilderMethods CreateBuilderMethods(MethodCreator methodCreator)
+    {
+        BuilderMethods builderMethods = CreateBuilderMethodsInternal(methodCreator);
+        codeBoard.GroupsToMethods[group] = builderMethods;
+        return builderMethods;
+    }
+
+    private BuilderMethods CreateBuilderMethodsInternal(MethodCreator methodCreator)
     {
         if (FluentApiInfos.Count == 0)
         {

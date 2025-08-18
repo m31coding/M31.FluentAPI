@@ -82,7 +82,6 @@ public struct HashCode
             {
                 hash = hash * 23 + item?.GetHashCode() ?? 0;
             }
-
         }
     }
 

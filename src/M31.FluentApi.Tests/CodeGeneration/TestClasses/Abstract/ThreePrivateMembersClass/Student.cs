@@ -14,7 +14,7 @@ public class Student
     public string Name { get; private set; }
 
     [FluentMember(1, "BornOn")]
-    public DateOnly DateOfBirth{ get; private set; }
+    public DateOnly DateOfBirth { get; private set; }
 
     [FluentMember(2, "InSemester")]
     public int Semester { get; private set; }

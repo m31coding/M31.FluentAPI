@@ -12,7 +12,7 @@ internal record FluentMethodAttributeInfo : AttributeInfoBase
     }
 
     internal string Method { get; }
-    internal override string FluentMethodName => Method;
+    internal override IReadOnlyList<string> FluentMethodNames => new string[] { Method };
 
     internal static FluentMethodAttributeInfo Create(AttributeData attributeData, string memberName)
     {

@@ -15,7 +15,8 @@ internal class ForkCreator : ICodeBoardActor
 
     public void Modify(CodeBoard codeBoard)
     {
-        BuilderMethodFactory builderMethodFactory = new BuilderMethodFactory(codeBoard.InnerBodyCreationDelegates);
+        BuilderMethodFactory builderMethodFactory =
+            new BuilderMethodFactory(codeBoard.InnerBodyCreationDelegates, codeBoard.TransformedComments);
         MethodCreator methodCreator = new MethodCreator(builderMethodFactory);
         CreateForks(methodCreator, codeBoard);
         codeBoard.Forks = GetForks();
@@ -32,8 +33,8 @@ internal class ForkCreator : ICodeBoardActor
                 return;
             }
 
-            BuilderMethodCreator builderMethodCreator = new BuilderMethodCreator(group, codeBoard);
-            BuilderMethods builderMethods = builderMethodCreator.CreateBuilderMethods(methodCreator);
+            BuilderMethodsCreator builderMethodsCreator = new BuilderMethodsCreator(group, codeBoard);
+            BuilderMethods builderMethods = builderMethodsCreator.CreateBuilderMethods(methodCreator);
 
             foreach (string @using in builderMethods.RequiredUsings)
             {

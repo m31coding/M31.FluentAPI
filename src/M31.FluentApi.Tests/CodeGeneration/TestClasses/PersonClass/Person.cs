@@ -38,24 +38,24 @@ public class Person
     {
     }
 
-        [FluentMethod(4)]
-        private void WithHouseNumber(string houseNumber)
-        {
-            HouseNumber = houseNumber;
-        }
+    [FluentMethod(4)]
+    private void WithHouseNumber(string houseNumber)
+    {
+        HouseNumber = houseNumber;
+    }
 
-        [FluentMethod(5)]
-        private void WithStreet(string street)
-        {
-            Street = street;
-        }
+    [FluentMethod(5)]
+    private void WithStreet(string street)
+    {
+        Street = street;
+    }
 
-        [FluentMethod(6)]
-        [FluentBreak]
-        private void InCity(string city)
-        {
-            City = city;
-        }
+    [FluentMethod(6)]
+    [FluentBreak]
+    private void InCity(string city)
+    {
+        City = city;
+    }
 
     [FluentMethod(3)]
     [FluentContinueWith(7)]
@@ -64,9 +64,9 @@ public class Person
         IsDigitalNomad = true;
     }
 
-        [FluentMethod(7)]
-        private void LivingInCity(string city)
-        {
-            City = city;
-        }
+    [FluentMethod(7)]
+    private void LivingInCity(string city)
+    {
+        City = city;
+    }
 }

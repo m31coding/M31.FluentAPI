@@ -16,7 +16,8 @@ internal class MethodCreator
     internal BuilderMethod CreateMethod(MemberSymbolInfo symbolInfo, string methodName)
     {
         return BuilderMethodFactory
-            .CreateBuilderMethod(methodName, ComputeValueCode.Create(symbolInfo.Name, GetStandardParameter(symbolInfo)));
+            .CreateBuilderMethod(methodName,
+                ComputeValueCode.Create(symbolInfo.Name, GetStandardParameter(symbolInfo)));
     }
 
     internal BuilderMethod CreateMethodWithDefaultValue(
@@ -42,13 +43,14 @@ internal class MethodCreator
         Func<string, string> buildCodeWithParameter)
     {
         return BuilderMethodFactory
-            .CreateBuilderMethod(methodName, ComputeValueCode.Create(symbolInfo.Name, parameter, buildCodeWithParameter));
+            .CreateBuilderMethod(methodName,
+                ComputeValueCode.Create(symbolInfo.Name, parameter, buildCodeWithParameter));
     }
 
-    internal BuilderMethod CreateMethodThatDoesNothing(string methodName)
+    internal BuilderMethod CreateMethodThatDoesNothing(MemberSymbolInfo memberSymbolInfo, string methodName)
     {
         return BuilderMethodFactory
-            .CreateBuilderMethod(methodName);
+            .CreateEmptyBuilderMethod(memberSymbolInfo, methodName);
     }
 
     private Parameter GetStandardParameter(MemberSymbolInfo symbolInfo, string? defaultValue = null)

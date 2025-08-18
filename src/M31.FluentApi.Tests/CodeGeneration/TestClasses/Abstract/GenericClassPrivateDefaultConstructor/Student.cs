@@ -11,7 +11,6 @@ public class Student<T1, T2>
 {
     private Student()
     {
-
     }
 
     [FluentMember(0)]

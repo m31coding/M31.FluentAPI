@@ -21,6 +21,15 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "ContinueWithSelfClass", "Student" },
                 new object[] { "Abstract", "CustomFluentMethodNameClass", "Student" },
                 new object[] { "Abstract", "DefaultFluentMethodNameClass", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "CommentedCompoundClass", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "CommentedLambdaCollectionClass", "Student|Phone" },
+                new object[] { "Abstract", "FluentApiComments", "CommentedMethodsClass", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "CommentedPropertiesClass", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "CommentedPropertiesClassAdvanced", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "IncompletelyCommentedPropertyClass", "Student"},
+                new object[] { "Abstract", "FluentApiComments", "RedundantCommentCompoundClass", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "WronglyCommentedClass", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "WronglyCommentedClass2", "Student" },
                 new object[] { "Abstract", "EmptyClass", "Student" },
                 new object[] { "Abstract", "FluentDefaultMemberClass", "Student" },
                 new object[] { "Abstract", "FluentLambdaClass", "Student|Address" },
@@ -100,6 +109,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "TwoMemberClass", "Student" },
                 new object[] { "Abstract", "TwoParameterCompoundClass", "Student" },
                 new object[] { "Abstract", "TwoParameterCompoundClassReversedParameters", "Student" },
+                new object[] { "DocumentedStudentClass", "DocumentedStudent" },
                 new object[] { "PersonClass", "Person" },
                 new object[] { "StudentClass", "Student" }
             }).Select(l => new string[] { "..", "..", "..", "CodeGeneration", "TestClasses" }
@@ -110,6 +120,6 @@ internal class TestDataProvider : IEnumerable<object[]>
 
     private static List<object[]> Filter(string[] testsToFilter, List<object[]> tests)
     {
-        return testsToFilter.Length == 0 ? tests : tests.Where(t => testsToFilter.Contains((string)t[1])).ToList();
+        return testsToFilter.Length == 0 ? tests : tests.Where(t => testsToFilter.Contains((string)t[^2])).ToList();
     }
 }

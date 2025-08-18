@@ -20,7 +20,7 @@ internal class MemberMethod : IBuilderMethodCreator
         List<BuilderMethod> builderMethods = new List<BuilderMethod>();
         HashSet<string> requiredUsings = new HashSet<string>();
 
-        BuilderMethod builderMethod = methodCreator.CreateMethod(SymbolInfo, MemberAttributeInfo.FluentMethodName);
+        BuilderMethod builderMethod = methodCreator.CreateMethod(SymbolInfo, MemberAttributeInfo.Method);
         builderMethods.Add(builderMethod);
 
         if (MemberAttributeInfo.LambdaBuilderInfo != null)

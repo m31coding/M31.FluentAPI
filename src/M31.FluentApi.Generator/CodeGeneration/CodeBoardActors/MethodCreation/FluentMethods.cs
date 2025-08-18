@@ -25,7 +25,7 @@ internal class FluentMethods : IBuilderMethodCreator
         BuilderMethod builderMethod =
             methodCreator.BuilderMethodFactory.CreateBuilderMethod(
                 SymbolInfo,
-                MethodAttributeInfo.FluentMethodName,
+                MethodAttributeInfo.Method,
                 ReturnAttributeInfo != null);
         return new BuilderMethods(builderMethod);
     }

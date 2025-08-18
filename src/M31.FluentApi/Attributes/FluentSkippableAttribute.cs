@@ -11,6 +11,5 @@ public class FluentSkippableAttribute : Attribute
     /// </summary>
     public FluentSkippableAttribute()
     {
-
     }
 }

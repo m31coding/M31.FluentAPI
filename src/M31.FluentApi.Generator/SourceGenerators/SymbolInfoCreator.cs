@@ -1,9 +1,12 @@
+using System.Text.RegularExpressions;
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
@@ -39,7 +42,8 @@ internal static class SymbolInfoCreator
             CodeTypeExtractor.GetTypeForCodeGeneration(fieldSymbol.Type),
             fieldSymbol.NullableAnnotation == NullableAnnotation.Annotated,
             false,
-            CollectionInference.InferCollectionType(fieldSymbol.Type));
+            CollectionInference.InferCollectionType(fieldSymbol.Type),
+            GetFluentSymbolComments(fieldSymbol));
     }
 
     private static MemberSymbolInfo CreateMemberSymbolInfo(
@@ -55,7 +59,8 @@ internal static class SymbolInfoCreator
             CodeTypeExtractor.GetTypeForCodeGeneration(propertySymbol.Type),
             propertySymbol.NullableAnnotation == NullableAnnotation.Annotated,
             true,
-            CollectionInference.InferCollectionType(propertySymbol.Type));
+            CollectionInference.InferCollectionType(propertySymbol.Type),
+            GetFluentSymbolComments(propertySymbol));
     }
 
     private static MethodSymbolInfo CreateMethodSymbolInfo(
@@ -78,7 +83,8 @@ internal static class SymbolInfoCreator
             RequiresReflection(methodSymbol),
             genericInfo,
             parameterInfos,
-            CodeTypeExtractor.GetTypeForCodeGeneration(methodSymbol.ReturnType));
+            CodeTypeExtractor.GetTypeForCodeGeneration(methodSymbol.ReturnType),
+            GetFluentSymbolComments(methodSymbol));
     }
 
     private static GenericInfo? GetGenericInfo(IMethodSymbol methodSymbol)
@@ -192,5 +198,37 @@ internal static class SymbolInfoCreator
         }
 
         return parameterKinds;
+    }
+
+    private static readonly Regex fluentApiCommentStart = new Regex(@"^\s*////(?!/)", RegexOptions.Compiled);
+    private static Comments GetFluentSymbolComments(ISymbol symbol)
+    {
+        SyntaxReference? syntaxRef = symbol.DeclaringSyntaxReferences.FirstOrDefault();
+        if (syntaxRef == null)
+        {
+            return new Comments(Array.Empty<Comment>());
+        }
+
+        SyntaxNode syntaxNode = syntaxRef.GetSyntax();
+        SyntaxTriviaList leadingTrivia = syntaxNode.GetLeadingTrivia();
+
+        List<string> commentLines = new List<string>();
+
+        foreach (SyntaxTrivia syntaxTrivia in leadingTrivia)
+        {
+            if (!syntaxTrivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
+            {
+                continue;
+            }
+
+            string str = syntaxTrivia.ToString();
+            if (fluentApiCommentStart.IsMatch(str))
+            {
+                commentLines.Add(str.TrimStart('/', ' '));
+            }
+        }
+
+        string comments = string.Join(Environment.NewLine, commentLines);
+        return FluentCommentsParser.Parse(comments);
     }
 }

@@ -311,12 +311,12 @@ namespace FullExample
 namespace NestedFluentApis
 {
     /* Lastly, I would like to demonstrate the effect of applying the FluentMember attribute to a member whose type has
-       its own Fluent API. In this scenario, an additional builder method that accepts a lambda expression is generated.
-       In the example below, the Student class has an Address property, and the Address class has its own Fluent API.
+       its own fluent API. In this scenario, an additional builder method that accepts a lambda expression is generated.
+       In the example below, the Student class has an Address property, and the Address class has its own fluent API.
        The advantage of the lambda method is that the user does not have to figure out the builder name of the Address
        class when creating a student.
        Similarly, additional lambda methods are generated if the FluentCollection attribute is applied to a collection
-       whose element type has its own Fluent API. The employee class below is modeled with several addresses that can be
+       whose element type has its own fluent API. The employee class below is modeled with several addresses that can be
        conveniently set using lambda methods.
 
        In the next chapter, you will learn how to create non-linear paths with control attributes.

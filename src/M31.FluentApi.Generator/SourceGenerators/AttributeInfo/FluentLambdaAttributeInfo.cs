@@ -14,7 +14,7 @@ internal record FluentLambdaAttributeInfo : AttributeInfoBase
 
     internal string Method { get; }
     internal LambdaBuilderInfo BuilderInfo { get; }
-    internal override string FluentMethodName => Method;
+    internal override IReadOnlyList<string> FluentMethodNames => new string[] { Method };
 
     internal static FluentLambdaAttributeInfo Create(
         AttributeData attributeData,

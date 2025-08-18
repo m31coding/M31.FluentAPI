@@ -1,20 +1,27 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 
 internal class BuilderMethodFactory
 {
     private readonly InnerBodyCreationDelegates innerBodyCreationDelegates;
+    private readonly TransformedComments transformedComments;
 
-    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates)
+    internal BuilderMethodFactory(InnerBodyCreationDelegates innerBodyCreationDelegates,
+        TransformedComments transformedComments)
     {
         this.innerBodyCreationDelegates = innerBodyCreationDelegates;
+        this.transformedComments = transformedComments;
     }
 
-    internal BuilderMethod CreateBuilderMethod(string methodName)
+    internal BuilderMethod CreateEmptyBuilderMethod(MemberSymbolInfo memberInfo, string methodName)
     {
-        return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>());
+        MemberCommentKey key = new MemberCommentKey(memberInfo.Name, methodName);
+        Comments comments = transformedComments.GetMemberComments(key, Array.Empty<string>());
+        return new BuilderMethod(methodName, null, new List<Parameter>(), null, (_, _, _) => new List<string>(),
+            comments);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, ComputeValueCode computeValue)
@@ -35,7 +42,9 @@ internal class BuilderMethodFactory
             };
         }
 
-        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode);
+        MemberCommentKey key = new MemberCommentKey(computeValue.TargetMember, methodName);
+        Comments comments = transformedComments.GetMemberComments(key, parameters.Select(p => p.Name).ToArray());
+        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
     }
 
     internal BuilderMethod CreateBuilderMethod(string methodName, List<ComputeValueCode> computeValues)
@@ -53,7 +62,22 @@ internal class BuilderMethodFactory
                 .ToList();
         }
 
-        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode);
+        Comments comments =
+            GetCompoundComments(methodName, parameters, computeValues.Select(v => v.TargetMember).ToArray());
+        return new BuilderMethod(methodName, null, parameters, null, BuildBodyCode, comments);
+    }
+
+    private Comments GetCompoundComments(
+        string methodName,
+        List<Parameter> parameters,
+        IReadOnlyCollection<string> memberNames)
+    {
+        string[] parameterNames = parameters.Select(p => p.Name).ToArray();
+
+        return new Comments(memberNames
+            .SelectMany(n =>
+                transformedComments.GetMemberComments(new MemberCommentKey(n, methodName), parameterNames).List)
+            .ToArray());
     }
 
     internal BuilderMethod CreateBuilderMethod(
@@ -81,11 +105,14 @@ internal class BuilderMethodFactory
                 .BuildCode(instancePrefix, parameters, reservedVariableNames, returnType);
         }
 
+        Comments comments = transformedComments.GetMethodComments(methodSymbolInfo);
+
         return new BuilderMethod(
             methodName,
             methodSymbolInfo.GenericInfo,
             parameters,
             returnTypeToRespect,
-            BuildBodyCode);
+            BuildBodyCode,
+            comments);
     }
 }

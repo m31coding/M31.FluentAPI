@@ -86,7 +86,7 @@ public class DiagnosticsDuringGenerationTests
         ExpectedDiagnostic expectedDiagnostic2 = new ExpectedDiagnostic(
             ReservedMethodName.Descriptor,
             "InitialStep",
-            (18, 6));
+            (17, 6));
 
         RunGeneratorAndCheckDiagnostics("ReservedMethodClass1", "Student", expectedDiagnostic1, expectedDiagnostic2);
     }

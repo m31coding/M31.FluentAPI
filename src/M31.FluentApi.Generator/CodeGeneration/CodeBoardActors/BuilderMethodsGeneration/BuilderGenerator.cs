@@ -7,10 +7,10 @@ internal class BuilderGenerator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
-        BuilderMethods builderMethods =
-            BuilderMethodsCreator.CreateBuilderMethods(codeBoard.Forks, codeBoard.CancellationToken);
+        BuilderStepMethods builderStepMethods =
+            BuilderStepMethodsCreator.CreateBuilderMethods(codeBoard.Forks, codeBoard.CancellationToken);
 
-        foreach (BuilderStepMethod staticMethod in builderMethods.StaticMethods)
+        foreach (BuilderStepMethod staticMethod in builderStepMethods.StaticMethods)
         {
             if (codeBoard.CancellationToken.IsCancellationRequested)
             {
@@ -21,10 +21,10 @@ internal class BuilderGenerator : ICodeBoardActor
             codeBoard.BuilderClass.AddMethod(method);
         }
 
-        List<Interface> interfaces = new List<Interface>(builderMethods.Interfaces.Count);
-        interfaces.Add(CreateInitialStepInterface(builderMethods, codeBoard));
+        List<Interface> interfaces = new List<Interface>(builderStepMethods.Interfaces.Count);
+        interfaces.Add(CreateInitialStepInterface(builderStepMethods, codeBoard));
 
-        foreach (BuilderInterface builderInterface in builderMethods.Interfaces)
+        foreach (BuilderInterface builderInterface in builderStepMethods.Interfaces)
         {
             if (codeBoard.CancellationToken.IsCancellationRequested)
             {
@@ -37,8 +37,11 @@ internal class BuilderGenerator : ICodeBoardActor
             foreach (InterfaceBuilderMethod interfaceMethod in builderInterface.Methods)
             {
                 Method method = CreateMethod(interfaceMethod, codeBoard);
-                codeBoard.BuilderClass.AddMethod(method);
-                @interface.AddMethodSignature(method.MethodSignature.ToSignatureForInterface());
+                codeBoard.BuilderClass.AddMethod(CreateMethodWithInheritedDocs(method));
+                CommentedMethodSignature methodSignature = new CommentedMethodSignature(
+                    method.MethodSignature.ToSignatureForInterface(),
+                    method.MethodComments);
+                @interface.AddMethodSignature(methodSignature);
             }
 
             @interface.AddBaseInterfaces(builderInterface.BaseInterfaces);
@@ -50,6 +53,16 @@ internal class BuilderGenerator : ICodeBoardActor
             codeBoard.BuilderClass,
             codeBoard.Info.BuilderClassNameWithTypeParameters);
         AddInterfaceDefinitionsToBuilderClass(interfaces, codeBoard.BuilderClass);
+    }
+
+    private Method CreateMethodWithInheritedDocs(Method method)
+    {
+        return new Method(
+            new MethodComments(method.MethodComments.Any
+                ? new List<string>() { "/// <inheritdoc/>" }
+                : new List<string>()),
+            method.MethodSignature,
+            method.MethodBody);
     }
 
     private Method CreateMethod(BuilderStepMethod builderStepMethod, CodeBoard codeBoard)
@@ -64,9 +77,9 @@ internal class BuilderGenerator : ICodeBoardActor
         return method;
     }
 
-    private Interface CreateInitialStepInterface(BuilderMethods builderMethods, CodeBoard codeBoard)
+    private Interface CreateInitialStepInterface(BuilderStepMethods builderStepMethods, CodeBoard codeBoard)
     {
-        string? firstInterfaceName = builderMethods.Interfaces.FirstOrDefault()?.InterfaceName;
+        string? firstInterfaceName = builderStepMethods.Interfaces.FirstOrDefault()?.InterfaceName;
 
         Interface initialStepInterface =
             new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.InitialStepInterfaceName);

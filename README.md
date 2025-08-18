@@ -37,7 +37,7 @@ PM> Install-Package M31.FluentApi
 A package reference will be added to your `csproj` file. Moreover, since this library provides code via source code generation, consumers of your project don't need the reference to `M31.FluentApi`. Therefore, it is recommended to use the `PrivateAssets` metadata tag:
 
 ```xml
-<PackageReference Include="M31.FluentApi" Version="1.10.0" PrivateAssets="all"/>
+<PackageReference Include="M31.FluentApi" Version="1.11.0" PrivateAssets="all"/>
 ```
 
 If you would like to examine the generated code, you may emit it by adding the following lines to your `csproj` file:
@@ -438,6 +438,65 @@ private void BornOn(DateOnly dateOfBirth)
 ...OfAge(22)...
 ...BornOn(new DateOnly(2002, 8, 3))...
 ```
+
+
+### Documentation comments
+
+Documentation comments for fluent API members can be added using four slashes (////) followed by XML tags prefixed with `fluent`, e.g.:
+
+```cs
+//// <fluentSummary>
+//// Sets the student's name.
+//// </fluentSummary>
+//// <fluentParam name="name">The student's name.</fluentParam>
+//// <fluentReturns>A builder for setting the student's age.</fluentReturns>
+[FluentMember(0)]
+public string Name { get; private set; }
+```
+
+Using four slashes instead of three prevents the IDE from interpreting these comments as standard XML documentation for the member.
+
+All `fluent`-prefixed tags are copied to the generated builder method and automatically transformed, e.g., `//// <fluentSummary>` becomes `/// <summary>` in the generated code.
+
+For compounds, add the documentation comments to the first member of the compound only to avoid duplication:
+
+```cs
+//// <fluentSummary>
+//// Sets the student's name.
+//// </fluentSummary>
+//// <fluentParam name="firstName">The student's first name.</fluentParam>
+//// <fluentParam name="lastName">The student's last name.</fluentParam>
+//// <fluentReturns>A builder for setting the student's age.</fluentReturns>
+[FluentMember(0, "Named", 0)]
+public string FirstName { get; private set; }
+
+[FluentMember(0, "Named", 1)]
+public string LastName { get; private set; }
+```
+
+If multiple methods are generated for a member, you can target a specific method by adding the `method` XML attribute to the documentation tags:
+
+```cs
+//// <fluentSummary method="InSemester">
+//// Sets the student's current semester.
+//// </fluentSummary>
+//// <fluentParam method="InSemester" name="semester">The student's current semester.</fluentParam>
+//// <fluentReturns method="InSemester">A builder for setting the student's city.</fluentReturns>
+////
+//// <fluentSummary method="WhoStartsUniversity">
+//// Sets the student's semester to 0.
+//// </fluentSummary>
+//// <fluentReturns method="WhoStartsUniversity">A builder for setting the student's city.</fluentReturns>
+[FluentMember(2, "InSemester")]
+[FluentDefault("WhoStartsUniversity")]
+public int Semester { get; private set; } = 0;
+```
+
+To simplify adding documentation comments, a code action is available to generate the boilerplate for the selected member:
+
+![doc-comments-action](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/create-doc-comments-action.png)
+
+For reference, you can view the documented version of the `Student` class in [DocumentedStudent.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/DocumentedStudent.cs). The corresponding generated code is located in [DocumentedStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/CreateDocumentedStudent.g.cs)
 
 
 ### Lambda pattern

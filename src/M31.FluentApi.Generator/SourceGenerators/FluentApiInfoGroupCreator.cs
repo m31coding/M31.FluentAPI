@@ -30,11 +30,12 @@ internal class FluentApiInfoGroupCreator
         // Group FluentApiInfos that have the same builder step, the same fluent method name, and represent
         // FluentMembers (compounds).
         (int builderStep, string fluentMethodName, Type type, FluentApiInfo[] infoArray)[] grouping = infos
-            .GroupBy(i => (i.AttributeInfo.BuilderStep, i.FluentMethodName, i.AttributeInfo.GetType()))
+            .GroupBy(
+                i => (i.AttributeInfo.BuilderStep, i.AttributeInfo.FluentMethodNames[0], i.AttributeInfo.GetType()))
             .SelectMany(g =>
                 g.First().AttributeInfo.GetType() == typeof(FluentMemberAttributeInfo)
-                    ? new[] { (g.Key.BuilderStep, g.Key.FluentMethodName, g.Key.GetType(), g.ToArray()) }
-                    : g.Select(g2 => (g.Key.BuilderStep, g.Key.FluentMethodName, g.Key.GetType(), new[] { g2 })))
+                    ? new[] { (g.Key.BuilderStep, g.Key.Item2, g.Key.Item3, g.ToArray()) }
+                    : g.Select(g2 => (g.Key.BuilderStep, g.Key.Item2, g.Key.Item3, new[] { g2 })))
             .OrderBy(g => g.BuilderStep)
             .ToArray();
 
@@ -66,7 +67,8 @@ internal class FluentApiInfoGroupCreator
                 nextBuilderStep,
                 groupIsSkippable,
                 group.fluentMethodName,
-                group.type, group.infoArray));
+                group.type,
+                group.infoArray));
         }
 
         return infoGroups;

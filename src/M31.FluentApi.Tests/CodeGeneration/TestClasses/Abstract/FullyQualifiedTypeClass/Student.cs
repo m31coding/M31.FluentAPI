@@ -10,7 +10,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FullyQualified
 public class Student
 {
     [FluentMember(0, "BornOn")]
-    public System.DateOnly DateOfBirth{ get; set; }
+    public System.DateOnly DateOfBirth { get; set; }
 
     [FluentCollection(0, "Friend")]
     public System.Collections.Generic.List<string> Friends { get; set; }

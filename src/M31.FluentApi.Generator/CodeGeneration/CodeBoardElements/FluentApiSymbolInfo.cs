@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
 using M31.FluentApi.Generator.Commons;
 using Microsoft.CodeAnalysis;
 
@@ -9,13 +10,15 @@ internal abstract class FluentApiSymbolInfo
         string name,
         string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
-        bool requiresReflection)
+        bool requiresReflection,
+        Comments comments)
     {
         Name = name;
         NameInCamelCase = Name.TrimStart('_').FirstCharToLower();
         DeclaringClassNameWithTypeParameters = declaringClassNameWithTypeParameters;
         Accessibility = accessibility;
         RequiresReflection = requiresReflection;
+        Comments = comments;
     }
 
     internal string Name { get; }
@@ -23,13 +26,15 @@ internal abstract class FluentApiSymbolInfo
     internal string DeclaringClassNameWithTypeParameters { get; }
     internal Accessibility Accessibility { get; }
     internal bool RequiresReflection { get; }
+    internal Comments Comments { get; }
 
     protected bool Equals(FluentApiSymbolInfo other)
     {
         return Name == other.Name &&
                DeclaringClassNameWithTypeParameters == other.DeclaringClassNameWithTypeParameters &&
                Accessibility == other.Accessibility &&
-               RequiresReflection == other.RequiresReflection;
+               RequiresReflection == other.RequiresReflection &&
+               Comments.Equals(other.Comments);
     }
 
     public override bool Equals(object? obj)
@@ -42,6 +47,7 @@ internal abstract class FluentApiSymbolInfo
 
     public override int GetHashCode()
     {
-        return new HashCode().Add(Name, DeclaringClassNameWithTypeParameters, Accessibility, RequiresReflection);
+        return new HashCode()
+            .Add(Name, DeclaringClassNameWithTypeParameters, Accessibility, RequiresReflection, Comments);
     }
 }

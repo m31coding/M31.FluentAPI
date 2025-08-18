@@ -25,8 +25,9 @@ internal abstract class CollectionMethodCreator
 
     internal BuilderMethod? CreateWithItemsMethod(MethodCreator methodCreator)
     {
-        return !ShouldCreateWithItemsMethod() ? null :
-            methodCreator.CreateMethod(symbolInfo, collectionAttributeInfo.WithItems);
+        return !ShouldCreateWithItemsMethod()
+            ? null
+            : methodCreator.CreateMethod(symbolInfo, collectionAttributeInfo.WithItems);
     }
 
     private bool ShouldCreateWithItemsMethod()

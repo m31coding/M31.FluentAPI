@@ -12,12 +12,10 @@ public class Student
     [FluentMethod(0)]
     public void InitialStep()
     {
-
     }
 
     [FluentMethod(1, "InitialStep")]
     public void Method1()
     {
-
     }
 }

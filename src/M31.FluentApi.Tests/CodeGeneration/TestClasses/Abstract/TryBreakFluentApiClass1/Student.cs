@@ -12,6 +12,5 @@ public class Student
     [FluentMethod(0)]
     private void SomeMethod(string someMethodMethodInfo)
     {
-
     }
 }

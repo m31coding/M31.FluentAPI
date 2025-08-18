@@ -77,7 +77,6 @@ internal struct HashCode
             {
                 hash = hash * 23 + item?.GetHashCode() ?? 0;
             }
-
         }
 
         return this;

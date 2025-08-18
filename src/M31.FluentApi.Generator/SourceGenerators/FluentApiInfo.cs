@@ -31,7 +31,6 @@ internal class FluentApiInfo
     internal IReadOnlyCollection<OrthogonalAttributeInfoBase> OrthogonalAttributeInfos { get; }
     internal IReadOnlyCollection<ControlAttributeInfoBase> ControlAttributeInfos { get; }
     internal FluentApiAdditionalInfo AdditionalInfo { get; }
-    internal string FluentMethodName => AttributeInfo.FluentMethodName;
 
     protected bool Equals(FluentApiInfo other)
     {

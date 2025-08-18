@@ -8,7 +8,7 @@ internal class FluentApiInfoGroup
         bool isSkippable,
         string fluentMethodName,
         Type attributeInfoType,
-        IReadOnlyCollection<FluentApiInfo> fluentApiInfos)
+        IReadOnlyList<FluentApiInfo> fluentApiInfos)
     {
         BuilderStep = builderStep;
         NextBuilderStep = nextBuilderStep;
@@ -23,6 +23,6 @@ internal class FluentApiInfoGroup
     internal bool IsSkippable { get; }
     internal string FluentMethodName { get; }
     internal Type AttributeInfoType { get; }
-    internal IReadOnlyCollection<FluentApiInfo> FluentApiInfos { get; }
+    internal IReadOnlyList<FluentApiInfo> FluentApiInfos { get; }
     internal bool IsCompoundGroup => FluentApiInfos.Count > 1;
 }

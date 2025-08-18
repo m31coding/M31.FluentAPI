@@ -9,7 +9,6 @@ public class Student
 {
     private Student()
     {
-
     }
 
     [FluentMember(0, "InSemester")]
