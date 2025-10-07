@@ -35,23 +35,23 @@ public class Address2
 {
     [FluentMember(0, "{Name}")]
     [FluentContinueWith(0)]
-    public string Street { get; private set; }
+    public string? Street { get; private set; }
 
     [FluentMember(0, "{Name}")]
     [FluentContinueWith(0)]
-    public string City { get; private set; }
+    public string? City { get; private set; }
 
     [FluentMember(0, "{Name}")]
     [FluentContinueWith(0)]
-    public string Zip { get; private set; }
+    public string? Zip { get; private set; }
 
     [FluentMember(0, "{Name}")]
     [FluentContinueWith(0)]
-    public string State { get; private set; }
+    public string? State { get; private set; }
 
     [FluentMember(0, "{Name}")]
     [FluentContinueWith(0)]
-    public string Country { get; private set; }
+    public string? Country { get; private set; }
 
     [FluentMethod(0)]
     private void Build()

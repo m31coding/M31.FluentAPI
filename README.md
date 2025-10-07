@@ -516,6 +516,58 @@ university.AddStudent(s => s.Named("Alice", "King").OfAge(22)...);
 ```
 
 Note that if you want to set a member of a Fluent API class, you can simply use `FluentMember` or `FluentCollection` instead of the pattern above.
+       
+
+### Make everything optional
+
+There are two ways to make all fields, properties, and methods optional in your fluent API. If the initialization order matters for your use case, use the following approach:
+
+```cs
+[FluentApi]
+public class Student
+{
+    [FluentMember(0)]
+    [FluentSkippable]
+    public string? FirstName { get; private set; }
+
+    [FluentMember(1)]
+    [FluentSkippable]
+    public string? LastName { get; private set; }
+
+    [FluentMember(2)]
+    [FluentSkippable]
+    public int? Age { get; private set; }
+
+    [FluentMethod(3)]
+    public void Build()
+    {
+    }
+}
+```
+
+If the initialization order does not matter, you can simplify the configuration as follows:
+
+```cs
+public class Student
+{
+    [FluentMember(0)]
+    [FluentContinueWith(0)]
+    public string? FirstName { get; private set; }
+
+    [FluentMember(0)]
+    [FluentContinueWith(0)]
+    public string? LastName { get; private set; }
+
+    [FluentMember(0)]
+    [FluentContinueWith(0)]
+    public int? Age { get; private set; }
+
+    [FluentMethod(0)]
+    public void Build()
+    {
+    }
+}
+```
 
 
 ## Problems with the IDE
