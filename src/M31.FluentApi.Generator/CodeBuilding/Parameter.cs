@@ -1,3 +1,5 @@
+using M31.FluentApi.Generator.Commons;
+
 namespace M31.FluentApi.Generator.CodeBuilding;
 
 internal class Parameter : ICode
@@ -10,7 +12,7 @@ internal class Parameter : ICode
         ParameterAnnotations? parameterAnnotations = null)
     {
         Type = type;
-        Name = name;
+        Name = CSharpKeywords.IsCSharpKeyword(name) ? $"@{name}" : name;
         DefaultValue = defaultValue;
         GenericTypeParameterPosition = genericTypeParameterPosition;
         ParameterAnnotations = parameterAnnotations;
