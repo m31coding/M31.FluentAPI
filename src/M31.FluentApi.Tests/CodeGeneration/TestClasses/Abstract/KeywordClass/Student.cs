@@ -14,7 +14,7 @@ public class Student
     public string Operator { get; set; }
 
     [FluentMember(1, "With{Name}")]
-    public string @Class { get; set; }
+    public string Class { get; set; }
 
     [FluentMember(2)]
     public int Void { get; set; }
