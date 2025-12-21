@@ -12,13 +12,12 @@ internal class MemberSymbolInfo : FluentApiSymbolInfo
         string type,
         string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
-        bool requiresReflection,
         string typeForCodeGeneration,
         bool isNullable,
         bool isProperty,
         CollectionType? collectionType,
         Comments comments)
-        : base(name, declaringClassNameWithTypeParameters, accessibility, requiresReflection, comments)
+        : base(name, declaringClassNameWithTypeParameters, accessibility, comments)
     {
         Type = type;
         TypeForCodeGeneration = typeForCodeGeneration;

@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements.FluentApiComments;
-using M31.FluentApi.Generator.Commons;
 using M31.FluentApi.Generator.SourceGenerators.Collections;
 using M31.FluentApi.Generator.SourceGenerators.Generics;
 using Microsoft.CodeAnalysis;
@@ -38,7 +37,6 @@ internal static class SymbolInfoCreator
             fieldSymbol.Type.ToString(),
             declaringClassNameWithTypeParameters,
             fieldSymbol.DeclaredAccessibility,
-            RequiresReflection(fieldSymbol),
             CodeTypeExtractor.GetTypeForCodeGeneration(fieldSymbol.Type),
             fieldSymbol.NullableAnnotation == NullableAnnotation.Annotated,
             false,
@@ -55,7 +53,6 @@ internal static class SymbolInfoCreator
             propertySymbol.Type.ToString(),
             declaringClassNameWithTypeParameters,
             propertySymbol.DeclaredAccessibility,
-            RequiresReflection(propertySymbol),
             CodeTypeExtractor.GetTypeForCodeGeneration(propertySymbol.Type),
             propertySymbol.NullableAnnotation == NullableAnnotation.Annotated,
             true,
@@ -80,7 +77,6 @@ internal static class SymbolInfoCreator
             methodSymbol.Name,
             declaringClassNameWithTypeParameters,
             methodSymbol.DeclaredAccessibility,
-            RequiresReflection(methodSymbol),
             genericInfo,
             parameterInfos,
             CodeTypeExtractor.GetTypeForCodeGeneration(methodSymbol.ReturnType),
@@ -90,35 +86,6 @@ internal static class SymbolInfoCreator
     private static GenericInfo? GetGenericInfo(IMethodSymbol methodSymbol)
     {
         return methodSymbol.IsGenericMethod ? GenericInfo.Create(methodSymbol.TypeParameters) : null;
-    }
-
-    private static bool RequiresReflection(IFieldSymbol fieldSymbol)
-    {
-        bool isWritable = !fieldSymbol.IsReadOnly;
-        return RequiresReflection(fieldSymbol.DeclaredAccessibility, isWritable);
-    }
-
-    private static bool RequiresReflection(IMethodSymbol methodSymbol)
-    {
-        return !methodSymbol.DeclaredAccessibility.IsPublicOrInternal();
-    }
-
-    private static bool RequiresReflection(IPropertySymbol propertySymbol)
-    {
-        bool isWritable = false;
-
-        if (propertySymbol.SetMethod != null)
-        {
-            isWritable = propertySymbol.SetMethod.DeclaredAccessibility.IsPublicOrInternal() &&
-                         !propertySymbol.SetMethod.IsInitOnly;
-        }
-
-        return RequiresReflection(propertySymbol.DeclaredAccessibility, isWritable);
-    }
-
-    private static bool RequiresReflection(Accessibility declaredAccessibility, bool isWritable)
-    {
-        return !declaredAccessibility.IsPublicOrInternal() || !isWritable;
     }
 
     private static ParameterSymbolInfo CreateParameterSymbolInfo(

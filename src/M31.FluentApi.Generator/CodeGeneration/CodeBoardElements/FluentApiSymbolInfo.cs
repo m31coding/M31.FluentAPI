@@ -10,14 +10,12 @@ internal abstract class FluentApiSymbolInfo
         string name,
         string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
-        bool requiresReflection,
         Comments comments)
     {
         Name = name;
         NameInCamelCase = Name.TrimStart('_').FirstCharToLower();
         DeclaringClassNameWithTypeParameters = declaringClassNameWithTypeParameters;
         Accessibility = accessibility;
-        RequiresReflection = requiresReflection;
         Comments = comments;
     }
 
@@ -25,7 +23,6 @@ internal abstract class FluentApiSymbolInfo
     internal string NameInCamelCase { get; }
     internal string DeclaringClassNameWithTypeParameters { get; }
     internal Accessibility Accessibility { get; }
-    internal bool RequiresReflection { get; }
     internal Comments Comments { get; }
 
     protected bool Equals(FluentApiSymbolInfo other)
@@ -33,7 +30,6 @@ internal abstract class FluentApiSymbolInfo
         return Name == other.Name &&
                DeclaringClassNameWithTypeParameters == other.DeclaringClassNameWithTypeParameters &&
                Accessibility == other.Accessibility &&
-               RequiresReflection == other.RequiresReflection &&
                Comments.Equals(other.Comments);
     }
 
@@ -48,6 +44,6 @@ internal abstract class FluentApiSymbolInfo
     public override int GetHashCode()
     {
         return new HashCode()
-            .Add(Name, DeclaringClassNameWithTypeParameters, Accessibility, RequiresReflection, Comments);
+            .Add(Name, DeclaringClassNameWithTypeParameters, Accessibility, Comments);
     }
 }
