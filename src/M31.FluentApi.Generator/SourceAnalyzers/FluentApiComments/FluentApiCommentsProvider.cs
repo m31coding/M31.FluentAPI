@@ -164,7 +164,7 @@ internal class FluentApiCommentsProvider : CodeRefactoringProvider
     {
         const string fallback = "    ";
         SyntaxTrivia? first = leadingTrivia.FirstOrDefault();
-        if (first == null || first.Value.Kind() != SyntaxKind.WhitespaceTrivia)
+        if (first == null || !first.Value.IsKind(SyntaxKind.WhitespaceTrivia))
         {
             return fallback;
         }

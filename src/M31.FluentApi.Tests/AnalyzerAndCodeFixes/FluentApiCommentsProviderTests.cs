@@ -35,11 +35,11 @@ public class FluentApiCommentsProviderTests
         {
             TestCode = source.Source.SelectSpan(selectedSpan),
             FixedCode = source.FixedSource!,
-#if NET6_0
+#if NET8_0
             ReferenceAssemblies = new ReferenceAssemblies(
-                "net6.0",
-                new PackageIdentity("Microsoft.NETCore.App.Ref", "6.0.0"),
-                Path.Combine("ref", "net6.0")),
+                "net8.0",
+                new PackageIdentity("Microsoft.NETCore.App.Ref", "8.0.0"),
+                Path.Combine("ref", "net8.0")),
 #else
             throw new NotSupportedException();
 #endif

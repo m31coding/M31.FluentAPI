@@ -228,7 +228,7 @@ internal static class SymbolInfoCreator
             }
         }
 
-        string comments = string.Join(Environment.NewLine, commentLines);
+        string comments = string.Join(SourceGenerator.GeneratorConfig.NewLineString, commentLines);
         return FluentCommentsParser.Parse(comments);
     }
 }
