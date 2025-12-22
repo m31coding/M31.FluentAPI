@@ -14,7 +14,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         return symbolInfo.IsProperty ? "Property" : "Field";
     }
 
-    protected override void GenerateInnerBodyWithoutReflection(MemberSymbolInfo symbolInfo)
+    protected override void GenerateInnerBodyForPublicSymbol(MemberSymbolInfo symbolInfo)
     {
         // createStudent.student.Semester = semester;
         SetMemberCode setMemberCode =
@@ -28,25 +28,12 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         }
     }
 
-    protected override void GenerateInnerBodyWithReflection(MemberSymbolInfo symbolInfo, string infoFieldName)
+    protected override void GenerateInnerBodyForPrivateSymbol(MemberSymbolInfo symbolInfo, string setMethodName)
     {
-        // CreateStudent.semesterPropertyInfo.SetValue(createStudent.student, semester);
+        // SetName(createStudent.student, name);
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
-                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}" +
-                $".SetValue({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
+                $"{setMethodName}({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
         CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
-    }
-
-    protected override void InitializeInfoField(string fieldName, MemberSymbolInfo symbolInfo)
-    {
-        // semesterPropertyInfo = typeof(Student<T1, T2>)
-        //     .GetProperty("Semester", BindingFlags.Instance | BindingFlags.NonPublic););
-        string code = $"{fieldName} =" +
-                      $" typeof({symbolInfo.DeclaringClassNameWithTypeParameters})" +
-                      $".Get{SymbolType(symbolInfo)}(\"{symbolInfo.Name}\", " +
-                      $"{InfoFieldBindingFlagsArgument(symbolInfo)})!;";
-
-        CodeBoard.StaticConstructor!.AppendBodyLine(code);
     }
 }

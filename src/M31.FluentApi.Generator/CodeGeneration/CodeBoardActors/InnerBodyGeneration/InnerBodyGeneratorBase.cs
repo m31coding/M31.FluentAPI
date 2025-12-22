@@ -11,58 +11,53 @@ internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
 
     internal InnerBodyGeneratorBase(CodeBoard codeBoard)
     {
-        this.CodeBoard = codeBoard;
-        ReflectionRequired = false;
+        CodeBoard = codeBoard;
+        UnsafeAccessors = false;
     }
 
-    internal bool ReflectionRequired { get; private set; }
+    internal bool UnsafeAccessors { get; private set; }
 
     internal void GenerateInnerBody(TSymbolInfo symbolInfo)
     {
-        if (!symbolInfo.RequiresReflection)
+        if (symbolInfo.Accessibility.IsPublicOrInternal())
         {
-            GenerateInnerBodyWithoutReflection(symbolInfo);
+            GenerateInnerBodyForPublicSymbol(symbolInfo);
         }
         else
         {
-            GenerateInnerBodyWithReflectionAndFields(symbolInfo);
-            ReflectionRequired = true;
+            GenerateUnsafeAccessorAndInnerBodyForPrivateSymbol(symbolInfo);
+            UnsafeAccessors = true;
         }
     }
 
     protected abstract string SymbolType(TSymbolInfo symbolInfo);
-    protected abstract void GenerateInnerBodyWithoutReflection(TSymbolInfo symbolInfo);
-    protected abstract void GenerateInnerBodyWithReflection(TSymbolInfo symbolInfo, string infoFieldName);
-    protected abstract void InitializeInfoField(string fieldName, TSymbolInfo symbolInfo);
+    protected abstract void GenerateInnerBodyForPublicSymbol(TSymbolInfo symbolInfo);
+    protected abstract void GenerateInnerBodyForPrivateSymbol(TSymbolInfo symbolInfo, string setMethodName);
 
-    private void GenerateInnerBodyWithReflectionAndFields(TSymbolInfo symbolInfo)
+    private void GenerateUnsafeAccessorAndInnerBodyForPrivateSymbol(TSymbolInfo symbolInfo)
     {
-        string symbolType = SymbolType(symbolInfo);
+        if (symbolInfo is not MemberSymbolInfo memberSymbolInfo) // todo: method
+        {
+            return;
+        }
 
-        // semesterPropertyInfo / semesterFieldInfo / semesterMethodInfo
-        string infoFieldName = $"{symbolInfo.NameInCamelCase}{symbolType}Info";
-        infoFieldName = CodeBoard.ReservedVariableNames.GetNewGlobalVariableName(infoFieldName);
+        string setMethodName = $"Set{symbolInfo.NameInPascalCase}";
 
-        GenerateInfoField(symbolType, infoFieldName);
-        InitializeInfoField(infoFieldName, symbolInfo);
+        // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+        // private static extern void SetName(Student<T1, T2> student, string value);
+        MethodSignature methodSignature =
+            MethodSignature.Create("void", setMethodName, null, false);
+        methodSignature.AddModifiers("private", "static", "extern");
 
-        GenerateInnerBodyWithReflection(symbolInfo, infoFieldName);
-    }
+        methodSignature.AddParameter(
+            CodeBoard.Info.FluentApiClassNameWithTypeParameters,
+            CodeBoard.Info.ClassInstanceName); // Student<T1, T2> student
+        methodSignature.AddParameter(memberSymbolInfo.TypeForCodeGeneration, "value"); // string value
 
-    private void GenerateInfoField(string symbolType, string fieldName)
-    {
-        // private static readonly PropertyInfo semesterPropertyInfo;
-        Field field = new Field($"{symbolType}Info", fieldName);
-        field.AddModifiers("private", "static", "readonly");
-        CodeBoard.BuilderClass.AddField(field);
-    }
+        methodSignature.AddAttribute(
+            $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"set_{symbolInfo.NameInPascalCase}\")]");
+        CodeBoard.BuilderClass.AddMethodSignature(methodSignature);
 
-    protected string InfoFieldBindingFlagsArgument(TSymbolInfo symbolInfo)
-    {
-        string accessibilityBindingFlag = symbolInfo.Accessibility.IsPublicOrInternal()
-            ? "BindingFlags.Public"
-            : "BindingFlags.NonPublic";
-
-        return $"BindingFlags.Instance | {accessibilityBindingFlag}";
+        GenerateInnerBodyForPrivateSymbol(symbolInfo, setMethodName);
     }
 }

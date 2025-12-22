@@ -14,6 +14,7 @@ internal abstract class FluentApiSymbolInfo
     {
         Name = name;
         NameInCamelCase = Name.TrimStart('_').FirstCharToLower();
+        NameInPascalCase = Name.TrimStart('_').FirstCharToUpper();
         DeclaringClassNameWithTypeParameters = declaringClassNameWithTypeParameters;
         Accessibility = accessibility;
         Comments = comments;
@@ -21,6 +22,7 @@ internal abstract class FluentApiSymbolInfo
 
     internal string Name { get; }
     internal string NameInCamelCase { get; }
+    internal string NameInPascalCase { get; }
     internal string DeclaringClassNameWithTypeParameters { get; }
     internal Accessibility Accessibility { get; }
     internal Comments Comments { get; }

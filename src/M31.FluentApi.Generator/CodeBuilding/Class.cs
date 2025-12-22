@@ -4,6 +4,7 @@ internal class Class : ICode
 {
     private readonly List<Field> fields;
     private readonly List<Method> methods;
+    private readonly List<MethodSignature> methodSignatures;
     private readonly List<Property> properties;
     private readonly List<string> interfaces;
     private readonly List<ICode> definitions;
@@ -15,6 +16,7 @@ internal class Class : ICode
         Modifiers = new Modifiers();
         fields = new List<Field>();
         methods = new List<Method>();
+        methodSignatures = new List<MethodSignature>();
         properties = new List<Property>();
         interfaces = new List<string>();
         definitions = new List<ICode>();
@@ -26,6 +28,7 @@ internal class Class : ICode
     internal Modifiers Modifiers { get; }
     internal IReadOnlyCollection<Field> Fields => fields;
     internal IReadOnlyCollection<Method> Methods => methods;
+    internal IReadOnlyCollection<MethodSignature> MethodSignatures => methodSignatures;
     internal IReadOnlyCollection<Property> Properties => properties;
     internal IReadOnlyCollection<string> Interfaces => interfaces;
     internal IReadOnlyCollection<ICode> Definitions => definitions;
@@ -53,6 +56,11 @@ internal class Class : ICode
     internal void AddMethod(Method method)
     {
         methods.Add(method);
+    }
+
+    internal void AddMethodSignature(MethodSignature methodSignature)
+    {
+        methodSignatures.Add(methodSignature);
     }
 
     internal void AddProperty(Property property)
@@ -111,6 +119,7 @@ internal class Class : ICode
             .BlankLine()
             .Append(properties)
             .BlankLine()
+            .AppendWithBlankLines(methodSignatures)
             .AppendWithBlankLines(methods)
             .AppendWithBlankLines(definitions)
             .CloseBlock();

@@ -10,13 +10,6 @@ internal class ConstructorGenerator : ICodeBoardActor
         string instanceName = codeBoard.Info.ClassInstanceName;
         string classNameWithTypeParameters = codeBoard.Info.FluentApiClassNameWithTypeParameters;
 
-        if (codeBoard.FluentApiInfos.Any(i => i.SymbolInfo.RequiresReflection))
-        {
-            Method staticConstructor = CreateStaticConstructor(codeBoard.Info.BuilderClassName);
-            codeBoard.StaticConstructor = staticConstructor;
-            codeBoard.BuilderClass.AddMethod(staticConstructor);
-        }
-
         Method constructor = CreateConstructor(codeBoard.Info.BuilderClassName);
         int nofParameters = codeBoard.Info.FluentApiTypeConstructorInfo.NumberOfParameters;
 
@@ -57,14 +50,6 @@ internal class ConstructorGenerator : ICodeBoardActor
 
         codeBoard.Constructor = constructor;
         codeBoard.BuilderClass.AddMethod(constructor);
-    }
-
-    private static Method CreateStaticConstructor(string builderClassName)
-    {
-        // static CreateStudent()
-        MethodSignature signature = MethodSignature.CreateConstructorSignature(builderClassName);
-        signature.AddModifiers("static");
-        return new Method(signature);
     }
 
     private static Method CreateConstructor(string builderClassName)

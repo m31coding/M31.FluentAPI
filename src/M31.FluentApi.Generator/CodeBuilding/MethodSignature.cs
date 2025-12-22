@@ -15,6 +15,7 @@ internal class MethodSignature : ICode
         Generics = new Generics();
         Parameters = new Parameters();
         Modifiers = new Modifiers();
+        Attributes = new List<string>();
     }
 
     private MethodSignature(MethodSignature methodSignature, bool isSignatureForInterface)
@@ -26,6 +27,7 @@ internal class MethodSignature : ICode
         Generics = new Generics(methodSignature.Generics);
         Parameters = new Parameters(methodSignature.Parameters);
         Modifiers = new Modifiers(methodSignature.Modifiers);
+        Attributes = new List<string>(methodSignature.Attributes);
     }
 
     internal static MethodSignature Create(
@@ -49,6 +51,7 @@ internal class MethodSignature : ICode
     internal Generics Generics { get; }
     internal Parameters Parameters { get; }
     internal Modifiers Modifiers { get; }
+    internal List<string> Attributes { get; }
     internal bool IsSignatureForMethodBody => !IsSignatureForInterface;
     internal bool IsExplicitInterfaceImplementation => ExplicitInterfacePrefix != null;
 
@@ -70,6 +73,11 @@ internal class MethodSignature : ICode
     internal void AddModifiers(params string[] modifiers)
     {
         Modifiers.Add(modifiers);
+    }
+
+    internal void AddAttribute(string attribute)
+    {
+        Attributes.Add(attribute);
     }
 
     internal MethodSignature ToSignatureForInterface()

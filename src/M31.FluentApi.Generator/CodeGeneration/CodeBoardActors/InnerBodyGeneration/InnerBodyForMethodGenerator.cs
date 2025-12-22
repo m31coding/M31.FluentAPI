@@ -19,7 +19,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         return "Method";
     }
 
-    protected override void GenerateInnerBodyWithoutReflection(MethodSymbolInfo symbolInfo)
+    protected override void GenerateInnerBodyForPublicSymbol(MethodSymbolInfo symbolInfo)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
@@ -50,7 +50,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         }
     }
 
-    protected override void GenerateInnerBodyWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
+    protected override void GenerateInnerBodyForPrivateSymbol(MethodSymbolInfo symbolInfo, string setMethodName)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
@@ -64,14 +64,14 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             return outerMethodParameters.Any(p =>
                 p.HasAnnotation(ParameterKinds.Ref) || p.HasAnnotation(ParameterKinds.Out))
                 ? BuildReflectionCodeWithRefAndOutParameters(
-                    infoFieldName,
+                    setMethodName,
                     instancePrefix,
                     symbolInfo.GenericInfo,
                     outerMethodParameters,
                     reservedVariableNames,
                     returnType)
                 : BuildDefaultReflectionCode(
-                    infoFieldName,
+                    setMethodName,
                     instancePrefix,
                     symbolInfo.GenericInfo,
                     outerMethodParameters,
@@ -80,7 +80,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
     }
 
     private List<string> BuildReflectionCodeWithRefAndOutParameters(
-        string infoFieldName,
+        string setMethodName,
         string instancePrefix,
         GenericInfo? genericInfo,
         IReadOnlyCollection<Parameter> outerMethodParameters,
@@ -106,7 +106,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         lines.Add(CodeBoard.NewCodeBuilder()
             .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
             .Append(
-                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}.{MakeGenericMethod(genericInfo)}")
+                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{setMethodName}.{MakeGenericMethod(genericInfo)}")
             .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args){suppressNullability};")
             .ToString());
 
@@ -139,7 +139,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
     }
 
     private List<string> BuildDefaultReflectionCode(
-        string infoFieldName,
+        string setMethodName,
         string instancePrefix,
         GenericInfo? genericInfo,
         IReadOnlyCollection<Parameter> outerMethodParameters,
@@ -155,7 +155,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             //     .Invoke(createStudent.student, new object[] { semester });
             CodeBoard.NewCodeBuilder()
                 .Append($"return ({returnType}) ", returnResult)
-                .Append($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}" +
+                .Append($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{setMethodName}" +
                         $".{MakeGenericMethod(genericInfo)}")
                 .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
                 .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }})" +
@@ -172,70 +172,6 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         }
 
         return $"MakeGenericMethod({string.Join(", ", genericInfo.ParameterStrings.Select(p => $"typeof({p})"))}).";
-    }
-
-    protected override void InitializeInfoField(string fieldName, MethodSymbolInfo symbolInfo)
-    {
-        Method staticConstructor = CodeBoard.StaticConstructor!;
-        const string indentation = CodeBuilder.OneLevelIndentation;
-
-        string typeArguments =
-            @$"new Type[] {{ {string.Join(", ",
-                symbolInfo.ParameterInfos.Select(CreateMethodParameter))} }}";
-
-        // withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
-        //     "WithName",
-        //     0,                                                   -> generic parameter count
-        //     BindingFlags.Instance | BindingFlags.NonPublic,
-        //     null                                                 -> binder
-        //     new Type[] { typeof(string) },
-        //     null)!;                                              -> modifiers
-        //
-        // Generic types are created via Type.MakeGenericMethodParameter(int position). In addition, a ref type is
-        // specified via MakeByRefType().
-        staticConstructor.AppendBodyLine($"{fieldName} = " +
-                                         $"typeof({symbolInfo.DeclaringClassNameWithTypeParameters}).GetMethod(");
-        staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
-        staticConstructor.AppendBodyLine($"{indentation}{GetGenericParameterCount(symbolInfo.GenericInfo)},");
-        staticConstructor.AppendBodyLine($"{indentation}{InfoFieldBindingFlagsArgument(symbolInfo)},");
-        staticConstructor.AppendBodyLine($"{indentation}null,");
-        staticConstructor.AppendBodyLine($"{indentation}{typeArguments},");
-        staticConstructor.AppendBodyLine($"{indentation}null)!;");
-
-        CodeBoard.CodeFile.AddUsing("System");
-
-        static string CreateMethodParameter(ParameterSymbolInfo parameterInfo)
-        {
-            return parameterInfo.IsGenericParameter
-                ? $"Type.MakeGenericMethodParameter({parameterInfo.GenericTypeParameterPosition!.Value})" +
-                  $"{MakeByRefType(parameterInfo.ParameterKinds)}"
-                : $"typeof({GetTypeOfArgument(parameterInfo)}){MakeByRefType(parameterInfo.ParameterKinds)}";
-
-            static string GetTypeOfArgument(ParameterSymbolInfo parameterInfo)
-            {
-                if (parameterInfo.IsReferenceType && parameterInfo.TypeForCodeGeneration.EndsWith("?"))
-                {
-                    return parameterInfo.TypeForCodeGeneration
-                        .Substring(0, parameterInfo.TypeForCodeGeneration.Length - 1);
-                }
-
-                return parameterInfo.TypeForCodeGeneration;
-            }
-
-            static string MakeByRefType(ParameterKinds parameterKinds)
-            {
-                return parameterKinds.HasFlag(ParameterKinds.In) ||
-                       parameterKinds.HasFlag(ParameterKinds.Out) ||
-                       parameterKinds.HasFlag(ParameterKinds.Ref)
-                    ? ".MakeByRefType()"
-                    : string.Empty;
-            }
-        }
-
-        static string GetGenericParameterCount(GenericInfo? genericInfo)
-        {
-            return genericInfo == null ? "0" : genericInfo.ParameterCount.ToString();
-        }
     }
 
     private static bool IsNoneOrVoid(string? returnType)
