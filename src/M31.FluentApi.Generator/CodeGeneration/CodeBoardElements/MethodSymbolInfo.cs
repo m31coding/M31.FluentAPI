@@ -11,11 +11,12 @@ internal class MethodSymbolInfo : FluentApiSymbolInfo
         string name,
         string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
+        bool publiclyWritable,
         GenericInfo? genericInfo,
         IReadOnlyCollection<ParameterSymbolInfo> parameterInfos,
         string returnType,
         Comments comments)
-        : base(name, declaringClassNameWithTypeParameters, accessibility, comments)
+        : base(name, declaringClassNameWithTypeParameters, accessibility, publiclyWritable, comments)
     {
         GenericInfo = genericInfo;
         ParameterInfos = parameterInfos;
