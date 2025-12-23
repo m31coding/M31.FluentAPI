@@ -19,7 +19,7 @@ internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
 
     internal void GenerateInnerBody(TSymbolInfo symbolInfo)
     {
-        if (symbolInfo.Accessibility.IsPublicOrInternal())
+        if (symbolInfo.PubliclyWritable)
         {
             GenerateInnerBodyForPublicSymbol(symbolInfo);
         }
@@ -46,8 +46,8 @@ internal abstract class InnerBodyGeneratorBase<TSymbolInfo>
         // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
         // private static extern void SetName(Student<T1, T2> student, string value);
         MethodSignature methodSignature =
-            MethodSignature.Create("void", setMethodName, null, false);
-        methodSignature.AddModifiers("private", "static", "extern");
+            MethodSignature.Create("void", setMethodName, null, true);
+        methodSignature.AddModifiers("private", "static", "extern"); // todo: modifiers dont work.
 
         methodSignature.AddParameter(
             CodeBoard.Info.FluentApiClassNameWithTypeParameters,

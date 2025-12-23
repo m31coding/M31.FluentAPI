@@ -8,7 +8,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreePrivateMembersClass;;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreePrivateMembersClass;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,

@@ -39,6 +39,6 @@ internal class InnerBodyCreator : ICodeBoardActor
 
     private static void ImportCompilerServices(CodeBoard codeBoard)
     {
-        codeBoard.CodeFile.AddUsing("using System.Runtime.CompilerServices");
+        codeBoard.CodeFile.AddUsing("System.Runtime.CompilerServices");
     }
 }
