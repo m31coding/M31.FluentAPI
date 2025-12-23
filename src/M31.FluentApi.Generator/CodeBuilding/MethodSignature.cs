@@ -96,7 +96,9 @@ internal class MethodSignature : ICode
         codeBuilder
             .AppendLines(Attributes)
             .StartLine()
-            .Append(Modifiers, IsSignatureForMethodBody && !IsExplicitInterfaceImplementation)
+            .Append(
+                Modifiers,
+                Modifiers.Contains("extern") || (IsSignatureForMethodBody && !IsExplicitInterfaceImplementation))
             .Append($"{ReturnType} ", ReturnType != null)
             .Append($"{ExplicitInterfacePrefix}.", IsSignatureForMethodBody && IsExplicitInterfaceImplementation)
             .Append(MethodName)
