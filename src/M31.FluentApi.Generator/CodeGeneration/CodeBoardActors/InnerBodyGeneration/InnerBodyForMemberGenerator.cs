@@ -1,3 +1,4 @@
+using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
@@ -7,11 +8,6 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
     internal InnerBodyForMemberGenerator(CodeBoard codeBoard)
         : base(codeBoard)
     {
-    }
-
-    protected override string SymbolType(MemberSymbolInfo symbolInfo)
-    {
-        return symbolInfo.IsProperty ? "Property" : "Field";
     }
 
     protected override void GenerateInnerBodyForPublicSymbol(MemberSymbolInfo symbolInfo)
@@ -28,8 +24,25 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         }
     }
 
-    protected override void GenerateInnerBodyForPrivateSymbol(MemberSymbolInfo symbolInfo, string setMethodName)
+    protected override void GenerateInnerBodyForPrivateSymbol(MemberSymbolInfo symbolInfo)
     {
+        string setMethodName = $"Set{symbolInfo.NameInPascalCase}";
+
+        // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+        // private static extern void SetName(Student<T1, T2> student, string value);
+        MethodSignature methodSignature =
+            MethodSignature.Create("void", setMethodName, null, true);
+        methodSignature.AddModifiers("private", "static", "extern");
+
+        methodSignature.AddParameter(
+            CodeBoard.Info.FluentApiClassNameWithTypeParameters,
+            CodeBoard.Info.ClassInstanceName); // Student<T1, T2> student
+        methodSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value"); // string value
+
+        methodSignature.AddAttribute(
+            $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"set_{symbolInfo.NameInPascalCase}\")]");
+        CodeBoard.BuilderClass.AddMethodSignature(methodSignature);
+
         // SetName(createStudent.student, name);
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>

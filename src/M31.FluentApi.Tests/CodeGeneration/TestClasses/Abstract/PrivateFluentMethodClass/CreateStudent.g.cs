@@ -6,7 +6,7 @@
 #nullable enable
 
 using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodClass;
 
@@ -17,39 +17,20 @@ public class CreateStudent :
     CreateStudent.IInSemester
 {
     private readonly Student student;
-    private static readonly MethodInfo withNameMethodInfo;
-    private static readonly MethodInfo bornOnMethodInfo;
-    private static readonly MethodInfo inSemesterMethodInfo;
-
-    static CreateStudent()
-    {
-        withNameMethodInfo = typeof(Student).GetMethod(
-            "WithName",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string) },
-            null)!;
-        bornOnMethodInfo = typeof(Student).GetMethod(
-            "BornOn",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(System.DateOnly) },
-            null)!;
-        inSemesterMethodInfo = typeof(Student).GetMethod(
-            "InSemester",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int) },
-            null)!;
-    }
 
     private CreateStudent()
     {
         student = new Student();
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WithName")]
+    private static extern void CallWithName(Student student, string name);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "BornOn")]
+    private static extern void CallBornOn(Student student, System.DateOnly date);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "InSemester")]
+    private static extern void CallInSemester(Student student, int semester);
 
     public static ICreateStudent InitialStep()
     {
@@ -59,25 +40,25 @@ public class CreateStudent :
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.withNameMethodInfo.Invoke(createStudent.student, new object?[] { name });
+        CallWithName(createStudent.student, name);
         return createStudent;
     }
 
     IBornOn IWithName.WithName(string name)
     {
-        CreateStudent.withNameMethodInfo.Invoke(student, new object?[] { name });
+        CallWithName(student, name);
         return this;
     }
 
     IInSemester IBornOn.BornOn(System.DateOnly date)
     {
-        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { date });
+        CallBornOn(student, date);
         return this;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        CreateStudent.inSemesterMethodInfo.Invoke(student, new object?[] { semester });
+        CallInSemester(student, semester);
         return student;
     }
 
