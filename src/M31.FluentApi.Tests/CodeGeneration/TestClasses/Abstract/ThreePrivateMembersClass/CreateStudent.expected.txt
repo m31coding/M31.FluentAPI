@@ -23,15 +23,6 @@ public class CreateStudent :
         student = new Student();
     }
 
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
-    private static extern void SetName(Student student, string value);
-
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_DateOfBirth")]
-    private static extern void SetDateOfBirth(Student student, System.DateOnly value);
-
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
-    private static extern void SetSemester(Student student, int value);
-
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
@@ -80,4 +71,13 @@ public class CreateStudent :
     {
         Student InSemester(int semester);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Student student, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_DateOfBirth")]
+    private static extern void SetDateOfBirth(Student student, System.DateOnly value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    private static extern void SetSemester(Student student, int value);
 }

@@ -46,7 +46,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WithName")]
         // private static extern void CallWithName(Student student, string name);
         MethodSignature methodSignature =
-            MethodSignature.Create("void", callMethodName, null, true);
+            MethodSignature.Create(symbolInfo.ReturnType, callMethodName, null, true);
         methodSignature.AddModifiers("private", "static", "extern");
 
         methodSignature.AddParameter(
@@ -77,6 +77,9 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             ReservedVariableNames reservedVariableNames,
             string? returnType)
         {
+            string firstArgument = $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}";
+            IEnumerable<string> otherArguments = outerMethodParameters.Select(CreateArgument);
+
             return new List<string>()
             {
                 // CallWithName(student, name); // todo: better example
@@ -84,8 +87,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                     .Append("return ", !IsNoneOrVoid(returnType))
                     .Append($"{callMethodName}")
                     .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
-                    .Append($"({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
-                    .Append($"{string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
+                    .Append($"({string.Join(", ", new[] { firstArgument }.Concat(otherArguments))});")
                     .ToString(),
             };
         }

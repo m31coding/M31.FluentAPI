@@ -119,10 +119,9 @@ internal class Class : ICode
             .BlankLine()
             .Append(properties)
             .BlankLine()
-            .AppendWithBlankLines(methods.Where(m => m.IsConstructor))
-            .AppendWithBlankLines(methodSignatures)
-            .AppendWithBlankLines(methods.Where(m => !m.IsConstructor))
+            .AppendWithBlankLines(methods)
             .AppendWithBlankLines(definitions)
+            .AppendWithBlankLines(methodSignatures)
             .CloseBlock();
     }
 }
