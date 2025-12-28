@@ -109,7 +109,7 @@ internal class ConstructorGenerator : ICodeBoardActor
             return $"ref {variableName}";
         }
 
-        if(parameter.HasAnnotation(ParameterKinds.In))
+        if (parameter.HasAnnotation(ParameterKinds.In))
         {
             string variableName = reservedVariableNames.GetNewLocalVariableName("v");
             requiredAssignment = $"{parameter.TypeForCodeGeneration} {variableName} = default!;";

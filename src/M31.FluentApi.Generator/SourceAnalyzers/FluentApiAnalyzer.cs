@@ -10,6 +10,7 @@ using static M31.FluentApi.Generator.SourceGenerators.AttributeElements.Attribut
 
 namespace M31.FluentApi.Generator.SourceAnalyzers;
 
+// todo: https://github.com/dotnet/roslyn-analyzers/issues/7438
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal class FluentApiAnalyzer : DiagnosticAnalyzer
 {
