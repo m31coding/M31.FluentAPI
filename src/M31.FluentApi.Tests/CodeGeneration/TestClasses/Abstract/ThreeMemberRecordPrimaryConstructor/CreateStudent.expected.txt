@@ -6,7 +6,6 @@
 #nullable enable
 
 using System;
-using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreeMemberRecordPrimaryConstructor;
@@ -73,12 +72,12 @@ public class CreateStudent :
         Student InSemester(int semester);
     }
 
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_name")]
     private static extern void SetName(Student student, string value);
 
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_DateOfBirth")]
-    private static extern void SetDateOfBirth(Student student, System.DateOnly value);
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_dateOfBirth")]
+    private static extern void SetDateOfBirth(Student student, DateOnly value);
 
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_semester")]
     private static extern void SetSemester(Student student, int value);
 }
