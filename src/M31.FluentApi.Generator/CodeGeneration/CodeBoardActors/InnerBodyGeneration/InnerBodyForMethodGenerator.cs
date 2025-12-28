@@ -2,6 +2,7 @@
 #pragma warning disable SA1513
 
 using M31.FluentApi.Generator.CodeBuilding;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.SourceGenerators.Generics; // todo: remove if not needed
 
@@ -33,7 +34,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                     .Append($"return ", !IsNoneOrVoid(returnType))
                     .Append($"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}")
                     .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
-                    .Append($"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
+                    .Append($"({string.Join(", ", outerMethodParameters.Select(CreateParameter))});")
                     .ToString(),
             };
         }
@@ -45,13 +46,14 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
 
         // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WithName")]
         // private static extern void CallWithName(Student student, string name);
-        MethodSignature methodSignature =
+        MethodSignature unsafeAccessorSignature =
             MethodSignature.Create(symbolInfo.ReturnType, callMethodName, null, true);
-        methodSignature.AddModifiers("private", "static", "extern");
+        // todo: generic constraints handled correctly for generic return type?
+        unsafeAccessorSignature.AddModifiers("private", "static", "extern");
 
-        methodSignature.AddParameter(
+        unsafeAccessorSignature.AddParameter(
             new Parameter(CodeBoard.Info.FluentApiClassNameWithTypeParameters, CodeBoard.Info.ClassInstanceName));
-        // todo: test generic case
+        CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, CodeBoard.Info.GenericInfo); // todo: test generic case
 
         List<Parameter> parameters = symbolInfo.ParameterInfos // todo: extract method from BuilderMethodFactory.
             .Select(i => new Parameter(
@@ -62,11 +64,12 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                 new ParameterAnnotations(i.ParameterKinds)))
             .ToList();
 
-        parameters.ForEach(methodSignature.AddParameter); // todo: add generic parameters
+        parameters.ForEach(unsafeAccessorSignature.AddParameter);
+        CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, symbolInfo.GenericInfo);
 
-        methodSignature.AddAttribute(
+        unsafeAccessorSignature.AddAttribute(
             $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"{symbolInfo.NameInPascalCase}\")]");
-        CodeBoard.BuilderClass.AddMethodSignature(methodSignature);
+        CodeBoard.BuilderClass.AddMethodSignature(unsafeAccessorSignature);
 
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
@@ -78,7 +81,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             string? returnType)
         {
             string firstArgument = $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}";
-            IEnumerable<string> otherArguments = outerMethodParameters.Select(CreateArgument);
+            IEnumerable<string> otherArguments = outerMethodParameters.Select(CreateParameter);
 
             return new List<string>()
             {
@@ -93,7 +96,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         }
     }
 
-    private static string CreateArgument(Parameter outerMethodParameter)
+    private static string CreateParameter(Parameter outerMethodParameter)
     {
         // ref/in/out semester
         return $"{outerMethodParameter.ParameterAnnotations?.ToCallsiteAnnotations()}{outerMethodParameter.Name}";

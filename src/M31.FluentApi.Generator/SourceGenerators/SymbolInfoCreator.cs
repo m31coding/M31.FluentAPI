@@ -29,6 +29,16 @@ internal static class SymbolInfoCreator
         };
     }
 
+    internal static ConstructorInfo CreateConstructorInfo(IMethodSymbol constructor)
+    {
+        // Constructor can't be generic => genericInfo = null.
+        IReadOnlyCollection<ParameterSymbolInfo> parameterInfos = GetParameterInfos(constructor, null);
+
+        return new ConstructorInfo(
+            parameterInfos,
+            constructor.DeclaredAccessibility != Accessibility.Public);
+    }
+
     private static MemberSymbolInfo CreateMemberSymbolInfo(
         IFieldSymbol fieldSymbol,
         string declaringClassNameWithTypeParameters)
@@ -68,13 +78,6 @@ internal static class SymbolInfoCreator
         string declaringClassNameWithTypeParameters)
     {
         GenericInfo? genericInfo = GetGenericInfo(methodSymbol);
-        Dictionary<string, int> typeParameterNameToTypeParameterPosition = genericInfo == null
-            ? new Dictionary<string, int>()
-            : genericInfo.Parameters.ToDictionary(p => p.ParameterName, p => p.ParameterPosition);
-
-        IReadOnlyCollection<ParameterSymbolInfo> parameterInfos =
-            methodSymbol.Parameters.Select(p => CreateParameterSymbolInfo(p, typeParameterNameToTypeParameterPosition))
-                .ToArray();
 
         return new MethodSymbolInfo(
             methodSymbol.Name,
@@ -82,7 +85,7 @@ internal static class SymbolInfoCreator
             methodSymbol.DeclaredAccessibility,
             PubliclyWritable(methodSymbol),
             genericInfo,
-            parameterInfos,
+            GetParameterInfos(methodSymbol, genericInfo),
             CodeTypeExtractor.GetTypeForCodeGeneration(methodSymbol.ReturnType),
             GetFluentSymbolComments(methodSymbol));
     }
@@ -90,6 +93,19 @@ internal static class SymbolInfoCreator
     private static GenericInfo? GetGenericInfo(IMethodSymbol methodSymbol)
     {
         return methodSymbol.IsGenericMethod ? GenericInfo.Create(methodSymbol.TypeParameters) : null;
+    }
+
+    private static IReadOnlyCollection<ParameterSymbolInfo> GetParameterInfos(
+        IMethodSymbol methodSymbol,
+        GenericInfo? genericInfo)
+    {
+        Dictionary<string, int> typeParameterNameToTypeParameterPosition = genericInfo == null
+            ? new Dictionary<string, int>()
+            : genericInfo.Parameters.ToDictionary(p => p.ParameterName, p => p.ParameterPosition);
+
+        return methodSymbol.Parameters
+            .Select(p => CreateParameterSymbolInfo(p, typeParameterNameToTypeParameterPosition))
+            .ToArray();
     }
 
     private static bool PubliclyWritable(IFieldSymbol fieldSymbol)
@@ -201,6 +217,7 @@ internal static class SymbolInfoCreator
     }
 
     private static readonly Regex fluentApiCommentStart = new Regex(@"^\s*////(?!/)", RegexOptions.Compiled);
+
     private static Comments GetFluentSymbolComments(ISymbol symbol)
     {
         SyntaxReference? syntaxRef = symbol.DeclaringSyntaxReferences.FirstOrDefault();

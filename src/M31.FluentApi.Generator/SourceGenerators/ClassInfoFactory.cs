@@ -197,9 +197,7 @@ internal class ClassInfoFactory
             return null;
         }
 
-        return new ConstructorInfo(
-            constructors[0].Parameters.Length,
-            constructors[0].DeclaredAccessibility != Accessibility.Public);
+        return SymbolInfoCreator.CreateConstructorInfo(constructors[0]);
     }
 
     private FluentApiInfo? TryCreateFluentApiInfo(

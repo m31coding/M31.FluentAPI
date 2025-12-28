@@ -32,6 +32,11 @@ internal class ParameterSymbolInfo
     internal ParameterKinds ParameterKinds { get; }
     internal bool IsGenericParameter => GenericTypeParameterPosition.HasValue;
 
+    internal bool HasAnnotation(ParameterKinds parameterKinds)
+    {
+        return ParameterKinds.HasFlag(parameterKinds);
+    }
+
     protected bool Equals(ParameterSymbolInfo other)
     {
         return ParameterName == other.ParameterName &&

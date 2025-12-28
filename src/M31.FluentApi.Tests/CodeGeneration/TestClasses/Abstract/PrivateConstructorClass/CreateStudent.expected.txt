@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateConstructorClass;
 
@@ -17,7 +17,7 @@ public class CreateStudent :
 
     private CreateStudent()
     {
-        student = (Student) Activator.CreateInstance(typeof(Student), true)!;
+        student = CreateStudentInstance();
     }
 
     public static ICreateStudent InitialStep()
@@ -46,4 +46,7 @@ public class CreateStudent :
     {
         Student InSemester(int semester);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
+    private static extern Student CreateStudentInstance();
 }

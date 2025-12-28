@@ -1,13 +1,16 @@
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+
 namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal record ConstructorInfo
 {
-    public ConstructorInfo(int numberOfParameters, bool constructorIsNonPublic)
+    public ConstructorInfo(IReadOnlyCollection<ParameterSymbolInfo> parameterInfos, bool constructorIsNonPublic)
     {
-        NumberOfParameters = numberOfParameters;
+        ParameterInfos = parameterInfos;
         ConstructorIsNonPublic = constructorIsNonPublic;
     }
 
-    internal int NumberOfParameters { get; }
+    internal IReadOnlyCollection<ParameterSymbolInfo> ParameterInfos { get; }
     internal bool ConstructorIsNonPublic { get; }
+    internal int NumberOfParameters => ParameterInfos.Count;
 }

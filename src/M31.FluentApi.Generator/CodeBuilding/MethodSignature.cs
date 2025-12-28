@@ -34,9 +34,9 @@ internal class MethodSignature : ICode
         string returnType,
         string methodName,
         string? prefix,
-        bool isSignatureForInterface)
+        bool isStandaloneSignature)
     {
-        return new MethodSignature(returnType, methodName, prefix, isSignatureForInterface);
+        return new MethodSignature(returnType, methodName, prefix, isStandaloneSignature);
     }
 
     internal static MethodSignature CreateConstructorSignature(string className)

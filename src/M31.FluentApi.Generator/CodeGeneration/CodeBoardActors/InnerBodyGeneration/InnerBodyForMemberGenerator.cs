@@ -30,18 +30,18 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
 
         // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
         // private static extern void SetName(Student<T1, T2> student, string value);
-        MethodSignature methodSignature =
+        MethodSignature unsafeAccessorSignature =
             MethodSignature.Create("void", setMethodName, null, true);
-        methodSignature.AddModifiers("private", "static", "extern");
+        unsafeAccessorSignature.AddModifiers("private", "static", "extern");
 
-        methodSignature.AddParameter(
+        unsafeAccessorSignature.AddParameter(
             CodeBoard.Info.FluentApiClassNameWithTypeParameters,
             CodeBoard.Info.ClassInstanceName); // Student<T1, T2> student
-        methodSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value"); // string value
+        unsafeAccessorSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value"); // string value
 
-        methodSignature.AddAttribute(
+        unsafeAccessorSignature.AddAttribute(
             $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"set_{symbolInfo.NameInPascalCase}\")]");
-        CodeBoard.BuilderClass.AddMethodSignature(methodSignature);
+        CodeBoard.BuilderClass.AddMethodSignature(unsafeAccessorSignature);
 
         // SetName(createStudent.student, name);
         SetMemberCode setMemberCode =
