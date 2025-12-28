@@ -1,3 +1,5 @@
+#if TEST_GENERATED_CODE
+
 // ReSharper disable NotAccessedVariable
 
 using System;
@@ -21,3 +23,5 @@ public class CodeGenerationTests
         Assert.Equal(2, student.semester);
     }
 }
+
+#endif

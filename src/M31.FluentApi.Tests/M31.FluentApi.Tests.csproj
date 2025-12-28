@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>M31.FluentApi.Tests</RootNamespace>
+    <DefineConstants>TEST_GENERATED_CODE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

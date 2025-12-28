@@ -3,7 +3,6 @@
 // ReSharper disable All
 
 using System;
-using System.Reflection.Metadata;
 using M31.FluentApi.Attributes;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreeMemberRecordPrimaryConstructor;

@@ -40,7 +40,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         unsafeAccessorSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value"); // string value
 
         unsafeAccessorSignature.AddAttribute(
-            $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"set_{symbolInfo.NameInPascalCase}\")]");
+            $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"set_{symbolInfo.Name}\")]");
         CodeBoard.BuilderClass.AddMethodSignature(unsafeAccessorSignature);
 
         // SetName(createStudent.student, name);
