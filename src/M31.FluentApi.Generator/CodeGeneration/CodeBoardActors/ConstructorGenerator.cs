@@ -24,8 +24,6 @@ internal class ConstructorGenerator : ICodeBoardActor
                 null,
                 true);
 
-            CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, codeBoard.Info.GenericInfo);
-
             List<Parameter> parameters = constructorInfo.ParameterInfos // todo: extract x3
                 .Select(i => new Parameter(
                     i.TypeForCodeGeneration,
@@ -47,8 +45,7 @@ internal class ConstructorGenerator : ICodeBoardActor
             List<string> arguments = new List<string>();
             CodeBuilder codeBuilder = new CodeBuilder(codeBoard.NewLineString);
             codeBuilder
-                .Append($"{instanceName} = {unsafeAccessorName}")
-                .Append(codeBoard.Info.GenericInfo?.ParameterListInAngleBrackets);
+                .Append($"{instanceName} = {unsafeAccessorName}");
 
             foreach (ParameterSymbolInfo parameterInfo in constructorInfo.ParameterInfos)
             {
