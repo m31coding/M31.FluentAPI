@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPrivateDefaultConstructor;
 
@@ -17,7 +17,7 @@ public class CreateStudent<T1, T2> :
 
     private CreateStudent()
     {
-        student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), true)!;
+        student = CreateStudentInstance();
     }
 
     public static ICreateStudent InitialStep()
@@ -61,4 +61,7 @@ public class CreateStudent<T1, T2> :
 
         Student<T1, T2> WithProperty2(T2 property2);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
+    private static extern Student<T1, T2> CreateStudentInstance();
 }
