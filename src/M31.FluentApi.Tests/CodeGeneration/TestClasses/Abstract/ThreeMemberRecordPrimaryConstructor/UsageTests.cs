@@ -8,7 +8,7 @@ using Xunit.Priority;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreeMemberRecordPrimaryConstructor;
 
-public class CodeGenerationTests
+public class UsageTests
 {
     [Fact, Priority(1)]
     public void CanExecuteThreeMemberRecordPrimaryConstructor()
