@@ -10,7 +10,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 
 namespace M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers;
 
@@ -20,7 +19,7 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
 {
     internal static DiagnosticResult Diagnostic(string diagnosticId)
     {
-        return CSharpCodeFixVerifier<TAnalyzer, TCodeFix, XUnitVerifier>
+        return CSharpCodeFixVerifier<TAnalyzer, TCodeFix, DefaultVerifier>
             .Diagnostic(diagnosticId);
     }
 
@@ -39,7 +38,7 @@ internal static class AnalyzerAndCodeFixVerifier<TAnalyzer, TCodeFix>
         await test.RunAsync(CancellationToken.None);
     }
 
-    private class CodeFixTest : CSharpCodeFixTest<TAnalyzer, TCodeFix, XUnitVerifier>
+    private class CodeFixTest : CSharpCodeFixTest<TAnalyzer, TCodeFix, DefaultVerifier>
     {
         internal CodeFixTest(
             IReadOnlyCollection<SourceWithFix> sourceCode,
