@@ -7,7 +7,7 @@
 
 using System;
 using System.Reflection.Metadata;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ThreeMemberRecordPrimaryConstructor;
 
@@ -18,16 +18,6 @@ public class CreateStudent :
     CreateStudent.IInSemester
 {
     private readonly Student student;
-    private static readonly PropertyInfo namePropertyInfo;
-    private static readonly PropertyInfo dateOfBirthPropertyInfo;
-    private static readonly PropertyInfo semesterPropertyInfo;
-
-    static CreateStudent()
-    {
-        namePropertyInfo = typeof(Student).GetProperty("name", BindingFlags.Instance | BindingFlags.Public)!;
-        dateOfBirthPropertyInfo = typeof(Student).GetProperty("dateOfBirth", BindingFlags.Instance | BindingFlags.Public)!;
-        semesterPropertyInfo = typeof(Student).GetProperty("semester", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -42,25 +32,25 @@ public class CreateStudent :
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
+        SetName(createStudent.student, name);
         return createStudent;
     }
 
     IBornOn IWithName.WithName(string name)
     {
-        CreateStudent.namePropertyInfo.SetValue(student, name);
+        SetName(student, name);
         return this;
     }
 
     IInSemester IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        CreateStudent.dateOfBirthPropertyInfo.SetValue(student, dateOfBirth);
+        SetDateOfBirth(student, dateOfBirth);
         return this;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
+        SetSemester(student, semester);
         return student;
     }
 
@@ -82,4 +72,13 @@ public class CreateStudent :
     {
         Student InSemester(int semester);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Student student, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_DateOfBirth")]
+    private static extern void SetDateOfBirth(Student student, System.DateOnly value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    private static extern void SetSemester(Student student, int value);
 }
