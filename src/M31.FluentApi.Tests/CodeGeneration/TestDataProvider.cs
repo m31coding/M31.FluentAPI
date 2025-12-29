@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(["CommentedMethodsClass"],
+        Filter([],
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -24,9 +24,9 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "FluentApiComments", "CommentedCompoundClass", "Student" },
                 new object[] { "Abstract", "FluentApiComments", "CommentedLambdaCollectionClass", "Student|Phone" },
                 new object[] { "Abstract", "FluentApiComments", "CommentedMethodsClass", "Student" },
-                // new object[] { "Abstract", "FluentApiComments", "CommentedPropertiesClass", "Student" },
-                // new object[] { "Abstract", "FluentApiComments", "CommentedPropertiesClassAdvanced", "Student" },
-                // new object[] { "Abstract", "FluentApiComments", "IncompletelyCommentedPropertyClass", "Student"},
+                new object[] { "Abstract", "FluentApiComments", "CommentedPropertiesClass", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "CommentedPropertiesClassAdvanced", "Student" },
+                new object[] { "Abstract", "FluentApiComments", "IncompletelyCommentedPropertyClass", "Student"},
                 // new object[] { "Abstract", "FluentApiComments", "RedundantCommentCompoundClass", "Student" },
                 // new object[] { "Abstract", "FluentApiComments", "WronglyCommentedClass", "Student" },
                 // new object[] { "Abstract", "FluentApiComments", "WronglyCommentedClass2", "Student" },
