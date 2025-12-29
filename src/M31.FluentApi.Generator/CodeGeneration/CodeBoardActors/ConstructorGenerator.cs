@@ -1,4 +1,5 @@
 using M31.FluentApi.Generator.CodeBuilding;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
 using M31.FluentApi.Generator.SourceGenerators;
 
@@ -24,15 +25,7 @@ internal class ConstructorGenerator : ICodeBoardActor
                 null,
                 true);
 
-            List<Parameter> parameters = constructorInfo.ParameterInfos // todo: extract x3
-                .Select(i => new Parameter(
-                    i.TypeForCodeGeneration,
-                    i.ParameterName,
-                    i.DefaultValue,
-                    i.GenericTypeParameterPosition,
-                    new ParameterAnnotations(i.ParameterKinds)))
-                .ToList();
-
+            List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(constructorInfo.ParameterInfos);
             parameters.ForEach(unsafeAccessorSignature.AddParameter);
 
             unsafeAccessorSignature.AddModifiers("private", "static", "extern");

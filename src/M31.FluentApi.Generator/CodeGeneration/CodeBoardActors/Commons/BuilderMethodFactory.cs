@@ -85,15 +85,7 @@ internal class BuilderMethodFactory
         string methodName,
         bool respectReturnType)
     {
-        List<Parameter> parameters = methodSymbolInfo.ParameterInfos
-            .Select(i => new Parameter(
-                i.TypeForCodeGeneration,
-                i.ParameterName,
-                i.DefaultValue,
-                i.GenericTypeParameterPosition,
-                new ParameterAnnotations(i.ParameterKinds)))
-            .ToList();
-
+        List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(methodSymbolInfo.ParameterInfos);
         string? returnTypeToRespect = respectReturnType ? methodSymbolInfo.ReturnType : null;
 
         List<string> BuildBodyCode(

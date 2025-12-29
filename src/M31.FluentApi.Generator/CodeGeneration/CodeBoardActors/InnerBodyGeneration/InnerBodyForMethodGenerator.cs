@@ -55,15 +55,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             new Parameter(CodeBoard.Info.FluentApiClassNameWithTypeParameters, CodeBoard.Info.ClassInstanceName));
         CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, CodeBoard.Info.GenericInfo); // todo: test generic case
 
-        List<Parameter> parameters = symbolInfo.ParameterInfos // todo: extract method from BuilderMethodFactory.
-            .Select(i => new Parameter(
-                i.TypeForCodeGeneration,
-                i.ParameterName,
-                i.DefaultValue,
-                i.GenericTypeParameterPosition,
-                new ParameterAnnotations(i.ParameterKinds)))
-            .ToList();
-
+        List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(symbolInfo.ParameterInfos);
         parameters.ForEach(unsafeAccessorSignature.AddParameter);
         CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, symbolInfo.GenericInfo);
 
