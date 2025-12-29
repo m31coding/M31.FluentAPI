@@ -76,8 +76,8 @@ public class CreateStudent :
     private static extern void SetSemester(Student student, int value);
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
-    private static extern void SetName(Student student, string value);
+    private static extern void SetName(Person person, string value);
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_DateOfBirth")]
-    private static extern void SetDateOfBirth(Student student, System.DateOnly value);
+    private static extern void SetDateOfBirth(Person person, System.DateOnly value);
 }

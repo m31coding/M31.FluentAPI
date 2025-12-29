@@ -1,5 +1,6 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
@@ -47,8 +48,8 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         unsafeAccessorSignature.AddModifiers("private", "static", "extern");
 
         unsafeAccessorSignature.AddParameter(
-            CodeBoard.Info.FluentApiClassNameWithTypeParameters,
-            CodeBoard.Info.ClassInstanceName); // Student<T1, T2> student
+            symbolInfo.DeclaringClassNameWithTypeParameters,
+            symbolInfo.DeclaringClassNameWithTypeParameters.FirstCharToLower()); // Student<T1, T2> student
         unsafeAccessorSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value");
 
         unsafeAccessorSignature.AddAttribute(
@@ -73,8 +74,8 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         unsafeAccessorSignature.AddModifiers("private", "static", "extern", "ref");
 
         unsafeAccessorSignature.AddParameter(
-            CodeBoard.Info.FluentApiClassNameWithTypeParameters,
-            CodeBoard.Info.ClassInstanceName); // Student student
+            symbolInfo.DeclaringClassNameWithTypeParameters,
+            symbolInfo.DeclaringClassNameWithTypeParameters.FirstCharToLower()); // Student student
 
         unsafeAccessorSignature.AddAttribute(
             $"[UnsafeAccessor(UnsafeAccessorKind.Field, Name = \"{symbolInfo.Name}\")]");
