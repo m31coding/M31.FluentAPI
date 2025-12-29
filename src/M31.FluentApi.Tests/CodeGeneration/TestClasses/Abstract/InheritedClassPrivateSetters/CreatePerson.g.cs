@@ -6,7 +6,7 @@
 #nullable enable
 
 using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClassPrivateSetters;
 
@@ -16,22 +16,6 @@ public class CreatePerson :
     CreatePerson.IOfAgeBornOn
 {
     private readonly Person person;
-    private static readonly PropertyInfo namePropertyInfo;
-    private static readonly PropertyInfo agePropertyInfo;
-    private static readonly MethodInfo bornOnMethodInfo;
-
-    static CreatePerson()
-    {
-        namePropertyInfo = typeof(Person).GetProperty("Name", BindingFlags.Instance | BindingFlags.Public)!;
-        agePropertyInfo = typeof(Person).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
-        bornOnMethodInfo = typeof(Person).GetMethod(
-            "BornOn",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(System.DateOnly) },
-            null)!;
-    }
 
     private CreatePerson()
     {
@@ -46,25 +30,25 @@ public class CreatePerson :
     public static IOfAgeBornOn WithName(string name)
     {
         CreatePerson createPerson = new CreatePerson();
-        CreatePerson.namePropertyInfo.SetValue(createPerson.person, name);
+        SetName(createPerson.person, name);
         return createPerson;
     }
 
     IOfAgeBornOn IWithName.WithName(string name)
     {
-        CreatePerson.namePropertyInfo.SetValue(person, name);
+        SetName(person, name);
         return this;
     }
 
     Person IOfAgeBornOn.OfAge(int age)
     {
-        CreatePerson.agePropertyInfo.SetValue(person, age);
+        SetAge(person, age);
         return person;
     }
 
     Person IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        CreatePerson.bornOnMethodInfo.Invoke(person, new object?[] { dateOfBirth });
+        CallBornOn(person, dateOfBirth);
         return person;
     }
 
@@ -83,4 +67,13 @@ public class CreatePerson :
 
         Person BornOn(System.DateOnly dateOfBirth);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Person person, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Age")]
+    private static extern void SetAge(Person person, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "BornOn")]
+    private static extern void CallBornOn(Person person, System.DateOnly dateOfBirth);
 }

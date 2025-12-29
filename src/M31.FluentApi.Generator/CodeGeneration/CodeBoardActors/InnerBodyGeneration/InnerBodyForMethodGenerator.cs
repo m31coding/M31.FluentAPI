@@ -4,7 +4,7 @@
 using M31.FluentApi.Generator.CodeBuilding;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
-using M31.FluentApi.Generator.SourceGenerators.Generics; // todo: remove if not needed
+using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
@@ -49,11 +49,12 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         MethodSignature unsafeAccessorSignature =
             MethodSignature.Create(symbolInfo.ReturnType, callMethodName, null, true);
         // todo: generic constraints handled correctly for generic return type?
-        // todo: check inheritance, see innerbody for member generator, uses symbolInfo.DeclaringClassNameWithTypeParameters,
         unsafeAccessorSignature.AddModifiers("private", "static", "extern");
 
+         // Student student
         unsafeAccessorSignature.AddParameter(
-            new Parameter(CodeBoard.Info.FluentApiClassNameWithTypeParameters, CodeBoard.Info.ClassInstanceName));
+            symbolInfo.DeclaringClassNameWithTypeParameters,
+            symbolInfo.DeclaringClassNameWithTypeParameters.FirstCharToLower());
 
         List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(symbolInfo.ParameterInfos);
         parameters.ForEach(unsafeAccessorSignature.AddParameter);
