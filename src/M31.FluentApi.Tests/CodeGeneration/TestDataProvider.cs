@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(["ContinueWithAfterCompoundClass"],
+        Filter(["ContinueWithOfOverloadedMethodClass"],
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -16,8 +16,8 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "CollectionMemberClassWithSuppression", "Student" },
                 new object[] { "Abstract", "CollectionNullableArrayClass", "Student" },
                 new object[] { "Abstract", "ContinueWithAfterCompoundClass", "Student" },
-                // new object[] { "Abstract", "ContinueWithInForkClass", "Student" },
-                // new object[] { "Abstract", "ContinueWithOfOverloadedMethodClass", "Student" },
+                new object[] { "Abstract", "ContinueWithInForkClass", "Student" },
+                new object[] { "Abstract", "ContinueWithOfOverloadedMethodClass", "Student" },
                 // new object[] { "Abstract", "ContinueWithSelfClass", "Student" },
                 // new object[] { "Abstract", "CustomFluentMethodNameClass", "Student" },
                 // new object[] { "Abstract", "DefaultFluentMethodNameClass", "Student" },

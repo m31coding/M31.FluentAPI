@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithOfOverloadedMethodClass;
 
@@ -16,14 +16,6 @@ public class CreateStudent :
     CreateStudent.IWithProperty2
 {
     private readonly Student student;
-    private static readonly PropertyInfo property1PropertyInfo;
-    private static readonly PropertyInfo property2PropertyInfo;
-
-    static CreateStudent()
-    {
-        property1PropertyInfo = typeof(Student).GetProperty("Property1", BindingFlags.Instance | BindingFlags.Public)!;
-        property2PropertyInfo = typeof(Student).GetProperty("Property2", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -63,13 +55,13 @@ public class CreateStudent :
 
     IWithProperty2 IWithProperty1.WithProperty1(string property1)
     {
-        CreateStudent.property1PropertyInfo.SetValue(student, property1);
+        SetProperty1(student, property1);
         return this;
     }
 
     Student IWithProperty2.WithProperty2(string property2)
     {
-        CreateStudent.property2PropertyInfo.SetValue(student, property2);
+        SetProperty2(student, property2);
         return student;
     }
 
@@ -93,4 +85,10 @@ public class CreateStudent :
     {
         Student WithProperty2(string property2);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Property1")]
+    private static extern void SetProperty1(Student student, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Property2")]
+    private static extern void SetProperty2(Student student, string value);
 }
