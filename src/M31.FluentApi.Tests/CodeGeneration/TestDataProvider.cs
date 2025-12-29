@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(["FluentNullableNoNullableAnnotationPrivateSetClass"],
+        Filter([],
             new List<object[]>
             {
                 new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -38,7 +38,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "FluentLambdaCompoundClass", "Student|Address|Phone" },
                 new object[] { "Abstract", "FluentLambdaCompoundOfSameTypeClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaManyCollectionsClass", "Student|Address" },
-                new object[] { "Abstract", "FluentLambdaManyPrivateCollectionsClass", "Student|Address" },
+                // new object[] { "Abstract", "FluentLambdaManyPrivateCollectionsClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaNullablePropertyClass", "Student|Address" },
                 new object[] { "Abstract", "FluentLambdaRecursiveClass", "Student" },
                 new object[] { "Abstract", "FluentLambdaSingleStepClass", "Student|Address" },
@@ -81,7 +81,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "ParameterAnnotationsPrivateConstructorClass", "Student" },
                 new object[] { "Abstract", "ParameterAnnotationsPublicConstructorClass", "Student" },
                 // new object[] { "Abstract", "PartialClass", "Student1|Student2" },
-                // new object[] { "Abstract", "PredicateClass", "Student" },
+                new object[] { "Abstract", "PredicateClass", "Student" },
                 new object[] { "Abstract", "PredicatePrivateFieldClass", "Student" },
                 new object[] { "Abstract", "PrivateConstructorClass", "Student" },
                 new object[] { "Abstract", "PrivateFieldClass", "Student" },
@@ -90,8 +90,8 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "PrivateFluentMethodParameterModifiersClass", "Student" },
                 new object[] { "Abstract", "PrivateReadonlyFieldClass", "Student" },
                 new object[] { "Abstract", "PrivateUnderscoreFieldClass", "Student" },
-                // new object[] { "Abstract", "PublicFieldClass", "Student" },
-                // new object[] { "Abstract", "PublicReadonlyFieldClass", "Student" },
+                new object[] { "Abstract", "PublicFieldClass", "Student" },
+                new object[] { "Abstract", "PublicReadonlyFieldClass", "Student" },
                 // new object[] { "Abstract", "SameNameMemberClass", "Student" },
                 // new object[] { "Abstract", "SkippableFirstMemberClass", "Student" },
                 // new object[] { "Abstract", "SkippableFirstTwoMembersClass", "Student" },
