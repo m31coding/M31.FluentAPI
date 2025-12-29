@@ -26,6 +26,18 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
 
     protected override void GenerateInnerBodyForPrivateSymbol(MemberSymbolInfo symbolInfo)
     {
+        if (symbolInfo.IsProperty)
+        {
+            GenerateInnerBodyForPrivateProperty(symbolInfo);
+        }
+        else
+        {
+            GenerateInnerBodyForPrivateField(symbolInfo);
+        }
+    }
+
+    private void GenerateInnerBodyForPrivateProperty(MemberSymbolInfo symbolInfo)
+    {
         string setMethodName = $"Set{symbolInfo.NameInPascalCase}";
 
         // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
@@ -37,7 +49,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         unsafeAccessorSignature.AddParameter(
             CodeBoard.Info.FluentApiClassNameWithTypeParameters,
             CodeBoard.Info.ClassInstanceName); // Student<T1, T2> student
-        unsafeAccessorSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value"); // string value
+        unsafeAccessorSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value");
 
         unsafeAccessorSignature.AddAttribute(
             $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"set_{symbolInfo.Name}\")]");
@@ -47,6 +59,31 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
                 $"{setMethodName}({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
+        CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
+    }
+
+    private void GenerateInnerBodyForPrivateField(MemberSymbolInfo symbolInfo)
+    {
+        string getFieldName = $"{symbolInfo.NameInPascalCase}Field";
+
+        // [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "semester")]
+        // private static extern ref int SemesterField(Student student);
+        MethodSignature unsafeAccessorSignature =
+            MethodSignature.Create(symbolInfo.TypeForCodeGeneration, getFieldName, null, true);
+        unsafeAccessorSignature.AddModifiers("private", "static", "extern", "ref");
+
+        unsafeAccessorSignature.AddParameter(
+            CodeBoard.Info.FluentApiClassNameWithTypeParameters,
+            CodeBoard.Info.ClassInstanceName); // Student student
+
+        unsafeAccessorSignature.AddAttribute(
+            $"[UnsafeAccessor(UnsafeAccessorKind.Field, Name = \"{symbolInfo.Name}\")]");
+        CodeBoard.BuilderClass.AddMethodSignature(unsafeAccessorSignature);
+
+        // SemesterField(createStudent.student) = semester;
+        SetMemberCode setMemberCode =
+            new SetMemberCode((instancePrefix, value) =>
+                $"{getFieldName}({instancePrefix}{CodeBoard.Info.ClassInstanceName}) = {value};");
         CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
     }
 }

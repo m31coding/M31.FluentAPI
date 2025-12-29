@@ -28,13 +28,13 @@ public class CreateStudent :
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetSemester(createStudent.student) = semester;
+        SemesterField(createStudent.student) = semester;
         return createStudent.student;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        SetSemester(student) = semester;
+        SemesterField(student) = semester;
         return student;
     }
 
@@ -48,5 +48,5 @@ public class CreateStudent :
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "semester")]
-    private static extern ref int SetSemester(Student student);
+    private static extern ref int SemesterField(Student student);
 }

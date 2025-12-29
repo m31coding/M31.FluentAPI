@@ -60,7 +60,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, symbolInfo.GenericInfo);
 
         unsafeAccessorSignature.AddAttribute(
-            $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"{symbolInfo.NameInPascalCase}\")]");
+            $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"{symbolInfo.Name}\")]");
         CodeBoard.BuilderClass.AddMethodSignature(unsafeAccessorSignature);
 
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
