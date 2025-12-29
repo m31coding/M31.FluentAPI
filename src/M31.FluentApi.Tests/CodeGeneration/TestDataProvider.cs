@@ -114,7 +114,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "TwoParameterCompoundClassReversedParameters", "Student" },
                 new object[] { "DocumentedStudentClass", "DocumentedStudent" },
                 // new object[] { "PersonClass", "Person" },
-                // new object[] { "StudentClass", "Student" }
+                new object[] { "StudentClass", "Student" }
             }).Select(l => new string[] { "..", "..", "..", "CodeGeneration", "TestClasses" }
             .Concat(l).Reverse().ToArray()).ToList(); // reversed for better readability in the unit test panel
 
