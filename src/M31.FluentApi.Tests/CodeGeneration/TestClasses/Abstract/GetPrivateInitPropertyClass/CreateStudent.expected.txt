@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GetPrivateInitPropertyClass;
 
@@ -14,12 +14,6 @@ public class CreateStudent :
     CreateStudent.IInSemester
 {
     private readonly Student student;
-    private static readonly PropertyInfo semesterPropertyInfo;
-
-    static CreateStudent()
-    {
-        semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -34,13 +28,13 @@ public class CreateStudent :
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.semesterPropertyInfo.SetValue(createStudent.student, semester);
+        SetSemester(createStudent.student, semester);
         return createStudent.student;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
+        SetSemester(student, semester);
         return student;
     }
 
@@ -52,4 +46,7 @@ public class CreateStudent :
     {
         Student InSemester(int semester);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    private static extern void SetSemester(Student student, int value);
 }

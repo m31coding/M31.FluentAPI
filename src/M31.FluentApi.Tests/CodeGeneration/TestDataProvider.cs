@@ -7,7 +7,7 @@ namespace M31.FluentApi.Tests.CodeGeneration;
 internal class TestDataProvider : IEnumerable<object[]>
 {
     private readonly List<object[]> testClasses =
-        Filter(new string[] { "InheritedClassPrivateSetters" },
+        Filter(new string[] { "GetPrivateInitPropertyClass" },
             new List<object[]>
             {
                 // new object[] { "Abstract", "AliasNamespaceClass", "Student" },
@@ -64,7 +64,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 // new object[] { "Abstract", "GenericOverloadedMethodClass", "Student" },
                 // new object[] { "Abstract", "GenericOverloadedPrivateMethodClass", "Student" },
                 // new object[] { "Abstract", "GetInitPropertyClass", "Student" },
-                // new object[] { "Abstract", "GetPrivateInitPropertyClass", "Student" },
+                new object[] { "Abstract", "GetPrivateInitPropertyClass", "Student" },
                 // new object[] { "Abstract", "GetPrivateSetPropertyClass", "Student" },
                 // new object[] { "Abstract", "InternalPropertyClass", "Student" },
                 new object[] { "Abstract", "InheritedClass", "Student|Person" },
