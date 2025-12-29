@@ -80,7 +80,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 // new object[] { "Abstract", "OverloadedMethodClass", "Student" },
                 new object[] { "Abstract", "ParameterAnnotationsPrivateConstructorClass", "Student" },
                 new object[] { "Abstract", "ParameterAnnotationsPublicConstructorClass", "Student" },
-                // new object[] { "Abstract", "PartialClass", "Student1|Student2" },
+                new object[] { "Abstract", "PartialClass", "Student1|Student2" },
                 new object[] { "Abstract", "PredicateClass", "Student" },
                 new object[] { "Abstract", "PredicatePrivateFieldClass", "Student" },
                 new object[] { "Abstract", "PrivateConstructorClass", "Student" },
