@@ -53,7 +53,6 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
 
         unsafeAccessorSignature.AddParameter(
             new Parameter(CodeBoard.Info.FluentApiClassNameWithTypeParameters, CodeBoard.Info.ClassInstanceName));
-        CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, CodeBoard.Info.GenericInfo); // todo: test generic case
 
         List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(symbolInfo.ParameterInfos);
         parameters.ForEach(unsafeAccessorSignature.AddParameter);
@@ -77,7 +76,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
 
             return new List<string>()
             {
-                // CallWithName(student, name); // todo: better example
+                // CallWithName(student, name);
                 CodeBoard.NewCodeBuilder()
                     .Append("return ", !IsNoneOrVoid(returnType))
                     .Append($"{callMethodName}")
