@@ -6,7 +6,7 @@
 #nullable enable
 
 using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComments.CommentedMethodsClass;
 
@@ -16,28 +16,6 @@ public class CreateStudent :
     CreateStudent.IOfAgeBornOn
 {
     private readonly Student student;
-    private static readonly MethodInfo withNameMethodInfo;
-    private static readonly PropertyInfo agePropertyInfo;
-    private static readonly MethodInfo bornOnMethodInfo;
-
-    static CreateStudent()
-    {
-        withNameMethodInfo = typeof(Student).GetMethod(
-            "WithName",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string), typeof(string) },
-            null)!;
-        agePropertyInfo = typeof(Student).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
-        bornOnMethodInfo = typeof(Student).GetMethod(
-            "BornOn",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(System.DateOnly) },
-            null)!;
-    }
 
     private CreateStudent()
     {
@@ -55,27 +33,27 @@ public class CreateStudent :
     public static IOfAgeBornOn WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.withNameMethodInfo.Invoke(createStudent.student, new object?[] { firstName, lastName });
+        CallWithName(createStudent.student, firstName, lastName);
         return createStudent;
     }
 
     /// <inheritdoc/>
     IOfAgeBornOn IWithName.WithName(string firstName, string lastName)
     {
-        CreateStudent.withNameMethodInfo.Invoke(student, new object?[] { firstName, lastName });
+        CallWithName(student, firstName, lastName);
         return this;
     }
 
     Student IOfAgeBornOn.OfAge(int age)
     {
-        CreateStudent.agePropertyInfo.SetValue(student, age);
+        SetAge(student, age);
         return student;
     }
 
     /// <inheritdoc/>
     Student IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
+        CallBornOn(student, dateOfBirth);
         return student;
     }
 
@@ -99,4 +77,13 @@ public class CreateStudent :
         /// <param name="dateOfBirth">The student's date of birth.</param>
         Student BornOn(System.DateOnly dateOfBirth);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WithName")]
+    private static extern void CallWithName(Student student, string firstName, string lastName);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Age")]
+    private static extern void SetAge(Student student, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "BornOn")]
+    private static extern void CallBornOn(Student student, System.DateOnly dateOfBirth);
 }
