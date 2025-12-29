@@ -107,7 +107,7 @@ internal class TestDataProvider : IEnumerable<object[]>
                 new object[] { "Abstract", "ThreePrivateMembersClass", "Student" },
                 new object[] { "Abstract", "ThreeMemberRecordStruct", "Student" },
                 new object[] { "Abstract", "TryBreakFluentApiClass1", "Student" },
-                // new object[] { "Abstract", "TryBreakFluentApiClass2", "Student" },
+                new object[] { "Abstract", "TryBreakFluentApiClass2", "Student" },
                 new object[] { "Abstract", "TryBreakFluentApiClass3", "Student|Address" },
                 // new object[] { "Abstract", "TwoMemberClass", "Student" },
                 // new object[] { "Abstract", "TwoParameterCompoundClass", "Student" },
