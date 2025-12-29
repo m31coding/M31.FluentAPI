@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PredicatePrivateFieldClass;
 
@@ -14,12 +14,6 @@ public class CreateStudent :
     CreateStudent.IWhoIsHappy
 {
     private readonly Student student;
-    private static readonly FieldInfo isHappyFieldInfo;
-
-    static CreateStudent()
-    {
-        isHappyFieldInfo = typeof(Student).GetField("isHappy", BindingFlags.Instance | BindingFlags.NonPublic)!;
-    }
 
     private CreateStudent()
     {
@@ -34,26 +28,26 @@ public class CreateStudent :
     public static Student WhoIsHappy(bool isHappy = true)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.isHappyFieldInfo.SetValue(createStudent.student, isHappy);
+        IsHappyField(createStudent.student) = isHappy;
         return createStudent.student;
     }
 
     public static Student WhoIsSad()
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.isHappyFieldInfo.SetValue(createStudent.student, false);
+        IsHappyField(createStudent.student) = false;
         return createStudent.student;
     }
 
     Student IWhoIsHappy.WhoIsHappy(bool isHappy)
     {
-        CreateStudent.isHappyFieldInfo.SetValue(student, isHappy);
+        IsHappyField(student) = isHappy;
         return student;
     }
 
     Student IWhoIsHappy.WhoIsSad()
     {
-        CreateStudent.isHappyFieldInfo.SetValue(student, false);
+        IsHappyField(student) = false;
         return student;
     }
 
@@ -67,4 +61,7 @@ public class CreateStudent :
 
         Student WhoIsSad();
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "isHappy")]
+    private static extern ref bool IsHappyField(Student student);
 }
