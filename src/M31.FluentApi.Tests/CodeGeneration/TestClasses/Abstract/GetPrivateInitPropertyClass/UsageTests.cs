@@ -10,7 +10,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GetPrivateInit
 public class UsageTests
 {
     [Fact, Priority(1)]
-    public void CanExecutePrivateReadonlyFieldClass()
+    public void CanExecuteGetPrivateInitPropertyClass()
     {
         var student = CreateStudent
             .InSemester(4);

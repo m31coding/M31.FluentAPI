@@ -12,7 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWi
 public class UsageTests
 {
     [Fact, Priority(1)]
-    public void CanExecuteGenericClassWithGenericMethods()
+    public void CanExecuteGenericClassWithPrivateGenericMethods()
     {
         var student = CreateStudent<string, string?, int, int, int>
             .WithProperty1("property1")

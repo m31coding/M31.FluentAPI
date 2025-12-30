@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateUndersc
 public class UsageTests
 {
     [Fact, Priority(1)]
-    public void CanExecutePrivateReadonlyFieldClass()
+    public void CanExecutePrivateUnderscoreFieldClass()
     {
         var student = CreateStudent
             .InSemester(4);

@@ -10,7 +10,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithAf
 public class UsageTests
 {
     [Fact, Priority(1)]
-    public void CanExecutePrivateReadonlyFieldClass()
+    public void CanExecuteContinueWithAfterCompoundClass()
     {
         var student = CreateStudent
             .WithName("Alice", "King")

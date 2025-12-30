@@ -24,5 +24,3 @@ public class UsageTests
 }
 
 #endif
-// todo: check all usage tests. Some have the wrong method names.
-// todo: all tests with UnsafeAccessor should have a usage test.

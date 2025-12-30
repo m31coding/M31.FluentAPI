@@ -48,7 +48,6 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
         // private static extern void CallWithName(Student student, string name);
         MethodSignature unsafeAccessorSignature =
             MethodSignature.Create(symbolInfo.ReturnType, callMethodName, null, true);
-        // todo: generic constraints handled correctly for generic return type?
         unsafeAccessorSignature.AddModifiers("private", "static", "extern");
 
          // Student student

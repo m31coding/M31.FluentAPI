@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PredicatePriva
 public class UsageTests
 {
     [Fact, Priority(1)]
-    public void CanExecutePrivateReadonlyFieldClass()
+    public void CanExecutePredicatePrivateFieldClass()
     {
         var student = CreateStudent
             .WhoIsHappy();

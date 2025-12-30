@@ -10,7 +10,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CollectionNull
 public class UsageTests
 {
     [Fact, Priority(1)]
-    public void CanExecutePrivateReadonlyFieldClass()
+    public void CanExecuteCollectionNullableArrayClass()
     {
         var student = CreateStudent
             .WhoseFriendsAre("Alice", "Bob");
