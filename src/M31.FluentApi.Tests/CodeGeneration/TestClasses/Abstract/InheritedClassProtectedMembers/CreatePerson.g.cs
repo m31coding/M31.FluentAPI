@@ -6,7 +6,7 @@
 #nullable enable
 
 using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClassProtectedMembers;
 
@@ -16,14 +16,6 @@ public class CreatePerson :
     CreatePerson.IBornOn
 {
     private readonly Person person;
-    private static readonly PropertyInfo namePropertyInfo;
-    private static readonly PropertyInfo dateOfBirthPropertyInfo;
-
-    static CreatePerson()
-    {
-        namePropertyInfo = typeof(Person).GetProperty("Name", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        dateOfBirthPropertyInfo = typeof(Person).GetProperty("DateOfBirth", BindingFlags.Instance | BindingFlags.NonPublic)!;
-    }
 
     private CreatePerson()
     {
@@ -38,19 +30,19 @@ public class CreatePerson :
     public static IBornOn WithName(string name)
     {
         CreatePerson createPerson = new CreatePerson();
-        CreatePerson.namePropertyInfo.SetValue(createPerson.person, name);
+        SetName(createPerson.person, name);
         return createPerson;
     }
 
     IBornOn IWithName.WithName(string name)
     {
-        CreatePerson.namePropertyInfo.SetValue(person, name);
+        SetName(person, name);
         return this;
     }
 
     Person IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        CreatePerson.dateOfBirthPropertyInfo.SetValue(person, dateOfBirth);
+        SetDateOfBirth(person, dateOfBirth);
         return person;
     }
 
@@ -67,4 +59,10 @@ public class CreatePerson :
     {
         Person BornOn(System.DateOnly dateOfBirth);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Person person, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_DateOfBirth")]
+    private static extern void SetDateOfBirth(Person person, System.DateOnly value);
 }

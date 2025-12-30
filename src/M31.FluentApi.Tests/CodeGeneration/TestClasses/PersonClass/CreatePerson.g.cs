@@ -5,8 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.PersonClass;
 
@@ -22,72 +21,6 @@ public class CreatePerson :
     CreatePerson.ILivingInCity
 {
     private readonly Person person;
-    private static readonly PropertyInfo firstNamePropertyInfo;
-    private static readonly PropertyInfo middleNamePropertyInfo;
-    private static readonly PropertyInfo lastNamePropertyInfo;
-    private static readonly MethodInfo whoseAddressIsUnknownMethodInfo;
-    private static readonly MethodInfo whoLivesAtAddressMethodInfo;
-    private static readonly MethodInfo withHouseNumberMethodInfo;
-    private static readonly MethodInfo withStreetMethodInfo;
-    private static readonly MethodInfo inCityMethodInfo;
-    private static readonly MethodInfo whoIsADigitalNomadMethodInfo;
-    private static readonly MethodInfo livingInCityMethodInfo;
-
-    static CreatePerson()
-    {
-        firstNamePropertyInfo = typeof(Person).GetProperty("FirstName", BindingFlags.Instance | BindingFlags.Public)!;
-        middleNamePropertyInfo = typeof(Person).GetProperty("MiddleName", BindingFlags.Instance | BindingFlags.Public)!;
-        lastNamePropertyInfo = typeof(Person).GetProperty("LastName", BindingFlags.Instance | BindingFlags.Public)!;
-        whoseAddressIsUnknownMethodInfo = typeof(Person).GetMethod(
-            "WhoseAddressIsUnknown",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] {  },
-            null)!;
-        whoLivesAtAddressMethodInfo = typeof(Person).GetMethod(
-            "WhoLivesAtAddress",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] {  },
-            null)!;
-        withHouseNumberMethodInfo = typeof(Person).GetMethod(
-            "WithHouseNumber",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string) },
-            null)!;
-        withStreetMethodInfo = typeof(Person).GetMethod(
-            "WithStreet",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string) },
-            null)!;
-        inCityMethodInfo = typeof(Person).GetMethod(
-            "InCity",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string) },
-            null)!;
-        whoIsADigitalNomadMethodInfo = typeof(Person).GetMethod(
-            "WhoIsADigitalNomad",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] {  },
-            null)!;
-        livingInCityMethodInfo = typeof(Person).GetMethod(
-            "LivingInCity",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string) },
-            null)!;
-    }
 
     private CreatePerson()
     {
@@ -102,67 +35,67 @@ public class CreatePerson :
     public static IWithMiddleName WithFirstName(string firstName)
     {
         CreatePerson createPerson = new CreatePerson();
-        CreatePerson.firstNamePropertyInfo.SetValue(createPerson.person, firstName);
+        SetFirstName(createPerson.person, firstName);
         return createPerson;
     }
 
     IWithMiddleName IWithFirstName.WithFirstName(string firstName)
     {
-        CreatePerson.firstNamePropertyInfo.SetValue(person, firstName);
+        SetFirstName(person, firstName);
         return this;
     }
 
     IWithLastName IWithMiddleName.WithMiddleName(string? middleName)
     {
-        CreatePerson.middleNamePropertyInfo.SetValue(person, middleName);
+        SetMiddleName(person, middleName);
         return this;
     }
 
     IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad IWithLastName.WithLastName(string lastName)
     {
-        CreatePerson.lastNamePropertyInfo.SetValue(person, lastName);
+        SetLastName(person, lastName);
         return this;
     }
 
     Person IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoseAddressIsUnknown()
     {
-        CreatePerson.whoseAddressIsUnknownMethodInfo.Invoke(person, new object?[] {  });
+        CallWhoseAddressIsUnknown(person);
         return person;
     }
 
     IWithHouseNumber IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoLivesAtAddress()
     {
-        CreatePerson.whoLivesAtAddressMethodInfo.Invoke(person, new object?[] {  });
+        CallWhoLivesAtAddress(person);
         return this;
     }
 
     ILivingInCity IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad.WhoIsADigitalNomad()
     {
-        CreatePerson.whoIsADigitalNomadMethodInfo.Invoke(person, new object?[] {  });
+        CallWhoIsADigitalNomad(person);
         return this;
     }
 
     IWithStreet IWithHouseNumber.WithHouseNumber(string houseNumber)
     {
-        CreatePerson.withHouseNumberMethodInfo.Invoke(person, new object?[] { houseNumber });
+        CallWithHouseNumber(person, houseNumber);
         return this;
     }
 
     IInCity IWithStreet.WithStreet(string street)
     {
-        CreatePerson.withStreetMethodInfo.Invoke(person, new object?[] { street });
+        CallWithStreet(person, street);
         return this;
     }
 
     Person IInCity.InCity(string city)
     {
-        CreatePerson.inCityMethodInfo.Invoke(person, new object?[] { city });
+        CallInCity(person, city);
         return person;
     }
 
     Person ILivingInCity.LivingInCity(string city)
     {
-        CreatePerson.livingInCityMethodInfo.Invoke(person, new object?[] { city });
+        CallLivingInCity(person, city);
         return person;
     }
 
@@ -213,4 +146,34 @@ public class CreatePerson :
     {
         Person LivingInCity(string city);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_FirstName")]
+    private static extern void SetFirstName(Person person, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_MiddleName")]
+    private static extern void SetMiddleName(Person person, string? value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_LastName")]
+    private static extern void SetLastName(Person person, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WhoseAddressIsUnknown")]
+    private static extern void CallWhoseAddressIsUnknown(Person person);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WhoLivesAtAddress")]
+    private static extern void CallWhoLivesAtAddress(Person person);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WithHouseNumber")]
+    private static extern void CallWithHouseNumber(Person person, string houseNumber);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WithStreet")]
+    private static extern void CallWithStreet(Person person, string street);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "InCity")]
+    private static extern void CallInCity(Person person, string city);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WhoIsADigitalNomad")]
+    private static extern void CallWhoIsADigitalNomad(Person person);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "LivingInCity")]
+    private static extern void CallLivingInCity(Person person, string city);
 }

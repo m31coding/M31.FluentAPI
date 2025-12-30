@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SameNameMemberClass;
 
@@ -16,16 +16,6 @@ public class CreateStudent :
     CreateStudent.IWithName2
 {
     private readonly Student student;
-    private static readonly PropertyInfo semesterPropertyInfo;
-    private static readonly PropertyInfo initialPropertyInfo;
-    private static readonly PropertyInfo lastNamePropertyInfo;
-
-    static CreateStudent()
-    {
-        semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
-        initialPropertyInfo = typeof(Student).GetProperty("Initial", BindingFlags.Instance | BindingFlags.Public)!;
-        lastNamePropertyInfo = typeof(Student).GetProperty("LastName", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -40,25 +30,25 @@ public class CreateStudent :
     public static IWithName InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.semesterPropertyInfo.SetValue(createStudent.student, semester);
+        SetSemester(createStudent.student, semester);
         return createStudent;
     }
 
     IWithName IInSemester.InSemester(int semester)
     {
-        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
+        SetSemester(student, semester);
         return this;
     }
 
     IWithName2 IWithName.WithName(char initial)
     {
-        CreateStudent.initialPropertyInfo.SetValue(student, initial);
+        SetInitial(student, initial);
         return this;
     }
 
     Student IWithName2.WithName(string lastName)
     {
-        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
+        SetLastName(student, lastName);
         return student;
     }
 
@@ -80,4 +70,13 @@ public class CreateStudent :
     {
         Student WithName(string lastName);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    private static extern void SetSemester(Student student, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Initial")]
+    private static extern void SetInitial(Student student, char value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_LastName")]
+    private static extern void SetLastName(Student student, string value);
 }

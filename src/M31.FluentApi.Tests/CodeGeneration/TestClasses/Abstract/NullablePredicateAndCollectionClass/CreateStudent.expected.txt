@@ -6,7 +6,7 @@
 #nullable enable
 
 using System.Collections.Generic;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NullablePredicateAndCollectionClass;
 
@@ -16,12 +16,6 @@ public class CreateStudent :
     CreateStudent.IWhoIsHappy
 {
     private readonly Student student;
-    private static readonly PropertyInfo isHappyPropertyInfo;
-
-    static CreateStudent()
-    {
-        isHappyPropertyInfo = typeof(Student).GetProperty("IsHappy", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -100,19 +94,19 @@ public class CreateStudent :
 
     Student IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        CreateStudent.isHappyPropertyInfo.SetValue(student, isHappy);
+        SetIsHappy(student, isHappy);
         return student;
     }
 
     Student IWhoIsHappy.WhoIsSad()
     {
-        CreateStudent.isHappyPropertyInfo.SetValue(student, false);
+        SetIsHappy(student, false);
         return student;
     }
 
     Student IWhoIsHappy.WithUnknownMood()
     {
-        CreateStudent.isHappyPropertyInfo.SetValue(student, null);
+        SetIsHappy(student, null);
         return student;
     }
 
@@ -141,4 +135,7 @@ public class CreateStudent :
 
         Student WithUnknownMood();
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_IsHappy")]
+    private static extern void SetIsHappy(Student student, bool? value);
 }
