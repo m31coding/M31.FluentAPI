@@ -10,6 +10,7 @@ internal class MemberSymbolInfo : FluentApiSymbolInfo
     internal MemberSymbolInfo(
         string name,
         string type,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
         bool publiclyWritable,
@@ -18,7 +19,13 @@ internal class MemberSymbolInfo : FluentApiSymbolInfo
         bool isProperty,
         CollectionType? collectionType,
         Comments comments)
-        : base(name, declaringClassNameWithTypeParameters, accessibility, publiclyWritable, comments)
+        : base(
+            name,
+            declaringClassName,
+            declaringClassNameWithTypeParameters,
+            accessibility,
+            publiclyWritable,
+            comments)
     {
         Type = type;
         TypeForCodeGeneration = typeForCodeGeneration;

@@ -12,18 +12,24 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal static class SymbolInfoCreator
 {
-    internal static FluentApiSymbolInfo Create(ISymbol symbol, string declaringClassNameWithTypeParameters)
+    internal static FluentApiSymbolInfo Create(
+        ISymbol symbol,
+        string declaringClassName,
+        string declaringClassNameWithTypeParameters)
     {
         return symbol switch
         {
             IPropertySymbol propertySymbol => CreateMemberSymbolInfo(
                 propertySymbol,
+                declaringClassName,
                 declaringClassNameWithTypeParameters),
             IFieldSymbol fieldSymbol => CreateMemberSymbolInfo(
                 fieldSymbol,
+                declaringClassName,
                 declaringClassNameWithTypeParameters),
             IMethodSymbol methodSymbol => CreateMethodSymbolInfo(
                 methodSymbol,
+                declaringClassName,
                 declaringClassNameWithTypeParameters),
             _ => throw new ArgumentException($"Unexpected symbol type: {symbol.GetType()}."),
         };
@@ -41,11 +47,13 @@ internal static class SymbolInfoCreator
 
     private static MemberSymbolInfo CreateMemberSymbolInfo(
         IFieldSymbol fieldSymbol,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters)
     {
         return new MemberSymbolInfo(
             fieldSymbol.Name,
             fieldSymbol.Type.ToString(),
+            declaringClassName,
             declaringClassNameWithTypeParameters,
             fieldSymbol.DeclaredAccessibility,
             PubliclyWritable(fieldSymbol),
@@ -58,11 +66,13 @@ internal static class SymbolInfoCreator
 
     private static MemberSymbolInfo CreateMemberSymbolInfo(
         IPropertySymbol propertySymbol,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters)
     {
         return new MemberSymbolInfo(
             propertySymbol.Name,
             propertySymbol.Type.ToString(),
+            declaringClassName,
             declaringClassNameWithTypeParameters,
             propertySymbol.DeclaredAccessibility,
             PubliclyWritable(propertySymbol),
@@ -75,12 +85,14 @@ internal static class SymbolInfoCreator
 
     private static MethodSymbolInfo CreateMethodSymbolInfo(
         IMethodSymbol methodSymbol,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters)
     {
         GenericInfo? genericInfo = GetGenericInfo(methodSymbol);
 
         return new MethodSymbolInfo(
             methodSymbol.Name,
+            declaringClassName,
             declaringClassNameWithTypeParameters,
             methodSymbol.DeclaredAccessibility,
             PubliclyWritable(methodSymbol),

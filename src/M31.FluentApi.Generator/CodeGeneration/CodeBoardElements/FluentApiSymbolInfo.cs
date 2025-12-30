@@ -8,6 +8,7 @@ internal abstract class FluentApiSymbolInfo
 {
     internal FluentApiSymbolInfo(
         string name,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
         bool publiclyWritable,
@@ -16,6 +17,7 @@ internal abstract class FluentApiSymbolInfo
         Name = name;
         NameInCamelCase = Name.TrimStart('_').FirstCharToLower();
         NameInPascalCase = Name.TrimStart('_').FirstCharToUpper();
+        DeclaringClassName = declaringClassName;
         DeclaringClassNameWithTypeParameters = declaringClassNameWithTypeParameters;
         Accessibility = accessibility;
         PubliclyWritable = publiclyWritable;
@@ -25,6 +27,7 @@ internal abstract class FluentApiSymbolInfo
     internal string Name { get; }
     internal string NameInCamelCase { get; }
     internal string NameInPascalCase { get; }
+    internal string DeclaringClassName { get; }
     internal string DeclaringClassNameWithTypeParameters { get; }
     internal Accessibility Accessibility { get; }
     internal bool PubliclyWritable { get; }
@@ -33,6 +36,7 @@ internal abstract class FluentApiSymbolInfo
     protected bool Equals(FluentApiSymbolInfo other)
     {
         return Name == other.Name &&
+               DeclaringClassName == other.DeclaringClassName &&
                DeclaringClassNameWithTypeParameters == other.DeclaringClassNameWithTypeParameters &&
                Accessibility == other.Accessibility &&
                PubliclyWritable == other.PubliclyWritable &&
@@ -50,6 +54,8 @@ internal abstract class FluentApiSymbolInfo
     public override int GetHashCode()
     {
         return new HashCode()
-            .Add(Name, DeclaringClassNameWithTypeParameters, Accessibility, PubliclyWritable, Comments);
+            .Add(Name)
+            .Add(DeclaringClassName, DeclaringClassNameWithTypeParameters)
+            .Add(Accessibility, PubliclyWritable, Comments);
     }
 }

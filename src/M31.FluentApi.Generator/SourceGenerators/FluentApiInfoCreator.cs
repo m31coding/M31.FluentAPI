@@ -20,6 +20,7 @@ internal class FluentApiInfoCreator
     internal FluentApiInfo? Create(
         ISymbol symbol,
         FluentApiAttributeData attributeData,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters,
         CancellationToken cancellationToken)
     {
@@ -28,7 +29,10 @@ internal class FluentApiInfoCreator
             return null;
         }
 
-        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(symbol, declaringClassNameWithTypeParameters);
+        FluentApiSymbolInfo symbolInfo = SymbolInfoCreator.Create(
+            symbol,
+            declaringClassName,
+            declaringClassNameWithTypeParameters);
         AttributeInfoBase? attributeInfo = CreateAttributeInfo(attributeData.MainAttributeData, symbol, symbolInfo);
 
         if (attributeInfo == null || cancellationToken.IsCancellationRequested)

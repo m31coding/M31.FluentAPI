@@ -54,7 +54,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
          // Student student
         unsafeAccessorSignature.AddParameter(
             symbolInfo.DeclaringClassNameWithTypeParameters,
-            symbolInfo.DeclaringClassNameWithTypeParameters.FirstCharToLower());
+            symbolInfo.DeclaringClassName.FirstCharToLower());
 
         List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(symbolInfo.ParameterInfos);
         parameters.ForEach(unsafeAccessorSignature.AddParameter);

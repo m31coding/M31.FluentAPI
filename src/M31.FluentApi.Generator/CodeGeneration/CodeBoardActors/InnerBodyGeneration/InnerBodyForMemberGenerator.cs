@@ -49,7 +49,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
 
         unsafeAccessorSignature.AddParameter(
             symbolInfo.DeclaringClassNameWithTypeParameters,
-            symbolInfo.DeclaringClassNameWithTypeParameters.FirstCharToLower()); // Student<T1, T2> student
+            symbolInfo.DeclaringClassName.FirstCharToLower()); // Student<T1, T2> student
         unsafeAccessorSignature.AddParameter(symbolInfo.TypeForCodeGeneration, "value");
 
         unsafeAccessorSignature.AddAttribute(
@@ -75,7 +75,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
 
         unsafeAccessorSignature.AddParameter(
             symbolInfo.DeclaringClassNameWithTypeParameters,
-            symbolInfo.DeclaringClassNameWithTypeParameters.FirstCharToLower()); // Student student
+            symbolInfo.DeclaringClassName.FirstCharToLower()); // Student student
 
         unsafeAccessorSignature.AddAttribute(
             $"[UnsafeAccessor(UnsafeAccessorKind.Field, Name = \"{symbolInfo.Name}\")]");
