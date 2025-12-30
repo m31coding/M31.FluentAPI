@@ -83,6 +83,7 @@ internal class TestDataProvider : IEnumerable<object[]>
             ["Abstract", "PredicateClass", "Student"],
             ["Abstract", "PredicatePrivateFieldClass", "Student"],
             ["Abstract", "PrivateConstructorClass", "Student"],
+            ["Abstract", "PrivateConstructorClassWithParams", "Student"],
             ["Abstract", "PrivateFieldClass", "Student"],
             ["Abstract", "PrivateFluentMethodClass", "Student"],
             ["Abstract", "PrivateFluentMethodNullableParameterClass", "Student"],
