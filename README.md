@@ -112,7 +112,7 @@ public class Student
 
 ![fluent-api-usage](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/fluent-api.gif)
 
-You may have a look at the generated code for this example: [CreateStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/StudentClass/CreateStudent.g.cs). Note that if you use private members or properties with a private set accessor, as it is the case in this example, the generated code will use reflection to set the properties.
+You may have a look at the generated code for this example: [CreateStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/StudentClass/CreateStudent.g.cs). Note that if you use private members or properties with a private set accessor, as it is the case in this example, the generated code will use UnsafeAccessors to set the properties.
 
 ## Attributes
 

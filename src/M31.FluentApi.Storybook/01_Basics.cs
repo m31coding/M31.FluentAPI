@@ -206,7 +206,7 @@ namespace OrthogonalAttributesExample
 namespace FluentMethodExample
 {
     /* The generated builder methods simply set the values of the fields and properties. For public fields and
-       properties, this is straightforward. For private fields and private set accessors, reflection will be used.
+       properties, this is straightforward. For private fields and private set accessors, UnsafeAccessors will be used.
        Nevertheless, in both cases, the builder methods merely set the values to the given arguments.
        There might be use cases where you want to have more control over the builder methods, such as setting the value
        in a particular way or triggering additional behavior. To this end you, can define custom methods that return
