@@ -31,25 +31,25 @@ public class CreateStudent :
     public static IBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetName(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent;
     }
 
     IBornOn IWithName.WithName(string name)
     {
-        SetName(student, name);
+        SetName(student, name!);
         return this;
     }
 
     IInSemester IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        SetDateOfBirth(student, dateOfBirth);
+        SetDateOfBirth(student, dateOfBirth!);
         return this;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        SetSemester(student, semester);
+        SetSemester(student, semester!);
         return student;
     }
 

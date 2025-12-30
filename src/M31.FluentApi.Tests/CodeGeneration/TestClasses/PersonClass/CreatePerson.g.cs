@@ -35,25 +35,25 @@ public class CreatePerson :
     public static IWithMiddleName WithFirstName(string firstName)
     {
         CreatePerson createPerson = new CreatePerson();
-        SetFirstName(createPerson.person, firstName);
+        SetFirstName(createPerson.person, firstName!);
         return createPerson;
     }
 
     IWithMiddleName IWithFirstName.WithFirstName(string firstName)
     {
-        SetFirstName(person, firstName);
+        SetFirstName(person, firstName!);
         return this;
     }
 
     IWithLastName IWithMiddleName.WithMiddleName(string? middleName)
     {
-        SetMiddleName(person, middleName);
+        SetMiddleName(person, middleName!);
         return this;
     }
 
     IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad IWithLastName.WithLastName(string lastName)
     {
-        SetLastName(person, lastName);
+        SetLastName(person, lastName!);
         return this;
     }
 

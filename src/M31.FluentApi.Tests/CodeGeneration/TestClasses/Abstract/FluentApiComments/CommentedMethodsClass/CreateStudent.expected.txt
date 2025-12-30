@@ -46,7 +46,7 @@ public class CreateStudent :
 
     Student IOfAgeBornOn.OfAge(int age)
     {
-        SetAge(student, age);
+        SetAge(student, age!);
         return student;
     }
 

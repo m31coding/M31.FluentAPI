@@ -30,25 +30,25 @@ public class CreateStudent :
     public static IWithName InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetSemester(createStudent.student, semester);
+        SetSemester(createStudent.student, semester!);
         return createStudent;
     }
 
     IWithName IInSemester.InSemester(int semester)
     {
-        SetSemester(student, semester);
+        SetSemester(student, semester!);
         return this;
     }
 
     IWithName2 IWithName.WithName(char initial)
     {
-        SetInitial(student, initial);
+        SetInitial(student, initial!);
         return this;
     }
 
     Student IWithName2.WithName(string lastName)
     {
-        SetLastName(student, lastName);
+        SetLastName(student, lastName!);
         return student;
     }
 

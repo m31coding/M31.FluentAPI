@@ -70,19 +70,19 @@ public class CreateStudent :
 
     Student IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        SetIsHappy(student, isHappy);
+        SetIsHappy(student, isHappy!);
         return student;
     }
 
     Student IWhoIsHappy.WhoIsSad()
     {
-        SetIsHappy(student, false);
+        SetIsHappy(student, false!);
         return student;
     }
 
     Student IWhoIsHappy.WithUnknownMood()
     {
-        SetIsHappy(student, null);
+        SetIsHappy(student, null!);
         return student;
     }
 

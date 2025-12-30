@@ -30,27 +30,27 @@ public class CreateStudent :
     public static IWithProperty2 WithName(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetFirstName(createStudent.student, firstName);
-        SetLastName(createStudent.student, lastName);
+        SetFirstName(createStudent.student, firstName!);
+        SetLastName(createStudent.student, lastName!);
         return createStudent;
     }
 
     IWithProperty2 IWithName.WithName(string firstName, string lastName)
     {
-        SetFirstName(student, firstName);
-        SetLastName(student, lastName);
+        SetFirstName(student, firstName!);
+        SetLastName(student, lastName!);
         return this;
     }
 
     IWithProperty2 IWithProperty1.WithProperty1(string property1)
     {
-        SetProperty1(student, property1);
+        SetProperty1(student, property1!);
         return this;
     }
 
     Student IWithProperty2.WithProperty2(string property2)
     {
-        SetProperty2(student, property2);
+        SetProperty2(student, property2!);
         return student;
     }
 

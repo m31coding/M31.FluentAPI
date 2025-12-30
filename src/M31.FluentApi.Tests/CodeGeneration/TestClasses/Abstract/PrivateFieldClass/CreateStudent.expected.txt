@@ -28,13 +28,13 @@ public class CreateStudent :
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        SemesterField(createStudent.student) = semester;
+        SemesterField(createStudent.student) = semester!;
         return createStudent.student;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        SemesterField(student) = semester;
+        SemesterField(student) = semester!;
         return student;
     }
 

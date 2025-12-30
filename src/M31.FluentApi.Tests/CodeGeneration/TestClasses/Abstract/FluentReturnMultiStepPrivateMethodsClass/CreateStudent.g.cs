@@ -30,13 +30,13 @@ public class CreateStudent :
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetName(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent;
     }
 
     IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter IWithName.WithName(string name)
     {
-        SetName(student, name);
+        SetName(student, name!);
         return this;
     }
 

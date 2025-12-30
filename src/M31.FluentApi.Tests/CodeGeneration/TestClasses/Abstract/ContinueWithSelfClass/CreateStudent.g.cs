@@ -29,25 +29,25 @@ public class CreateStudent :
     public static IWithMiddleNameWithLastName WithFirstName(string firstName)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetFirstName(createStudent.student, firstName);
+        SetFirstName(createStudent.student, firstName!);
         return createStudent;
     }
 
     IWithMiddleNameWithLastName IWithFirstName.WithFirstName(string firstName)
     {
-        SetFirstName(student, firstName);
+        SetFirstName(student, firstName!);
         return this;
     }
 
     IWithMiddleNameWithLastName IWithMiddleNameWithLastName.WithMiddleName(string? middleName)
     {
-        SetMiddleName(student, middleName);
+        SetMiddleName(student, middleName!);
         return this;
     }
 
     Student IWithMiddleNameWithLastName.WithLastName(string lastName)
     {
-        SetLastName(student, lastName);
+        SetLastName(student, lastName!);
         return student;
     }
 

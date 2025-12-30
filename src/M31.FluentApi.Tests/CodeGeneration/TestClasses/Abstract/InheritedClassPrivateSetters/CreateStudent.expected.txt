@@ -31,19 +31,19 @@ public class CreateStudent :
     public static IOfAgeBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetName(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent;
     }
 
     IOfAgeBornOn IWithName.WithName(string name)
     {
-        SetName(student, name);
+        SetName(student, name!);
         return this;
     }
 
     IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        SetAge(student, age);
+        SetAge(student, age!);
         return this;
     }
 
@@ -55,7 +55,7 @@ public class CreateStudent :
 
     Student IInSemester.InSemester(int semester)
     {
-        SetSemester(student, semester);
+        SetSemester(student, semester!);
         return student;
     }
 

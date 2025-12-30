@@ -30,19 +30,19 @@ public class CreatePerson :
     public static IBornOn WithName(string name)
     {
         CreatePerson createPerson = new CreatePerson();
-        SetName(createPerson.person, name);
+        SetName(createPerson.person, name!);
         return createPerson;
     }
 
     IBornOn IWithName.WithName(string name)
     {
-        SetName(person, name);
+        SetName(person, name!);
         return this;
     }
 
     Person IBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        SetDateOfBirth(person, dateOfBirth);
+        SetDateOfBirth(person, dateOfBirth!);
         return person;
     }
 

@@ -30,19 +30,19 @@ public class CreatePerson :
     public static IOfAgeBornOn WithName(string name)
     {
         CreatePerson createPerson = new CreatePerson();
-        SetName(createPerson.person, name);
+        SetName(createPerson.person, name!);
         return createPerson;
     }
 
     IOfAgeBornOn IWithName.WithName(string name)
     {
-        SetName(person, name);
+        SetName(person, name!);
         return this;
     }
 
     Person IOfAgeBornOn.OfAge(int age)
     {
-        SetAge(person, age);
+        SetAge(person, age!);
         return person;
     }
 

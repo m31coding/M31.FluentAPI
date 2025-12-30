@@ -28,39 +28,39 @@ public class CreateStudent :
     public static Student WhoseFriendsAre(params string[]? friends)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetFriends(createStudent.student, friends);
+        SetFriends(createStudent.student, friends!);
         return createStudent.student;
     }
 
     public static Student WhoseFriendIs(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetFriends(createStudent.student, new string[1]{ friend });
+        SetFriends(createStudent.student, new string[1]{ friend }!);
         return createStudent.student;
     }
 
     public static Student WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
-        SetFriends(createStudent.student, new string[0]);
+        SetFriends(createStudent.student, new string[0]!);
         return createStudent.student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
     {
-        SetFriends(student, friends);
+        SetFriends(student, friends!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        SetFriends(student, new string[1]{ friend });
+        SetFriends(student, new string[1]{ friend }!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoHasNoFriends()
     {
-        SetFriends(student, new string[0]);
+        SetFriends(student, new string[0]!);
         return student;
     }
 

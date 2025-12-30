@@ -35,21 +35,21 @@ public class CreateStudent :
     public static IOfAgeBornOn Named(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetFirstName(createStudent.student, firstName);
-        SetLastName(createStudent.student, lastName);
+        SetFirstName(createStudent.student, firstName!);
+        SetLastName(createStudent.student, lastName!);
         return createStudent;
     }
 
     IOfAgeBornOn INamed.Named(string firstName, string lastName)
     {
-        SetFirstName(student, firstName);
-        SetLastName(student, lastName);
+        SetFirstName(student, firstName!);
+        SetLastName(student, lastName!);
         return this;
     }
 
     IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        SetAge(student, age);
+        SetAge(student, age!);
         return this;
     }
 
@@ -61,7 +61,7 @@ public class CreateStudent :
 
     ILivingIn IInSemester.InSemester(int semester)
     {
-        SetSemester(student, semester);
+        SetSemester(student, semester!);
         return this;
     }
 
@@ -72,7 +72,7 @@ public class CreateStudent :
 
     IWhoIsHappy ILivingIn.LivingIn(string? city)
     {
-        SetCity(student, city);
+        SetCity(student, city!);
         return this;
     }
 
@@ -83,49 +83,49 @@ public class CreateStudent :
 
     IWhoIsHappy ILivingIn.InUnknownCity()
     {
-        SetCity(student, null);
+        SetCity(student, null!);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        SetIsHappy(student, isHappy);
+        SetIsHappy(student, isHappy!);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WhoIsSad()
     {
-        SetIsHappy(student, false);
+        SetIsHappy(student, false!);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WithUnknownMood()
     {
-        SetIsHappy(student, null);
+        SetIsHappy(student, null!);
         return this;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
-        SetFriends(student, friends);
+        SetFriends(student, friends!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
     {
-        SetFriends(student, friends);
+        SetFriends(student, friends!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        SetFriends(student, new string[1]{ friend });
+        SetFriends(student, new string[1]{ friend }!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoHasNoFriends()
     {
-        SetFriends(student, new string[0]);
+        SetFriends(student, new string[0]!);
         return student;
     }
 

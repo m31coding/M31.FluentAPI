@@ -28,26 +28,26 @@ public class CreateStudent :
     public static Student WhoIsHappy(bool isHappy = true)
     {
         CreateStudent createStudent = new CreateStudent();
-        IsHappyField(createStudent.student) = isHappy;
+        IsHappyField(createStudent.student) = isHappy!;
         return createStudent.student;
     }
 
     public static Student WhoIsSad()
     {
         CreateStudent createStudent = new CreateStudent();
-        IsHappyField(createStudent.student) = false;
+        IsHappyField(createStudent.student) = false!;
         return createStudent.student;
     }
 
     Student IWhoIsHappy.WhoIsHappy(bool isHappy)
     {
-        IsHappyField(student) = isHappy;
+        IsHappyField(student) = isHappy!;
         return student;
     }
 
     Student IWhoIsHappy.WhoIsSad()
     {
-        IsHappyField(student) = false;
+        IsHappyField(student) = false!;
         return student;
     }
 

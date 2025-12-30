@@ -39,23 +39,23 @@ public class CreateDocumentedStudent :
     public static IOfAgeBornOn Named(string firstName, string lastName)
     {
         CreateDocumentedStudent createDocumentedStudent = new CreateDocumentedStudent();
-        SetFirstName(createDocumentedStudent.documentedStudent, firstName);
-        SetLastName(createDocumentedStudent.documentedStudent, lastName);
+        SetFirstName(createDocumentedStudent.documentedStudent, firstName!);
+        SetLastName(createDocumentedStudent.documentedStudent, lastName!);
         return createDocumentedStudent;
     }
 
     /// <inheritdoc/>
     IOfAgeBornOn INamed.Named(string firstName, string lastName)
     {
-        SetFirstName(documentedStudent, firstName);
-        SetLastName(documentedStudent, lastName);
+        SetFirstName(documentedStudent, firstName!);
+        SetLastName(documentedStudent, lastName!);
         return this;
     }
 
     /// <inheritdoc/>
     IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        SetAge(documentedStudent, age);
+        SetAge(documentedStudent, age!);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class CreateDocumentedStudent :
     /// <inheritdoc/>
     ILivingIn IInSemester.InSemester(int semester)
     {
-        SetSemester(documentedStudent, semester);
+        SetSemester(documentedStudent, semester!);
         return this;
     }
 
@@ -82,7 +82,7 @@ public class CreateDocumentedStudent :
     /// <inheritdoc/>
     IWhoIsHappy ILivingIn.LivingIn(string? city)
     {
-        SetCity(documentedStudent, city);
+        SetCity(documentedStudent, city!);
         return this;
     }
 
@@ -95,56 +95,56 @@ public class CreateDocumentedStudent :
     /// <inheritdoc/>
     IWhoIsHappy ILivingIn.InUnknownCity()
     {
-        SetCity(documentedStudent, null);
+        SetCity(documentedStudent, null!);
         return this;
     }
 
     /// <inheritdoc/>
     IWhoseFriendsAre IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        SetIsHappy(documentedStudent, isHappy);
+        SetIsHappy(documentedStudent, isHappy!);
         return this;
     }
 
     /// <inheritdoc/>
     IWhoseFriendsAre IWhoIsHappy.WhoIsSad()
     {
-        SetIsHappy(documentedStudent, false);
+        SetIsHappy(documentedStudent, false!);
         return this;
     }
 
     /// <inheritdoc/>
     IWhoseFriendsAre IWhoIsHappy.WithUnknownMood()
     {
-        SetIsHappy(documentedStudent, null);
+        SetIsHappy(documentedStudent, null!);
         return this;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
-        SetFriends(documentedStudent, friends);
+        SetFriends(documentedStudent, friends!);
         return documentedStudent;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
     {
-        SetFriends(documentedStudent, friends);
+        SetFriends(documentedStudent, friends!);
         return documentedStudent;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        SetFriends(documentedStudent, new string[1]{ friend });
+        SetFriends(documentedStudent, new string[1]{ friend }!);
         return documentedStudent;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoHasNoFriends()
     {
-        SetFriends(documentedStudent, new string[0]);
+        SetFriends(documentedStudent, new string[0]!);
         return documentedStudent;
     }
 

@@ -28,13 +28,13 @@ public class CreateStudent :
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetSemester(createStudent.student, semester);
+        SetSemester(createStudent.student, semester!);
         return createStudent.student;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        SetSemester(student, semester);
+        SetSemester(student, semester!);
         return student;
     }
 

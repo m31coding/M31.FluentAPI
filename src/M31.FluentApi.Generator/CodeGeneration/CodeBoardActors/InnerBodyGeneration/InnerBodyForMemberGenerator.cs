@@ -59,7 +59,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         // SetName(createStudent.student, name);
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
-                $"{setMethodName}({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value});");
+                $"{setMethodName}({instancePrefix}{CodeBoard.Info.ClassInstanceName}, {value}!);");
         CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
     }
 
@@ -84,7 +84,7 @@ internal class InnerBodyForMemberGenerator : InnerBodyGeneratorBase<MemberSymbol
         // SemesterField(createStudent.student) = semester;
         SetMemberCode setMemberCode =
             new SetMemberCode((instancePrefix, value) =>
-                $"{getFieldName}({instancePrefix}{CodeBoard.Info.ClassInstanceName}) = {value};");
+                $"{getFieldName}({instancePrefix}{CodeBoard.Info.ClassInstanceName}) = {value}!;");
         CodeBoard.InnerBodyCreationDelegates.AssignSetMemberCode(symbolInfo.Name, setMemberCode);
     }
 }

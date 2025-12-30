@@ -28,26 +28,26 @@ public class CreateStudent :
     public static Student WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        SetName(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent.student;
     }
 
     public static Student WhoseNameIsUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
-        SetName(createStudent.student, null);
+        SetName(createStudent.student, null!);
         return createStudent.student;
     }
 
     Student IWithName.WithName(string name)
     {
-        SetName(student, name);
+        SetName(student, name!);
         return student;
     }
 
     Student IWithName.WhoseNameIsUnknown()
     {
-        SetName(student, null);
+        SetName(student, null!);
         return student;
     }
 
