@@ -2,6 +2,7 @@
 
 // ReSharper disable NotAccessedVariable
 
+using System;
 using Xunit;
 using Xunit.Priority;
 
@@ -12,7 +13,7 @@ public class UsageTests
     [Fact, Priority(1)]
     public void CanExecuteTryBreakFluentApiClass2()
     {
-        var exception = Record.Exception(() =>
+        Exception? exception = Record.Exception(() =>
         {
             Student student = CreateStudent
                 .SomeMethod("hello world");

@@ -5,14 +5,14 @@
 using Xunit;
 using Xunit.Priority;
 
-namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFieldClass;
+namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateConstructorClass;
 
 public class UsageTests
 {
     [Fact, Priority(1)]
-    public void CanExecutePrivateFieldClass()
+    public void CanExecutePrivateConstructorClass()
     {
-        var student = CreateStudent
+        Student student = CreateStudent
             .InSemester(2);
 
         Assert.Equal(2, student.Semester);
