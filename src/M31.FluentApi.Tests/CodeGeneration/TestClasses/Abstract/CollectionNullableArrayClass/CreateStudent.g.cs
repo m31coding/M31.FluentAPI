@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CollectionNullableArrayClass;
 
@@ -14,12 +14,6 @@ public class CreateStudent :
     CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
-    private static readonly PropertyInfo friendsPropertyInfo;
-
-    static CreateStudent()
-    {
-        friendsPropertyInfo = typeof(Student).GetProperty("Friends", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -34,39 +28,39 @@ public class CreateStudent :
     public static Student WhoseFriendsAre(params string[]? friends)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, friends);
+        SetFriends(createStudent.student, friends!);
         return createStudent.student;
     }
 
     public static Student WhoseFriendIs(string friend)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, new string[1]{ friend });
+        SetFriends(createStudent.student, new string[1]{ friend }!);
         return createStudent.student;
     }
 
     public static Student WhoHasNoFriends()
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.friendsPropertyInfo.SetValue(createStudent.student, new string[0]);
+        SetFriends(createStudent.student, new string[0]!);
         return createStudent.student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(params string[]? friends)
     {
-        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
+        SetFriends(student, friends!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        CreateStudent.friendsPropertyInfo.SetValue(student, new string[1]{ friend });
+        SetFriends(student, new string[1]{ friend }!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoHasNoFriends()
     {
-        CreateStudent.friendsPropertyInfo.SetValue(student, new string[0]);
+        SetFriends(student, new string[0]!);
         return student;
     }
 
@@ -82,4 +76,7 @@ public class CreateStudent :
 
         Student WhoHasNoFriends();
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Friends")]
+    private static extern void SetFriends(Student student, string[]? value);
 }

@@ -5,8 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluentApiClass2;
 
@@ -15,18 +14,6 @@ public class CreateStudent :
     CreateStudent.ISomeMethod
 {
     private readonly Student student;
-    private static readonly MethodInfo someMethodMethodInfo;
-
-    static CreateStudent()
-    {
-        someMethodMethodInfo = typeof(Student).GetMethod(
-            "SomeMethod",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string) },
-            null)!;
-    }
 
     private CreateStudent()
     {
@@ -41,13 +28,13 @@ public class CreateStudent :
     public static Student SomeMethod(string createStudent)
     {
         CreateStudent createStudent2 = new CreateStudent();
-        CreateStudent.someMethodMethodInfo.Invoke(createStudent2.student, new object?[] { createStudent });
+        CallSomeMethod(createStudent2.student, createStudent);
         return createStudent2.student;
     }
 
     Student ISomeMethod.SomeMethod(string createStudent)
     {
-        CreateStudent.someMethodMethodInfo.Invoke(student, new object?[] { createStudent });
+        CallSomeMethod(student, createStudent);
         return student;
     }
 
@@ -59,4 +46,7 @@ public class CreateStudent :
     {
         Student SomeMethod(string createStudent);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "SomeMethod")]
+    private static extern void CallSomeMethod(Student student, string createStudent);
 }

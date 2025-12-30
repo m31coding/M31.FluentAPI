@@ -5,8 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.OverloadedMethodClass;
 
@@ -15,26 +14,6 @@ public class CreateStudent :
     CreateStudent.INamedNamed
 {
     private readonly Student student;
-    private static readonly MethodInfo namedMethodInfo;
-    private static readonly MethodInfo namedMethodInfo2;
-
-    static CreateStudent()
-    {
-        namedMethodInfo = typeof(Student).GetMethod(
-            "Named",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string), typeof(string) },
-            null)!;
-        namedMethodInfo2 = typeof(Student).GetMethod(
-            "Named",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string) },
-            null)!;
-    }
 
     private CreateStudent()
     {
@@ -49,26 +28,26 @@ public class CreateStudent :
     public static Student Named(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namedMethodInfo.Invoke(createStudent.student, new object?[] { firstName, lastName });
+        CallNamed(createStudent.student, firstName, lastName);
         return createStudent.student;
     }
 
     public static Student Named(string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namedMethodInfo2.Invoke(createStudent.student, new object?[] { lastName });
+        CallNamed(createStudent.student, lastName);
         return createStudent.student;
     }
 
     Student INamedNamed.Named(string firstName, string lastName)
     {
-        CreateStudent.namedMethodInfo.Invoke(student, new object?[] { firstName, lastName });
+        CallNamed(student, firstName, lastName);
         return student;
     }
 
     Student INamedNamed.Named(string lastName)
     {
-        CreateStudent.namedMethodInfo2.Invoke(student, new object?[] { lastName });
+        CallNamed(student, lastName);
         return student;
     }
 
@@ -82,4 +61,10 @@ public class CreateStudent :
 
         Student Named(string lastName);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Named")]
+    private static extern void CallNamed(Student student, string firstName, string lastName);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Named")]
+    private static extern void CallNamed(Student student, string lastName);
 }

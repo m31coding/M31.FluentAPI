@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PartialClass;
 
@@ -15,14 +15,6 @@ public class CreateStudent :
     CreateStudent.IWithLastName
 {
     private readonly Student student;
-    private static readonly PropertyInfo firstNamePropertyInfo;
-    private static readonly PropertyInfo lastNamePropertyInfo;
-
-    static CreateStudent()
-    {
-        firstNamePropertyInfo = typeof(Student).GetProperty("FirstName", BindingFlags.Instance | BindingFlags.Public)!;
-        lastNamePropertyInfo = typeof(Student).GetProperty("LastName", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -37,19 +29,19 @@ public class CreateStudent :
     public static IWithLastName WithFirstName(string firstName)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.firstNamePropertyInfo.SetValue(createStudent.student, firstName);
+        SetFirstName(createStudent.student, firstName!);
         return createStudent;
     }
 
     IWithLastName IWithFirstName.WithFirstName(string firstName)
     {
-        CreateStudent.firstNamePropertyInfo.SetValue(student, firstName);
+        SetFirstName(student, firstName!);
         return this;
     }
 
     Student IWithLastName.WithLastName(string lastName)
     {
-        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
+        SetLastName(student, lastName!);
         return student;
     }
 
@@ -66,4 +58,10 @@ public class CreateStudent :
     {
         Student WithLastName(string lastName);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_FirstName")]
+    private static extern void SetFirstName(Student student, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_LastName")]
+    private static extern void SetLastName(Student student, string value);
 }

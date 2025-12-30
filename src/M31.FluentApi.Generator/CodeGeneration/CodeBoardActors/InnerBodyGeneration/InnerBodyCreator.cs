@@ -31,14 +31,14 @@ internal class InnerBodyCreator : ICodeBoardActor
             }
         }
 
-        if (innerBodyForMemberGenerator.ReflectionRequired || innerBodyForMethodGenerator.ReflectionRequired)
+        if (innerBodyForMemberGenerator.UnsafeAccessors || innerBodyForMethodGenerator.UnsafeAccessors)
         {
-            ImportReflectionNamespace(codeBoard);
+            ImportCompilerServices(codeBoard);
         }
     }
 
-    private static void ImportReflectionNamespace(CodeBoard codeBoard)
+    private static void ImportCompilerServices(CodeBoard codeBoard)
     {
-        codeBoard.CodeFile.AddUsing("System.Reflection");
+        codeBoard.CodeFile.AddUsing("System.Runtime.CompilerServices");
     }
 }

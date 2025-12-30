@@ -22,7 +22,7 @@ internal class Interface : ICode
 
     internal void AddMethodSignature(CommentedMethodSignature methodSignature)
     {
-        if (!methodSignature.MethodSignature.IsSignatureForInterface)
+        if (!methodSignature.MethodSignature.IsStandaloneSignature)
         {
             throw new ArgumentException("Expected a stand-alone method signature.");
         }

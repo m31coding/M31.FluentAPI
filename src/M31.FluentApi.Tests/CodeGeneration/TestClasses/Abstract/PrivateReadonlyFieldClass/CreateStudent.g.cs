@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateReadonlyFieldClass;
 
@@ -14,12 +14,6 @@ public class CreateStudent :
     CreateStudent.IInSemester
 {
     private readonly Student student;
-    private static readonly FieldInfo semesterFieldInfo;
-
-    static CreateStudent()
-    {
-        semesterFieldInfo = typeof(Student).GetField("semester", BindingFlags.Instance | BindingFlags.NonPublic)!;
-    }
 
     private CreateStudent()
     {
@@ -34,13 +28,13 @@ public class CreateStudent :
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.semesterFieldInfo.SetValue(createStudent.student, semester);
+        SemesterField(createStudent.student) = semester!;
         return createStudent.student;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        CreateStudent.semesterFieldInfo.SetValue(student, semester);
+        SemesterField(student) = semester!;
         return student;
     }
 
@@ -52,4 +46,7 @@ public class CreateStudent :
     {
         Student InSemester(int semester);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "semester")]
+    private static extern ref int SemesterField(Student student);
 }

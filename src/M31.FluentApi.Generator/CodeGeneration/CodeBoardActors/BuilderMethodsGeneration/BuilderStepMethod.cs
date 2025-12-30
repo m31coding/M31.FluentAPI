@@ -50,16 +50,7 @@ internal abstract class BuilderStepMethod : BuilderMethod
 
         MethodSignature signature = MethodSignature.Create(returnType, MethodName, explicitInterfacePrefix, false);
         signature.AddModifiers(modifiers);
-
-        if (GenericInfo != null)
-        {
-            foreach (GenericTypeParameter genericTypeParameter in GenericInfo.Parameters)
-            {
-                signature.AddGenericParameter(
-                    genericTypeParameter.ParameterName,
-                    genericTypeParameter.Constraints.GetConstraintsForCodeGeneration());
-            }
-        }
+        CodeBuildingHelpers.AddGenericParameters(signature, GenericInfo);
 
         foreach (Parameter parameter in Parameters)
         {

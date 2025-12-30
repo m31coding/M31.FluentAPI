@@ -19,6 +19,7 @@ internal class Method : ICode
     internal MethodComments MethodComments { get; }
     internal MethodSignature MethodSignature { get; }
     internal MethodBody MethodBody { get; }
+    internal bool IsConstructor => MethodSignature.IsConstructor;
 
     internal void AddCommentLine(string commentLine)
     {

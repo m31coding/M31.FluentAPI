@@ -8,32 +8,38 @@ internal abstract class FluentApiSymbolInfo
 {
     internal FluentApiSymbolInfo(
         string name,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters,
         Accessibility accessibility,
-        bool requiresReflection,
+        bool publiclyWritable,
         Comments comments)
     {
         Name = name;
         NameInCamelCase = Name.TrimStart('_').FirstCharToLower();
+        NameInPascalCase = Name.TrimStart('_').FirstCharToUpper();
+        DeclaringClassName = declaringClassName;
         DeclaringClassNameWithTypeParameters = declaringClassNameWithTypeParameters;
         Accessibility = accessibility;
-        RequiresReflection = requiresReflection;
+        PubliclyWritable = publiclyWritable;
         Comments = comments;
     }
 
     internal string Name { get; }
     internal string NameInCamelCase { get; }
+    internal string NameInPascalCase { get; }
+    internal string DeclaringClassName { get; }
     internal string DeclaringClassNameWithTypeParameters { get; }
     internal Accessibility Accessibility { get; }
-    internal bool RequiresReflection { get; }
+    internal bool PubliclyWritable { get; }
     internal Comments Comments { get; }
 
     protected bool Equals(FluentApiSymbolInfo other)
     {
         return Name == other.Name &&
+               DeclaringClassName == other.DeclaringClassName &&
                DeclaringClassNameWithTypeParameters == other.DeclaringClassNameWithTypeParameters &&
                Accessibility == other.Accessibility &&
-               RequiresReflection == other.RequiresReflection &&
+               PubliclyWritable == other.PubliclyWritable &&
                Comments.Equals(other.Comments);
     }
 
@@ -41,13 +47,15 @@ internal abstract class FluentApiSymbolInfo
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
+        if (obj.GetType() != GetType()) return false;
         return Equals((FluentApiSymbolInfo)obj);
     }
 
     public override int GetHashCode()
     {
         return new HashCode()
-            .Add(Name, DeclaringClassNameWithTypeParameters, Accessibility, RequiresReflection, Comments);
+            .Add(Name)
+            .Add(DeclaringClassName, DeclaringClassNameWithTypeParameters)
+            .Add(Accessibility, PubliclyWritable, Comments);
     }
 }

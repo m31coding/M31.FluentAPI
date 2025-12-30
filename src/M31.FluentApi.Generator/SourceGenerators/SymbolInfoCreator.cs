@@ -12,33 +12,51 @@ namespace M31.FluentApi.Generator.SourceGenerators;
 
 internal static class SymbolInfoCreator
 {
-    internal static FluentApiSymbolInfo Create(ISymbol symbol, string declaringClassNameWithTypeParameters)
+    internal static FluentApiSymbolInfo Create(
+        ISymbol symbol,
+        string declaringClassName,
+        string declaringClassNameWithTypeParameters)
     {
         return symbol switch
         {
             IPropertySymbol propertySymbol => CreateMemberSymbolInfo(
                 propertySymbol,
+                declaringClassName,
                 declaringClassNameWithTypeParameters),
             IFieldSymbol fieldSymbol => CreateMemberSymbolInfo(
                 fieldSymbol,
+                declaringClassName,
                 declaringClassNameWithTypeParameters),
             IMethodSymbol methodSymbol => CreateMethodSymbolInfo(
                 methodSymbol,
+                declaringClassName,
                 declaringClassNameWithTypeParameters),
             _ => throw new ArgumentException($"Unexpected symbol type: {symbol.GetType()}."),
         };
     }
 
+    internal static ConstructorInfo CreateConstructorInfo(IMethodSymbol constructor)
+    {
+        // Constructor can't be generic => genericInfo = null.
+        IReadOnlyCollection<ParameterSymbolInfo> parameterInfos = GetParameterInfos(constructor, null);
+
+        return new ConstructorInfo(
+            parameterInfos,
+            constructor.DeclaredAccessibility != Accessibility.Public);
+    }
+
     private static MemberSymbolInfo CreateMemberSymbolInfo(
         IFieldSymbol fieldSymbol,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters)
     {
         return new MemberSymbolInfo(
             fieldSymbol.Name,
             fieldSymbol.Type.ToString(),
+            declaringClassName,
             declaringClassNameWithTypeParameters,
             fieldSymbol.DeclaredAccessibility,
-            RequiresReflection(fieldSymbol),
+            PubliclyWritable(fieldSymbol),
             CodeTypeExtractor.GetTypeForCodeGeneration(fieldSymbol.Type),
             fieldSymbol.NullableAnnotation == NullableAnnotation.Annotated,
             false,
@@ -48,14 +66,16 @@ internal static class SymbolInfoCreator
 
     private static MemberSymbolInfo CreateMemberSymbolInfo(
         IPropertySymbol propertySymbol,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters)
     {
         return new MemberSymbolInfo(
             propertySymbol.Name,
             propertySymbol.Type.ToString(),
+            declaringClassName,
             declaringClassNameWithTypeParameters,
             propertySymbol.DeclaredAccessibility,
-            RequiresReflection(propertySymbol),
+            PubliclyWritable(propertySymbol),
             CodeTypeExtractor.GetTypeForCodeGeneration(propertySymbol.Type),
             propertySymbol.NullableAnnotation == NullableAnnotation.Annotated,
             true,
@@ -65,24 +85,19 @@ internal static class SymbolInfoCreator
 
     private static MethodSymbolInfo CreateMethodSymbolInfo(
         IMethodSymbol methodSymbol,
+        string declaringClassName,
         string declaringClassNameWithTypeParameters)
     {
         GenericInfo? genericInfo = GetGenericInfo(methodSymbol);
-        Dictionary<string, int> typeParameterNameToTypeParameterPosition = genericInfo == null
-            ? new Dictionary<string, int>()
-            : genericInfo.Parameters.ToDictionary(p => p.ParameterName, p => p.ParameterPosition);
-
-        IReadOnlyCollection<ParameterSymbolInfo> parameterInfos =
-            methodSymbol.Parameters.Select(p => CreateParameterSymbolInfo(p, typeParameterNameToTypeParameterPosition))
-                .ToArray();
 
         return new MethodSymbolInfo(
             methodSymbol.Name,
+            declaringClassName,
             declaringClassNameWithTypeParameters,
             methodSymbol.DeclaredAccessibility,
-            RequiresReflection(methodSymbol),
+            PubliclyWritable(methodSymbol),
             genericInfo,
-            parameterInfos,
+            GetParameterInfos(methodSymbol, genericInfo),
             CodeTypeExtractor.GetTypeForCodeGeneration(methodSymbol.ReturnType),
             GetFluentSymbolComments(methodSymbol));
     }
@@ -92,18 +107,31 @@ internal static class SymbolInfoCreator
         return methodSymbol.IsGenericMethod ? GenericInfo.Create(methodSymbol.TypeParameters) : null;
     }
 
-    private static bool RequiresReflection(IFieldSymbol fieldSymbol)
+    private static IReadOnlyCollection<ParameterSymbolInfo> GetParameterInfos(
+        IMethodSymbol methodSymbol,
+        GenericInfo? genericInfo)
+    {
+        Dictionary<string, int> typeParameterNameToTypeParameterPosition = genericInfo == null
+            ? new Dictionary<string, int>()
+            : genericInfo.Parameters.ToDictionary(p => p.ParameterName, p => p.ParameterPosition);
+
+        return methodSymbol.Parameters
+            .Select(p => CreateParameterSymbolInfo(p, typeParameterNameToTypeParameterPosition))
+            .ToArray();
+    }
+
+    private static bool PubliclyWritable(IFieldSymbol fieldSymbol)
     {
         bool isWritable = !fieldSymbol.IsReadOnly;
-        return RequiresReflection(fieldSymbol.DeclaredAccessibility, isWritable);
+        return PubliclyWritable(fieldSymbol.DeclaredAccessibility, isWritable);
     }
 
-    private static bool RequiresReflection(IMethodSymbol methodSymbol)
+    private static bool PubliclyWritable(IMethodSymbol methodSymbol)
     {
-        return !methodSymbol.DeclaredAccessibility.IsPublicOrInternal();
+        return methodSymbol.DeclaredAccessibility.IsPublicOrInternal();
     }
 
-    private static bool RequiresReflection(IPropertySymbol propertySymbol)
+    private static bool PubliclyWritable(IPropertySymbol propertySymbol)
     {
         bool isWritable = false;
 
@@ -113,12 +141,12 @@ internal static class SymbolInfoCreator
                          !propertySymbol.SetMethod.IsInitOnly;
         }
 
-        return RequiresReflection(propertySymbol.DeclaredAccessibility, isWritable);
+        return PubliclyWritable(propertySymbol.DeclaredAccessibility, isWritable);
     }
 
-    private static bool RequiresReflection(Accessibility declaredAccessibility, bool isWritable)
+    private static bool PubliclyWritable(Accessibility declaredAccessibility, bool isWritable)
     {
-        return !declaredAccessibility.IsPublicOrInternal() || !isWritable;
+        return declaredAccessibility.IsPublicOrInternal() && isWritable;
     }
 
     private static ParameterSymbolInfo CreateParameterSymbolInfo(
@@ -201,6 +229,7 @@ internal static class SymbolInfoCreator
     }
 
     private static readonly Regex fluentApiCommentStart = new Regex(@"^\s*////(?!/)", RegexOptions.Compiled);
+
     private static Comments GetFluentSymbolComments(ISymbol symbol)
     {
         SyntaxReference? syntaxRef = symbol.DeclaringSyntaxReferences.FirstOrDefault();
@@ -228,7 +257,7 @@ internal static class SymbolInfoCreator
             }
         }
 
-        string comments = string.Join(Environment.NewLine, commentLines);
+        string comments = string.Join(SourceGenerator.GeneratorConfig.NewLineString, commentLines);
         return FluentCommentsParser.Parse(comments);
     }
 }

@@ -6,8 +6,7 @@
 #nullable enable
 
 using System.Collections.Generic;
-using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericOverloadedPrivateMethodClass;
 
@@ -16,66 +15,6 @@ public class CreateStudent :
     CreateStudent.IMethod1Method1Method1Method1Method1Method1Method1
 {
     private readonly Student student;
-    private static readonly MethodInfo method1MethodInfo;
-    private static readonly MethodInfo method1MethodInfo2;
-    private static readonly MethodInfo method1MethodInfo3;
-    private static readonly MethodInfo method1MethodInfo4;
-    private static readonly MethodInfo method1MethodInfo5;
-    private static readonly MethodInfo method1MethodInfo6;
-    private static readonly MethodInfo method1MethodInfo7;
-
-    static CreateStudent()
-    {
-        method1MethodInfo = typeof(Student).GetMethod(
-            "Method1",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int), typeof(string) },
-            null)!;
-        method1MethodInfo2 = typeof(Student).GetMethod(
-            "Method1",
-            1,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int), typeof(string) },
-            null)!;
-        method1MethodInfo3 = typeof(Student).GetMethod(
-            "Method1",
-            1,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { Type.MakeGenericMethodParameter(0), typeof(string) },
-            null)!;
-        method1MethodInfo4 = typeof(Student).GetMethod(
-            "Method1",
-            2,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { Type.MakeGenericMethodParameter(1), typeof(string) },
-            null)!;
-        method1MethodInfo5 = typeof(Student).GetMethod(
-            "Method1",
-            2,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { Type.MakeGenericMethodParameter(1), typeof(string).MakeByRefType() },
-            null)!;
-        method1MethodInfo6 = typeof(Student).GetMethod(
-            "Method1",
-            2,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { Type.MakeGenericMethodParameter(1).MakeByRefType(), typeof(string) },
-            null)!;
-        method1MethodInfo7 = typeof(Student).GetMethod(
-            "Method1",
-            2,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { Type.MakeGenericMethodParameter(1).MakeByRefType(), typeof(string).MakeByRefType() },
-            null)!;
-    }
 
     private CreateStudent()
     {
@@ -90,99 +29,91 @@ public class CreateStudent :
     public static Student Method1(int p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.method1MethodInfo.Invoke(createStudent.student, new object?[] { p1, p2 });
+        CallMethod1(createStudent.student, p1, p2);
         return createStudent.student;
     }
 
     public static Student Method1<T>(int p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.method1MethodInfo2.MakeGenericMethod(typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CallMethod1<T>(createStudent.student, p1, p2);
         return createStudent.student;
     }
 
     public static Student Method1<T>(T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.method1MethodInfo3.MakeGenericMethod(typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CallMethod1<T>(createStudent.student, p1, p2);
         return createStudent.student;
     }
 
     public static Student Method1<S, T>(T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.method1MethodInfo4.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CallMethod1<S, T>(createStudent.student, p1, p2);
         return createStudent.student;
     }
 
     public static Student Method1<S, T>(T p1, out string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        object?[] args = new object?[] { p1, null };
-        CreateStudent.method1MethodInfo5.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, args);
-        p2 = (string) args[1]!;
+        CallMethod1<S, T>(createStudent.student, p1, out p2);
         return createStudent.student;
     }
 
     public static Student Method1<S, T>(in T p1, string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.method1MethodInfo6.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, new object?[] { p1, p2 });
+        CallMethod1<S, T>(createStudent.student, in p1, p2);
         return createStudent.student;
     }
 
     public static Student Method1<S, T>(in T p1, ref string p2)
     {
         CreateStudent createStudent = new CreateStudent();
-        object?[] args = new object?[] { p1, p2 };
-        CreateStudent.method1MethodInfo7.MakeGenericMethod(typeof(S), typeof(T)).Invoke(createStudent.student, args);
-        p2 = (string) args[1]!;
+        CallMethod1<S, T>(createStudent.student, in p1, ref p2);
         return createStudent.student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1(int p1, string p2)
     {
-        CreateStudent.method1MethodInfo.Invoke(student, new object?[] { p1, p2 });
+        CallMethod1(student, p1, p2);
         return student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(int p1, string p2)
     {
-        CreateStudent.method1MethodInfo2.MakeGenericMethod(typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CallMethod1<T>(student, p1, p2);
         return student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<T>(T p1, string p2)
     {
-        CreateStudent.method1MethodInfo3.MakeGenericMethod(typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CallMethod1<T>(student, p1, p2);
         return student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, string p2)
     {
-        CreateStudent.method1MethodInfo4.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CallMethod1<S, T>(student, p1, p2);
         return student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(T p1, out string p2)
     {
-        object?[] args = new object?[] { p1, null };
-        CreateStudent.method1MethodInfo5.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, args);
-        p2 = (string) args[1]!;
+        CallMethod1<S, T>(student, p1, out p2);
         return student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(in T p1, string p2)
     {
-        CreateStudent.method1MethodInfo6.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, new object?[] { p1, p2 });
+        CallMethod1<S, T>(student, in p1, p2);
         return student;
     }
 
     Student IMethod1Method1Method1Method1Method1Method1Method1.Method1<S, T>(in T p1, ref string p2)
     {
-        object?[] args = new object?[] { p1, p2 };
-        CreateStudent.method1MethodInfo7.MakeGenericMethod(typeof(S), typeof(T)).Invoke(student, args);
-        p2 = (string) args[1]!;
+        CallMethod1<S, T>(student, in p1, ref p2);
         return student;
     }
 
@@ -206,4 +137,25 @@ public class CreateStudent :
 
         Student Method1<S, T>(in T p1, ref string p2);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Method1")]
+    private static extern void CallMethod1(Student student, int p1, string p2);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Method1")]
+    private static extern void CallMethod1<T>(Student student, int p1, string p2);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Method1")]
+    private static extern void CallMethod1<T>(Student student, T p1, string p2);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Method1")]
+    private static extern void CallMethod1<S, T>(Student student, T p1, string p2);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Method1")]
+    private static extern void CallMethod1<S, T>(Student student, T p1, out string p2);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Method1")]
+    private static extern void CallMethod1<S, T>(Student student, in T p1, string p2);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Method1")]
+    private static extern void CallMethod1<S, T>(Student student, in T p1, ref string p2);
 }

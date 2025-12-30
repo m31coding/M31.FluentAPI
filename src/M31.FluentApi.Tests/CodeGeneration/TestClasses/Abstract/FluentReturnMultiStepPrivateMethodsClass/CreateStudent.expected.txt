@@ -6,8 +6,7 @@
 #nullable enable
 
 using System.Collections.Generic;
-using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnMultiStepPrivateMethodsClass;
 
@@ -17,44 +16,6 @@ public class CreateStudent :
     CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
 {
     private readonly Student student;
-    private static readonly PropertyInfo namePropertyInfo;
-    private static readonly MethodInfo returnVoidMethodMethodInfo;
-    private static readonly MethodInfo returnIntMethodMethodInfo;
-    private static readonly MethodInfo returnListMethodMethodInfo;
-    private static readonly MethodInfo returnIntMethodWithRefParameterMethodInfo;
-
-    static CreateStudent()
-    {
-        namePropertyInfo = typeof(Student).GetProperty("Name", BindingFlags.Instance | BindingFlags.Public)!;
-        returnVoidMethodMethodInfo = typeof(Student).GetMethod(
-            "ReturnVoidMethod",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] {  },
-            null)!;
-        returnIntMethodMethodInfo = typeof(Student).GetMethod(
-            "ReturnIntMethod",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] {  },
-            null)!;
-        returnListMethodMethodInfo = typeof(Student).GetMethod(
-            "ReturnListMethod",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] {  },
-            null)!;
-        returnIntMethodWithRefParameterMethodInfo = typeof(Student).GetMethod(
-            "ReturnIntMethodWithRefParameter",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(string).MakeByRefType() },
-            null)!;
-    }
 
     private CreateStudent()
     {
@@ -69,37 +30,34 @@ public class CreateStudent :
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent;
     }
 
     IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter IWithName.WithName(string name)
     {
-        CreateStudent.namePropertyInfo.SetValue(student, name);
+        SetName(student, name!);
         return this;
     }
 
     void IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnVoidMethod()
     {
-        CreateStudent.returnVoidMethodMethodInfo.Invoke(student, new object?[] {  });
+        CallReturnVoidMethod(student);
     }
 
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethod()
     {
-        return (int) CreateStudent.returnIntMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        return CallReturnIntMethod(student);
     }
 
     System.Collections.Generic.List<int> IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnListMethod()
     {
-        return (System.Collections.Generic.List<int>) CreateStudent.returnListMethodMethodInfo.Invoke(student, new object?[] {  })!;
+        return CallReturnListMethod(student);
     }
 
     int IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter.ReturnIntMethodWithRefParameter(ref string s)
     {
-        object?[] args = new object?[] { s };
-        int result = (int) CreateStudent.returnIntMethodWithRefParameterMethodInfo.Invoke(student, args)!;
-        s = (string) args[0]!;
-        return result;
+        return CallReturnIntMethodWithRefParameter(student, ref s);
     }
 
     public interface ICreateStudent : IWithName
@@ -121,4 +79,19 @@ public class CreateStudent :
 
         int ReturnIntMethodWithRefParameter(ref string s);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Student student, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ReturnVoidMethod")]
+    private static extern void CallReturnVoidMethod(Student student);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ReturnIntMethod")]
+    private static extern int CallReturnIntMethod(Student student);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ReturnListMethod")]
+    private static extern System.Collections.Generic.List<int> CallReturnListMethod(Student student);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "ReturnIntMethodWithRefParameter")]
+    private static extern int CallReturnIntMethodWithRefParameter(Student student, ref string s);
 }

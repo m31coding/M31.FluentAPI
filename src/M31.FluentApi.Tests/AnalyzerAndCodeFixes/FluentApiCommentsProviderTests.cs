@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using M31.FluentApi.Attributes;
 using M31.FluentApi.Generator.SourceAnalyzers.FluentApiComments;
 using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
 using M31.FluentApi.Tests.AnalyzerAndCodeFixes.Helpers;
 using Microsoft.CodeAnalysis.Testing;
@@ -31,15 +30,15 @@ public class FluentApiCommentsProviderTests
     {
         SourceWithFix source = ReadSource(Path.Combine("FluentApiComments", commentTestClass), @class,
             $"Student.{member}.txt");
-        var test = new CSharpCodeRefactoringTest<FluentApiCommentsProvider, XUnitVerifier>
+        var test = new CSharpCodeRefactoringTest<FluentApiCommentsProvider, DefaultVerifier>
         {
             TestCode = source.Source.SelectSpan(selectedSpan),
             FixedCode = source.FixedSource!,
-#if NET6_0
+#if NET10_0
             ReferenceAssemblies = new ReferenceAssemblies(
-                "net6.0",
-                new PackageIdentity("Microsoft.NETCore.App.Ref", "6.0.0"),
-                Path.Combine("ref", "net6.0")),
+                "net10.0",
+                new PackageIdentity("Microsoft.NETCore.App.Ref", "10.0.0"),
+                Path.Combine("ref", "net10.0")),
 #else
             throw new NotSupportedException();
 #endif

@@ -5,8 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateFluentMethodParameterModifiersClass;
 
@@ -19,50 +18,6 @@ public class CreateStudent :
     CreateStudent.IMethodWithRefInAndOutParameter
 {
     private readonly Student student;
-    private static readonly MethodInfo methodWithParamsMethodInfo;
-    private static readonly MethodInfo methodWithRefParameterMethodInfo;
-    private static readonly MethodInfo methodWithInParameterMethodInfo;
-    private static readonly MethodInfo methodWithOutParameterMethodInfo;
-    private static readonly MethodInfo methodWithRefInAndOutParameterMethodInfo;
-
-    static CreateStudent()
-    {
-        methodWithParamsMethodInfo = typeof(Student).GetMethod(
-            "MethodWithParams",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int[]) },
-            null)!;
-        methodWithRefParameterMethodInfo = typeof(Student).GetMethod(
-            "MethodWithRefParameter",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int).MakeByRefType() },
-            null)!;
-        methodWithInParameterMethodInfo = typeof(Student).GetMethod(
-            "MethodWithInParameter",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int).MakeByRefType() },
-            null)!;
-        methodWithOutParameterMethodInfo = typeof(Student).GetMethod(
-            "MethodWithOutParameter",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int).MakeByRefType() },
-            null)!;
-        methodWithRefInAndOutParameterMethodInfo = typeof(Student).GetMethod(
-            "MethodWithRefInAndOutParameter",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int).MakeByRefType(), typeof(int).MakeByRefType(), typeof(int).MakeByRefType() },
-            null)!;
-    }
 
     private CreateStudent()
     {
@@ -77,44 +32,37 @@ public class CreateStudent :
     public static IMethodWithRefParameter MethodWithParams(params int[] numbers)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.methodWithParamsMethodInfo.Invoke(createStudent.student, new object?[] { numbers });
+        CallMethodWithParams(createStudent.student, numbers);
         return createStudent;
     }
 
     IMethodWithRefParameter IMethodWithParams.MethodWithParams(params int[] numbers)
     {
-        CreateStudent.methodWithParamsMethodInfo.Invoke(student, new object?[] { numbers });
+        CallMethodWithParams(student, numbers);
         return this;
     }
 
     IMethodWithInParameter IMethodWithRefParameter.MethodWithRefParameter(ref int n1)
     {
-        object?[] args = new object?[] { n1 };
-        CreateStudent.methodWithRefParameterMethodInfo.Invoke(student, args);
-        n1 = (int) args[0]!;
+        CallMethodWithRefParameter(student, ref n1);
         return this;
     }
 
     IMethodWithOutParameter IMethodWithInParameter.MethodWithInParameter(in int n2)
     {
-        CreateStudent.methodWithInParameterMethodInfo.Invoke(student, new object?[] { n2 });
+        CallMethodWithInParameter(student, in n2);
         return this;
     }
 
     IMethodWithRefInAndOutParameter IMethodWithOutParameter.MethodWithOutParameter(out int n3)
     {
-        object?[] args = new object?[] { null };
-        CreateStudent.methodWithOutParameterMethodInfo.Invoke(student, args);
-        n3 = (int) args[0]!;
+        CallMethodWithOutParameter(student, out n3);
         return this;
     }
 
     Student IMethodWithRefInAndOutParameter.MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6)
     {
-        object?[] args = new object?[] { n4, n5, null };
-        CreateStudent.methodWithRefInAndOutParameterMethodInfo.Invoke(student, args);
-        n4 = (int) args[0]!;
-        n6 = (int) args[2]!;
+        CallMethodWithRefInAndOutParameter(student, ref n4, in n5, out n6);
         return student;
     }
 
@@ -146,4 +94,19 @@ public class CreateStudent :
     {
         Student MethodWithRefInAndOutParameter(ref int n4, in int n5, out int n6);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "MethodWithParams")]
+    private static extern void CallMethodWithParams(Student student, params int[] numbers);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "MethodWithRefParameter")]
+    private static extern void CallMethodWithRefParameter(Student student, ref int n1);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "MethodWithInParameter")]
+    private static extern void CallMethodWithInParameter(Student student, in int n2);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "MethodWithOutParameter")]
+    private static extern void CallMethodWithOutParameter(Student student, out int n3);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "MethodWithRefInAndOutParameter")]
+    private static extern void CallMethodWithRefInAndOutParameter(Student student, ref int n4, in int n5, out int n6);
 }

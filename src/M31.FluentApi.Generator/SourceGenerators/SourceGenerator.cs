@@ -6,7 +6,9 @@ using static M31.FluentApi.Generator.SourceAnalyzers.FluentApiDiagnostics;
 
 namespace M31.FluentApi.Generator.SourceGenerators;
 
+#pragma warning disable RS1038
 [Generator(LanguageNames.CSharp)]
+#pragma warning restore RS1038
 internal class SourceGenerator : IIncrementalGenerator
 {
     internal static readonly SourceGeneratorConfig GeneratorConfig = new SourceGeneratorConfig();

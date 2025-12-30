@@ -7,7 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.StudentClass;
 
@@ -21,32 +21,6 @@ public class CreateStudent :
     CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
-    private static readonly PropertyInfo firstNamePropertyInfo;
-    private static readonly PropertyInfo lastNamePropertyInfo;
-    private static readonly PropertyInfo agePropertyInfo;
-    private static readonly MethodInfo bornOnMethodInfo;
-    private static readonly PropertyInfo semesterPropertyInfo;
-    private static readonly PropertyInfo cityPropertyInfo;
-    private static readonly PropertyInfo isHappyPropertyInfo;
-    private static readonly PropertyInfo friendsPropertyInfo;
-
-    static CreateStudent()
-    {
-        firstNamePropertyInfo = typeof(Student).GetProperty("FirstName", BindingFlags.Instance | BindingFlags.Public)!;
-        lastNamePropertyInfo = typeof(Student).GetProperty("LastName", BindingFlags.Instance | BindingFlags.Public)!;
-        agePropertyInfo = typeof(Student).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
-        bornOnMethodInfo = typeof(Student).GetMethod(
-            "BornOn",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(System.DateOnly) },
-            null)!;
-        semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
-        cityPropertyInfo = typeof(Student).GetProperty("City", BindingFlags.Instance | BindingFlags.Public)!;
-        isHappyPropertyInfo = typeof(Student).GetProperty("IsHappy", BindingFlags.Instance | BindingFlags.Public)!;
-        friendsPropertyInfo = typeof(Student).GetProperty("Friends", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -61,33 +35,33 @@ public class CreateStudent :
     public static IOfAgeBornOn Named(string firstName, string lastName)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.firstNamePropertyInfo.SetValue(createStudent.student, firstName);
-        CreateStudent.lastNamePropertyInfo.SetValue(createStudent.student, lastName);
+        SetFirstName(createStudent.student, firstName!);
+        SetLastName(createStudent.student, lastName!);
         return createStudent;
     }
 
     IOfAgeBornOn INamed.Named(string firstName, string lastName)
     {
-        CreateStudent.firstNamePropertyInfo.SetValue(student, firstName);
-        CreateStudent.lastNamePropertyInfo.SetValue(student, lastName);
+        SetFirstName(student, firstName!);
+        SetLastName(student, lastName!);
         return this;
     }
 
     IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        CreateStudent.agePropertyInfo.SetValue(student, age);
+        SetAge(student, age!);
         return this;
     }
 
     IInSemester IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
+        CallBornOn(student, dateOfBirth);
         return this;
     }
 
     ILivingIn IInSemester.InSemester(int semester)
     {
-        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
+        SetSemester(student, semester!);
         return this;
     }
 
@@ -98,7 +72,7 @@ public class CreateStudent :
 
     IWhoIsHappy ILivingIn.LivingIn(string? city)
     {
-        CreateStudent.cityPropertyInfo.SetValue(student, city);
+        SetCity(student, city!);
         return this;
     }
 
@@ -109,49 +83,49 @@ public class CreateStudent :
 
     IWhoIsHappy ILivingIn.InUnknownCity()
     {
-        CreateStudent.cityPropertyInfo.SetValue(student, null);
+        SetCity(student, null!);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        CreateStudent.isHappyPropertyInfo.SetValue(student, isHappy);
+        SetIsHappy(student, isHappy!);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WhoIsSad()
     {
-        CreateStudent.isHappyPropertyInfo.SetValue(student, false);
+        SetIsHappy(student, false!);
         return this;
     }
 
     IWhoseFriendsAre IWhoIsHappy.WithUnknownMood()
     {
-        CreateStudent.isHappyPropertyInfo.SetValue(student, null);
+        SetIsHappy(student, null!);
         return this;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
-        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
+        SetFriends(student, friends!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
     {
-        CreateStudent.friendsPropertyInfo.SetValue(student, friends);
+        SetFriends(student, friends!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        CreateStudent.friendsPropertyInfo.SetValue(student, new string[1]{ friend });
+        SetFriends(student, new string[1]{ friend }!);
         return student;
     }
 
     Student IWhoseFriendsAre.WhoHasNoFriends()
     {
-        CreateStudent.friendsPropertyInfo.SetValue(student, new string[0]);
+        SetFriends(student, new string[0]!);
         return student;
     }
 
@@ -206,4 +180,28 @@ public class CreateStudent :
 
         Student WhoHasNoFriends();
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_FirstName")]
+    private static extern void SetFirstName(Student student, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_LastName")]
+    private static extern void SetLastName(Student student, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Age")]
+    private static extern void SetAge(Student student, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "BornOn")]
+    private static extern void CallBornOn(Student student, System.DateOnly dateOfBirth);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    private static extern void SetSemester(Student student, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_City")]
+    private static extern void SetCity(Student student, string? value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_IsHappy")]
+    private static extern void SetIsHappy(Student student, bool? value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Friends")]
+    private static extern void SetFriends(Student student, System.Collections.Generic.IReadOnlyCollection<string> value);
 }

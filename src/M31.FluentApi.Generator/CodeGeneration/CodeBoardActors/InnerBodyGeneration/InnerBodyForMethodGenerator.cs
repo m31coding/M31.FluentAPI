@@ -2,8 +2,9 @@
 #pragma warning disable SA1513
 
 using M31.FluentApi.Generator.CodeBuilding;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
-using M31.FluentApi.Generator.SourceGenerators.Generics;
+using M31.FluentApi.Generator.Commons;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.InnerBodyGeneration;
 
@@ -14,12 +15,7 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
     {
     }
 
-    protected override string SymbolType(MethodSymbolInfo symbolInfo)
-    {
-        return "Method";
-    }
-
-    protected override void GenerateInnerBodyWithoutReflection(MethodSymbolInfo symbolInfo)
+    protected override void GenerateInnerBodyForPublicSymbol(MethodSymbolInfo symbolInfo)
     {
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
@@ -38,20 +34,35 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
                     .Append($"return ", !IsNoneOrVoid(returnType))
                     .Append($"{instancePrefix}{CodeBoard.Info.ClassInstanceName}.{symbolInfo.Name}")
                     .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
-                    .Append($"({string.Join(", ", outerMethodParameters.Select(CreateArgument))});")
+                    .Append($"({string.Join(", ", outerMethodParameters.Select(CreateParameter))});")
                     .ToString(),
             };
         }
-
-        static string CreateArgument(Parameter outerMethodParameter)
-        {
-            // ref/in/out semester
-            return $"{outerMethodParameter.ParameterAnnotations?.ToCallsiteAnnotations()}{outerMethodParameter.Name}";
-        }
     }
 
-    protected override void GenerateInnerBodyWithReflection(MethodSymbolInfo symbolInfo, string infoFieldName)
+    protected override void GenerateInnerBodyForPrivateSymbol(MethodSymbolInfo symbolInfo)
     {
+        string callMethodName = $"Call{symbolInfo.NameInPascalCase}";
+
+        // [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "WithName")]
+        // private static extern void CallWithName(Student student, string name);
+        MethodSignature unsafeAccessorSignature =
+            MethodSignature.Create(symbolInfo.ReturnType, callMethodName, null, true);
+        unsafeAccessorSignature.AddModifiers("private", "static", "extern");
+
+         // Student student
+        unsafeAccessorSignature.AddParameter(
+            symbolInfo.DeclaringClassNameWithTypeParameters,
+            symbolInfo.DeclaringClassName.FirstCharToLower());
+
+        List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(symbolInfo.ParameterInfos);
+        parameters.ForEach(unsafeAccessorSignature.AddParameter);
+        CodeBuildingHelpers.AddGenericParameters(unsafeAccessorSignature, symbolInfo.GenericInfo);
+
+        unsafeAccessorSignature.AddAttribute(
+            $"[UnsafeAccessor(UnsafeAccessorKind.Method, Name = \"{symbolInfo.Name}\")]");
+        CodeBoard.BuilderClass.AddMethodSignature(unsafeAccessorSignature);
+
         CallMethodCode callMethodCode = new CallMethodCode(BuildCallMethodCode, CodeBoard.NewLineString);
         CodeBoard.InnerBodyCreationDelegates.AssignCallMethodCode(symbolInfo, callMethodCode);
 
@@ -61,181 +72,26 @@ internal class InnerBodyForMethodGenerator : InnerBodyGeneratorBase<MethodSymbol
             ReservedVariableNames reservedVariableNames,
             string? returnType)
         {
-            return outerMethodParameters.Any(p =>
-                p.HasAnnotation(ParameterKinds.Ref) || p.HasAnnotation(ParameterKinds.Out))
-                ? BuildReflectionCodeWithRefAndOutParameters(
-                    infoFieldName,
-                    instancePrefix,
-                    symbolInfo.GenericInfo,
-                    outerMethodParameters,
-                    reservedVariableNames,
-                    returnType)
-                : BuildDefaultReflectionCode(
-                    infoFieldName,
-                    instancePrefix,
-                    symbolInfo.GenericInfo,
-                    outerMethodParameters,
-                    returnType);
-        }
-    }
+            string firstArgument = $"{instancePrefix}{CodeBoard.Info.ClassInstanceName}";
+            IEnumerable<string> otherArguments = outerMethodParameters.Select(CreateParameter);
 
-    private List<string> BuildReflectionCodeWithRefAndOutParameters(
-        string infoFieldName,
-        string instancePrefix,
-        GenericInfo? genericInfo,
-        IReadOnlyCollection<Parameter> outerMethodParameters,
-        ReservedVariableNames reservedVariableNames,
-        string? returnType)
-    {
-        bool returnResult = !IsNoneOrVoid(returnType);
-        string variableName = returnResult
-            ? reservedVariableNames.GetNewLocalVariableName("result")
-            : string.Empty;
-        string suppressNullability = returnResult ? "!" : string.Empty;
-
-        List<string> lines = new List<string>();
-
-        // object?[] args = new object?[] { semester };
-        lines.Add(
-            $"object?[] args = new object?[] {{ {string.Join(", ", outerMethodParameters.Select(GetArgument))} }};");
-
-        // CreateStudent.semesterMethodInfo.Invoke(createStudent.student, args) or
-        // CreateStudent.semesterMethodInfo.MakeGenericInfo(typeof(T1), typeof(T2))
-        //     .Invoke(createStudent.student, args) or
-        // string result = (string) toJsonMethodInfo.Invoke(createStudent.student, args)
-        lines.Add(CodeBoard.NewCodeBuilder()
-            .Append($"{returnType} {variableName} = ({returnType}) ", returnResult)
-            .Append(
-                $"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}.{MakeGenericMethod(genericInfo)}")
-            .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, args){suppressNullability};")
-            .ToString());
-
-        foreach (var parameter in outerMethodParameters.Select((p, i) => new { Value = p, Index = i }))
-        {
-            if (parameter.Value.HasAnnotation(ParameterKinds.Ref) || parameter.Value.HasAnnotation(ParameterKinds.Out))
+            return new List<string>()
             {
-                lines.Add(AssignValueToArgument(parameter.Index, parameter.Value));
-            }
-        }
-
-        if (returnResult)
-        {
-            lines.Add($"return {variableName};");
-        }
-
-        return lines;
-
-        string GetArgument(Parameter parameter)
-        {
-            return parameter.HasAnnotation(ParameterKinds.Out) ? "null" : parameter.Name;
-        }
-
-        string AssignValueToArgument(int index, Parameter parameter)
-        {
-            // For out and ref parameters, the invoke method writes the result values into the args array.
-            // semester = (int) args[0];
-            return $"{parameter.Name} = ({parameter.Type}) args[{index}]!;";
+                // CallWithName(student, name);
+                CodeBoard.NewCodeBuilder()
+                    .Append("return ", !IsNoneOrVoid(returnType))
+                    .Append($"{callMethodName}")
+                    .Append(symbolInfo.GenericInfo?.ParameterListInAngleBrackets)
+                    .Append($"({string.Join(", ", new[] { firstArgument }.Concat(otherArguments))});")
+                    .ToString(),
+            };
         }
     }
 
-    private List<string> BuildDefaultReflectionCode(
-        string infoFieldName,
-        string instancePrefix,
-        GenericInfo? genericInfo,
-        IReadOnlyCollection<Parameter> outerMethodParameters,
-        string? returnType)
+    private static string CreateParameter(Parameter outerMethodParameter)
     {
-        bool returnResult = !IsNoneOrVoid(returnType);
-        string suppressNullability = returnResult ? "!" : string.Empty;
-
-        return new List<string>()
-        {
-            // CreateStudent.semesterMethodInfo.Invoke(createStudent.student, new object[] { semester }); or
-            // CreateStudent.semesterMethodInfo.MakeGenericMethod(typeof(T1), typeof(T2))
-            //     .Invoke(createStudent.student, new object[] { semester });
-            CodeBoard.NewCodeBuilder()
-                .Append($"return ({returnType}) ", returnResult)
-                .Append($"{CodeBoard.Info.BuilderClassNameWithTypeParameters}.{infoFieldName}" +
-                        $".{MakeGenericMethod(genericInfo)}")
-                .Append($"Invoke({instancePrefix}{CodeBoard.Info.ClassInstanceName}, ")
-                .Append($"new object?[] {{ {string.Join(", ", outerMethodParameters.Select(p => p.Name))} }})" +
-                        $"{suppressNullability};")
-                .ToString(),
-        };
-    }
-
-    private static string MakeGenericMethod(GenericInfo? genericInfo)
-    {
-        if (genericInfo == null)
-        {
-            return string.Empty;
-        }
-
-        return $"MakeGenericMethod({string.Join(", ", genericInfo.ParameterStrings.Select(p => $"typeof({p})"))}).";
-    }
-
-    protected override void InitializeInfoField(string fieldName, MethodSymbolInfo symbolInfo)
-    {
-        Method staticConstructor = CodeBoard.StaticConstructor!;
-        const string indentation = CodeBuilder.OneLevelIndentation;
-
-        string typeArguments =
-            @$"new Type[] {{ {string.Join(", ",
-                symbolInfo.ParameterInfos.Select(CreateMethodParameter))} }}";
-
-        // withNameMethodInfo = typeof(Student<T1, T2>).GetMethod(
-        //     "WithName",
-        //     0,                                                   -> generic parameter count
-        //     BindingFlags.Instance | BindingFlags.NonPublic,
-        //     null                                                 -> binder
-        //     new Type[] { typeof(string) },
-        //     null)!;                                              -> modifiers
-        //
-        // Generic types are created via Type.MakeGenericMethodParameter(int position). In addition, a ref type is
-        // specified via MakeByRefType().
-        staticConstructor.AppendBodyLine($"{fieldName} = " +
-                                         $"typeof({symbolInfo.DeclaringClassNameWithTypeParameters}).GetMethod(");
-        staticConstructor.AppendBodyLine($"{indentation}\"{symbolInfo.Name}\",");
-        staticConstructor.AppendBodyLine($"{indentation}{GetGenericParameterCount(symbolInfo.GenericInfo)},");
-        staticConstructor.AppendBodyLine($"{indentation}{InfoFieldBindingFlagsArgument(symbolInfo)},");
-        staticConstructor.AppendBodyLine($"{indentation}null,");
-        staticConstructor.AppendBodyLine($"{indentation}{typeArguments},");
-        staticConstructor.AppendBodyLine($"{indentation}null)!;");
-
-        CodeBoard.CodeFile.AddUsing("System");
-
-        static string CreateMethodParameter(ParameterSymbolInfo parameterInfo)
-        {
-            return parameterInfo.IsGenericParameter
-                ? $"Type.MakeGenericMethodParameter({parameterInfo.GenericTypeParameterPosition!.Value})" +
-                  $"{MakeByRefType(parameterInfo.ParameterKinds)}"
-                : $"typeof({GetTypeOfArgument(parameterInfo)}){MakeByRefType(parameterInfo.ParameterKinds)}";
-
-            static string GetTypeOfArgument(ParameterSymbolInfo parameterInfo)
-            {
-                if (parameterInfo.IsReferenceType && parameterInfo.TypeForCodeGeneration.EndsWith("?"))
-                {
-                    return parameterInfo.TypeForCodeGeneration
-                        .Substring(0, parameterInfo.TypeForCodeGeneration.Length - 1);
-                }
-
-                return parameterInfo.TypeForCodeGeneration;
-            }
-
-            static string MakeByRefType(ParameterKinds parameterKinds)
-            {
-                return parameterKinds.HasFlag(ParameterKinds.In) ||
-                       parameterKinds.HasFlag(ParameterKinds.Out) ||
-                       parameterKinds.HasFlag(ParameterKinds.Ref)
-                    ? ".MakeByRefType()"
-                    : string.Empty;
-            }
-        }
-
-        static string GetGenericParameterCount(GenericInfo? genericInfo)
-        {
-            return genericInfo == null ? "0" : genericInfo.ParameterCount.ToString();
-        }
+        // ref/in/out semester
+        return $"{outerMethodParameter.ParameterAnnotations?.ToCallsiteAnnotations()}{outerMethodParameter.Name}";
     }
 
     private static bool IsNoneOrVoid(string? returnType)

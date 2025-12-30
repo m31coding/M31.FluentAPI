@@ -5,7 +5,7 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #nullable enable
 
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentNullableNoNullableAnnotationPrivateSetClass;
 
@@ -14,12 +14,6 @@ public class CreateStudent :
     CreateStudent.IWithName
 {
     private readonly Student student;
-    private static readonly PropertyInfo namePropertyInfo;
-
-    static CreateStudent()
-    {
-        namePropertyInfo = typeof(Student).GetProperty("Name", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -34,26 +28,26 @@ public class CreateStudent :
     public static Student WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent.student;
     }
 
     public static Student WhoseNameIsUnknown()
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namePropertyInfo.SetValue(createStudent.student, null);
+        SetName(createStudent.student, null!);
         return createStudent.student;
     }
 
     Student IWithName.WithName(string name)
     {
-        CreateStudent.namePropertyInfo.SetValue(student, name);
+        SetName(student, name!);
         return student;
     }
 
     Student IWithName.WhoseNameIsUnknown()
     {
-        CreateStudent.namePropertyInfo.SetValue(student, null);
+        SetName(student, null!);
         return student;
     }
 
@@ -67,4 +61,7 @@ public class CreateStudent :
 
         Student WhoseNameIsUnknown();
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Student student, string value);
 }

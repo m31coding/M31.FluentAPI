@@ -1,5 +1,7 @@
 using M31.FluentApi.Generator.CodeBuilding;
+using M31.FluentApi.Generator.CodeGeneration.CodeBoardActors.Commons;
 using M31.FluentApi.Generator.CodeGeneration.CodeBoardElements;
+using M31.FluentApi.Generator.SourceGenerators;
 
 namespace M31.FluentApi.Generator.CodeGeneration.CodeBoardActors;
 
@@ -10,61 +12,104 @@ internal class ConstructorGenerator : ICodeBoardActor
         string instanceName = codeBoard.Info.ClassInstanceName;
         string classNameWithTypeParameters = codeBoard.Info.FluentApiClassNameWithTypeParameters;
 
-        if (codeBoard.FluentApiInfos.Any(i => i.SymbolInfo.RequiresReflection))
-        {
-            Method staticConstructor = CreateStaticConstructor(codeBoard.Info.BuilderClassName);
-            codeBoard.StaticConstructor = staticConstructor;
-            codeBoard.BuilderClass.AddMethod(staticConstructor);
-        }
-
         Method constructor = CreateConstructor(codeBoard.Info.BuilderClassName);
-        int nofParameters = codeBoard.Info.FluentApiTypeConstructorInfo.NumberOfParameters;
+        ConstructorInfo constructorInfo = codeBoard.Info.FluentApiTypeConstructorInfo;
 
         if (codeBoard.Info.FluentApiTypeConstructorInfo.ConstructorIsNonPublic)
         {
-            if (nofParameters == 0)
-            {
-                // student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), true)!;
-                constructor.AppendBodyLine(
-                    $"{instanceName} = ({classNameWithTypeParameters}) " +
-                    $"Activator.CreateInstance(typeof({classNameWithTypeParameters}), true)!;");
+            // private static extern Student<T1, T2> CreateStudentInstance(T1 property1, T2 property2);
+            string unsafeAccessorName = $"Create{codeBoard.Info.FluentApiClassName}Instance";
+            MethodSignature unsafeAccessorSignature = MethodSignature.Create(
+                classNameWithTypeParameters,
+                unsafeAccessorName,
+                null,
+                true);
 
-                codeBoard.CodeFile.AddUsing("System");
-            }
-            else
-            {
-                // student = (Student<T1, T2>) Activator.CreateInstance(typeof(Student<T1, T2>), BindingFlags.Instance |
-                // BindingFlags.NonPublic, null, new object?[] { null, null }, null)!;
-                string parameters =
-                    $"new object?[] {{ {string.Join(", ", Enumerable.Repeat("null", nofParameters))} }}";
+            List<Parameter> parameters = CodeBuildingHelpers.CreateParameters(constructorInfo.ParameterInfos);
+            parameters.ForEach(unsafeAccessorSignature.AddParameter);
 
-                constructor.AppendBodyLine(
-                    $"{instanceName} = ({classNameWithTypeParameters}) " +
-                    $"Activator.CreateInstance(" +
-                    $"typeof({classNameWithTypeParameters}), BindingFlags.Instance | BindingFlags.NonPublic, null, {parameters}, null)!;");
+            unsafeAccessorSignature.AddModifiers("private", "static", "extern");
+            unsafeAccessorSignature.AddAttribute("[UnsafeAccessor(UnsafeAccessorKind.Constructor)]");
+            codeBoard.BuilderClass.AddMethodSignature(unsafeAccessorSignature);
+            codeBoard.CodeFile.AddUsing("System.Runtime.CompilerServices");
 
-                codeBoard.CodeFile.AddUsing("System.Reflection");
-                codeBoard.CodeFile.AddUsing("System");
-            }
+            // student = CreateStudentInstance(default!, default!);
+            ReservedVariableNames reservedVariableNames = codeBoard.ReservedVariableNames.NewLocalScope();
+
+            CodeBuilder codeBuilder = new CodeBuilder(codeBoard.NewLineString);
+            codeBuilder.Append($"{instanceName} = {unsafeAccessorName}");
+
+            (List<string> arguments, List<string> requiredAssignments) =
+                GetArguments(constructorInfo.ParameterInfos, reservedVariableNames);
+            codeBuilder.Append($"({string.Join(", ", arguments)});");
+            requiredAssignments.ForEach(constructor.AppendBodyLine);
+            constructor.AppendBodyLine(codeBuilder.ToString());
         }
         else
         {
             // student = new Student<T1, T2>(default!, default!);
-            string parameters = string.Join(", ",
-                Enumerable.Repeat("default!", nofParameters));
-            constructor.AppendBodyLine($"{instanceName} = new {classNameWithTypeParameters}({parameters});");
+            ReservedVariableNames reservedVariableNames = codeBoard.ReservedVariableNames.NewLocalScope();
+            CodeBuilder codeBuilder = new CodeBuilder(codeBoard.NewLineString);
+            codeBuilder.Append($"{instanceName} = new {classNameWithTypeParameters}");
+
+            (List<string> arguments, List<string> requiredAssignments) =
+                GetArguments(constructorInfo.ParameterInfos, reservedVariableNames);
+            codeBuilder.Append($"({string.Join(", ", arguments)});");
+            requiredAssignments.ForEach(constructor.AppendBodyLine);
+            constructor.AppendBodyLine(codeBuilder.ToString());
         }
 
         codeBoard.Constructor = constructor;
         codeBoard.BuilderClass.AddMethod(constructor);
     }
 
-    private static Method CreateStaticConstructor(string builderClassName)
+    private static (List<string> arguments, List<string> requiredAssignments) GetArguments(
+        IReadOnlyCollection<ParameterSymbolInfo> parameterInfos,
+        ReservedVariableNames reservedVariableNames)
     {
-        // static CreateStudent()
-        MethodSignature signature = MethodSignature.CreateConstructorSignature(builderClassName);
-        signature.AddModifiers("static");
-        return new Method(signature);
+        List<string> requiredAssignments = new List<string>();
+        List<string> arguments = new List<string>();
+
+        foreach (ParameterSymbolInfo parameterInfo in parameterInfos)
+        {
+            string argument = CreateArgument(parameterInfo, reservedVariableNames, out string? requiredAssignment);
+            arguments.Add(argument);
+            if (requiredAssignment != null)
+            {
+                requiredAssignments.Add(requiredAssignment);
+            }
+        }
+
+        return (arguments, requiredAssignments);
+    }
+
+    private static string CreateArgument(
+        ParameterSymbolInfo parameter,
+        ReservedVariableNames reservedVariableNames,
+        out string? requiredAssignment)
+    {
+        requiredAssignment = null;
+
+        if (parameter.HasAnnotation(ParameterKinds.Out))
+        {
+            return "out _";
+        }
+
+        if (parameter.HasAnnotation(ParameterKinds.Ref))
+        {
+            string variableName = reservedVariableNames.GetNewLocalVariableName("v");
+            requiredAssignment = $"{parameter.TypeForCodeGeneration} {variableName} = default!;";
+            return $"ref {variableName}";
+        }
+
+        if (parameter.HasAnnotation(ParameterKinds.In))
+        {
+            string variableName = reservedVariableNames.GetNewLocalVariableName("v");
+            requiredAssignment = $"{parameter.TypeForCodeGeneration} {variableName} = default!;";
+            return $"in {variableName}";
+        }
+
+        return "default!";
     }
 
     private static Method CreateConstructor(string builderClassName)

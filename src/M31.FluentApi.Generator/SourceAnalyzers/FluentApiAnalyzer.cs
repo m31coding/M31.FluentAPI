@@ -10,7 +10,9 @@ using static M31.FluentApi.Generator.SourceGenerators.AttributeElements.Attribut
 
 namespace M31.FluentApi.Generator.SourceAnalyzers;
 
+#pragma warning disable RS1038
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
+#pragma warning restore RS1038
 internal class FluentApiAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =

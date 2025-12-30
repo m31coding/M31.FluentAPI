@@ -6,7 +6,7 @@
 #nullable enable
 
 using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClassPrivateSetters;
 
@@ -17,24 +17,6 @@ public class CreateStudent :
     CreateStudent.IInSemester
 {
     private readonly Student student;
-    private static readonly PropertyInfo semesterPropertyInfo;
-    private static readonly PropertyInfo namePropertyInfo;
-    private static readonly PropertyInfo agePropertyInfo;
-    private static readonly MethodInfo bornOnMethodInfo;
-
-    static CreateStudent()
-    {
-        semesterPropertyInfo = typeof(Student).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
-        namePropertyInfo = typeof(Person).GetProperty("Name", BindingFlags.Instance | BindingFlags.Public)!;
-        agePropertyInfo = typeof(Person).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
-        bornOnMethodInfo = typeof(Person).GetMethod(
-            "BornOn",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(System.DateOnly) },
-            null)!;
-    }
 
     private CreateStudent()
     {
@@ -49,31 +31,31 @@ public class CreateStudent :
     public static IOfAgeBornOn WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent;
     }
 
     IOfAgeBornOn IWithName.WithName(string name)
     {
-        CreateStudent.namePropertyInfo.SetValue(student, name);
+        SetName(student, name!);
         return this;
     }
 
     IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        CreateStudent.agePropertyInfo.SetValue(student, age);
+        SetAge(student, age!);
         return this;
     }
 
     IInSemester IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        CreateStudent.bornOnMethodInfo.Invoke(student, new object?[] { dateOfBirth });
+        CallBornOn(student, dateOfBirth);
         return this;
     }
 
     Student IInSemester.InSemester(int semester)
     {
-        CreateStudent.semesterPropertyInfo.SetValue(student, semester);
+        SetSemester(student, semester!);
         return student;
     }
 
@@ -97,4 +79,16 @@ public class CreateStudent :
     {
         Student InSemester(int semester);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    private static extern void SetSemester(Student student, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Person person, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Age")]
+    private static extern void SetAge(Person person, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "BornOn")]
+    private static extern void CallBornOn(Person person, System.DateOnly dateOfBirth);
 }

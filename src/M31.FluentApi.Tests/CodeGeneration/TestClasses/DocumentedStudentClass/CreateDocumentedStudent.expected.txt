@@ -7,7 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.DocumentedStudentClass;
 
@@ -21,32 +21,6 @@ public class CreateDocumentedStudent :
     CreateDocumentedStudent.IWhoseFriendsAre
 {
     private readonly DocumentedStudent documentedStudent;
-    private static readonly PropertyInfo firstNamePropertyInfo;
-    private static readonly PropertyInfo lastNamePropertyInfo;
-    private static readonly PropertyInfo agePropertyInfo;
-    private static readonly MethodInfo bornOnMethodInfo;
-    private static readonly PropertyInfo semesterPropertyInfo;
-    private static readonly PropertyInfo cityPropertyInfo;
-    private static readonly PropertyInfo isHappyPropertyInfo;
-    private static readonly PropertyInfo friendsPropertyInfo;
-
-    static CreateDocumentedStudent()
-    {
-        firstNamePropertyInfo = typeof(DocumentedStudent).GetProperty("FirstName", BindingFlags.Instance | BindingFlags.Public)!;
-        lastNamePropertyInfo = typeof(DocumentedStudent).GetProperty("LastName", BindingFlags.Instance | BindingFlags.Public)!;
-        agePropertyInfo = typeof(DocumentedStudent).GetProperty("Age", BindingFlags.Instance | BindingFlags.Public)!;
-        bornOnMethodInfo = typeof(DocumentedStudent).GetMethod(
-            "BornOn",
-            0,
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(System.DateOnly) },
-            null)!;
-        semesterPropertyInfo = typeof(DocumentedStudent).GetProperty("Semester", BindingFlags.Instance | BindingFlags.Public)!;
-        cityPropertyInfo = typeof(DocumentedStudent).GetProperty("City", BindingFlags.Instance | BindingFlags.Public)!;
-        isHappyPropertyInfo = typeof(DocumentedStudent).GetProperty("IsHappy", BindingFlags.Instance | BindingFlags.Public)!;
-        friendsPropertyInfo = typeof(DocumentedStudent).GetProperty("Friends", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateDocumentedStudent()
     {
@@ -65,37 +39,37 @@ public class CreateDocumentedStudent :
     public static IOfAgeBornOn Named(string firstName, string lastName)
     {
         CreateDocumentedStudent createDocumentedStudent = new CreateDocumentedStudent();
-        CreateDocumentedStudent.firstNamePropertyInfo.SetValue(createDocumentedStudent.documentedStudent, firstName);
-        CreateDocumentedStudent.lastNamePropertyInfo.SetValue(createDocumentedStudent.documentedStudent, lastName);
+        SetFirstName(createDocumentedStudent.documentedStudent, firstName!);
+        SetLastName(createDocumentedStudent.documentedStudent, lastName!);
         return createDocumentedStudent;
     }
 
     /// <inheritdoc/>
     IOfAgeBornOn INamed.Named(string firstName, string lastName)
     {
-        CreateDocumentedStudent.firstNamePropertyInfo.SetValue(documentedStudent, firstName);
-        CreateDocumentedStudent.lastNamePropertyInfo.SetValue(documentedStudent, lastName);
+        SetFirstName(documentedStudent, firstName!);
+        SetLastName(documentedStudent, lastName!);
         return this;
     }
 
     /// <inheritdoc/>
     IInSemester IOfAgeBornOn.OfAge(int age)
     {
-        CreateDocumentedStudent.agePropertyInfo.SetValue(documentedStudent, age);
+        SetAge(documentedStudent, age!);
         return this;
     }
 
     /// <inheritdoc/>
     IInSemester IOfAgeBornOn.BornOn(System.DateOnly dateOfBirth)
     {
-        CreateDocumentedStudent.bornOnMethodInfo.Invoke(documentedStudent, new object?[] { dateOfBirth });
+        CallBornOn(documentedStudent, dateOfBirth);
         return this;
     }
 
     /// <inheritdoc/>
     ILivingIn IInSemester.InSemester(int semester)
     {
-        CreateDocumentedStudent.semesterPropertyInfo.SetValue(documentedStudent, semester);
+        SetSemester(documentedStudent, semester!);
         return this;
     }
 
@@ -108,7 +82,7 @@ public class CreateDocumentedStudent :
     /// <inheritdoc/>
     IWhoIsHappy ILivingIn.LivingIn(string? city)
     {
-        CreateDocumentedStudent.cityPropertyInfo.SetValue(documentedStudent, city);
+        SetCity(documentedStudent, city!);
         return this;
     }
 
@@ -121,56 +95,56 @@ public class CreateDocumentedStudent :
     /// <inheritdoc/>
     IWhoIsHappy ILivingIn.InUnknownCity()
     {
-        CreateDocumentedStudent.cityPropertyInfo.SetValue(documentedStudent, null);
+        SetCity(documentedStudent, null!);
         return this;
     }
 
     /// <inheritdoc/>
     IWhoseFriendsAre IWhoIsHappy.WhoIsHappy(bool? isHappy)
     {
-        CreateDocumentedStudent.isHappyPropertyInfo.SetValue(documentedStudent, isHappy);
+        SetIsHappy(documentedStudent, isHappy!);
         return this;
     }
 
     /// <inheritdoc/>
     IWhoseFriendsAre IWhoIsHappy.WhoIsSad()
     {
-        CreateDocumentedStudent.isHappyPropertyInfo.SetValue(documentedStudent, false);
+        SetIsHappy(documentedStudent, false!);
         return this;
     }
 
     /// <inheritdoc/>
     IWhoseFriendsAre IWhoIsHappy.WithUnknownMood()
     {
-        CreateDocumentedStudent.isHappyPropertyInfo.SetValue(documentedStudent, null);
+        SetIsHappy(documentedStudent, null!);
         return this;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string> friends)
     {
-        CreateDocumentedStudent.friendsPropertyInfo.SetValue(documentedStudent, friends);
+        SetFriends(documentedStudent, friends!);
         return documentedStudent;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoseFriendsAre(params string[] friends)
     {
-        CreateDocumentedStudent.friendsPropertyInfo.SetValue(documentedStudent, friends);
+        SetFriends(documentedStudent, friends!);
         return documentedStudent;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoseFriendIs(string friend)
     {
-        CreateDocumentedStudent.friendsPropertyInfo.SetValue(documentedStudent, new string[1]{ friend });
+        SetFriends(documentedStudent, new string[1]{ friend }!);
         return documentedStudent;
     }
 
     /// <inheritdoc/>
     DocumentedStudent IWhoseFriendsAre.WhoHasNoFriends()
     {
-        CreateDocumentedStudent.friendsPropertyInfo.SetValue(documentedStudent, new string[0]);
+        SetFriends(documentedStudent, new string[0]!);
         return documentedStudent;
     }
 
@@ -265,4 +239,28 @@ public class CreateDocumentedStudent :
         /// <returns>The <see cref="DocumentedStudent"/>.</returns>
         DocumentedStudent WhoHasNoFriends();
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_FirstName")]
+    private static extern void SetFirstName(DocumentedStudent documentedStudent, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_LastName")]
+    private static extern void SetLastName(DocumentedStudent documentedStudent, string value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Age")]
+    private static extern void SetAge(DocumentedStudent documentedStudent, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "BornOn")]
+    private static extern void CallBornOn(DocumentedStudent documentedStudent, System.DateOnly dateOfBirth);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Semester")]
+    private static extern void SetSemester(DocumentedStudent documentedStudent, int value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_City")]
+    private static extern void SetCity(DocumentedStudent documentedStudent, string? value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_IsHappy")]
+    private static extern void SetIsHappy(DocumentedStudent documentedStudent, bool? value);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Friends")]
+    private static extern void SetFriends(DocumentedStudent documentedStudent, System.Collections.Generic.IReadOnlyCollection<string> value);
 }

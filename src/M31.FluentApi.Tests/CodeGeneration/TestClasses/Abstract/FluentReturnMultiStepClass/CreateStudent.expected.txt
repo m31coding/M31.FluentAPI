@@ -6,7 +6,7 @@
 #nullable enable
 
 using System.Collections.Generic;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnMultiStepClass;
 
@@ -16,12 +16,6 @@ public class CreateStudent :
     CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
 {
     private readonly Student student;
-    private static readonly PropertyInfo namePropertyInfo;
-
-    static CreateStudent()
-    {
-        namePropertyInfo = typeof(Student).GetProperty("Name", BindingFlags.Instance | BindingFlags.Public)!;
-    }
 
     private CreateStudent()
     {
@@ -36,13 +30,13 @@ public class CreateStudent :
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
     {
         CreateStudent createStudent = new CreateStudent();
-        CreateStudent.namePropertyInfo.SetValue(createStudent.student, name);
+        SetName(createStudent.student, name!);
         return createStudent;
     }
 
     IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter IWithName.WithName(string name)
     {
-        CreateStudent.namePropertyInfo.SetValue(student, name);
+        SetName(student, name!);
         return this;
     }
 
@@ -85,4 +79,7 @@ public class CreateStudent :
 
         int ReturnIntMethodWithRefParameter(ref string s);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Name")]
+    private static extern void SetName(Student student, string value);
 }
