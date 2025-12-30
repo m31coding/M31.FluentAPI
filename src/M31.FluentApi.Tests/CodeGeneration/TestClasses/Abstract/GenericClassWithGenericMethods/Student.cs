@@ -61,4 +61,14 @@ public class Student<T1, T2, T3, T4, T5>
     {
         Logs.Add("Called Method3");
     }
+
+    [FluentMethod(8)]
+    [FluentReturn]
+    public T6 Method4<T6, T7>(T6 p1, T7 p2)
+        where T6: List<int>
+        where T7 : List<int>
+    {
+        Logs.Add("CalledMethod4");
+        return p1;
+    }
 }

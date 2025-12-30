@@ -18,7 +18,7 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
     CreateStudent<T1, T2, T3, T4, T5>.IWithProperty5,
     CreateStudent<T1, T2, T3, T4, T5>.IMethod1,
     CreateStudent<T1, T2, T3, T4, T5>.IMethod2,
-    CreateStudent<T1, T2, T3, T4, T5>.IMethod3
+    CreateStudent<T1, T2, T3, T4, T5>.IMethod3Method4
     where T1 : class
     where T2 : class?
     where T3 : struct
@@ -80,16 +80,21 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
         return this;
     }
 
-    IMethod3 IMethod2.Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+    IMethod3Method4 IMethod2.Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
     {
         student.Method2<T6, T7, T8, T9>(p1, p2, p3, p4, p5, p6, p7, p8, p9);
         return this;
     }
 
-    Student<T1, T2, T3, T4, T5> IMethod3.Method3<T6, T7, T8, T9>(T1 p1)
+    Student<T1, T2, T3, T4, T5> IMethod3Method4.Method3<T6, T7, T8, T9>(T1 p1)
     {
         student.Method3<T6, T7, T8, T9>(p1);
         return student;
+    }
+
+    T6 IMethod3Method4.Method4<T6, T7>(T6 p1, T7 p2)
+    {
+        return student.Method4<T6, T7>(p1, p2);
     }
 
     public interface ICreateStudent : IWithProperty1
@@ -132,19 +137,23 @@ public class CreateStudent<T1, T2, T3, T4, T5> :
 
     public interface IMethod2
     {
-        IMethod3 Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
+        IMethod3Method4 Method2<T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
             where T6 : unmanaged
             where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
             where T8 : class, System.Collections.Generic.IDictionary<int, string>
             where T9 : System.Collections.Generic.List<int>, new();
     }
 
-    public interface IMethod3
+    public interface IMethod3Method4
     {
         Student<T1, T2, T3, T4, T5> Method3<T6, T7, T8, T9>(T1 p1)
             where T6 : unmanaged
             where T7 : System.Collections.Generic.List<int>, System.Collections.Generic.IDictionary<int, string>
             where T8 : class, System.Collections.Generic.IDictionary<int, string>
             where T9 : System.Collections.Generic.List<int>, new();
+
+        T6 Method4<T6, T7>(T6 p1, T7 p2)
+            where T6 : System.Collections.Generic.List<int>
+            where T7 : System.Collections.Generic.List<int>;
     }
 }
