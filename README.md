@@ -553,6 +553,7 @@ public class Student
 If the initialization order does not matter, you can simplify the configuration as follows:
 
 ```cs
+[FluentApi]
 public class Student
 {
     [FluentMember(0)]
