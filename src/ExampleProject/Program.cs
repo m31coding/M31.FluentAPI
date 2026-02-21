@@ -119,6 +119,21 @@ Employee employee = CreateEmployee
 
 Console.WriteLine(JsonSerializer.Serialize(employee));
 
+Employee2 emp2 = CreateEmployee2.WithName("My Name")
+    .WithPhone(
+        p => p.WithNumber("222-222-2222").WithUsage("CELL"))
+    .WithJobs(
+        j => j.WithCompanyName("First Company").WithSalary(100),
+        j => j.WithCompanyName("Second Company").WithSalary(200));
+
+CreateEmployee2.ICreateEmployee2FromExisting createEmployee = CreateEmployee2.From(emp2);
+createEmployee.WithPhone( p => p.WithNumber("222-222-2222").WithUsage("CELL")).WithJobs(
+    j => j.WithCompanyName("First Company").WithSalary(100),
+    j => j.WithCompanyName("Second Company").WithSalary(200));
+
+CreateEmployee2.IWithJobs withJobs = createEmployee;
+
+
 // HttpRequest
 //
 // Example from https://github.com/dotnet/csharplang/discussions/7325.
