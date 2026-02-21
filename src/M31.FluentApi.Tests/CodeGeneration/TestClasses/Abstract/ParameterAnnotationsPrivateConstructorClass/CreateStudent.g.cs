@@ -23,6 +23,11 @@ public class CreateStudent :
         student = CreateStudentInstance(ref v, in v2, out _);
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();

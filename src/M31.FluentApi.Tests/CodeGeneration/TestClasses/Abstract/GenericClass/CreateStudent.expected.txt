@@ -18,6 +18,11 @@ public class CreateStudent<T1, T2> :
         student = new Student<T1, T2>();
     }
 
+    private CreateStudent(Student<T1, T2> student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent<T1, T2>();

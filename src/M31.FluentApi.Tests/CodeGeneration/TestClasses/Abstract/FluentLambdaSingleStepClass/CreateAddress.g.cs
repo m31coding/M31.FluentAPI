@@ -20,6 +20,11 @@ public class CreateAddress :
         address = new Address();
     }
 
+    private CreateAddress(Address address)
+    {
+        this.address = address;
+    }
+
     public static ICreateAddress InitialStep()
     {
         return new CreateAddress();

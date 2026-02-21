@@ -22,6 +22,11 @@ internal class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     internal static ICreateStudent InitialStep()
     {
         return new CreateStudent();

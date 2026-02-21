@@ -20,6 +20,11 @@ public class CreateStudent :
         student = CreateStudentInstance();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();

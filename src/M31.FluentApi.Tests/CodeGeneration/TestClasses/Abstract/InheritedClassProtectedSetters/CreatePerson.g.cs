@@ -22,6 +22,11 @@ public class CreatePerson :
         person = new Person();
     }
 
+    private CreatePerson(Person person)
+    {
+        this.person = person;
+    }
+
     public static ICreatePerson InitialStep()
     {
         return new CreatePerson();

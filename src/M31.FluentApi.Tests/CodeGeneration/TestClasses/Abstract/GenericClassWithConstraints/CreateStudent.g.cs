@@ -37,6 +37,11 @@ public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
         student = new Student<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
     }
 
+    private CreateStudent(Student<T1, T2, T3, T4, T5, T6, T7, T8, T9> student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>();

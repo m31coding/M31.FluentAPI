@@ -19,6 +19,11 @@ public class CreatePhone :
         phone = new Phone();
     }
 
+    private CreatePhone(Phone phone)
+    {
+        this.phone = phone;
+    }
+
     public static ICreatePhone InitialStep()
     {
         return new CreatePhone();

@@ -27,6 +27,11 @@ public class CreateDocumentedStudent :
         documentedStudent = new DocumentedStudent();
     }
 
+    private CreateDocumentedStudent(DocumentedStudent documentedStudent)
+    {
+        this.documentedStudent = documentedStudent;
+    }
+
     public static ICreateDocumentedStudent InitialStep()
     {
         return new CreateDocumentedStudent();

@@ -23,6 +23,11 @@ public class CreateStudent :
         student = new Student(default!, default!, default!);
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
