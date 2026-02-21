@@ -30,8 +30,6 @@ internal class CodeBoard
         Info = builderAndTargetInfo;
         CodeFile = codeFile;
         BuilderClass = builderClass;
-        Constructor = null;
-        StaticConstructor = null;
         InnerBodyCreationDelegates = new InnerBodyCreationDelegates();
         TransformedComments = new TransformedComments();
         GroupsToMethods = new Dictionary<FluentApiInfoGroup, BuilderMethods>();
@@ -48,8 +46,6 @@ internal class CodeBoard
     internal BuilderAndTargetInfo Info { get; }
     internal CodeFile CodeFile { get; }
     internal Class BuilderClass { get; }
-    internal Method? Constructor { get; set; }
-    internal Method? StaticConstructor { get; set; }
     internal InnerBodyCreationDelegates InnerBodyCreationDelegates { get; }
     internal TransformedComments TransformedComments { get; }
     internal Dictionary<FluentApiInfoGroup, BuilderMethods> GroupsToMethods { get; }
