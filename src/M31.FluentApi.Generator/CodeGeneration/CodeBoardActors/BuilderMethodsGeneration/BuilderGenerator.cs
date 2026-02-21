@@ -23,6 +23,7 @@ internal class BuilderGenerator : ICodeBoardActor
 
         List<Interface> interfaces = new List<Interface>(builderStepMethods.Interfaces.Count);
         interfaces.Add(CreateInitialStepInterface(builderStepMethods, codeBoard));
+        interfaces.Add(CreateFromExistingInterface(builderStepMethods, codeBoard));
 
         foreach (BuilderInterface builderInterface in builderStepMethods.Interfaces)
         {
@@ -90,6 +91,19 @@ internal class BuilderGenerator : ICodeBoardActor
         }
 
         return initialStepInterface;
+    }
+
+    private Interface CreateFromExistingInterface(BuilderStepMethods builderStepMethods, CodeBoard codeBoard)
+    {
+        Interface fromExistingInterface =
+            new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.InitialStepInterfaceName);
+
+        foreach (BuilderInterface @interface in builderStepMethods.Interfaces)
+        {
+            fromExistingInterface.AddBaseInterface(@interface.InterfaceName);
+        }
+
+        return fromExistingInterface;
     }
 
     private void AddInterfacesToBuilderClass(List<Interface> interfaces, Class builderClass, string prefix)
