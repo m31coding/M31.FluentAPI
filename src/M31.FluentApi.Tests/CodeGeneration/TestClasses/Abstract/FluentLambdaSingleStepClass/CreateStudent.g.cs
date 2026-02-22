@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaSi
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithAddress
 {
     private readonly Student student;
@@ -57,6 +58,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithAddress
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithAddress
     {
     }
 

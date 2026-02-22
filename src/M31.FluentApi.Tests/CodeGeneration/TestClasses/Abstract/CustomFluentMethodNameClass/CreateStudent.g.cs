@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CustomFluentMe
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithName,
     CreateStudent.IWhoIsHappy,
     CreateStudent.IInSemester,
@@ -89,6 +90,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithName, IWhoIsHappy, IInSemester, IWhoseFriendsAre
     {
     }
 

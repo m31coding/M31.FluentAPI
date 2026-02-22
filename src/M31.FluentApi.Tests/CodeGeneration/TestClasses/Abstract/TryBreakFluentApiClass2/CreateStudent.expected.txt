@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.TryBreakFluent
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.ISomeMethod
 {
     private readonly Student student;
@@ -44,6 +45,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : ISomeMethod
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : ISomeMethod
     {
     }
 

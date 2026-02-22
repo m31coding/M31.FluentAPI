@@ -12,6 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 
 public class CreatePerson :
     CreatePerson.ICreatePerson,
+    CreatePerson.ICreatePersonFromAnyStep,
     CreatePerson.IWithName,
     CreatePerson.IOfAgeBornOn
 {
@@ -58,6 +59,10 @@ public class CreatePerson :
     }
 
     public interface ICreatePerson : IWithName
+    {
+    }
+
+    public interface ICreatePersonFromAnyStep : IWithName, IOfAgeBornOn
     {
     }
 

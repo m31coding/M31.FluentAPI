@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SameNameMember
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IInSemester,
     CreateStudent.IWithName,
     CreateStudent.IWithName2
@@ -58,6 +59,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IInSemester
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IInSemester, IWithName, IWithName2
     {
     }
 

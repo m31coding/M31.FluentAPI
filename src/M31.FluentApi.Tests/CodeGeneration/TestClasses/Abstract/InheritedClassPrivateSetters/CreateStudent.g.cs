@@ -12,6 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithName,
     CreateStudent.IOfAgeBornOn,
     CreateStudent.IInSemester
@@ -65,6 +66,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithName, IOfAgeBornOn, IInSemester
     {
     }
 

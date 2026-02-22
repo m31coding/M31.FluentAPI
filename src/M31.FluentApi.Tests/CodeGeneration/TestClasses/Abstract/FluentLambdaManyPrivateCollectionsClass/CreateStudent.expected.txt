@@ -14,6 +14,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaMa
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithName,
     CreateStudent.IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG
 {
@@ -276,6 +277,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithName, IWithAddressesAWithAddressesBWithAddressesCWithAddressesDWithAddressesEWithAddressesFWithAddressesG
     {
     }
 

@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SkippableMembe
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithFirstName,
     CreateStudent.IWithMiddleName,
     CreateStudent.IWithLastName
@@ -56,6 +57,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithFirstName
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithFirstName, IWithMiddleName, IWithLastName
     {
     }
 

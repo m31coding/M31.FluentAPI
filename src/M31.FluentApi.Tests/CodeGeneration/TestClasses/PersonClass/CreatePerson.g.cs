@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.PersonClass;
 
 public class CreatePerson :
     CreatePerson.ICreatePerson,
+    CreatePerson.ICreatePersonFromAnyStep,
     CreatePerson.IWithFirstName,
     CreatePerson.IWithMiddleName,
     CreatePerson.IWithLastName,
@@ -105,6 +106,10 @@ public class CreatePerson :
     }
 
     public interface ICreatePerson : IWithFirstName
+    {
+    }
+
+    public interface ICreatePersonFromAnyStep : IWithFirstName, IWithMiddleName, IWithLastName, IWhoseAddressIsUnknownWhoLivesAtAddressWhoIsADigitalNomad, IWithHouseNumber, IWithStreet, IInCity, ILivingInCity
     {
     }
 

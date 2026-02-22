@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CollectionMemb
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWhoseFriendsAre,
     CreateStudent.IWithPets,
     CreateStudent.IWithBackpackContent
@@ -77,6 +78,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWhoseFriendsAre, IWithPets, IWithBackpackContent
     {
     }
 

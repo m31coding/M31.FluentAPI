@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPr
 
 public class CreateStudent<T1, T2> :
     CreateStudent<T1, T2>.ICreateStudent,
+    CreateStudent<T1, T2>.ICreateStudentFromAnyStep,
     CreateStudent<T1, T2>.IWithProperty1WithProperty2
 {
     private readonly Student<T1, T2> student;
@@ -57,6 +58,10 @@ public class CreateStudent<T1, T2> :
     }
 
     public interface ICreateStudent : IWithProperty1WithProperty2
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithProperty1WithProperty2
     {
     }
 

@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithOf
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IMethod1Method1,
     CreateStudent.IWithProperty1,
     CreateStudent.IWithProperty2
@@ -71,6 +72,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IMethod1Method1
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IMethod1Method1, IWithProperty1, IWithProperty2
     {
     }
 

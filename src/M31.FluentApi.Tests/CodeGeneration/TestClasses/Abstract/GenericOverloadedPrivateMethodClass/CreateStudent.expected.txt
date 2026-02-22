@@ -12,6 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericOverloa
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IMethod1Method1Method1Method1Method1Method1Method1
 {
     private readonly Student student;
@@ -123,6 +124,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IMethod1Method1Method1Method1Method1Method1Method1
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IMethod1Method1Method1Method1Method1Method1Method1
     {
     }
 

@@ -7,7 +7,9 @@
 
 namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.EmptyClass;
 
-public class CreateStudent : CreateStudent.ICreateStudent
+public class CreateStudent :
+    CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep
 {
     private readonly Student student;
 
@@ -27,6 +29,10 @@ public class CreateStudent : CreateStudent.ICreateStudent
     }
 
     public interface ICreateStudent
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep
     {
     }
 }

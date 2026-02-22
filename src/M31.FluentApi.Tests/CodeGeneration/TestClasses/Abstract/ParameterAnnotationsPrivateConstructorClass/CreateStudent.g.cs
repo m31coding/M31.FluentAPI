@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ParameterAnnot
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithProperty1,
     CreateStudent.IWithProperty2
 {
@@ -53,6 +54,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithProperty1
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithProperty1, IWithProperty2
     {
     }
 

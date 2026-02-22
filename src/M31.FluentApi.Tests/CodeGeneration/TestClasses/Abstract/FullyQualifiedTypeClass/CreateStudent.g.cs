@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FullyQualified
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IBornOnWithFriends
 {
     private readonly Student student;
@@ -96,6 +97,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IBornOnWithFriends
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IBornOnWithFriends
     {
     }
 

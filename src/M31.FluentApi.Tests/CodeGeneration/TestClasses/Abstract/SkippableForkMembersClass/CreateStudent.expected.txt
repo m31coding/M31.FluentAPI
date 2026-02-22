@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SkippableForkM
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithMember0,
     CreateStudent.IWithMember1AWithMember1B,
     CreateStudent.IWithMember0WithMember1AWithMember1B,
@@ -84,6 +85,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithMember0
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithMember0, IWithMember1AWithMember1B, IWithMember0WithMember1AWithMember1B, IWithMember2
     {
     }
 

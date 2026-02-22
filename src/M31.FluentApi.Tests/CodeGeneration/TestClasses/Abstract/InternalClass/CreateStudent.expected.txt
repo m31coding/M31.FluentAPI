@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InternalClass;
 
 internal class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithName,
     CreateStudent.IBornOn,
     CreateStudent.IInSemester
@@ -58,6 +59,10 @@ internal class CreateStudent :
     }
 
     internal interface ICreateStudent : IWithName
+    {
+    }
+
+    internal interface ICreateStudentFromAnyStep : IWithName, IBornOn, IInSemester
     {
     }
 

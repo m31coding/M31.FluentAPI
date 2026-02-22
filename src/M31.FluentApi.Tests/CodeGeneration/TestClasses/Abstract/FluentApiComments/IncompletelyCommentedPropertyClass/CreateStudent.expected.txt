@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.ILivingIn
 {
     private readonly Student student;
@@ -66,6 +67,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : ILivingIn
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : ILivingIn
     {
     }
 

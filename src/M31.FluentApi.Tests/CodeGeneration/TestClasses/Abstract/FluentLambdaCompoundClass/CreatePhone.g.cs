@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCo
 
 public class CreatePhone :
     CreatePhone.ICreatePhone,
+    CreatePhone.ICreatePhoneFromAnyStep,
     CreatePhone.IWithNumber,
     CreatePhone.IWithUsage
 {
@@ -49,6 +50,10 @@ public class CreatePhone :
     }
 
     public interface ICreatePhone : IWithNumber
+    {
+    }
+
+    public interface ICreatePhoneFromAnyStep : IWithNumber, IWithUsage
     {
     }
 

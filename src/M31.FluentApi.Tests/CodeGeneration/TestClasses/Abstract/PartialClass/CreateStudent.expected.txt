@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PartialClass;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithFirstName,
     CreateStudent.IWithLastName
 {
@@ -51,6 +52,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithFirstName
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithFirstName, IWithLastName
     {
     }
 

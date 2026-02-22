@@ -12,6 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.AliasNamespace
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWhoseFriendsAre
 {
     private readonly Student student;
@@ -84,6 +85,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWhoseFriendsAre
     {
     }
 

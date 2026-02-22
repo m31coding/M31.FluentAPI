@@ -12,6 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NullablePredic
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWhoseFriendsAre,
     CreateStudent.IWhoIsHappy
 {
@@ -116,6 +117,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWhoseFriendsAre, IWhoIsHappy
     {
     }
 

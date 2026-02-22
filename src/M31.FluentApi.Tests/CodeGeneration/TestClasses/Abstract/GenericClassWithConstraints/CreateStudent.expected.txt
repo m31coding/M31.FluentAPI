@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWi
 
 public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.ICreateStudent,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.ICreateStudentFromAnyStep,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty1,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty2,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty3,
@@ -109,6 +110,10 @@ public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
     }
 
     public interface ICreateStudent : IWithProperty1
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithProperty1, IWithProperty2, IWithProperty3, IWithProperty4, IWithProperty5, IWithProperty6, IWithProperty7, IWithProperty8, IWithProperty9
     {
     }
 

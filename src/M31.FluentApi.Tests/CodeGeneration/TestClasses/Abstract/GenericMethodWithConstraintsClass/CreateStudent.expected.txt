@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericMethodW
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IMethod1
 {
     private readonly Student student;
@@ -53,6 +54,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IMethod1
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IMethod1
     {
     }
 

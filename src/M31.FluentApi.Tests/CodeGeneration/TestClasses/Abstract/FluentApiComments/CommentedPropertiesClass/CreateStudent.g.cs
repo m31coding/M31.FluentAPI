@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithGivenNameWithFirstName,
     CreateStudent.IWithLastName,
     CreateStudent.IOfAge,
@@ -89,6 +90,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithGivenNameWithFirstName
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithGivenNameWithFirstName, IWithLastName, IOfAge, IInSemester, ILivingIn
     {
     }
 

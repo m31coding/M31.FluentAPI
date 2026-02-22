@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithSe
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.IWithFirstName,
     CreateStudent.IWithMiddleNameWithLastName
 {
@@ -57,6 +58,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithFirstName
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : IWithFirstName, IWithMiddleNameWithLastName
     {
     }
 

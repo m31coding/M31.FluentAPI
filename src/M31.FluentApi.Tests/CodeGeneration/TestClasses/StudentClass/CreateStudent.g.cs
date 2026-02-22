@@ -13,6 +13,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.StudentClass;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromAnyStep,
     CreateStudent.INamed,
     CreateStudent.IOfAgeBornOn,
     CreateStudent.IInSemester,
@@ -135,6 +136,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : INamed
+    {
+    }
+
+    public interface ICreateStudentFromAnyStep : INamed, IOfAgeBornOn, IInSemester, ILivingIn, IWhoIsHappy, IWhoseFriendsAre
     {
     }
 
