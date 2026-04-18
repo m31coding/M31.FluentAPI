@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericMethodW
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IMethod1
 {
     private readonly Student student;
@@ -29,6 +29,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static Student Method1<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5, T6 p6, T7 p7, T8 p8, T9 p9)
@@ -57,7 +62,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IMethod1
+    public interface ICreateStudentFromExisting : IMethod1
     {
     }
 

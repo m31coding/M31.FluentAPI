@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentNullable
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithName
 {
     private readonly Student student;
@@ -29,6 +29,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static Student WithName(string name)
@@ -61,7 +66,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithName
+    public interface ICreateStudentFromExisting : IWithName
     {
     }
 

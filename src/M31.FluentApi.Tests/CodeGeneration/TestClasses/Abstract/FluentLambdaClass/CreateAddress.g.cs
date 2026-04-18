@@ -9,7 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCl
 
 public class CreateAddress :
     CreateAddress.ICreateAddress,
-    CreateAddress.ICreateAddressFromAnyStep,
+    CreateAddress.ICreateAddressFromExisting,
     CreateAddress.IWithHouseNumber,
     CreateAddress.IWithStreet,
     CreateAddress.IInCity
@@ -29,6 +29,11 @@ public class CreateAddress :
     public static ICreateAddress InitialStep()
     {
         return new CreateAddress();
+    }
+
+    public static ICreateAddressFromExisting FromExisting(Address address)
+    {
+        return new CreateAddress(address);
     }
 
     public static IWithStreet WithHouseNumber(string houseNumber)
@@ -60,7 +65,7 @@ public class CreateAddress :
     {
     }
 
-    public interface ICreateAddressFromAnyStep : IWithHouseNumber, IWithStreet, IInCity
+    public interface ICreateAddressFromExisting : IWithHouseNumber, IWithStreet, IInCity
     {
     }
 

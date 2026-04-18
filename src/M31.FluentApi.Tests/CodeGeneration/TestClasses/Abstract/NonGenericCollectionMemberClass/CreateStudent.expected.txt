@@ -12,7 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NonGenericColl
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWhoseFriendsAre,
     CreateStudent.IWithPets,
     CreateStudent.IWithBackpackContent
@@ -32,6 +32,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithPets WhoseFriendsAre(System.Collections.IEnumerable friends)
@@ -138,7 +143,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWhoseFriendsAre, IWithPets, IWithBackpackContent
+    public interface ICreateStudentFromExisting : IWhoseFriendsAre, IWithPets, IWithBackpackContent
     {
     }
 

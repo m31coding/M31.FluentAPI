@@ -13,7 +13,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.DocumentedStudentClass;
 
 public class CreateDocumentedStudent :
     CreateDocumentedStudent.ICreateDocumentedStudent,
-    CreateDocumentedStudent.ICreateDocumentedStudentFromAnyStep,
+    CreateDocumentedStudent.ICreateDocumentedStudentFromExisting,
     CreateDocumentedStudent.INamed,
     CreateDocumentedStudent.IOfAgeBornOn,
     CreateDocumentedStudent.IInSemester,
@@ -36,6 +36,11 @@ public class CreateDocumentedStudent :
     public static ICreateDocumentedStudent InitialStep()
     {
         return new CreateDocumentedStudent();
+    }
+
+    public static ICreateDocumentedStudentFromExisting FromExisting(DocumentedStudent documentedStudent)
+    {
+        return new CreateDocumentedStudent(documentedStudent);
     }
 
     /// <summary>Sets the student's name.</summary>
@@ -158,7 +163,7 @@ public class CreateDocumentedStudent :
     {
     }
 
-    public interface ICreateDocumentedStudentFromAnyStep : INamed, IOfAgeBornOn, IInSemester, ILivingIn, IWhoIsHappy, IWhoseFriendsAre
+    public interface ICreateDocumentedStudentFromExisting : INamed, IOfAgeBornOn, IInSemester, ILivingIn, IWhoIsHappy, IWhoseFriendsAre
     {
     }
 

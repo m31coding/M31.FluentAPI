@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithName,
     CreateStudent.IOfAge,
     CreateStudent.ILivingIn,
@@ -32,6 +32,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IOfAge WithName(string name)
@@ -96,7 +101,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithName, IOfAge, ILivingIn, IWhoIsHappy
+    public interface ICreateStudentFromExisting : IWithName, IOfAge, ILivingIn, IWhoIsHappy
     {
     }
 

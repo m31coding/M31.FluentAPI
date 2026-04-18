@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GetInitPropert
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IInSemester
 {
     private readonly Student student;
@@ -31,6 +31,11 @@ public class CreateStudent :
         return new CreateStudent();
     }
 
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
+    }
+
     public static Student InSemester(int semester)
     {
         CreateStudent createStudent = new CreateStudent();
@@ -48,7 +53,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IInSemester
+    public interface ICreateStudentFromExisting : IInSemester
     {
     }
 

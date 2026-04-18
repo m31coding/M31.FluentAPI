@@ -12,7 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnMu
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithName,
     CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
 {
@@ -31,6 +31,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter WithName(string name)
@@ -70,7 +75,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithName, IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
+    public interface ICreateStudentFromExisting : IWithName, IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
     {
     }
 

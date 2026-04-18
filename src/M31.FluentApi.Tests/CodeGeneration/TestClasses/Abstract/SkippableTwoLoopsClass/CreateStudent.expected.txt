@@ -9,7 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SkippableTwoLo
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithMember0,
     CreateStudent.IWithMember1WithMember1B,
     CreateStudent.IWithMember0WithMember1WithMember1B,
@@ -34,6 +34,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithMember1WithMember1B WithMember0(string? member0)
@@ -109,7 +114,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithMember0, IWithMember1WithMember1B, IWithMember0WithMember1WithMember1B, IWithMember2, IWithMember3, IWithMember4WithMember4B, IWithMember3WithMember4WithMember4B, IWithMember5
+    public interface ICreateStudentFromExisting : IWithMember0, IWithMember1WithMember1B, IWithMember0WithMember1WithMember1B, IWithMember2, IWithMember3, IWithMember4WithMember4B, IWithMember3WithMember4WithMember4B, IWithMember5
     {
     }
 

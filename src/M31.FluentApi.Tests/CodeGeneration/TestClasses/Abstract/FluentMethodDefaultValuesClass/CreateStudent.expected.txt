@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodDe
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithFirstName,
     CreateStudent.IWithLastName,
     CreateStudent.IBornOn,
@@ -35,6 +35,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithLastName WithFirstName(string firstName = "Alice")
@@ -90,7 +95,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithFirstName, IWithLastName, IBornOn, IEnrolledIn, IInSemester, IWithNumberOfPassedExams, IWithNumberOfFailedExams
+    public interface ICreateStudentFromExisting : IWithFirstName, IWithLastName, IBornOn, IEnrolledIn, IInSemester, IWithNumberOfPassedExams, IWithNumberOfFailedExams
     {
     }
 

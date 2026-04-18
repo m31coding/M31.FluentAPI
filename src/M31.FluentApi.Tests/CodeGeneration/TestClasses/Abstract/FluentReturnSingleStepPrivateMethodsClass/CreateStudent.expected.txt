@@ -12,7 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentReturnSi
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
 {
     private readonly Student student;
@@ -30,6 +30,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static void ReturnVoidMethod()
@@ -80,7 +85,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
+    public interface ICreateStudentFromExisting : IReturnVoidMethodReturnIntMethodReturnListMethodReturnIntMethodWithRefParameter
     {
     }
 

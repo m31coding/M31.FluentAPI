@@ -13,7 +13,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentLambdaCo
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithName,
     CreateStudent.IWithAddresses
 {
@@ -32,6 +32,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithAddresses WithName(string name)
@@ -87,7 +92,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithName, IWithAddresses
+    public interface ICreateStudentFromExisting : IWithName, IWithAddresses
     {
     }
 

@@ -9,7 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentMethodPa
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IMethodWithParams,
     CreateStudent.IMethodWithRefParameter,
     CreateStudent.IMethodWithInParameter,
@@ -31,6 +31,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IMethodWithRefParameter MethodWithParams(params int[] numbers)
@@ -74,7 +79,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IMethodWithParams, IMethodWithRefParameter, IMethodWithInParameter, IMethodWithOutParameter, IMethodWithRefInAndOutParameter
+    public interface ICreateStudentFromExisting : IMethodWithParams, IMethodWithRefParameter, IMethodWithInParameter, IMethodWithOutParameter, IMethodWithRefInAndOutParameter
     {
     }
 

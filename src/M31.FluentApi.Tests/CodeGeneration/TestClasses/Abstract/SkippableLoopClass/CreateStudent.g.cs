@@ -9,7 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SkippableLoopC
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithMember1,
     CreateStudent.IWithMember2,
     CreateStudent.IWithMember3WithMember4,
@@ -30,6 +30,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithMember2 WithMember1(string? member1)
@@ -88,7 +93,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithMember1, IWithMember2, IWithMember3WithMember4, IWithMember1WithMember2WithMember3WithMember4
+    public interface ICreateStudentFromExisting : IWithMember1, IWithMember2, IWithMember3WithMember4, IWithMember1WithMember2WithMember3WithMember4
     {
     }
 

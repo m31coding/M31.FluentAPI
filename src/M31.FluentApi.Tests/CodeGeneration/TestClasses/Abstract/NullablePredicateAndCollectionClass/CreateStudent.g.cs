@@ -12,7 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.NullablePredic
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWhoseFriendsAre,
     CreateStudent.IWhoIsHappy
 {
@@ -31,6 +31,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWhoIsHappy WhoseFriendsAre(System.Collections.Generic.IReadOnlyCollection<string>? friends)
@@ -120,7 +125,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWhoseFriendsAre, IWhoIsHappy
+    public interface ICreateStudentFromExisting : IWhoseFriendsAre, IWhoIsHappy
     {
     }
 

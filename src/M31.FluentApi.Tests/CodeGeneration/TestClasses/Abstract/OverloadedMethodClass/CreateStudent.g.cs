@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.OverloadedMeth
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.INamedNamed
 {
     private readonly Student student;
@@ -29,6 +29,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static Student Named(string firstName, string lastName)
@@ -61,7 +66,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : INamedNamed
+    public interface ICreateStudentFromExisting : INamedNamed
     {
     }
 

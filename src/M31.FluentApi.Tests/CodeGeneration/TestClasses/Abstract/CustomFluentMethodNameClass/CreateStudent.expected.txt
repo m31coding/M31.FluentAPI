@@ -11,7 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CustomFluentMe
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
-    CreateStudent.ICreateStudentFromAnyStep,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithName,
     CreateStudent.IWhoIsHappy,
     CreateStudent.IInSemester,
@@ -32,6 +32,11 @@ public class CreateStudent :
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWhoIsHappy WithName(string firstName, string lastName)
@@ -93,7 +98,7 @@ public class CreateStudent :
     {
     }
 
-    public interface ICreateStudentFromAnyStep : IWithName, IWhoIsHappy, IInSemester, IWhoseFriendsAre
+    public interface ICreateStudentFromExisting : IWithName, IWhoIsHappy, IInSemester, IWhoseFriendsAre
     {
     }
 
