@@ -26,7 +26,7 @@ internal static class CodeGenerator
             new ForkCreator(),
             new DuplicateMethodsChecker(),
             new InitialStepMethodGenerator(),
-            new FromMethodGenerator(),
+            new FromExistingMethodGenerator(),
             new BuilderGenerator(),
         };
 

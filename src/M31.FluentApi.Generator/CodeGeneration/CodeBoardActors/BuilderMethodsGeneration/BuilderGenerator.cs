@@ -96,7 +96,7 @@ internal class BuilderGenerator : ICodeBoardActor
     private Interface CreateFromAnyStepInterface(BuilderStepMethods builderStepMethods, CodeBoard codeBoard)
     {
         Interface fromExistingInterface =
-            new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.FromAnyStepInterfaceName);
+            new Interface(codeBoard.Info.DefaultAccessModifier, codeBoard.Info.FromExistingInterfaceName);
 
         foreach (BuilderInterface @interface in builderStepMethods.Interfaces)
         {
