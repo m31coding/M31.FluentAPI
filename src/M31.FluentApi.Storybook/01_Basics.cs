@@ -12,8 +12,8 @@ namespace BasicExample
        As shown in the usage examples below, a student can be created by calling the static WithFirstName
        method on the CreateStudent class.
        Alternatively, an existing Student can be passed to the static FromExisting method. After calling FromExisting,
-       the builder can continue from any step. student2 refers to the same instance as student1, and the last name is
-       set to "Queen".
+       the builder can continue from any step. The FromExisting method mutates the passed instance, and the last name
+       is set to "Queen".
        The InitialStep method can be used to create a builder instance without creating a student. This is useful for
        advanced use cases such as the lambda pattern, as described in the README.md.
        Although I use classes with properties in all examples of this file, the FluentApi attribute can also be applied
