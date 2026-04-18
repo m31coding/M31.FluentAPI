@@ -502,6 +502,18 @@ To simplify adding documentation comments, a code action is available to generat
 ![doc-comments-action](https://raw.githubusercontent.com/m31coding/M31.FluentAPI/main/media/create-doc-comments-action.png)
 
 For reference, you can view the documented version of the `Student` class in [DocumentedStudent.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/DocumentedStudent.cs). The corresponding generated code is located in [DocumentedStudent.g.cs](src/M31.FluentApi.Tests/CodeGeneration/TestClasses/DocumentedStudentClass/CreateDocumentedStudent.g.cs)
+    
+
+### Modifying an existing instance
+
+The static `FromExisting` method can be used to modify an existing instance:
+
+```cs
+Student student1 = CreateStudent.WithFirstName("Alice").WithLastName("King");
+Student student2 = CreateStudent.FromExisting(student1).WithLastName("Queen");
+```
+
+After calling `FromExisting`, the builder can continue from any step. To avoid mutating the original instance, create a copy constructor on the `Student` class and pass a copy to the `FromExisting` method.
 
 
 ### Lambda pattern
