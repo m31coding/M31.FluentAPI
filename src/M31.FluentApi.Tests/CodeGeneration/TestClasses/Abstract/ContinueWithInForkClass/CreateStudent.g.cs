@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ContinueWithIn
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithMember1,
     CreateStudent.IWithMember2AWithMember2B,
     CreateStudent.IWithMember3,
@@ -21,9 +22,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithMember2AWithMember2B WithMember1(string member1)
@@ -64,6 +75,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithMember1
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWithMember1, IWithMember2AWithMember2B, IWithMember3, IWithMember4
     {
     }
 

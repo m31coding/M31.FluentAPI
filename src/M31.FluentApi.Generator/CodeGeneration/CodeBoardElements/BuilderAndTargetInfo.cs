@@ -30,6 +30,7 @@ internal class BuilderAndTargetInfo
         BuilderInstanceName = builderClassName.FirstCharToLower();
         ClassInstanceName = fluentApiClassName.FirstCharToLower();
         InitialStepInterfaceName = $"I{builderClassName}";
+        FromExistingInterfaceName = $"I{builderClassName}FromExisting";
     }
 
     internal string? Namespace { get; }
@@ -45,4 +46,5 @@ internal class BuilderAndTargetInfo
     internal string BuilderInstanceName { get; }
     internal string ClassInstanceName { get; }
     internal string InitialStepInterfaceName { get; }
+    internal string FromExistingInterfaceName { get; }
 }

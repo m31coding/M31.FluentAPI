@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericOverloa
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IMethod1Method1Method1Method1Method1Method1Method1
 {
     private readonly Student student;
@@ -20,9 +21,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static Student Method1(int p1, string p2)
@@ -117,6 +128,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IMethod1Method1Method1Method1Method1Method1Method1
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IMethod1Method1Method1Method1Method1Method1Method1
     {
     }
 

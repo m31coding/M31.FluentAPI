@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithName
 {
     private readonly Student student;
@@ -18,9 +19,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     /// <summary>Sets the student's name.</summary>
@@ -46,6 +57,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithName
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWithName
     {
     }
 

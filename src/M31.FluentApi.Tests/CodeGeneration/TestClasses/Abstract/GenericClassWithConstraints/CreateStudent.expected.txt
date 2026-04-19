@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassWi
 
 public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.ICreateStudent,
+    CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.ICreateStudentFromExisting,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty1,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty2,
     CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>.IWithProperty3,
@@ -37,9 +38,19 @@ public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
         student = new Student<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
     }
 
+    private CreateStudent(Student<T1, T2, T3, T4, T5, T6, T7, T8, T9> student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student<T1, T2, T3, T4, T5, T6, T7, T8, T9> student)
+    {
+        return new CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9>(student);
     }
 
     public static IWithProperty2 WithProperty1(T1 property1)
@@ -104,6 +115,10 @@ public class CreateStudent<T1, T2, T3, T4, T5, T6, T7, T8, T9> :
     }
 
     public interface ICreateStudent : IWithProperty1
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWithProperty1, IWithProperty2, IWithProperty3, IWithProperty4, IWithProperty5, IWithProperty6, IWithProperty7, IWithProperty8, IWithProperty9
     {
     }
 

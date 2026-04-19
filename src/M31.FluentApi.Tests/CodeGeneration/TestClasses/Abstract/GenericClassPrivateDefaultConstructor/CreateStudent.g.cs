@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.GenericClassPr
 
 public class CreateStudent<T1, T2> :
     CreateStudent<T1, T2>.ICreateStudent,
+    CreateStudent<T1, T2>.ICreateStudentFromExisting,
     CreateStudent<T1, T2>.IWithProperty1WithProperty2
 {
     private readonly Student<T1, T2> student;
@@ -20,9 +21,19 @@ public class CreateStudent<T1, T2> :
         student = CreateStudentInstance();
     }
 
+    private CreateStudent(Student<T1, T2> student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent<T1, T2>();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student<T1, T2> student)
+    {
+        return new CreateStudent<T1, T2>(student);
     }
 
     public static Student<T1, T2> WithProperty1(T1 property1)
@@ -52,6 +63,10 @@ public class CreateStudent<T1, T2> :
     }
 
     public interface ICreateStudent : IWithProperty1WithProperty2
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWithProperty1WithProperty2
     {
     }
 

@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.KeywordClass;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithOperator,
     CreateStudent.IWithClass,
     CreateStudent.IWithVoid
@@ -22,9 +23,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithClass WithOperator(string @operator)
@@ -53,6 +64,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithOperator
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWithOperator, IWithClass, IWithVoid
     {
     }
 

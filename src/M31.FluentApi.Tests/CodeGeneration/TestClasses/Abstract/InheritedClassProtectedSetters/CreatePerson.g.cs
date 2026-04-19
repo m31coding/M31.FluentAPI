@@ -12,6 +12,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.InheritedClass
 
 public class CreatePerson :
     CreatePerson.ICreatePerson,
+    CreatePerson.ICreatePersonFromExisting,
     CreatePerson.IWithName,
     CreatePerson.IBornOn
 {
@@ -22,9 +23,19 @@ public class CreatePerson :
         person = new Person();
     }
 
+    private CreatePerson(Person person)
+    {
+        this.person = person;
+    }
+
     public static ICreatePerson InitialStep()
     {
         return new CreatePerson();
+    }
+
+    public static ICreatePersonFromExisting FromExisting(Person person)
+    {
+        return new CreatePerson(person);
     }
 
     public static IBornOn WithName(string name)
@@ -47,6 +58,10 @@ public class CreatePerson :
     }
 
     public interface ICreatePerson : IWithName
+    {
+    }
+
+    public interface ICreatePersonFromExisting : IWithName, IBornOn
     {
     }
 

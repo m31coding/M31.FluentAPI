@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.SkippableFirst
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithFirstName,
     CreateStudent.IWithMiddleName,
     CreateStudent.IWithLastName
@@ -20,9 +21,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithMiddleName WithFirstName(string? firstName)
@@ -65,6 +76,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithFirstName
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWithFirstName, IWithMiddleName, IWithLastName
     {
     }
 

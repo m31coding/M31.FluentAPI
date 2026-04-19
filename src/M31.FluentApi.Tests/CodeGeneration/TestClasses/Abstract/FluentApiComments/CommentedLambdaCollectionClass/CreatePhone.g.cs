@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.FluentApiComme
 
 public class CreatePhone :
     CreatePhone.ICreatePhone,
+    CreatePhone.ICreatePhoneFromExisting,
     CreatePhone.IWithNumber,
     CreatePhone.IWithUsage
 {
@@ -19,9 +20,19 @@ public class CreatePhone :
         phone = new Phone();
     }
 
+    private CreatePhone(Phone phone)
+    {
+        this.phone = phone;
+    }
+
     public static ICreatePhone InitialStep()
     {
         return new CreatePhone();
+    }
+
+    public static ICreatePhoneFromExisting FromExisting(Phone phone)
+    {
+        return new CreatePhone(phone);
     }
 
     public static IWithUsage WithNumber(string number)
@@ -44,6 +55,10 @@ public class CreatePhone :
     }
 
     public interface ICreatePhone : IWithNumber
+    {
+    }
+
+    public interface ICreatePhoneFromExisting : IWithNumber, IWithUsage
     {
     }
 

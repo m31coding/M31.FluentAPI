@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PrivateUndersc
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IInSemester
 {
     private readonly Student student;
@@ -20,9 +21,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static Student InSemester(int semester)
@@ -39,6 +50,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IInSemester
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IInSemester
     {
     }
 

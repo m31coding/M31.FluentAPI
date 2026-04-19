@@ -9,6 +9,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.ParameterAnnot
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWithProperty1,
     CreateStudent.IWithProperty2
 {
@@ -21,9 +22,19 @@ public class CreateStudent :
         student = new Student(ref v, in v2, out _);
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithProperty2 WithProperty1(string property1)
@@ -46,6 +57,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWithProperty1
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWithProperty1, IWithProperty2
     {
     }
 

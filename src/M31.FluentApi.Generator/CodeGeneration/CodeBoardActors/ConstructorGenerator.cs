@@ -9,10 +9,16 @@ internal class ConstructorGenerator : ICodeBoardActor
 {
     public void Modify(CodeBoard codeBoard)
     {
+        CreateParameterlessConstructor(codeBoard);
+        CreateConstructorWithInstanceParameter(codeBoard);
+    }
+
+    private static void CreateParameterlessConstructor(CodeBoard codeBoard)
+    {
         string instanceName = codeBoard.Info.ClassInstanceName;
         string classNameWithTypeParameters = codeBoard.Info.FluentApiClassNameWithTypeParameters;
 
-        Method constructor = CreateConstructor(codeBoard.Info.BuilderClassName);
+        Method constructor = CreateParameterlessConstructorMethod(codeBoard.Info.BuilderClassName);
         ConstructorInfo constructorInfo = codeBoard.Info.FluentApiTypeConstructorInfo;
 
         if (codeBoard.Info.FluentApiTypeConstructorInfo.ConstructorIsNonPublic)
@@ -59,7 +65,17 @@ internal class ConstructorGenerator : ICodeBoardActor
             constructor.AppendBodyLine(codeBuilder.ToString());
         }
 
-        codeBoard.Constructor = constructor;
+        codeBoard.BuilderClass.AddMethod(constructor);
+    }
+
+    private static void CreateConstructorWithInstanceParameter(CodeBoard codeBoard)
+    {
+        Method constructor = CreateConstructorWithInstanceParameterMethod(codeBoard.Info);
+
+        CodeBuilder codeBuilder = new CodeBuilder(codeBoard.NewLineString);
+        codeBuilder.Append($"this.{codeBoard.Info.ClassInstanceName} = {codeBoard.Info.ClassInstanceName};");
+        constructor.AppendBodyLine(codeBuilder.ToString());
+
         codeBoard.BuilderClass.AddMethod(constructor);
     }
 
@@ -112,10 +128,21 @@ internal class ConstructorGenerator : ICodeBoardActor
         return "default!";
     }
 
-    private static Method CreateConstructor(string builderClassName)
+    private static Method CreateParameterlessConstructorMethod(string builderClassName)
     {
         // private CreateStudent()
         MethodSignature signature = MethodSignature.CreateConstructorSignature(builderClassName);
+        signature.AddModifiers("private");
+        return new Method(signature);
+    }
+
+    private static Method CreateConstructorWithInstanceParameterMethod(
+        BuilderAndTargetInfo info)
+    {
+        // private CreateStudent(Student student)
+        MethodSignature signature = MethodSignature.CreateConstructorSignature(info.BuilderClassName);
+        Parameter parameter = new Parameter(info.FluentApiClassNameWithTypeParameters, info.ClassInstanceName);
+        signature.AddParameter(parameter);
         signature.AddModifiers("private");
         return new Method(signature);
     }

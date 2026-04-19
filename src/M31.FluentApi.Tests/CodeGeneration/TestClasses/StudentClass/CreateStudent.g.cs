@@ -13,6 +13,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.StudentClass;
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.INamed,
     CreateStudent.IOfAgeBornOn,
     CreateStudent.IInSemester,
@@ -27,9 +28,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IOfAgeBornOn Named(string firstName, string lastName)
@@ -130,6 +141,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : INamed
+    {
+    }
+
+    public interface ICreateStudentFromExisting : INamed, IOfAgeBornOn, IInSemester, ILivingIn, IWhoIsHappy, IWhoseFriendsAre
     {
     }
 

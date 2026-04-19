@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.PredicatePriva
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWhoIsHappy
 {
     private readonly Student student;
@@ -20,9 +21,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static Student WhoIsHappy(bool isHappy = true)
@@ -52,6 +63,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWhoIsHappy
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWhoIsHappy
     {
     }
 

@@ -11,6 +11,7 @@ namespace M31.FluentApi.Tests.CodeGeneration.TestClasses.Abstract.CollectionInte
 
 public class CreateStudent :
     CreateStudent.ICreateStudent,
+    CreateStudent.ICreateStudentFromExisting,
     CreateStudent.IWhoseFriendsAre,
     CreateStudent.IWithPets,
     CreateStudent.IWithBackpackContent
@@ -22,9 +23,19 @@ public class CreateStudent :
         student = new Student();
     }
 
+    private CreateStudent(Student student)
+    {
+        this.student = student;
+    }
+
     public static ICreateStudent InitialStep()
     {
         return new CreateStudent();
+    }
+
+    public static ICreateStudentFromExisting FromExisting(Student student)
+    {
+        return new CreateStudent(student);
     }
 
     public static IWithPets WhoseFriendsAre(System.Collections.Generic.IList<string> friends)
@@ -128,6 +139,10 @@ public class CreateStudent :
     }
 
     public interface ICreateStudent : IWhoseFriendsAre
+    {
+    }
+
+    public interface ICreateStudentFromExisting : IWhoseFriendsAre, IWithPets, IWithBackpackContent
     {
     }
 
